@@ -1,0 +1,45 @@
+[W1-Information_Architecture_StudyAbroadVista_v1.docx] P170: Logo (links to homepage)
+[W1-Information_Architecture_StudyAbroadVista_v1.docx] P180: Hamburger menu icon top left, logo center, primary CTA right (compressed to icon)
+[W1-Information_Architecture_StudyAbroadVista_v1.docx] P185: Footer contains six columns for full navigation completeness and SEO internal linking value:
+[W1-Information_Architecture_StudyAbroadVista_v1.docx] P395: Universities featured — logos of partner universities (Featured Silver/Gold/Platinum)
+[W1-Information_Architecture_StudyAbroadVista_v1.docx] T5R5: Footer (persistent) | 24-30 links | Global navigation depth
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P23: 1. Global Layout Structure
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P30: Left: Vista logo (SVG, links to homepage)
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P36: Center: Vista logo
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P92: 6-8 featured university logos (Silver/Gold/Platinum tiers). Rotating carousel on mobile.
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P167: University logo (left)
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P202: University logo preloaded
+[W10-HTML_Templates_StudyAbroadVista_v1.docx] P298: Vista logo at top
+[W11-Website_Content_Plan_StudyAbroadVista_v1.docx] P123: Rotating carousel of Featured tier universities (Silver/Gold/Platinum). Each shows: logo + name + Featured tier badge.
+[W11-Website_Content_Plan_StudyAbroadVista_v1.docx] P170: Logo (from university's press kit)
+[W3-User_Journeys_StudyAbroadVista_v1.docx] P24: A confused user does not care about beautiful typography. An overwhelmed user cannot process a 12-item menu. Journeys track emotional state at every stage — Vista's response must match the emotional bandwidth available.
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P29: The homepage must display: hero section with primary CTA, featured programs (4-6 cards), featured countries (Anchor Six), Weekly Vista newsletter teaser, latest 3 awareness articles, testimonials, AI Counsellor invitation band, and featured university logos.
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P367: Sessions stored in Redis. Force-logout capability from admin panel. Session invalidation on password change.
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P593: [TR-TEST-001] Unit test coverage minimum 70%  (P1)
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P596: [TR-TEST-002] Integration tests for every API endpoint  (P1)
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P599: [TR-TEST-003] E2E tests for critical journeys  (P1)
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P602: [TR-TEST-004] Load testing quarterly  (P1)
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P605: [TR-TEST-005] Chaos engineering  (P2)
+[W4-FRD_TRD_StudyAbroadVista_v1.docx] P624: QA Team:  Owns test plan derived from TR-TEST. Automation coverage matches TR-TEST-001 to 005.
+[W6-Data_Schema_StudyAbroadVista_v1.docx] T12R14: logo_url | VARCHAR(500) | NULL | S3 URL
+[W7-Integration_API_StudyAbroadVista_v1.docx] P111: POST /auth/logout  —  Invalidate current session
+[W7-Integration_API_StudyAbroadVista_v1.docx] T2R0: Header | Value / Example | Purpose
+[W7-Integration_API_StudyAbroadVista_v1.docx] T6R13: 429 Too Many Requests | Rate limit exceeded; check Retry-After header
+[W7-Integration_API_StudyAbroadVista_v1.docx] T6R16: 503 Service Unavailable | Temporary; check Retry-After header
+[W7-Integration_API_StudyAbroadVista_v1.docx] T8R0: Header: {   "alg": "RS256",   "typ": "JWT",   "kid": "vista-2026-09"    // Key rotation identifier }  Payload (claims): {   "iss": "https://api.studyabroadvista.com",   "sub": "01937b8f-4c2e-...",       // User ID   "aud": "vista-web" | "vista-buyer" | "vista-admin",   "role": "student" | "buyer_admin" | "buyer_sales" | "internal_admin" | ...,   "permissions": ["leads:read", "leads:contact", ...],   "buyer_id": "01937b8f-4c2e-...",  // Present for buyer tokens   "exp": 1699999999,                 // 15-minute expiry   "iat": 1699999099,   "jti": "01937b8f-4c2e-..."         // Unique token ID for revocation }
+[W7-Integration_API_StudyAbroadVista_v1.docx] T14R0: // Node.js example const crypto = require('crypto'); const signature = req.headers['x-vista-signature'].replace('sha256=', ''); const computed = crypto   .createHmac('sha256', WEBHOOK_SECRET)   .update(req.rawBody)   .digest('hex'); if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computed))) {   return res.status(401).send('Invalid signature'); }
+[W7-Integration_API_StudyAbroadVista_v1.docx] T22R2: 429 Too Many Requests | Yes | Wait per Retry-After header
+[W7-Integration_API_StudyAbroadVista_v1.docx] T22R5: 503 Service Unavailable | Yes | Per Retry-After header if present, else exp backoff
+[W8-NFR_StudyAbroadVista_v1.docx] P282: [NFR-MAINT-001] Language standards enforced
+[W8-NFR_StudyAbroadVista_v1.docx] P284: [NFR-MAINT-002] Linting mandatory
+[W8-NFR_StudyAbroadVista_v1.docx] P286: [NFR-MAINT-003] Code formatting automated
+[W8-NFR_StudyAbroadVista_v1.docx] P288: [NFR-MAINT-004] Code review mandatory
+[W8-NFR_StudyAbroadVista_v1.docx] P290: [NFR-MAINT-005] Complexity limits
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] P216: Fonts self-hosted (not Google Fonts CDN — slower for Indian users). font-display: swap prevents FOIT. Preload only weights used above-the-fold.
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] P234: font-display: optional or size-adjust matching. Fallback fonts sized to match final font metrics.
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] P329: [SEO-CONTENT-001] Content Team follows on-page SEO checklist
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] P331: [SEO-CONTENT-002] Content freshness signals
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] P333: [SEO-CONTENT-003] Content length appropriate to topic
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] T4R0: {   "@context": "https://schema.org",   "@type": "Organization",   "name": "StudyAbroadVista",   "url": "https://studyabroadvista.com/",   "logo": "https://studyabroadvista.com/img/logo.png",   "sameAs": [     "https://www.linkedin.com/company/studyabroadvista",     "https://www.instagram.com/studyabroadvista",     "https://www.youtube.com/@studyabroadvista"   ],   "contactPoint": {     "@type": "ContactPoint",     "telephone": "+91-XXX-XXXXXXX",     "contactType": "customer service",     "areaServed": "IN"   } }
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] T5R0: {   "@context": "https://schema.org",   "@type": "EducationalOrganization",   "name": "Imperial College London",   "url": "https://www.imperial.ac.uk/",   "logo": "https://studyabroadvista.com/img/uni/imperial.png",   "description": "Ranked #6 in QS World University Rankings 2026...",   "address": {     "@type": "PostalAddress",     "addressLocality": "London",     "addressCountry": "GB"   },   "aggregateRating": {     "@type": "AggregateRating",     "ratingValue": "4.5",     "reviewCount": 892   },   "hasOfferCatalog": {     "@type": "OfferCatalog",     "name": "Programs at Imperial College London",     "itemListElement": [...list of programs...]   } }
+[W9-SEO_Technical_StudyAbroadVista_v1.docx] T6R0: {   "@context": "https://schema.org",   "@type": "Article",   "headline": "Complete Guide to Studying in UK for Indian Students 2027",   "author": {     "@type": "Person",     "name": "Priya Sharma",     "url": "https://studyabroadvista.com/authors/priya-sharma/"   },   "datePublished": "2026-11-01T09:00:00+05:30",   "dateModified": "2026-11-15T14:30:00+05:30",   "publisher": {     "@type": "Organization",     "name": "StudyAbroadVista",     "logo": {       "@type": "ImageObject",       "url": "https://studyabroadvista.com/img/logo.png"     }   },   "image": "https://studyabroadvista.com/img/guides/uk-guide-hero.jpg" }

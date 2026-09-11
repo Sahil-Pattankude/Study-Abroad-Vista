@@ -1,0 +1,36 @@
+{
+  "name": "study-abroad-vista",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/test-db.mjs && node ./node_modules/next/dist/bin/next dev",
+    "build": "node ./node_modules/next/dist/bin/next build",
+    "start": "node ./node_modules/next/dist/bin/next start",
+    "test:db": "node scripts/test-db.mjs",
+    "test:sanity": "node scripts/test-sanity.mjs"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "@sanity/client": "^6.28.2",
+    "@supabase/supabase-js": "^2.49.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.16.0",
+    "next": "^15.2.0",
+    "next-sanity": "^11.6.13",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "sanity": "^4.22.0",
+    "styled-components": "6.1",
+    "tailwind-merge": "^3.0.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  }
+}

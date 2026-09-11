@@ -1,0 +1,104 @@
+=== FILE: W1-Information_Architecture_StudyAbroadVista_v1.docx ===
+P11: Development Team — URL routing, navigation components, breadcrumbs, internal linking logic
+P13: SEO Team — canonical URL structure, faceted navigation rules, internal link equity distribution
+P33: Principle 7 — Rich Internal Linking (The Web, Not the Tree)
+P34: A page's IA is not just its position in the hierarchy tree; it is also its connections to parent, siblings, children, cross-country peers, cross-program peers, related universities, related pillar articles, and cross-cutting utilities. Every page has 15-30 internal outbound links, contextually placed.
+P38: As sub-brands emerge (StudyAbroadVista MBBS, Nursing, Executive), they inherit the parent IA — same URL patterns, same navigation logic, same internal linking rules. Sub-brands vary in emphasis and accent color; never in structural pattern.
+P43: Every page on StudyAbroadVista belongs to exactly one of two layers. Understanding which layer a page belongs to determines its URL, its internal linking pattern, its lead capture treatment, and its SEO priority.
+P55: Internal links out:  Down to Conversion Layer pages relevant to the topic
+P65: Internal links out:  Sideways to sibling pages, up to parent, down to child specializations
+P67: Internal linking must respect the funnel direction:
+P93: Business: Finance, Marketing, HR, Operations, Strategy, Supply Chain, Entrepreneurship, International Business
+P135: Admin Panel — for internal team to manage content, leads, buyers
+P184: Footer Navigation
+P185: Footer contains six columns for full navigation completeness and SEO internal linking value:
+P200: Rich internal linking is the most under-appreciated SEO and user-experience lever in this business. Every page carries 15-30 internal links, contextually placed.
+P207: A grid of sibling pages appears in a 'You may also be interested in' module. Example on /study-in-uk/masters: shows MBA in UK, Bachelor's in UK, Nursing in UK.
+P216: Internal Link Placement Rules
+P221: Never use domain-name anchor text ('studyabroadvista.com') for internal links
+P271: Visitor decides to read more or leave. IA requirements: rich internal links to related content, faceted filters if applicable, comparison tools accessible, related sidebar visible.
+P273: Visitor interacts with tools. IA requirements: AI Counsellor CTA floating and non-intrusive, cost calculator embedded contextually, save-to-shortlist button, compare tool accessible.
+P285: Placement:  Passive — footer newsletter, sticky bottom bar (dismissible), save icon on university cards
+P326: Full-screen chat interface with sidebar showing suggested questions
+P334: Every tool interaction is a lead capture opportunity — but each at a different level:
+P416: An orphan page is one with no internal links pointing to it. Orphan pages waste SEO potential and confuse users.
+P417: Every page must have at least 3 internal inbound links from other pages
+P419: New content publish workflow includes 'internal linking checklist' — writer must add 5+ internal links inbound to new content
+P435: Internal linking checklist run on every publish (5+ inbound, 15+ outbound)
+P446: Internal link equity distributed via footer navigation (24-30 links)
+P449: Every page template includes: top nav, breadcrumb, page content, related sidebar, contextual lead form, footer
+T3R15: Blog article | Time-sensitive news, opinion, interview | /blog/<article-slug>/
+T5R5: Footer (persistent) | 24-30 links | Global navigation depth
+T7R5: Engage | Tool interaction rate | Over 15% of sessions
+=== FILE: W10-HTML_Templates_StudyAbroadVista_v1.docx ===
+P19: Interactive elements (forms, CTAs, modals, tabs)
+P24: Every page shares a common frame — top nav, breadcrumb, footer. Only the main content area varies by template.
+P44: Footer
+P109: AI Counsellor script loaded only on interaction (not on page load)
+P129: Persistent form with pre-filled country context. Fields: Name, Email, Phone, Program interest, Intake year, Budget range. Level 3 lead capture. DPDP consent + Privacy Policy link.
+P165: Hero with University Header
+P166: Rich header with:
+P267: Purpose:  Interactive utilities that engage + convert
+P270: Above-fold tool interface (calculator, comparator, etc.)
+P283: Purpose:  Internal search
+P384: Header — top navigation bar
+P385: Footer — global footer
+P408: Interactive Components
+P409: AIChatWidget — AI Counsellor chat interface
+P451: Touch Interactions
+P455: Any hover interaction (tooltip, dropdown) also works on tap. Mobile users can't hover.
+P461: 10. Interaction Patterns
+P468: Form Interactions
+P499: Micro-Interactions
+P508: RP-026: Above-fold interactive within 3.5 seconds
+P509: Users can interact with above-fold elements within 3.5s on 4G mobile. Below-fold hydrates progressively.
+P522: Implements interaction patterns per Section 10
+P528: Maintains design system in Figma matching component library
+P562: Feeds into:  Frontend engineering implementation, Content team writing, Design system, QA testing
+T3R1: v1.0 | 4 September 2026 | Initial HTML Templates spec. 15 templates covering all 1,290+ URLs. Component library of 40+ reusable components. Complete responsive breakpoints. Interaction patterns.
+T4R0: The blueprint is locked. 15 page templates covering all 1,290+ Vista URLs. Wireframes for the four most critical templates (global layout, homepage, country hub, university detail). Component library of 40+ reusable components. Responsive breakpoint strategy. Interaction patterns. This is what frontend engineers use to build every page, and what UI designers use to create mockups.
+=== FILE: W8-NFR_StudyAbroadVista_v1.docx ===
+P28: When a user first interacts (tap, click), the page must respond within 100ms at p75. Requires deferring non-critical JavaScript and avoiding long-running main-thread tasks.
+P35: [NFR-PERF-006] Time to Interactive (TTI) under 3.5 seconds on 4G mobile
+P36: Page becomes fully interactive within 3.5 seconds on simulated slow 4G (400ms RTT, 400kbps). Requires progressive hydration and code splitting.
+P54: WhatsApp template message delivered (Interakt to Meta to recipient device) within 90 seconds at p95 for buyer alerts.
+P80: All static assets (JS, CSS, images, fonts) served via Cloudflare CDN. Origin bandwidth reduced by 95%+. Cache-Control max-age 1 year for versioned assets.
+P113: Admin panel available 99.0%. Downtime budget: 7.2 hours/month. Lowest SLA — internal users can tolerate.
+P153: State-changing endpoints (POST, PUT, PATCH, DELETE) require: SameSite=Strict cookie + CSRF token in header OR OAuth bearer token. Public POST /leads exception uses reCAPTCHA v3.
+P155: CSP header on all pages: script-src 'self' + specific CDN allowlist; no inline scripts (nonces for unavoidable inline); no eval; strict-dynamic for module loading.
+P175: All internal admin users MUST use MFA (TOTP via Google Authenticator or hardware key). No exception.
+P302: Tests failing intermittently marked as flaky. Ownership assigned. Fixed within 1 week or deleted.
+P320: Risky features (algorithm changes, new integrations, UI redesigns) deployed dark behind feature flag. Enabled progressively: internal → 1% users → 10% → 50% → 100%.
+P328: Every interactive element reachable and operable by keyboard alone (Tab, Shift+Tab, Enter, Space, arrows). Focus indicator always visible.
+P330: All content and interactions announced correctly by NVDA, JAWS, VoiceOver. Semantic HTML preferred; ARIA labels for custom widgets.
+P332: Text color contrast against background at least 4.5:1 (large text: 3:1). Enforced by design system tokens.
+P345: Interactive elements (buttons, links) at least 44x44 CSS pixels. Prevents mis-taps on mobile.
+P349: At 320px viewport, no horizontal scrolling required to see content. Tables scroll internally, not the whole page.
+P352: Public content pages (country landings, guides, blog posts) render fully with JavaScript disabled. Enhanced features (interactivity, personalization) require JS.
+=== FILE: W4-FRD_TRD_StudyAbroadVista_v1.docx ===
+P41: Each university profile page must display: university header (name, location, ranking), programs offered (filterable), fees and cost breakdown, admission requirements, application intakes, scholarships available at this university, featured status badge, contextual lead form.
+P92: URL /ai-counsellor/ provides a full-screen counsellor interface with sidebar showing suggested questions.
+P139: Integrated with financial partner APIs. Users input: co-signer income, collateral, target amount. Returns loan pre-approval and estimated interest rates from partner banks.
+P217: One-click dispute filing per lead. Categories: fake number, wrong info, already applied via competitor, uninterested. Vista team reviews within 24 hours. Approved disputes auto-refund to wallet.
+P234: Dashboard shows: current featured status (Free/Silver/Gold/Platinum), monthly impressions, click-through rate, top search queries leading to profile, inbound interest count.
+P240: Detailed analytics on profile performance: impressions over time, click-through rates, competitor comparison (anonymized), geographic distribution of interest, program-level interest breakdown.
+P243: In-portal upgrade to Silver/Gold/Platinum tiers. Payment via Razorpay/Stripe for Indian and international billing. Immediate tier activation on payment success.
+P246: Platinum-tier universities receive direct feed of leads expressing specific interest in their institution. Delivered via portal, email, and webhook.
+P249: 10. FR-ADM — Admin Panel (Internal)
+P269: Admin manages internal user accounts and roles: Content Editor, Partnerships Manager, Finance, Engineering, Full Admin. RBAC enforced on all endpoints.
+P277: System sends notifications via: transactional email (SendGrid/SES), WhatsApp (Business API via Meta/Interakt), SMS (MSG91/Twilio), in-app notifications.
+P311: The system is composed of independently deployable services (Content, Search, AI Counsellor, Lead Capture, Lead Delivery Engine, Buyer, User, Notification, Analytics, Tool, CMS, University). Services communicate via REST APIs (external) and message queues (internal async).
+P458: WhatsApp Business API:  Meta official, or via Interakt / Gupshup — for MBBS family + Level 3+ leads
+P469: Stripe:  International buyer payments (universities from abroad)
+P479: [TR-INTEG-001] All integrations abstracted behind interfaces  (P1)
+P480: Each integration wrapped in a service interface (e.g., EmailService, SMSService). Provider swap requires implementing the interface, not rewriting business logic.
+P591: Integration tests: 30%. Test service boundaries and database interactions
+T1R6: Content Editor | Vista internal team creating and updating content | Yes (admin)
+T1R7: Admin User | Vista internal team with system administration privileges | Yes (admin)
+=== FILE: W2-Sitemap_StudyAbroadVista_v1.docx ===
+P89: Time-sensitive articles — news, opinion, interviews, seasonal content. URL pattern: /blog/<article-slug>/.
+P101: Admin Panel — internal team
+P111: All /admin/* URLs (internal admin)
+P136: For each URL, create a content brief that includes: target keyword, H1, meta description, sections outline, internal links (5+ inbound targets, 15+ outbound), lead form config
+T16R3: Student interviews | Real student experience stories | Bi-weekly | 20 articles
+T20R3: 3 | /university-portal/dashboard/ | Featured status + inbound interest | P1

@@ -1,0 +1,518 @@
+P0: SITEMAP
+P1: The complete URL inventory for Year 1
+P2: 1,080+ URLs published across four phases
+P3: StudyAbroadVista
+P4: Dnyanal Educon Pvt. Ltd.
+P5: Version 1.0  |  Prepared 31 August 2026
+P6: Inherits directly from IA v1.0
+P8: Purpose of This Document
+P9: The Sitemap document is the comprehensive URL inventory for StudyAbroadVista Year 1. It answers the question: 'What pages exist, when do they publish, and what content type does each use?' It inherits directly from the Information Architecture (W2, v1.0) — every URL here follows the patterns, taxonomy, and hierarchy defined there.
+P10: This document is the operational reference for:
+P11: Content Team — production schedule, page priority, ownership
+P12: Development Team — sitemap.xml generation, template mapping, URL routing
+P13: SEO Team — priority values, change frequency, canonical URLs, indexation rules
+P14: Project Management — Year 1 content roadmap, phasing gates, dependency tracking
+P17: 1. Total URL Summary
+P18: Year 1 target: approximately 1,080 URLs published across four phases from November 2026 to May 2027.
+P20: Publish phasing — content publishes in four phases, not all on Launch Day
+P21: Summary Counts by Content Type
+P22: Note: Blog article counts are estimates. The Blog will exceed 115 articles by end of Year 1 if organic momentum builds — target is 3-5 new articles per week from Phase 3 onward.
+P24: 2. Country x Program Coverage Matrix
+P25: The Conversion Layer's core inventory — which country + program combinations exist in Year 1, and in which phase each publishes. Every combination marked P1/P2/P3 becomes a canonical URL under /study-in-<country>/<program>/.
+P27: 76 country x program URLs across 19 countries and 8 programs — phased publishing
+P28: The matrix reflects three principles: (1) MBBS destinations get MBBS-only pages, (2) Anchor Six countries get the widest program coverage, (3) Emerging bets (France, Italy, Malaysia) launch minimally in Phase 3.
+P30: 3. Homepage
+P31: The homepage is the L0 root. It curates featured content from all five L1 sections and is republished with fresh featured content weekly. See IA v1.0 Section 13 for Discovery Modules on Homepage.
+P33: 4. Country Landings (L2)
+P34: Overview pages for each destination country. 19 total, phased across Phase 1-3.
+P36: 5. Country + Program Pages (L3)
+P37: The canonical Conversion Layer pages. 76 total. Format: /study-in-<country>/<program>/.
+P38: Phase 1 — Launch (12 pages)
+P39: Phase 2 — Month +1 (30 pages)
+P40: Phase 3 — Month +3 (20 pages) & Phase 4 — Month +6 (14 pages)
+P42: 6. Specialization Pages (L4)
+P43: The deepest Conversion Layer pages. Format: /study-in-<country>/<program>/<specialization>/. 150 total across Year 1.
+P44: URL Pattern Examples
+P45: Rather than listing all 150 URLs individually, patterns are documented here. Full URL list maintained in the Content Team's tracking spreadsheet.
+P46: Total specialization pages: ~150 across all countries and programs, prioritized by keyword search volume (see F1 Scope Log v2).
+P48: 7. Program Landings (L2)
+P49: Aggregation pages for each program category across all countries. 8 total, all Phase 1.
+P50: Program landings serve as alternate discovery paths. E.g., /masters-abroad/uk/ 301-redirects to canonical /study-in-uk/masters/ per IA v1.0 Section 5.
+P52: 8. University Pages
+P53: Individual university profile pages. 500 total across Year 1, phased by tier.
+P54: Phase 1 — Launch (150 universities)
+P55: Featured Partner universities (Platinum, Gold, Silver tiers who signed partnership agreements by Sept 2026) + top 100 globally ranked universities across the Anchor Six countries.
+P56: URL Pattern
+P57: Canonical URL:  /university/<university-slug>/
+P58: Slug convention:  Lowercase, hyphens, remove 'The', 'University of' where common
+P59: Examples:  /university/oxford, /university/cambridge, /university/mit, /university/stanford
+P60: Sample Launch List (representative — not full 150)
+P61: Phase 2-4 Additional Universities (350 more)
+P62: Rolled out based on: (1) University partnerships closed post-launch, (2) SEO-driven demand for specific universities, (3) Regional coverage gaps (secondary countries).
+P63: Phase 2 (Dec 2026):  100 universities — Fill remaining Anchor Six top-200
+P64: Phase 3 (Feb 2027):  150 universities — Secondary countries + MBBS colleges
+P65: Phase 4 (May 2027):  100 universities — Emerging bets + long-tail coverage
+P66: University x Program Pages (200 total, Phase 3-4)
+P67: URL Pattern:  /university/<slug>/<program>/
+P68: Example:  /university/oxford/mba, /university/harvard/executive-mba
+P69: Rule:  Only created for universities in Platinum/Gold tier, or when the university-program combination has verified search demand (>500 searches/month)
+P71: 9. Pillar Guides — Awareness Layer (L2)
+P72: Top-of-funnel pillar pages targeting pre-decision audiences. 10 total.
+P73: Cluster Articles — 70 total across Year 1
+P74: Each pillar carries 5-10 cluster articles that support the pillar's SEO authority. URL pattern: /guides/<pillar-slug>/<cluster-slug>/.
+P75: Example — MBBS Abroad Pillar Clusters (Phase 2)
+P76: Similar cluster expansions for all 10 pillars. Total cluster count: 70 in Year 1.
+P78: 10. Scholarship, Visa & Test Prep Pages
+P79: Scholarship Pages (50 total)
+P80: Each major scholarship gets its own SEO-optimized page. Format: /scholarships/<scholarship-slug>/.
+P81: Phase 1 Launch (30 scholarships)
+P82: Phase 2 adds 20 more scholarships covering less-known but high-value opportunities.
+P83: Visa Guide Pages (15 total)
+P84: Test Prep Pages (10 total)
+P86: 11. Tool Pages
+P88: 12. Blog Articles
+P89: Time-sensitive articles — news, opinion, interviews, seasonal content. URL pattern: /blog/<article-slug>/.
+P90: Blog Article Categories
+P91: Sample Blog Articles for Phase 1 (5 launch articles)
+P93: 13. Legal & Utility Pages
+P94: Note: /sitemap.xml (machine-readable XML sitemap) is separate from /sitemap/ (HTML page for humans). Both exist. See Section 15 for XML sitemap details.
+P96: 14. Authenticated Portals (Behind Login)
+P97: These URLs are not indexed by search engines. They are gated behind authentication. Documented here for completeness — full flows in FRD/TRD (W5).
+P98: Buyer Portal — for consultants, loan partners, forex partners, channel partners
+P99: University Portal — for universities to manage listings
+P100: Student Dashboard — for registered students
+P101: Admin Panel — internal team
+P103: 15. XML Sitemap Generation Rules
+P104: The technical /sitemap.xml file for search engine crawlers. Rules governing what appears in it.
+P105: Included in sitemap.xml
+P106: All Homepage, Country landings, Country+Program, Specialization pages, Program landings, University details, Pillar guides, Cluster articles, Scholarships, Visa guides, Test prep, Tool pages, Blog articles, Legal/utility pages
+P107: EXCLUDED from sitemap.xml
+P108: All /buyer/* URLs (authenticated buyer portal)
+P109: All /university-portal/* URLs (authenticated university portal)
+P110: All /dashboard/* URLs (student dashboard)
+P111: All /admin/* URLs (internal admin)
+P112: All alias URLs (e.g., /masters-abroad/uk/ — only canonical /study-in-uk/masters/ is included)
+P113: All filter-parameter URLs (per IA v1.0 Section 8)
+P114: Any page with a noindex meta tag
+P115: Sitemap Structure
+P116: For a site of 1,000+ URLs, use a Sitemap Index file that references multiple category sitemaps:
+P117: Change Frequency Values (per URL type)
+P119: 16. Redirects & URL Aliases
+P120: Some pages have multiple logical access paths but only one canonical URL. The others 301-redirect to canonical. This section documents the redirect rules.
+P121: Program-first to Country-first Redirects
+P122: Per IA v1.0 Section 5, country-first is canonical. All program-first URLs redirect:
+P123: Legacy URL Redirects (from Collegencourses.com)
+P124: If any content is migrated from CNC (the sibling brand), those URLs must 301-redirect to StudyAbroadVista canonical URLs. To be documented once migration plan is finalized (post-launch).
+P125: Common Typo/Variant Redirects
+P126: Redirect Implementation Rules
+P127: All redirects are 301 (permanent) — never 302
+P128: Redirects are enforced at server level (nginx or Cloudflare), not at application level
+P129: Redirect chains are forbidden — every alias goes directly to canonical in one hop
+P130: Redirects preserve query strings and fragments where appropriate
+P132: 17. Handoff Checklist & Downstream Dependencies
+P133: For Content Team
+P134: Every URL in this Sitemap has an assigned owner (see per-section tables)
+P135: Content production schedule aligns with Phase 1/2/3/4 dates in Section 1
+P136: For each URL, create a content brief that includes: target keyword, H1, meta description, sections outline, internal links (5+ inbound targets, 15+ outbound), lead form config
+P137: Track content production in the shared Sitemap tracking spreadsheet (to be created by Content Lead)
+P138: For Development Team
+P139: URL routing supports all patterns in Sections 3-14
+P140: 301 redirects configured per Section 16
+P141: XML sitemap auto-generation per Section 15 (multi-file structure)
+P142: Every URL type has a corresponding template file
+P143: Buyer portal, University portal, Dashboard, Admin URLs blocked from robots.txt and search indexing
+P144: For SEO Team
+P145: XML sitemap submitted to Google Search Console + Bing Webmaster Tools on Launch Day
+P146: Priority + changefreq values per Section 15 applied to sitemap.xml
+P147: Weekly sitemap regeneration for the blog sitemap
+P148: Monthly audit — new URLs added, orphan URLs identified
+P149: Robots.txt blocks: /buyer/, /university-portal/, /dashboard/, /admin/, /*?filter*
+P150: For Project Management
+P151: Publish gate reviews at end of each Phase — validate content quality, technical readiness, SEO configuration
+P152: Weekly WIP tracking against Phase targets
+P153: Content Lead has final call on Phase transitions if content quality risks are identified
+P154: Downstream Documents This Sitemap Feeds Into
+P155: W4 — User Journey Diagrams (uses URL inventory to map user paths)
+P156: W5 — FRD/TRD (uses URL inventory to define template requirements)
+P157: W7 — Data Schema (uses content type inventory to define data models)
+P158: W10 — SEO Technical Requirements (uses XML sitemap + priority values)
+P159: W11 — HTML Templates (one template per content type in this Sitemap)
+P160: W12 — Website Content Plan (uses URL inventory to plan content production)
+P162: 18. Version Control & Closure
+P163: Version History
+P164: Living Document Status
+P165: Unlike the Information Architecture (which is a locked blueprint), the Sitemap is a living document. Individual URL additions do not require version bumps as long as they follow patterns established in IA v1.0 and this Sitemap v1.0.
+P166: When to Version the Sitemap
+P167: v1.1 — Adding a new phase (e.g., Phase 5 for Year 2)
+P168: v1.1 — Adding a new content type not currently listed
+P169: v1.1 — Changing publish phase for a category (e.g., delaying all Phase 4 by a month)
+P170: v2.0 — Major expansion (e.g., new country group, sub-brand launch)
+P171: What Does NOT Require a Version Bump
+P172: Adding individual URLs that follow existing patterns (e.g., another Cluster Article to an existing pillar)
+P173: Adjusting content production dates within a Phase window
+P174: Adding a new scholarship page to /scholarships/
+P175: Blog articles (always added freely)
+P176: Approval
+P177: Prepared by:  Strategic consulting partner (via Claude)
+P178: Prepared for:  Nikhita Deshmukh, Founder Director, Dnyanal Educon Pvt. Ltd.
+P179: Locked date:  31 August 2026
+P180: Inherits from:  Information Architecture v1.0
+P183: End of Sitemap Document
+P184: Sitemap v1.0  |  StudyAbroadVista
+P185: A Dnyanal Educon Pvt. Ltd. brand
+T0R0: Sitemap is different from IA. IA (W2) is the structural blueprint — the principles, taxonomy, and hierarchy. Sitemap (this document) is the operational inventory — every specific URL, its phase, its template, its owner. If IA answers 'how is the site organized?', Sitemap answers 'exactly what pages exist and when?'
+T1R0: Content Type | Phase 1 (Launch) | Phase 2 (+1mo) | Phase 3 (+3mo) | Phase 4 (+6mo) | Year 1 Total
+T1R1: Homepage | 1 | - | - | - | 1
+T1R2: Country landings | 6 | 9 | 4 | - | 19
+T1R3: Country + Program | 12 | 30 | 20 | 14 | 76
+T1R4: Specialization pages | 40 | 50 | 40 | 20 | 150
+T1R5: Program landings | 8 | - | - | - | 8
+T1R6: University detail pages | 150 | 100 | 150 | 100 | 500
+T1R7: University x Program | - | - | 100 | 100 | 200
+T1R8: Pillar guides (awareness) | 4 | - | 4 | 2 | 10
+T1R9: Cluster articles | - | 30 | 20 | 20 | 70
+T1R10: Scholarship pages | 30 | 20 | - | - | 50
+T1R11: Visa guides | 6 | - | 9 | - | 15
+T1R12: Test prep pages | 10 | - | - | - | 10
+T1R13: Tool pages | 10 | - | - | 2 | 12
+T1R14: Blog articles | 5 | 10 | 50 | 50 | 115
+T1R15: Legal/Utility pages | 10 | - | - | - | 10
+T1R16: Buyer portal (auth) | 8 | - | - | 5 | 13
+T1R17: University portal (auth) | 5 | - | - | 3 | 8
+T1R18: Student dashboard (auth) | 5 | - | - | 3 | 8
+T1R19: Admin panel (auth) | 10 | - | 5 | - | 15
+T1R21: TOTAL | 310 | 249 | 402 | 319 | 1,290
+T2R0: URL | Template | Layer | Phase | SEO Priority | Change Frequency | Owner
+T2R1: / | Homepage template | Both | P1 | 1.0 | Weekly | Content Lead
+T3R0: # | URL | Country | Phase | SEO Priority | Owner
+T3R1: 1 | /study-in-uk/ | United Kingdom | P1 | 0.9 | Content Lead
+T3R2: 2 | /study-in-usa/ | United States | P1 | 0.9 | Content Lead
+T3R3: 3 | /study-in-germany/ | Germany | P1 | 0.9 | Content Lead
+T3R4: 4 | /study-in-canada/ | Canada | P1 | 0.9 | Content Lead
+T3R5: 5 | /study-in-australia/ | Australia | P1 | 0.9 | Content Lead
+T3R6: 6 | /study-in-ireland/ | Ireland | P1 | 0.9 | Content Lead
+T3R7: 7 | /study-in-russia/ | Russia | P1 | 0.9 | Content Lead (MBBS focus)
+T3R8: 8 | /study-in-georgia/ | Georgia | P1 | 0.9 | Content Lead (MBBS focus)
+T3R9: 9 | /study-in-new-zealand/ | New Zealand | P2 | 0.85 | Content Lead
+T3R10: 10 | /study-in-singapore/ | Singapore | P2 | 0.85 | Content Lead
+T3R11: 11 | /study-in-netherlands/ | Netherlands | P2 | 0.85 | Content Lead
+T3R12: 12 | /study-in-uae/ | UAE (Dubai) | P2 | 0.85 | Content Lead
+T3R13: 13 | /study-in-kyrgyzstan/ | Kyrgyzstan | P2 | 0.85 | Content Lead (MBBS focus)
+T3R14: 14 | /study-in-kazakhstan/ | Kazakhstan | P2 | 0.85 | Content Lead (MBBS focus)
+T3R15: 15 | /study-in-philippines/ | Philippines | P2 | 0.85 | Content Lead (MBBS+Nursing)
+T3R16: 16 | /study-in-france/ | France | P3 | 0.8 | Content Lead
+T3R17: 17 | /study-in-italy/ | Italy | P3 | 0.8 | Content Lead
+T3R18: 18 | /study-in-malaysia/ | Malaysia | P3 | 0.8 | Content Lead
+T3R19: 19 | /study-in-uzbekistan/ | Uzbekistan | P3 | 0.75 | Content Lead (MBBS focus)
+T4R0: # | URL | Combination | SEO Priority
+T4R1: 1 | /study-in-uk/masters/ | MS in UK | 0.9 (hero)
+T4R2: 2 | /study-in-uk/mba/ | MBA in UK | 0.85
+T4R3: 3 | /study-in-uk/executive-mba/ | Executive MBA in UK | 0.8
+T4R4: 4 | /study-in-uk/nursing/ | Nursing in UK | 0.85
+T4R5: 5 | /study-in-usa/masters/ | MS in USA | 0.9 (hero)
+T4R6: 6 | /study-in-usa/mba/ | MBA in USA | 0.85
+T4R7: 7 | /study-in-usa/executive-mba/ | Executive MBA in USA | 0.8
+T4R8: 8 | /study-in-germany/masters/ | MS in Germany | 0.9
+T4R9: 9 | /study-in-germany/ausbildung/ | Germany Ausbildung | 0.85
+T4R10: 10 | /study-in-canada/masters/ | MS in Canada | 0.85
+T4R11: 11 | /study-in-russia/mbbs/ | MBBS in Russia | 0.9 (hero)
+T4R12: 12 | /study-in-georgia/mbbs/ | MBBS in Georgia | 0.9 (hero)
+T5R0: # | URL | Combination
+T5R1: 13 | /study-in-uk/mba-healthcare/ | MBA Healthcare in UK
+T5R2: 14 | /study-in-uk/bachelors/ | Bachelor's in UK
+T5R3: 15 | /study-in-usa/mba-healthcare/ | MBA Healthcare in USA
+T5R4: 16 | /study-in-usa/nursing/ | Nursing in USA
+T5R5: 17 | /study-in-germany/mba/ | MBA in Germany
+T5R6: 18 | /study-in-germany/executive-mba/ | Executive MBA in Germany
+T5R7: 19 | /study-in-canada/mba/ | MBA in Canada
+T5R8: 20 | /study-in-canada/executive-mba/ | Executive MBA in Canada
+T5R9: 21 | /study-in-canada/mba-healthcare/ | MBA Healthcare in Canada
+T5R10: 22 | /study-in-canada/nursing/ | Nursing in Canada
+T5R11: 23 | /study-in-canada/bachelors/ | Bachelor's in Canada
+T5R12: 24 | /study-in-australia/masters/ | MS in Australia
+T5R13: 25 | /study-in-australia/mba/ | MBA in Australia
+T5R14: 26 | /study-in-australia/executive-mba/ | Executive MBA in Australia
+T5R15: 27 | /study-in-australia/mba-healthcare/ | MBA Healthcare in Australia
+T5R16: 28 | /study-in-australia/nursing/ | Nursing in Australia
+T5R17: 29 | /study-in-ireland/masters/ | MS in Ireland
+T5R18: 30 | /study-in-ireland/mba/ | MBA in Ireland
+T5R19: 31 | /study-in-ireland/nursing/ | Nursing in Ireland
+T5R20: 32 | /study-in-new-zealand/masters/ | MS in New Zealand
+T5R21: 33 | /study-in-new-zealand/mba/ | MBA in New Zealand
+T5R22: 34 | /study-in-new-zealand/nursing/ | Nursing in New Zealand
+T5R23: 35 | /study-in-singapore/masters/ | MS in Singapore
+T5R24: 36 | /study-in-singapore/mba/ | MBA in Singapore
+T5R25: 37 | /study-in-singapore/executive-mba/ | Executive MBA in Singapore
+T5R26: 38 | /study-in-netherlands/masters/ | MS in Netherlands
+T5R27: 39 | /study-in-netherlands/mba/ | MBA in Netherlands
+T5R28: 40 | /study-in-uae/masters/ | MS in UAE
+T5R29: 41 | /study-in-uae/mba/ | MBA in UAE
+T5R30: 42 | /study-in-uae/executive-mba/ | Executive MBA in UAE
+T6R0: Phase | URL | Combination
+T6R1: P3 | /study-in-uk/ausbildung/ | N/A — placeholder for related
+T6R2: P3 | /study-in-usa/bachelors/ | Bachelor's in USA
+T6R3: P3 | /study-in-germany/mba-healthcare/ | MBA Healthcare in Germany
+T6R4: P3 | /study-in-germany/nursing/ | Nursing in Germany (career migration)
+T6R5: P3 | /study-in-germany/bachelors/ | Bachelor's in Germany
+T6R6: P3 | /study-in-ireland/executive-mba/ | Executive MBA in Ireland
+T6R7: P3 | /study-in-ireland/mba-healthcare/ | MBA Healthcare in Ireland
+T6R8: P3 | /study-in-singapore/mba-healthcare/ | MBA Healthcare in Singapore
+T6R9: P3 | /study-in-netherlands/executive-mba/ | Executive MBA in Netherlands
+T6R10: P3 | /study-in-netherlands/bachelors/ | Bachelor's in Netherlands
+T6R11: P3 | /study-in-uae/bachelors/ | Bachelor's in UAE
+T6R12: P3 | /study-in-kyrgyzstan/mbbs/ | MBBS in Kyrgyzstan
+T6R13: P3 | /study-in-kazakhstan/mbbs/ | MBBS in Kazakhstan
+T6R14: P3 | /study-in-philippines/mbbs/ | MBBS in Philippines
+T6R15: P3 | /study-in-philippines/nursing/ | Nursing in Philippines
+T6R16: P3 | /study-in-australia/bachelors/ | Bachelor's in Australia
+T6R17: P3 | /study-in-usa/mbbs/ | N/A — repurposed as MD guide
+T6R18: P3 | /study-in-uzbekistan/mbbs/ | MBBS in Uzbekistan
+T6R19: P3 | + 2 more MBBS deep dives | Extended MBBS coverage
+T6R20: P4 | /study-in-france/masters/ | MS in France
+T6R21: P4 | /study-in-france/mba/ | MBA in France
+T6R22: P4 | /study-in-france/executive-mba/ | Executive MBA in France
+T6R23: P4 | /study-in-italy/masters/ | MS in Italy
+T6R24: P4 | /study-in-italy/mba/ | MBA in Italy
+T6R25: P4 | /study-in-italy/bachelors/ | Bachelor's in Italy (design/fashion)
+T6R26: P4 | /study-in-malaysia/masters/ | MS in Malaysia
+T6R27: P4 | /study-in-malaysia/mba/ | MBA in Malaysia
+T6R28: P4 | + 6 more Emerging Bets | Remaining France/Italy/Malaysia
+T7R0: Pattern | Count | Phase Distribution
+T7R1: /study-in-<country>/masters/data-science/ | 8 countries | P1: 4, P2: 3, P3: 1
+T7R2: /study-in-<country>/masters/computer-science/ | 8 countries | P1: 4, P2: 3, P3: 1
+T7R3: /study-in-<country>/masters/business-analytics/ | 6 countries | P1: 3, P2: 3
+T7R4: /study-in-<country>/masters/artificial-intelligence/ | 6 countries | P1: 3, P2: 2, P3: 1
+T7R5: /study-in-<country>/masters/cybersecurity/ | 5 countries | P1: 3, P2: 2
+T7R6: /study-in-<country>/masters/finance/ | 7 countries | P1: 4, P2: 3
+T7R7: /study-in-<country>/masters/marketing/ | 5 countries | P2: 3, P3: 2
+T7R8: /study-in-<country>/masters/mechanical-engineering/ | 5 countries | P2: 3, P3: 2
+T7R9: /study-in-<country>/masters/electrical-engineering/ | 5 countries | P2: 3, P3: 2
+T7R10: /study-in-<country>/masters/civil-engineering/ | 4 countries | P2: 2, P3: 2
+T7R11: /study-in-<country>/masters/aerospace/ | 3 countries | P3: 2, P4: 1
+T7R12: /study-in-<country>/masters/public-health/ | 5 countries | P2: 3, P3: 2
+T7R13: /study-in-<country>/masters/biotechnology/ | 4 countries | P3: 3, P4: 1
+T7R14: /study-in-<country>/mba/finance/ | 6 countries | P1: 3, P2: 3
+T7R15: /study-in-<country>/mba/marketing/ | 5 countries | P2: 3, P3: 2
+T7R16: /study-in-<country>/mba/strategy/ | 4 countries | P2: 2, P3: 2
+T7R17: /study-in-<country>/mba/consulting/ | 4 countries | P2: 2, P3: 2
+T7R18: /study-in-<country>/mba/entrepreneurship/ | 3 countries | P3: 2, P4: 1
+T7R19: /study-in-<country>/mba/technology-management/ | 4 countries | P3: 3, P4: 1
+T8R0: # | URL | Program | Phase | SEO Priority | Notes
+T8R1: 1 | /masters-abroad/ | Master's abroad | P1 | 0.9 | Hero program — highest search volume
+T8R2: 2 | /mba-abroad/ | MBA abroad | P1 | 0.9 | High-value B2B lead source
+T8R3: 3 | /executive-mba/ | Executive MBA | P1 | 0.85 | Working professional target
+T8R4: 4 | /mba-healthcare/ | MBA in Healthcare Management | P1 | 0.8 | Cross-vertical
+T8R5: 5 | /mbbs-abroad/ | MBBS abroad | P1 | 0.95 | Highest-intent audience
+T8R6: 6 | /nursing-abroad/ | Nursing abroad | P1 | 0.9 | Career migration frame
+T8R7: 7 | /bachelors-abroad/ | Bachelor's abroad | P1 | 0.8 | Younger audience niche
+T8R8: 8 | /germany-ausbildung/ | Germany Ausbildung | P1 | 0.9 | Only country-specific L2
+T9R0: # | URL | University | Country | Featured Tier
+T9R1: 1 | /university/oxford/ | University of Oxford | UK | Platinum
+T9R2: 2 | /university/cambridge/ | University of Cambridge | UK | Platinum
+T9R3: 3 | /university/imperial-college/ | Imperial College London | UK | Gold
+T9R4: 4 | /university/lse/ | London School of Economics | UK | Gold
+T9R5: 5 | /university/ucl/ | University College London | UK | Silver
+T9R6: 6 | /university/manchester/ | University of Manchester | UK | Silver
+T9R7: 7 | /university/edinburgh/ | University of Edinburgh | UK | Silver
+T9R8: 8 | /university/mit/ | Massachusetts Institute of Technology | USA | Platinum
+T9R9: 9 | /university/stanford/ | Stanford University | USA | Platinum
+T9R10: 10 | /university/harvard/ | Harvard University | USA | Platinum
+T9R11: 11 | /university/berkeley/ | UC Berkeley | USA | Gold
+T9R12: 12 | /university/columbia/ | Columbia University | USA | Gold
+T9R13: 13 | /university/nyu/ | New York University | USA | Silver
+T9R14: 14 | /university/carnegie-mellon/ | Carnegie Mellon University | USA | Silver
+T9R15: 15 | /university/tum/ | Technical University of Munich | Germany | Gold
+T9R16: 16 | /university/heidelberg/ | Heidelberg University | Germany | Silver
+T9R17: 17 | /university/rwth-aachen/ | RWTH Aachen | Germany | Silver
+T9R18: 18 | /university/toronto/ | University of Toronto | Canada | Gold
+T9R19: 19 | /university/mcgill/ | McGill University | Canada | Gold
+T9R20: 20 | /university/ubc/ | University of British Columbia | Canada | Silver
+T9R21: ... | ... | Additional 130 universities across Anchor Six + MBBS destinations
+T10R0: # | URL | Pillar Topic | Phase | Target Audience
+T10R1: 1 | /guides/mbbs-abroad/ | MBBS Abroad Complete Guide | P1 | 12th-pass NEET-scoring students + parents
+T10R2: 2 | /guides/masters-abroad/ | Master's Abroad Complete Guide | P1 | Final-year UG + early professionals
+T10R3: 3 | /guides/mba-abroad/ | MBA Abroad Complete Guide | P1 | 3-7yr working professionals
+T10R4: 4 | /guides/nursing-career-migration/ | Nursing Career Migration Guide | P1 | BSc Nursing grads seeking overseas career
+T10R5: 5 | /guides/germany-ausbildung/ | Germany Ausbildung Complete Guide | P3 | 12th-pass students, skilled trade seekers
+T10R6: 6 | /guides/executive-mba-choice/ | Executive MBA Decision Guide | P3 | 8-15yr professionals evaluating EMBA
+T10R7: 7 | /guides/data-science-abroad/ | Data Science Careers Abroad | P3 | Engineering students, career switchers
+T10R8: 8 | /guides/study-abroad-costs/ | True Cost of Study Abroad | P3 | Parents, cost-anxious students
+T10R9: 9 | /guides/scholarships-abroad/ | Scholarships Complete Guide | P4 | All aspirants
+T10R10: 10 | /guides/post-study-work-visas/ | Post-Study Work Visa Guide | P4 | Decided-country students planning stay
+T11R0: URL | Cluster Topic
+T11R1: /guides/mbbs-abroad/neet-cutoff-2027/ | NEET cutoff analysis for MBBS abroad
+T11R2: /guides/mbbs-abroad/fmge-explained/ | FMGE (Foreign Medical Graduate Exam) explained
+T11R3: /guides/mbbs-abroad/mci-vs-nmc/ | MCI vs NMC recognition — what changed
+T11R4: /guides/mbbs-abroad/cost-comparison/ | MBBS cost across 6 countries compared
+T11R5: /guides/mbbs-abroad/return-to-india/ | Coming back to India after foreign MBBS
+T11R6: /guides/mbbs-abroad/russia-vs-georgia/ | Russia vs Georgia for MBBS — head to head
+T11R7: /guides/mbbs-abroad/6-year-vs-5.5-year/ | 6-year vs 5.5-year MBBS programs
+T11R8: /guides/mbbs-abroad/hostel-life/ | Hostel life for Indian MBBS students abroad
+T11R9: /guides/mbbs-abroad/parents-guide/ | Parents' guide to MBBS abroad decisions
+T11R10: /guides/mbbs-abroad/warning-signs/ | 10 warning signs of a fake MBBS agent
+T12R0: URL | Scholarship | Country/Region
+T12R1: /scholarships/chevening/ | Chevening Scholarship | UK (Govt)
+T12R2: /scholarships/commonwealth/ | Commonwealth Scholarship | UK (Govt)
+T12R3: /scholarships/gates-cambridge/ | Gates Cambridge Scholarship | UK (Cambridge)
+T12R4: /scholarships/rhodes/ | Rhodes Scholarship | UK (Oxford)
+T12R5: /scholarships/fulbright-nehru/ | Fulbright-Nehru Scholarship | USA (Govt)
+T12R6: /scholarships/inlaks/ | Inlaks Shivdasani Foundation | India-origin, multi-country
+T12R7: /scholarships/kc-mahindra/ | KC Mahindra Scholarship | India-origin, multi-country
+T12R8: /scholarships/jn-tata-endowment/ | JN Tata Endowment | India-origin, multi-country
+T12R9: /scholarships/daad/ | DAAD Scholarships (Germany) | Germany
+T12R10: /scholarships/erasmus-mundus/ | Erasmus Mundus Scholarship | EU multi-country
+T12R11: /scholarships/vanier-canada/ | Vanier Canada Graduate Scholarship | Canada (Govt)
+T12R12: /scholarships/australia-awards/ | Australia Awards | Australia (Govt)
+T12R13: /scholarships/government-of-ireland/ | Government of Ireland Postgrad Scholarship | Ireland
+T12R14: /scholarships/nz-commonwealth/ | New Zealand Commonwealth Scholarship | New Zealand
+T12R15: /scholarships/asean-scholarships/ | ASEAN Scholarships | Singapore
+T12R16: /scholarships/rotary-peace/ | Rotary Peace Fellowship | Multi-country
+T12R17: /scholarships/aga-khan-foundation/ | Aga Khan Foundation Scholarship | Multi-country
+T12R18: /scholarships/schwarzman-scholars/ | Schwarzman Scholars | China (relevant for Asia focus)
+T12R19: /scholarships/mahatma-gandhi-scholarship/ | Mahatma Gandhi Scholarship | UK
+T12R20: + 11 more launch scholarships | Detailed in Content Team spreadsheet | Various
+T13R0: # | URL | Country | Phase
+T13R1: 1 | /visa/uk-student-visa/ | United Kingdom | P1
+T13R2: 2 | /visa/usa-f1-visa/ | United States (F1) | P1
+T13R3: 3 | /visa/germany-student-visa/ | Germany | P1
+T13R4: 4 | /visa/canada-study-permit/ | Canada | P1
+T13R5: 5 | /visa/australia-student-visa/ | Australia | P1
+T13R6: 6 | /visa/ireland-student-visa/ | Ireland | P1
+T13R7: 7 | /visa/new-zealand-student-visa/ | New Zealand | P3
+T13R8: 8 | /visa/singapore-student-pass/ | Singapore | P3
+T13R9: 9 | /visa/netherlands-student-visa/ | Netherlands | P3
+T13R10: 10 | /visa/russia-student-visa/ | Russia (MBBS focus) | P3
+T13R11: 11 | /visa/georgia-student-visa/ | Georgia (MBBS focus) | P3
+T13R12: 12 | /visa/uae-student-visa/ | UAE | P3
+T13R13: 13 | /visa/france-student-visa/ | France | P3
+T13R14: 14 | /visa/italy-student-visa/ | Italy | P3
+T13R15: 15 | /visa/philippines-student-visa/ | Philippines | P3
+T14R0: # | URL | Test | Notes
+T14R1: 1 | /test-prep/ | Test Prep Hub | L1 landing
+T14R2: 2 | /test-prep/ielts/ | IELTS | Most important for UK/Canada/Australia
+T14R3: 3 | /test-prep/toefl/ | TOEFL | USA primary
+T14R4: 4 | /test-prep/pte/ | PTE Academic | Australia + UK alternative
+T14R5: 5 | /test-prep/duolingo/ | Duolingo English Test | Rising alternative
+T14R6: 6 | /test-prep/gre/ | GRE | MS in USA + Canada
+T14R7: 7 | /test-prep/gmat/ | GMAT | MBA globally
+T14R8: 8 | /test-prep/nclex/ | NCLEX | Nursing USA/Canada
+T14R9: 9 | /test-prep/plab/ | PLAB | MBBS-to-UK licensing
+T14R10: 10 | /test-prep/oet/ | OET (Occupational English Test) | Nursing UK/Australia
+T15R0: # | URL | Tool | Phase | Owner
+T15R1: 1 | /ai-counsellor/ | AI Counsellor (chat) | P1 | Product Lead
+T15R2: 2 | /cost-calculator/ | Total Cost Calculator | P1 | Product Lead
+T15R3: 3 | /compare/ | University Compare Tool | P1 | Product Lead
+T15R4: 4 | /my-shortlist/ | Saved Shortlist | P1 | Product Lead
+T15R5: 5 | /deadlines/ | Application Deadline Tracker | P1 | Product Lead
+T15R6: 6 | /scholarships/finder/ | Scholarship Finder Tool | P1 | Product Lead
+T15R7: 7 | /eligibility-check/ | Admission Eligibility Checker | P1 | Product Lead
+T15R8: 8 | /loan-eligibility/ | Education Loan Eligibility | P1 | Product Lead + Finance Partners
+T15R9: 9 | /currency-converter/ | Currency Converter (INR context) | P1 | Product Lead
+T15R10: 10 | /gpa-converter/ | GPA to CGPA Converter | P1 | Product Lead
+T15R11: 11 | /roi-calculator/ | Study Abroad ROI Calculator | P4 | Product Lead
+T15R12: 12 | /lms/ | Learning Management System (LMS) | P4 | Product Lead + Content
+T16R0: Category | Purpose | Frequency | Year 1 Target
+T16R1: News & updates | Visa changes, policy updates, deadline shifts | As-needed | 40 articles
+T16R2: Opinion & analysis | Trend analysis, market shifts, editor perspective | Weekly | 30 articles
+T16R3: Student interviews | Real student experience stories | Bi-weekly | 20 articles
+T16R4: Expert Q&A | University admissions officers, consultants | Monthly | 10 articles
+T16R5: Seasonal / calendar | Intake reminders, application deadlines | As-needed | 15 articles
+T17R0: URL | Article
+T17R1: /blog/uk-ms-tuition-2026-full-picture/ | UK MS tuition 2026 — the full picture, not just the sticker
+T17R2: /blog/why-we-built-studyabroadvista/ | Why we built StudyAbroadVista — the founder note
+T17R3: /blog/mbbs-nmc-what-changed-2026/ | MBBS abroad — what the 2026 NMC changes actually mean
+T17R4: /blog/germany-ausbildung-hidden-opportunity/ | Germany Ausbildung — the hidden opportunity Indian students miss
+T17R5: /blog/2026-intake-deadlines-tracker/ | 2026 intake deadlines — the master tracker for Indian students
+T18R0: # | URL | Page | Phase | Owner
+T18R1: 1 | /about/ | About StudyAbroadVista | P1 | Founder
+T18R2: 2 | /contact/ | Contact Us | P1 | Founder / Admin
+T18R3: 3 | /partner-with-us/ | Partner With Us (universities, consultants) | P1 | Partnerships Lead
+T18R4: 4 | /careers/ | Careers at StudyAbroadVista | P1 | Founder / HR
+T18R5: 5 | /press/ | Press & Media | P1 | Content Lead
+T18R6: 6 | /privacy-policy/ | Privacy Policy | P1 | Legal / Founder
+T18R7: 7 | /terms-of-service/ | Terms of Service | P1 | Legal / Founder
+T18R8: 8 | /dpdp-consent/ | DPDP Consent Notice (India) | P1 | Legal / Founder
+T18R9: 9 | /refund-policy/ | Refund Policy | P1 | Legal / Founder
+T18R10: 10 | /sitemap/ | HTML Sitemap (user-facing) | P1 | Development
+T19R0: # | URL | Page | Phase
+T19R1: 1 | /buyer/login/ | Buyer login | P1
+T19R2: 2 | /buyer/register/ | Buyer registration + onboarding | P1
+T19R3: 3 | /buyer/dashboard/ | Buyer main dashboard | P1
+T19R4: 4 | /buyer/leads/ | Active leads inbox | P1
+T19R5: 5 | /buyer/leads/<lead-id>/ | Individual lead detail | P1
+T19R6: 6 | /buyer/wallet/ | Wallet & billing | P1
+T19R7: 7 | /buyer/settings/ | Account & preference settings | P1
+T19R8: 8 | /buyer/analytics/ | Lead performance analytics | P1
+T19R9: 9 | /buyer/api-access/ | API access for enterprise buyers | P4
+T19R10: 10 | /buyer/team/ | Team member management | P4
+T20R0: # | URL | Page | Phase
+T20R1: 1 | /university-portal/login/ | University portal login | P1
+T20R2: 2 | /university-portal/claim/ | Claim your university listing | P1
+T20R3: 3 | /university-portal/dashboard/ | Featured status + inbound interest | P1
+T20R4: 4 | /university-portal/programs/ | Manage programs offered | P1
+T20R5: 5 | /university-portal/analytics/ | Impression + click analytics | P1
+T21R0: # | URL | Page | Phase
+T21R1: 1 | /dashboard/ | Student main dashboard | P1
+T21R2: 2 | /dashboard/shortlist/ | My saved universities | P1
+T21R3: 3 | /dashboard/counsellor-chats/ | Saved AI Counsellor conversations | P1
+T21R4: 4 | /dashboard/applications/ | Application tracker | P1
+T21R5: 5 | /dashboard/profile/ | My profile | P1
+T22R0: # | URL | Page | Phase
+T22R1: 1 | /admin/ | Admin dashboard | P1
+T22R2: 2 | /admin/content/ | Content management | P1
+T22R3: 3 | /admin/leads/ | All leads (across buyers) | P1
+T22R4: 4 | /admin/buyers/ | Buyer management | P1
+T22R5: 5 | /admin/universities/ | University master data | P1
+T22R6: 6 | /admin/lead-delivery/ | Lead Delivery Engine controls | P1
+T22R7: 7 | /admin/pricing/ | CPL pricing rules | P1
+T22R8: 8 | /admin/analytics/ | Business analytics | P1
+T22R9: 9 | /admin/users/ | User & role management | P1
+T22R10: 10 | /admin/audit-log/ | Audit log | P1
+T22R11: + 5 more | Advanced controls in Phase 3 | P3
+T23R0: Sitemap File | Contents | Approximate URL Count
+T23R1: /sitemap.xml | Index file — points to all sub-sitemaps | N/A (index only)
+T23R2: /sitemap-main.xml | Homepage, Legal, About, Tools | ~30
+T23R3: /sitemap-countries.xml | All Country landings, Country+Program, Specializations | ~250
+T23R4: /sitemap-programs.xml | Program landings | 8
+T23R5: /sitemap-universities.xml | All university detail + University x Program | ~700
+T23R6: /sitemap-guides.xml | Pillar guides + Cluster articles | ~80
+T23R7: /sitemap-scholarships.xml | All scholarship pages | ~50
+T23R8: /sitemap-visa.xml | All visa guides | ~15
+T23R9: /sitemap-testprep.xml | All test prep pages | ~10
+T23R10: /sitemap-blog.xml | All blog articles (updated weekly) | ~115+
+T24R0: Content Type | changefreq value | priority value
+T24R1: Homepage | weekly | 1.0
+T24R2: Country landings (Anchor Six) | weekly | 0.9
+T24R3: Country landings (Secondary) | monthly | 0.85
+T24R4: Country + Program (hero pages) | weekly | 0.9
+T24R5: Country + Program (others) | monthly | 0.8
+T24R6: Specialization pages | monthly | 0.7
+T24R7: University detail (Platinum/Gold) | monthly | 0.8
+T24R8: University detail (Silver/other) | monthly | 0.6
+T24R9: Pillar guides | monthly | 0.9
+T24R10: Cluster articles | monthly | 0.7
+T24R11: Scholarship pages | quarterly | 0.7
+T24R12: Visa guides | quarterly | 0.75
+T24R13: Test prep pages | quarterly | 0.65
+T24R14: Tool pages | quarterly | 0.75
+T24R15: Blog articles | monthly | 0.6
+T24R16: Legal/Utility pages | yearly | 0.3
+T25R0: Alias URL | Canonical URL (target)
+T25R1: /masters-abroad/uk/ | /study-in-uk/masters/
+T25R2: /masters-abroad/usa/ | /study-in-usa/masters/
+T25R3: /masters-abroad/germany/ | /study-in-germany/masters/
+T25R4: /mba-abroad/uk/ | /study-in-uk/mba/
+T25R5: /mba-abroad/usa/ | /study-in-usa/mba/
+T25R6: /mbbs-abroad/russia/ | /study-in-russia/mbbs/
+T25R7: /mbbs-abroad/georgia/ | /study-in-georgia/mbbs/
+T25R8: ... (all program-first URLs) | ... (all redirect to country-first)
+T26R0: Variant URL | Canonical URL
+T26R1: /study-in-united-kingdom/ | /study-in-uk/
+T26R2: /study-in-united-states/ | /study-in-usa/
+T26R3: /study-in-america/ | /study-in-usa/
+T26R4: /study-in-britain/ | /study-in-uk/
+T26R5: /study-in-holland/ | /study-in-netherlands/
+T26R6: /study-in-dubai/ | /study-in-uae/
+T27R0: Version | Date | Key Changes
+T27R1: v1.0 | 31 August 2026 | Initial Sitemap locked. 1,080+ URLs planned across 4 phases. Full country x program matrix defined. XML sitemap structure specified. Redirect rules documented.
+T28R0: The Sitemap is complete. This document represents the full Year 1 URL inventory for StudyAbroadVista. Every downstream deliverable — content briefs, templates, data schema, SEO configuration — traces back to a URL listed here. Content Team can begin production against Phase 1 targets immediately.

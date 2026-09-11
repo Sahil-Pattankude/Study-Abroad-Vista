@@ -1,0 +1,108 @@
+StudyAbroad Vista
+MASTER PROJECT IMPLEMENTATION PLAN
+Refined Lean MVP Architecture | Synthesized from Project Track Documents W1 to W11
+Parent Entity: Dnyanal Educon Pvt. Ltd. | September 2026
+1. Executive Summary & Vision
+StudyAbroad Vista is an authoritative discovery portal and high-intent lead generation marketplace developed for Indian students, families, and working professionals looking to study abroad. It bridges Indian aspirants with accredited international universities and verified educational consultants.
+
+Key Project Objectives:
+• Programmatic SEO Engine: 1,080+ to 1,290+ high-speed, indexed URLs covering 19 destinations and 6 academic disciplines.
+• Conversion & Lead Qualification: Multi-step verified lead capture (SMS OTP via MSG91) matching students with consultants.
+• AI Counsellor (RAG): 24/7 conversational assistant using Google Gemini 2.0/1.5 Flash + Supabase pgvector knowledge retrieval.
+• Student Utility Suite: Cost of Living & Tuition Calculator, University Comparison Tray, and Eligibility Checker.
+• Four Dedicated Portals: Public Discovery Site, Student Dashboard, B2B Buyer Portal (Razorpay wallet), and Admin CMS.
+2. Project Scope & Master Taxonomy
+Geographic Scope (Year 1 - 19 Destinations):
+• Tier 1 (High Demand / English Hubs): USA, UK, Canada, Australia, Ireland, New Zealand
+• Tier 2 (Affordable / Low-Fee European & Asian Hubs): Germany, France, Italy, Netherlands, Singapore, Malaysia, UAE
+• Tier 3 (Specialized Medical / Low-Cost MBBS Hubs): Russia, Uzbekistan, Kazakhstan, Kyrgyzstan, Georgia, Philippines
+
+Program Disciplines:
+1. Master’s (MS/MSc) - STEM, Data Science, Core Engineering
+2. MBA & Management - Full-time, MIM, Executive MBA
+3. MBBS / Medicine - NMC/WHO compliant global medical schools
+4. Bachelor’s / UG - Engineering, Business, Computer Science after 12th
+5. Nursing - BSc/MSc with clinical registration pathways (UK, Ireland, Germany, Australia)
+6. Germany Ausbildung - Dual vocational training with stipends and language pathways
+3. Technology Stack Comparison (Original W4 vs. Refined Lean MVP)
+To ensure rapid time-to-market and low operating overhead, redundant technologies were restructured as follows:
+4. Essential Third-Party Integrations for Indian Market
+Beyond the core platforms (Next.js, Node.js, Supabase, Sanity.io, Vercel, Gemini), the following 5 services are critical for MVP operations:
+
+1. Razorpay (Payments & Prepaid B2B Wallet):
+   Enables admission consultants to top-up their lead purchase wallet in INR via UPI, Netbanking, and Cards, with automated GST invoice generation.
+
+2. MSG91 / Twilio (Indian Mobile SMS OTP):
+   Authenticates student phone numbers at lead capture to eliminate fake inquiries before leads reach paying consultants.
+
+3. Resend / SendGrid (Transactional Email):
+   Sends branded emails for booking confirmations, lead delivery receipts, and account authentication.
+
+4. WhatsApp Business API (High Conversion):
+   Automates immediate student notifications and consultation reminders. WhatsApp open rates in India exceed 90%.
+
+5. Google Search Console & GA4 (Free):
+   Monitors crawl rate, indexing coverage, and keyword rankings across 1,080+ programmatic SEO pages.
+5. System Architecture & Subsystem Design
+• Unified Data Engine (Supabase):
+  A single PostgreSQL database powers core entities (users, leads, buyers, wallets, universities, programs),   vector embeddings (rag_embeddings with pgvector), and authenticated file storage.
+
+• Editorial Content Lake (Sanity.io):
+  Pillar guides, blog articles, scholarship write-ups, and visa guides are managed in Sanity Studio.   When editors publish, a webhook triggers Next.js On-Demand Incremental Static Regeneration (ISR), updating pages in <500ms.
+
+• Fast Typo-Tolerant Search (Postgres FTS + pg_trgm):
+  A generated tsvector column with GIN index coupled with trigram extension provides instantaneous search with fuzzy typo-correction.
+
+• Conversational AI Counsellor (Gemini + RAG):
+  Google Gemini 2.0/1.5 Flash paired with text-embedding-004. Embeddings match via cosine similarity SQL queries in Supabase.   Gemini natively executes function tools (search_universities, calculate_costs, save_shortlist, book_counsellor_call).
+6. Phased Implementation Roadmap
+Phase 0: Foundations & Architecture (Weeks 1–2)
+Initialize repository (Next.js 14/15 App Router, TypeScript, Tailwind CSS, shadcn/ui).
+Configure Supabase project: PostgreSQL database tables, pgvector extension, and Storage buckets.
+Define Prisma/Drizzle ORM schema models with Row Level Security (RLS) policies.
+Set up Sanity.io Studio schemas for pillar guides, blog posts, and scholarship articles.
+Phase 1: Public Discovery Site & Programmatic SEO (Weeks 3–5)
+Develop responsive layout: Global Navigation, Mega-menu, Trust Badges, Footer taxonomy.
+Build dynamic page hierarchies: L1 Homepage, L2 Country Hubs (19 countries), L3 Country+Program, L4 Specializations.
+Build University Catalog & Program Detail templates.
+Implement Postgres Full-Text Search overlay with autocomplete and faceted filters.
+Implement Technical SEO Engine: Dynamic XML sitemap generator (1,080+ URLs), canonical tags, and JSON-LD structured data.
+Phase 2: Interactive Utilities & AI Counsellor (Weeks 6–8)
+Build interactive Study Cost Calculator (tuition + living expenses with multi-currency conversion).
+Develop Side-by-Side Comparison Engine (compare up to 4 universities/programs).
+Deploy Gemini 2.0/1.5 Flash AI Counsellor with Supabase pgvector RAG and streaming chat drawer.
+Implement multi-step Lead Capture modal with MSG91 Indian SMS OTP verification.
+Phase 3: Authenticated Portals & B2B Marketplace (Weeks 9–11)
+Student Dashboard: Profile evaluation history, saved shortlists, and consultation tracker.
+B2B Consultant Portal: Real-time lead marketplace feed and automatic buyer matching.
+Razorpay Wallet Engine: Consultant wallet top-ups, transaction logging, and automated GST billing.
+Internal Admin Panel: Master data manager (universities, fees, visa rules) and lead routing controls.
+Phase 4: Content Hydration, QA & Production Go-Live (Weeks 12–14)
+Ingest content for 19 country hubs and primary program pages via Sanity.io and Supabase.
+Core Web Vitals audit (LCP < 2.5s, INP < 200ms, CLS < 0.1).
+Comprehensive Playwright E2E tests for lead capture, AI chat, and Razorpay wallet recharges.
+Security & DPDP compliance audit; production deployment on Vercel with custom domain & Cloudflare DNS.
+7. Verification & Quality Assurance Plan
+• Automated Testing:
+  - Vitest unit tests for cost calculation algorithms, lead matching logic, and wallet transactions.
+  - Playwright E2E tests for student registration, lead form submission, and consultant wallet top-ups.
+
+• SEO & Performance Auditing:
+  - Google PageSpeed Insights & Lighthouse checks ensuring 90+ mobile performance scores.
+  - Schema.org Validator verification for JSON-LD scripts (CollegeOrUniversity, Course, FAQPage).
+
+• Data Protection & Compliance:
+  - Indian DPDP Act 2023 compliance: user consent tracking, encrypted PII, and automated data deletion rights.
+IMPORTANT ARCHITECTURAL RESTRUCTURING NOTICE: This implementation plan integrates the refined Lean MVP Stack based on review of Document W4 and project goals. Enterprise overhead (Kubernetes, MongoDB, Redis, Elasticsearch, Pinecone) has been replaced with a unified, high-velocity modern stack: Next.js 14/15, Node.js/TypeScript, Supabase (PostgreSQL, pgvector, Storage, Auth), Sanity.io Headless CMS, Google Gemini LLM, Vercel, and Cloudflare. Mobile web is responsive-first with React Native planned for Phase 2.
+Architecture Layer | Original W4 Draft | Refined Lean Stack | Strategic Advantage
+Frontend | Next.js + PWA | Next.js 14/15 (App Router, Tailwind) | Responsive mobile web; React Native in Phase 2.
+Primary DB | PostgreSQL 15+ | Supabase (PostgreSQL 15+) | Fully managed, built-in connection pooling, RLS, and Auth.
+Document DB | MongoDB | Supabase JSONB + Sanity.io | Unstructured data in Postgres JSONB; editorial blogs in Sanity.
+Cache & Sessions | Redis 7+ | Supabase Auth + Next.js Cache | Stateless JWT in HTTP-only cookies; Vercel Edge caching.
+Search Engine | ElasticSearch 8+ | Postgres FTS + pg_trgm | Native GIN index & trigrams; <10ms queries, zero JVM cluster.
+Vector DB | Pinecone | Supabase pgvector | Embeddings stored directly in Postgres SQL; saves $100/mo.
+Object Storage | AWS S3 / GCS | Supabase Storage / Cloudflare R2 | Built-in S3-compatible storage with CDN and RLS policies.
+Content CMS | Custom Mongo CMS | Sanity.io Studio | World-class headless CMS for writers with live preview & ISR.
+AI Engine | Claude 3.5 / GPT-4 | Google Gemini 2.0/1.5 Flash | Sub-400ms latency, 1M context window, 10x cheaper.
+Hosting & Ops | Kubernetes (EKS) | Vercel + GitHub Actions | Serverless scaling, zero DevOps overhead, instant deployments.
+Est. Infra Cost | ₹40,000 - ₹80,000 / mo | ₹3,500 - ₹6,000 / mo | >90% infrastructure cost reduction for MVP!
