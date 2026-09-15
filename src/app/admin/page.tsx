@@ -19,7 +19,8 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { useState } from "react";
-import { COUNTRIES, PROGRAMS, Country, University } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
+import { Country, University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { fetchLiveCountries, fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 

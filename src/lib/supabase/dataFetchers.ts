@@ -1,5 +1,6 @@
 import { supabase } from "./client";
-import { COUNTRIES, FEATURED_UNIVERSITIES, Country, University } from "@/lib/data/masterData";
+import { COUNTRIES, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { Country, University } from "@/types";
 
 export async function fetchLiveCountries(): Promise<Country[]> {
   try {
