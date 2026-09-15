@@ -212,3 +212,34 @@ export async function getPillarGuideByCountry(countrySlug: string): Promise<Sani
   }
   return null;
 }
+
+const ALL_SANITY_UNIVERSITIES_QUERY = `*[_type == "university"] {
+  _id,
+  name,
+  "slug": slug.current,
+  country,
+  city,
+  rankingGlobal,
+  rankingNational,
+  tuitionFeeRangeINR,
+  ieltsMinScore,
+  greGmatRequired,
+  acceptanceRate,
+  postStudyWorkMonths,
+  featured
+}`;
+
+export async function getSanityUniversities() {
+  try {
+    const data = await client.fetch(ALL_SANITY_UNIVERSITIES_QUERY, {}, {
+      next: { revalidate: 60 },
+    });
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+  } catch (error) {
+    console.warn("Sanity getSanityUniversities fetch failed:", error);
+  }
+  return [];
+}
+
