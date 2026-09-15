@@ -32,6 +32,60 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/programs/emba-executive",
+        destination: "/programs/emba",
+        permanent: true,
+      },
+      {
+        source: "/programs/executive-mba",
+        destination: "/programs/emba",
+        permanent: true,
+      },
+      {
+        source: "/programs/masters-stem",
+        destination: "/programs/ms",
+        permanent: true,
+      },
+      {
+        source: "/programs/stem-masters",
+        destination: "/programs/ms",
+        permanent: true,
+      },
+      {
+        source: "/programs/mba-management",
+        destination: "/programs/mba",
+        permanent: true,
+      },
+      {
+        source: "/programs/mbbs-medicine",
+        destination: "/programs/mbbs",
+        permanent: true,
+      },
+      {
+        source: "/programs/nursing-healthcare",
+        destination: "/programs/nursing",
+        permanent: true,
+      },
+      {
+        source: "/programs/bachelors-ug",
+        destination: "/programs/bachelors",
+        permanent: true,
+      },
+      {
+        source: "/programs/germany-ausbildung",
+        destination: "/programs/ausbildung",
+        permanent: true,
+      },
+      {
+        source: "/programs/phd-doctoral",
+        destination: "/programs/phd",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
@@ -48,27 +102,35 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/masters-abroad",
-        destination: "/programs/masters-stem",
+        destination: "/programs/ms",
       },
       {
         source: "/mba-abroad",
-        destination: "/programs/mba-management",
+        destination: "/programs/mba",
       },
       {
         source: "/mbbs-abroad",
-        destination: "/programs/mbbs-medicine",
+        destination: "/programs/mbbs",
       },
       {
         source: "/nursing-abroad",
-        destination: "/programs/nursing-healthcare",
+        destination: "/programs/nursing",
       },
       {
         source: "/germany-ausbildung",
-        destination: "/programs/germany-ausbildung",
+        destination: "/programs/ausbildung",
       },
       {
         source: "/bachelors-abroad",
-        destination: "/programs/bachelors-ug",
+        destination: "/programs/bachelors",
+      },
+      {
+        source: "/emba-abroad",
+        destination: "/programs/emba",
+      },
+      {
+        source: "/phd-abroad",
+        destination: "/programs/phd",
       },
     ];
   },

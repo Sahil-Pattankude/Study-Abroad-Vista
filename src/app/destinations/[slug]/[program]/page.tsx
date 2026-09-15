@@ -13,7 +13,7 @@ import {
   HelpCircle,
   Award
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, getProgramBySlug } from "@/lib/data/masterData";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -34,7 +34,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, program } = await params;
   const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
-  const prog = PROGRAMS.find((p) => p.slug === (program || "").toLowerCase());
+  const prog = getProgramBySlug(program || "");
 
   if (!country || !prog) return { title: "Program Not Found" };
 
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CountryProgramPage({ params }: Props) {
   const { slug, program } = await params;
   const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
-  const prog = PROGRAMS.find((p) => p.slug === (program || "").toLowerCase());
+  const prog = getProgramBySlug(program || "");
 
   if (!country || !prog) {
     notFound();

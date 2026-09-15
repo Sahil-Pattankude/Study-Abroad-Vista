@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { ChevronRight, Globe2, ArrowRight, CheckCircle2, Award } from "lucide-react";
-import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS, PROGRAM_ALIASES, getProgramBySlug } from "@/lib/data/masterData";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -11,25 +11,32 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return PROGRAMS.map((p) => ({
+  const canonicalParams = PROGRAMS.map((p) => ({
     program: p.slug,
   }));
+  const aliasParams = Object.keys(PROGRAM_ALIASES).map((alias) => ({
+    program: alias,
+  }));
+  return [...canonicalParams, ...aliasParams];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { program } = await params;
-  const prog = PROGRAMS.find((p) => p.slug === program.toLowerCase());
+  const prog = getProgramBySlug(program);
   if (!prog) return { title: "Program Not Found" };
 
   return {
     title: `Study ${prog.name} Abroad for Indian Students (2026-2027) | Global Comparison & Top Countries`,
     description: `Complete guide to ${prog.name} abroad. Compare top countries (${prog.topDestinations.join(", ")}), global tuition fees in INR, and career pathways.`,
+    alternates: {
+      canonical: `/programs/${prog.slug}`,
+    },
   };
 }
 
 export default async function ProgramHubPage({ params }: Props) {
   const { program } = await params;
-  const prog = PROGRAMS.find((p) => p.slug === program.toLowerCase());
+  const prog = getProgramBySlug(program);
 
   if (!prog) {
     notFound();

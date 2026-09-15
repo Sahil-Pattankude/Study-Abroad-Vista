@@ -460,6 +460,39 @@ export const PROGRAMS: Program[] = [
   },
 ];
 
+export const PROGRAM_ALIASES: Record<string, string> = {
+  "emba-executive": "emba",
+  "executive-mba": "emba",
+  "emba-abroad": "emba",
+  "masters-stem": "ms",
+  "stem-masters": "ms",
+  "masters": "ms",
+  "masters-abroad": "ms",
+  "mba-management": "mba",
+  "mba-abroad": "mba",
+  "mbbs-medicine": "mbbs",
+  "medicine": "mbbs",
+  "mbbs-abroad": "mbbs",
+  "nursing-healthcare": "nursing",
+  "nursing-abroad": "nursing",
+  "germany-ausbildung": "ausbildung",
+  "ausbildung-germany": "ausbildung",
+  "bachelors-ug": "bachelors",
+  "undergraduate": "bachelors",
+  "bachelors-abroad": "bachelors",
+  "phd-doctoral": "phd",
+  "phd-research": "phd",
+  "phd-abroad": "phd",
+  "doctoral": "phd",
+};
+
+export function getProgramBySlug(slug: string): Program | undefined {
+  if (!slug) return undefined;
+  const normalized = slug.toLowerCase().trim();
+  const canonical = PROGRAM_ALIASES[normalized] || normalized;
+  return PROGRAMS.find((p) => p.slug === canonical);
+}
+
 export const FEATURED_UNIVERSITIES: University[] = [
   {
     id: "tum",

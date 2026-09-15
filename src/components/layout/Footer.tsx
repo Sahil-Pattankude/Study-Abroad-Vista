@@ -154,38 +154,43 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/programs/masters-stem" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/ms" className="text-slate-400 hover:text-white transition">
                   MS & STEM Masters
                 </Link>
               </li>
               <li>
-                <Link href="/programs/mba-management" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/mba" className="text-slate-400 hover:text-white transition">
                   MBA & Management
                 </Link>
               </li>
               <li>
-                <Link href="/programs/mbbs-medicine" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/mbbs" className="text-slate-400 hover:text-white transition">
                   MBBS Abroad
                 </Link>
               </li>
               <li>
-                <Link href="/programs/nursing-healthcare" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/nursing" className="text-slate-400 hover:text-white transition">
                   Nursing Migration
                 </Link>
               </li>
               <li>
-                <Link href="/programs/germany-ausbildung" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/ausbildung" className="text-slate-400 hover:text-white transition">
                   Germany Ausbildung
                 </Link>
               </li>
               <li>
-                <Link href="/programs/bachelors-ug" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/bachelors" className="text-slate-400 hover:text-white transition">
                   Bachelor&apos;s Degrees
                 </Link>
               </li>
               <li>
-                <Link href="/programs/emba-executive" className="text-slate-400 hover:text-white transition">
+                <Link href="/programs/emba" className="text-slate-400 hover:text-white transition">
                   Executive MBA
+                </Link>
+              </li>
+              <li>
+                <Link href="/programs/phd" className="text-slate-400 hover:text-white transition">
+                  PhD & Research
                 </Link>
               </li>
             </ul>
