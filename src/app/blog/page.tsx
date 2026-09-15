@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getAllArticles } from "@/lib/sanity/fetchers";
@@ -6,7 +6,8 @@ import { Clock, Calendar, ArrowRight, BookOpen, Compass, ShieldCheck } from "luc
 
 export const metadata = {
   title: "Study Abroad Blog & Admissions News | StudyAbroad Vista",
-  description: "Official StudyAbroad Vista blog: authentic visa rule updates, country comparisons, scholarship alerts, and student success stories.",
+  description:
+    "Official StudyAbroad Vista blog: authentic visa rule updates, country comparisons, scholarship alerts, and student success stories for international degrees.",
 };
 
 export default async function BlogDirectoryPage() {

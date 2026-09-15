@@ -13,7 +13,8 @@ import {
   ArrowRight,
   ShieldCheck
 } from "lucide-react";
-import { FEATURED_UNIVERSITIES, COUNTRIES } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -32,9 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const uni = FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
   if (!uni) return { title: "University Not Found" };
 
+  const rawDescription = `Admissions guide for ${uni.name} in ${uni.city}, ${uni.country}. Global QS rank #${uni.rankingGlobal}, tuition fees (${uni.tuitionFeeRangeINR}), IELTS score cutoffs, and Indian student application deadlines.`;
+
   return {
     title: `${uni.name} Admission for Indian Students (2026-2027) | Fees, Eligibility & Rankings`,
-    description: `Official admissions profile for ${uni.name} in ${uni.city}, ${uni.country}. Global Rank #${uni.rankingGlobal}, tuition fees (${uni.tuitionFeeRangeINR}), IELTS requirements, and deadlines.`,
+    description: fitMetaDescription(rawDescription),
+    alternates: {
+      canonical: `/universities/${uni.slug}`,
+    },
   };
 }
 

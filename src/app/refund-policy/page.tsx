@@ -17,10 +17,12 @@ import {
 
 export const metadata: Metadata = {
   title: "Cancellation & Refund Policy | StudyAbroad Vista",
-  description: "Official cancellation and refund terms for students, educational consultants (B2B lead wallet), and university partners governed by Dnyanal Educon Pvt. Ltd.",
+  description:
+    "Official cancellation and refund policy for StudyAbroad Vista. Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
   openGraph: {
     title: "Cancellation & Refund Policy | StudyAbroad Vista",
-    description: "Understand the transparent refund guidelines, B2B lead dispute mechanisms, wallet recharges, and grievance resolution SLAs.",
+    description:
+      "Official cancellation and refund policy for StudyAbroad Vista. Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
     url: "https://studyabroadvista.com/refund-policy",
     type: "website",
   },

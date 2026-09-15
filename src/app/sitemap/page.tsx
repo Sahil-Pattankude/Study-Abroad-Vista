@@ -22,10 +22,12 @@ import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
 export const metadata: Metadata = {
   title: "HTML Sitemap & Complete URL Directory | StudyAbroad Vista",
-  description: "Comprehensive navigational sitemap and directory of all 19 country guides, 8 academic programs, 9 test prep blueprints, verified universities, and decision tools.",
+  description:
+    "Comprehensive navigational sitemap and directory of all 19 country guides, 8 academic programs, 9 test prep blueprints, verified universities, and tools.",
   openGraph: {
     title: "Complete Website Sitemap | StudyAbroad Vista",
-    description: "Discover all pages, destination hubs, degree syllabi, test prep blueprints, and student tools across the StudyAbroad Vista portal.",
+    description:
+      "Comprehensive navigational sitemap and directory of all 19 country guides, 8 academic programs, 9 test prep blueprints, verified universities, and tools.",
     url: "https://studyabroadvista.com/sitemap",
     type: "website",
   },

@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getAllArticles } from "@/lib/sanity/fetchers";
@@ -6,7 +6,8 @@ import { Clock, Calendar, ArrowRight, BookOpen, Compass, ShieldCheck, Search } f
 
 export const metadata = {
   title: "Study Abroad Guides & Visa Updates (2026-2027) | StudyAbroad Vista",
-  description: "Comprehensive admissions guides, country pillar overviews, visa regulations, and scholarship checklists for Indian students.",
+  description:
+    "Comprehensive admissions guides, country pillar overviews, visa regulations, and scholarship checklists written for Indian students planning study abroad.",
 };
 
 export default async function ArticlesDirectoryPage() {

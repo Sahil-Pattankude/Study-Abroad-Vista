@@ -1,5 +1,12 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+
+export const metadata: Metadata = {
+  title: "Terms of Service | Platform Usage Guidelines | StudyAbroad Vista",
+  description:
+    "Official terms of service for StudyAbroad Vista. Review platform usage rules, student portal guidelines, B2B marketplace terms, and compliance standards.",
+};
 
 export default function TermsOfServicePage() {
   return (

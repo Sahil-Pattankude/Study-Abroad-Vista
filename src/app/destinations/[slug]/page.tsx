@@ -19,6 +19,7 @@ import {
   FileText
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, COUNTRY_ALIASES, getCountryBySlug } from "@/lib/data/masterData";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { getCountryEditorial } from "@/lib/data/contentData";
 import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
 import { Header } from "@/components/layout/Header";
@@ -43,9 +44,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const country = getCountryBySlug(slug || "");
   if (!country) return { title: "Country Not Found" };
 
+  const rawDescription = `Complete guide to studying in ${country.name} for Indian students. Compare tuition fees in INR (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), top universities, and scholarships.`;
+
   return {
     title: `Study in ${country.name} for Indian Students (2026-2027) | Cost, Visas & Top Universities`,
-    description: `Complete guide to studying in ${country.name} for Indian students. Costs (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), top universities, and scholarships.`,
+    description: fitMetaDescription(rawDescription),
     alternates: {
       canonical: `/study-in-${country.slug}`,
     },

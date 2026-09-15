@@ -14,6 +14,7 @@ import {
   Award
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, getCountryBySlug, getProgramBySlug } from "@/lib/data/masterData";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -38,9 +39,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!country || !prog) return { title: "Program Not Found" };
 
+  const rawDescription = `Complete admissions guide for ${prog.name} in ${country.name}. Tuition ranges (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), eligibility, and Indian student intake deadlines.`;
+
   return {
     title: `${prog.name} in ${country.name} for Indian Students (2026-2027) | Top Universities & Fees`,
-    description: `Complete admissions guide for ${prog.name} in ${country.name}. Tuition ranges (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), eligibility, and Indian student intake deadlines.`,
+    description: fitMetaDescription(rawDescription),
     alternates: {
       canonical: `/study-in-${country.slug}/${prog.slug}`,
     },

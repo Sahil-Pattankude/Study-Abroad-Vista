@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { ChevronRight, Globe2, ArrowRight, CheckCircle2, Award } from "lucide-react";
 import { COUNTRIES, PROGRAMS, PROGRAM_ALIASES, getProgramBySlug } from "@/lib/data/masterData";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -25,9 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const prog = getProgramBySlug(program);
   if (!prog) return { title: "Program Not Found" };
 
+  const rawDescription = `Complete guide to studying ${prog.name} abroad for Indian students. Compare top destinations (${prog.topDestinations.join(", ")}), tuition fees in INR, eligibility cutoffs, and career ROI.`;
+
   return {
     title: `Study ${prog.name} Abroad for Indian Students (2026-2027) | Global Comparison & Top Countries`,
-    description: `Complete guide to ${prog.name} abroad. Compare top countries (${prog.topDestinations.join(", ")}), global tuition fees in INR, and career pathways.`,
+    description: fitMetaDescription(rawDescription),
     alternates: {
       canonical: `/programs/${prog.slug}`,
     },

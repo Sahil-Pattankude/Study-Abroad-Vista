@@ -1,6 +1,13 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Mail, Phone, MapPin } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "Contact Admissions Desk | StudyAbroad Vista",
+  description:
+    "Contact StudyAbroad Vista admissions desk. Connect with international education strategists for university shortlists, intake guidance, and visa support.",
+};
 
 export default function ContactPage() {
   return (

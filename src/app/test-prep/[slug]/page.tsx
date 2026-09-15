@@ -19,6 +19,7 @@ import {
   Zap
 } from "lucide-react";
 import { TEST_PREP_EXAMS, TestPrepExam } from "@/lib/data/testPrepData";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HomeModalProvider, LeadTriggerButton, AICounsellorTriggerButton } from "@/components/home/HomeClientContext";
@@ -41,14 +42,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Exam Not Found | StudyAbroad Vista" };
   }
 
+  const rawDescription = `Complete guide to ${exam.name} (${exam.fullName}). Official fee ${exam.feeINR}, test format, score cutoffs for top universities, and free 8-week study blueprints.`;
+  const formattedDesc = fitMetaDescription(rawDescription);
+
   return {
     title: `${exam.name} Preparation Guide (2026-2027) | Fees in INR, Syllabus & Cutoffs for Indian Students`,
-    description: `Complete guide to ${exam.name} (${exam.fullName}). Official fee ${exam.feeINR}, duration ${exam.duration}, minimum score cutoffs by destination, section breakdown, and free 8-week study roadmap.`,
+    description: formattedDesc,
     openGraph: {
       title: `${exam.name} Exam Guide: Fees in INR, Cutoffs & 8-Week Roadmap`,
-      description: `Prepare for ${exam.name} for admissions to ${exam.targetCountries.slice(0, 4).join(", ")}. Learn format, fees (${exam.feeINR}), and score requirements.`,
+      description: formattedDesc,
       url: `https://studyabroadvista.com/test-prep/${exam.slug}`,
       type: "article",
+    },
+    alternates: {
+      canonical: `/test-prep/${exam.slug}`,
     },
   };
 }

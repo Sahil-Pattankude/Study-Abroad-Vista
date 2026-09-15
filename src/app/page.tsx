@@ -1,4 +1,11 @@
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "StudyAbroad Vista | Study Abroad Admissions Engine for Indian Students",
+  description:
+    "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
+};
 import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/home/Hero";
 import { CountryGrid } from "@/components/home/CountryGrid";

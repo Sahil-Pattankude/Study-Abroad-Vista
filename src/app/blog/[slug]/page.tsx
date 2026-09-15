@@ -1,8 +1,10 @@
-﻿import Link from "next/link";
+import { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getArticleBySlug, FALLBACK_ARTICLES } from "@/lib/sanity/fetchers";
+import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Clock, Calendar, ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 
@@ -14,6 +16,29 @@ export async function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+
+  if (!article) return { title: "Post Not Found | StudyAbroad Vista" };
+
+  const rawDescription = `${article.summary || article.title} StudyAbroad Vista blog for Indian students planning international education in 2026-2027.`;
+  const formattedDesc = fitMetaDescription(rawDescription);
+
+  return {
+    title: `${article.title} | StudyAbroad Vista Blog`,
+    description: formattedDesc,
+    openGraph: {
+      title: article.title,
+      description: formattedDesc,
+      type: "article",
+    },
+    alternates: {
+      canonical: `/blog/${article.slug}`,
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {

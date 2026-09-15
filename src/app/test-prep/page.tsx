@@ -23,10 +23,12 @@ import { TestPrepFilter } from "@/components/test-prep/TestPrepFilter";
 
 export const metadata: Metadata = {
   title: "Test Prep & Licensing Hub for Indian Students (2026-2027) | IELTS, GRE, GMAT, NCLEX, PLAB, OET",
-  description: "Comprehensive guide to 9 international entrance exams & licensing tests. Compare official fees in INR, test formats, minimum required score cutoffs by destination, and 8-week study blueprints.",
+  description:
+    "Compare exam fees in INR, scoring scales, cutoffs for top global universities, and get free 8-week study blueprints for IELTS, GRE, GMAT, NCLEX, and PLAB.",
   openGraph: {
     title: "International Test Prep & Licensing Hub | StudyAbroad Vista",
-    description: "Compare exam fees in INR, scoring scales, cutoffs for top global universities, and get free 8-week study blueprints for IELTS, TOEFL, PTE, GRE, GMAT, NCLEX, PLAB, and OET.",
+    description:
+      "Compare exam fees in INR, scoring scales, cutoffs for top global universities, and get free 8-week study blueprints for IELTS, GRE, GMAT, NCLEX, and PLAB.",
     url: "https://studyabroadvista.com/test-prep",
     type: "website",
   },

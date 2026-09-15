@@ -1,6 +1,13 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Compass, ShieldCheck, Award, Globe2, CheckCircle2 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "About Us | Dnyanal Educon & StudyAbroad Vista",
+  description:
+    "StudyAbroad Vista by Dnyanal Educon provides zero-bias admissions intelligence for Indian students across 19 global study destinations and 8 career streams.",
+};
 
 export default function AboutPage() {
   return (

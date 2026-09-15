@@ -1,6 +1,13 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ShieldCheck } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | DPDP Act 2023 Compliance | StudyAbroad Vista",
+  description:
+    "Official privacy policy for StudyAbroad Vista. Learn how student personal data is protected under India DPDP Act 2023 with strict zero-spam data privacy.",
+};
 
 export default function PrivacyPolicyPage() {
   return (

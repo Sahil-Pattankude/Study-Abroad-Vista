@@ -1,6 +1,13 @@
+import { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CostCalculatorWidget } from '@/components/home/CostCalculatorWidget';
+
+export const metadata: Metadata = {
+  title: "Study Abroad Cost of Living & Tuition Calculator (INR) | StudyAbroad Vista",
+  description:
+    "Calculate total study abroad expenses in INR across 19 countries. Compare tuition, living costs, blocked accounts, and health insurance for Indian students.",
+};
 
 export default function CostCalculatorPage() {
   return (

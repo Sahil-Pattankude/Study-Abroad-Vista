@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | StudyAbroad Vista",
   },
   description:
-    "Discover 19 global destinations and top programs (MS, MBA, MBBS, Nursing, Ausbildung) for Indian students. AI Counsellor, verified university rankings, and admission guidance by Dnyanal Educon.",
+    "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
