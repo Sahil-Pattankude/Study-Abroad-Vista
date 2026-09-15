@@ -18,7 +18,7 @@ import {
   Plane,
   FileText
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, COUNTRY_ALIASES, getCountryBySlug } from "@/lib/data/masterData";
 import { getCountryEditorial } from "@/lib/data/contentData";
 import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
 import { Header } from "@/components/layout/Header";
@@ -29,25 +29,32 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return COUNTRIES.map((c) => ({
+  const canonicalParams = COUNTRIES.map((c) => ({
     slug: c.slug,
   }));
+  const aliasParams = Object.keys(COUNTRY_ALIASES).map((alias) => ({
+    slug: alias,
+  }));
+  return [...canonicalParams, ...aliasParams];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
+  const country = getCountryBySlug(slug || "");
   if (!country) return { title: "Country Not Found" };
 
   return {
     title: `Study in ${country.name} for Indian Students (2026-2027) | Cost, Visas & Top Universities`,
     description: `Complete guide to studying in ${country.name} for Indian students. Costs (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), top universities, and scholarships.`,
+    alternates: {
+      canonical: `/study-in-${country.slug}`,
+    },
   };
 }
 
 export default async function CountryHubPage({ params }: Props) {
   const { slug } = await params;
-  const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
+  const country = getCountryBySlug(slug || "");
 
   if (!country) {
     notFound();

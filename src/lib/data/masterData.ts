@@ -493,6 +493,25 @@ export function getProgramBySlug(slug: string): Program | undefined {
   return PROGRAMS.find((p) => p.slug === canonical);
 }
 
+export const COUNTRY_ALIASES: Record<string, string> = {
+  "united-states": "usa",
+  "united-kingdom": "uk",
+  "america": "usa",
+  "britain": "uk",
+  "england": "uk",
+  "holland": "netherlands",
+  "dubai": "uae",
+  "united-arab-emirates": "uae",
+  "nz": "new-zealand",
+};
+
+export function getCountryBySlug(slug: string): Country | undefined {
+  if (!slug) return undefined;
+  const normalized = slug.toLowerCase().trim();
+  const canonical = COUNTRY_ALIASES[normalized] || normalized;
+  return COUNTRIES.find((c) => c.slug === canonical);
+}
+
 export const FEATURED_UNIVERSITIES: University[] = [
   {
     id: "tum",

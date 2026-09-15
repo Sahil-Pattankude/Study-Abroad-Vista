@@ -13,7 +13,7 @@ import {
   HelpCircle,
   Award
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, getProgramBySlug } from "@/lib/data/masterData";
+import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, getCountryBySlug, getProgramBySlug } from "@/lib/data/masterData";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -33,7 +33,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, program } = await params;
-  const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
+  const country = getCountryBySlug(slug || "");
   const prog = getProgramBySlug(program || "");
 
   if (!country || !prog) return { title: "Program Not Found" };
@@ -41,12 +41,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${prog.name} in ${country.name} for Indian Students (2026-2027) | Top Universities & Fees`,
     description: `Complete admissions guide for ${prog.name} in ${country.name}. Tuition ranges (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), eligibility, and Indian student intake deadlines.`,
+    alternates: {
+      canonical: `/study-in-${country.slug}/${prog.slug}`,
+    },
   };
 }
 
 export default async function CountryProgramPage({ params }: Props) {
   const { slug, program } = await params;
-  const country = COUNTRIES.find((c) => c.slug === (slug || "").toLowerCase());
+  const country = getCountryBySlug(slug || "");
   const prog = getProgramBySlug(program || "");
 
   if (!country || !prog) {

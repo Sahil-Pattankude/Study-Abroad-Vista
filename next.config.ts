@@ -84,6 +84,46 @@ const nextConfig: NextConfig = {
         destination: "/programs/phd",
         permanent: true,
       },
+      {
+        source: "/study-in-united-kingdom",
+        destination: "/study-in-uk",
+        permanent: true,
+      },
+      {
+        source: "/study-in-united-states",
+        destination: "/study-in-usa",
+        permanent: true,
+      },
+      {
+        source: "/study-in-america",
+        destination: "/study-in-usa",
+        permanent: true,
+      },
+      {
+        source: "/study-in-britain",
+        destination: "/study-in-uk",
+        permanent: true,
+      },
+      {
+        source: "/study-in-holland",
+        destination: "/study-in-netherlands",
+        permanent: true,
+      },
+      {
+        source: "/study-in-dubai",
+        destination: "/study-in-uae",
+        permanent: true,
+      },
+      {
+        source: "/study-in-united-arab-emirates",
+        destination: "/study-in-uae",
+        permanent: true,
+      },
+      {
+        source: "/study-in-nz",
+        destination: "/study-in-new-zealand",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
