@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!article) return { title: "Post Not Found | StudyAbroad Vista" };
 
-  const rawDescription = `${article.summary || article.title} StudyAbroad Vista blog for Indian students planning international education in 2026-2027.`;
+  const rawDescription = `${article.excerpt || article.title} StudyAbroad Vista blog for Indian students planning international education in 2026-2027.`;
   const formattedDesc = fitMetaDescription(rawDescription);
 
   return {
