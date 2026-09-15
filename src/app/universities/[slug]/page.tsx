@@ -14,6 +14,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -23,14 +24,16 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return FEATURED_UNIVERSITIES.map((u) => ({
+  const unis = await fetchLiveUniversities();
+  return unis.map((u) => ({
     slug: u.slug,
   }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const uni = FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
+  const unis = await fetchLiveUniversities();
+  const uni = unis.find((u) => u.slug === slug) || FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
   if (!uni) return { title: "University Not Found" };
 
   const rawDescription = `Admissions guide for ${uni.name} in ${uni.city}, ${uni.country}. Global QS rank #${uni.rankingGlobal}, tuition fees (${uni.tuitionFeeRangeINR}), IELTS score cutoffs, and Indian student application deadlines.`;
@@ -46,7 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function UniversityDetailPage({ params }: Props) {
   const { slug } = await params;
-  const uni = FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
+  const unis = await fetchLiveUniversities();
+  const uni = unis.find((u) => u.slug === slug) || FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
 
   if (!uni) {
     notFound();

@@ -18,22 +18,32 @@ import {
   ArrowRight,
   ShieldCheck
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
+import { useState } from "react";
+import { COUNTRIES, PROGRAMS, Country, University } from "@/lib/data/masterData";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { fetchLiveCountries, fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 
 export default function AdminPortalPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading, logout } = useAuth();
+  const [countriesList, setCountriesList] = useState<Country[]>(COUNTRIES);
+  const [universitiesList, setUniversitiesList] = useState<University[]>([]);
 
   useEffect(() => {
     if (!isLoading && !user) {
-      // Unauthenticated visitor -> redirect to login after short delay
       const timer = setTimeout(() => {
         router.push("/login?redirect=/admin");
       }, 1200);
       return () => clearTimeout(timer);
     }
   }, [user, isLoading, router]);
+
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      fetchLiveCountries().then((res) => setCountriesList(res));
+      fetchLiveUniversities().then((res) => setUniversitiesList(res));
+    }
+  }, [user]);
 
   // 1. Loading State during session hydration
   if (isLoading) {
@@ -239,22 +249,43 @@ export default function AdminPortalPage() {
         </div>
 
         {/* Master Catalog Quick Access */}
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {/* 19 Countries Catalog */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-[#102C57]">Country Master Records (19)</h3>
-              <span className="text-xs text-slate-400">All Live</span>
+              <h3 className="text-sm font-black text-[#102C57]">Country Records ({countriesList.length})</h3>
+              <span className="text-xs font-semibold text-emerald-600">Supabase Connected</span>
             </div>
             <div className="mt-3 max-h-64 overflow-y-auto space-y-1.5 text-xs">
-              {COUNTRIES.map((c) => (
-                <div key={c.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50">
+              {countriesList.map((c) => (
+                <div key={c.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 border border-slate-100/60">
                   <div className="flex items-center gap-2 font-bold text-slate-800">
                     <span>{c.flagEmoji}</span>
                     <span>{c.name}</span>
                     <span className="text-[10px] text-slate-400 font-normal">({c.tier})</span>
                   </div>
                   <span className="text-[11px] text-emerald-700 font-semibold">{c.currency} ≈ ₹{c.exchangeRateToINR}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Live Universities Catalog */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-sm font-black text-[#102C57]">Live Universities ({universitiesList.length})</h3>
+              <span className="text-xs font-semibold text-emerald-600">Supabase Connected</span>
+            </div>
+            <div className="mt-3 max-h-64 overflow-y-auto space-y-2 text-xs">
+              {universitiesList.map((u) => (
+                <div key={u.slug} className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50">
+                  <div>
+                    <h4 className="font-bold text-[#102C57]">{u.name}</h4>
+                    <p className="text-[10px] text-slate-500">{u.city}, {u.country} • Rank #{u.rankingGlobal}</p>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                    {u.tuitionFeeRangeINR}
+                  </span>
                 </div>
               ))}
             </div>
