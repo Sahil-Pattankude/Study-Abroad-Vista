@@ -67,8 +67,9 @@ export interface University {
   featured: boolean;
   logoUrl?: string;
   bannerUrl?: string;
-  claimed_status?: string;
+  claimed_status?: "claimed" | "unclaimed" | "verified";
   claimed_by_user_id?: string;
+  tierBadge?: "Platinum Partner" | "Gold Partner" | "Silver Partner";
 }
 
 export interface LeadSubmission {

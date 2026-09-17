@@ -77,13 +77,13 @@ export default function Home() {
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-[#EA5C2B]">
-                    Global Accreditation
+                    Global Accreditation & Tier Badges
                   </span>
                   <h2 className="mt-1 font-serif text-3xl font-extrabold text-[#102C57] sm:text-4xl">
-                    Featured Partner & Ranked Universities
+                    Featured Tier Partner Universities
                   </h2>
                   <p className="mt-1 text-xs text-slate-500">
-                    Direct admission pathways, high post-study work visa allowances, and verified English curriculum.
+                    Platinum, Gold, and Silver partner institutions with direct admissions, high post-study work visa allowances, and verified English curriculum.
                   </p>
                 </div>
                 <LeadTriggerButton
@@ -94,50 +94,64 @@ export default function Home() {
               </div>
 
               <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {FEATURED_UNIVERSITIES.map((uni) => (
-                  <div
-                    key={uni.id}
-                    className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 transition hover:bg-white hover:shadow-lg"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#102C57] shadow-xs">
-                        <Building2 className="h-5 w-5 text-[#EA5C2B]" />
-                      </div>
-                      <span className="rounded-full bg-slate-200/70 px-2 py-0.5 text-[10px] font-bold text-slate-700">
-                        Global #{uni.rankingGlobal}
-                      </span>
-                    </div>
+                {FEATURED_UNIVERSITIES.map((uni, idx) => {
+                  const badgeText = uni.tierBadge || (uni.rankingGlobal <= 25 ? "Platinum Partner" : uni.rankingGlobal <= 100 ? "Gold Partner" : "Silver Partner");
+                  const badgeClass = badgeText === "Platinum Partner" 
+                    ? "bg-[#D4AF37]/15 text-[#997915] border border-[#D4AF37]/40" 
+                    : badgeText === "Gold Partner"
+                    ? "bg-amber-100 text-amber-800 border border-amber-300"
+                    : "bg-slate-100 text-slate-700 border border-slate-200";
 
-                    <h3 className="mt-4 text-base font-extrabold text-[#102C57]">
-                      {uni.name}
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      {uni.city}, {uni.country}
-                    </p>
-
-                    <div className="mt-4 space-y-1.5 border-t border-slate-200/60 pt-3 text-xs">
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Tuition:</span>
-                        <span className="font-bold text-[#102C57]">{uni.tuitionFeeRangeINR}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">IELTS Min:</span>
-                        <span className="font-semibold text-slate-700">{uni.ieltsMinScore} Bands</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">Work Visa:</span>
-                        <span className="font-semibold text-emerald-700">{uni.postStudyWorkMonths} Months</span>
-                      </div>
-                    </div>
-
-                    <LeadTriggerButton
-                      country={uni.country}
-                      className="mt-5 w-full rounded-xl bg-white py-2 text-center text-xs font-bold text-[#102C57] border border-slate-200 hover:bg-[#102C57] hover:text-white transition"
+                  return (
+                    <div
+                      key={`${uni.id}-${idx}`}
+                      className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 transition hover:bg-white hover:shadow-lg"
                     >
-                      Check Admission Cutoffs
-                    </LeadTriggerButton>
-                  </div>
-                ))}
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#102C57] shadow-xs border border-slate-100">
+                            <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+                          </div>
+                          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${badgeClass}`}>
+                            {badgeText}
+                          </span>
+                        </div>
+                        <span className="rounded-full bg-slate-200/70 px-2 py-0.5 text-[10px] font-bold text-slate-700">
+                          Global #{uni.rankingGlobal}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-4 text-base font-extrabold text-[#102C57]">
+                        {uni.name}
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        {uni.city}, {uni.country}
+                      </p>
+
+                      <div className="mt-4 space-y-1.5 border-t border-slate-200/60 pt-3 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Tuition:</span>
+                          <span className="font-bold text-[#102C57]">{uni.tuitionFeeRangeINR}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">IELTS Min:</span>
+                          <span className="font-semibold text-slate-700">{uni.ieltsMinScore} Bands</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Work Visa:</span>
+                          <span className="font-semibold text-emerald-700">{uni.postStudyWorkMonths} Months</span>
+                        </div>
+                      </div>
+
+                      <LeadTriggerButton
+                        country={uni.country}
+                        className="mt-5 w-full rounded-xl bg-white py-2 text-center text-xs font-bold text-[#102C57] border border-slate-200 hover:bg-[#102C57] hover:text-white transition"
+                      >
+                        Check Admission Cutoffs
+                      </LeadTriggerButton>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -148,7 +162,7 @@ export default function Home() {
           {/* Interactive Cost Calculator */}
           <DeferredCostCalculator />
 
-          {/* AI Counsellor Showcase (Per Document W10 T-01: Full-width Gold/Navy with Q&A Mockup) */}
+          {/* AI Counsellor Showcase (Per Document W10 & W11 DOCX Specifications) */}
           <section className="cv-auto relative overflow-hidden bg-gradient-to-r from-[#102C57] via-[#1a3d73] to-[#091A36] py-20 text-white">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -159,10 +173,10 @@ export default function Home() {
                     24/7 AI Smart Counsellor
                   </div>
                   <h2 className="mt-4 font-serif text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-                    Ask Anything. Get Instant, Personalized Answers.
+                    Ask anything. Get instant, personalized answers.
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                    Powered by Advanced AI and trained on authentic admissions guidelines across 19 countries, real living costs in ₹ Lakhs, and visa eligibility rules.
+                    Chat with our AI counsellor about universities, programs, costs, visas — anything on your mind.
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-slate-200">
@@ -216,19 +230,19 @@ export default function Home() {
                     <div className="mt-5 space-y-3.5 text-xs">
                       {/* User Question */}
                       <div className="flex justify-end">
-                        <div className="max-w-[85%] rounded-2xl rounded-tr-none bg-[#EA5C2B] px-4 py-2.5 text-white shadow-sm">
-                          Can I study MS in Computer Science in Germany in English with zero tuition fee?
+                        <div className="max-w-[85%] rounded-2xl rounded-tr-none bg-[#EA5C2B] px-4 py-2.5 text-white shadow-sm font-medium">
+                          What are the best UK universities for MSc Data Science?
                         </div>
                       </div>
 
                       {/* AI Answer */}
                       <div className="flex justify-start">
                         <div className="max-w-[90%] rounded-2xl rounded-tl-none border border-white/15 bg-[#1e3c6a] sm:bg-white/15 px-4 py-3 text-slate-100 sm:backdrop-blur-md">
-                          <p className="font-semibold text-[#D4AF37]">Yes! Over 280+ German public universities offer English-taught master&apos;s degrees at zero tuition.</p>
+                          <p className="font-semibold text-[#D4AF37]">Top UK Universities for MSc Data Science (2026-2027):</p>
                           <ul className="mt-2 space-y-1 text-[11px] text-slate-300">
-                            <li>• <strong>Top choices:</strong> TU Munich, RWTH Aachen, TU Berlin</li>
-                            <li>• <strong>Living cost:</strong> Approx. €934/month (~₹85,000/mo in blocked account)</li>
-                            <li>• <strong>Work rights:</strong> 18-month post-study job seeker visa</li>
+                            <li>• <strong>University of Oxford:</strong> £33,970/yr | 2-Yr Graduate Work Visa</li>
+                            <li>• <strong>Imperial College London:</strong> £39,800/yr | High AI Placement</li>
+                            <li>• <strong>University of Edinburgh:</strong> £35,900/yr | Strong Research Focus</li>
                           </ul>
                         </div>
                       </div>
@@ -237,7 +251,7 @@ export default function Home() {
                     <AICounsellorTriggerButton
                       className="mt-5 flex w-full items-center justify-between rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-left text-xs text-slate-300 hover:bg-white/10 transition"
                     >
-                      <span>Ask your question (e.g., &apos;Compare MBA fees in UK vs France&apos;)...</span>
+                      <span>Ask sample question: &apos;What are the best UK universities for MSc Data Science?&apos;</span>
                       <Sparkles className="h-4 w-4 text-[#D4AF37]" />
                     </AICounsellorTriggerButton>
                   </div>
