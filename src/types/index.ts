@@ -67,6 +67,8 @@ export interface University {
   featured: boolean;
   logoUrl?: string;
   bannerUrl?: string;
+  claimed_status?: string;
+  claimed_by_user_id?: string;
 }
 
 export interface LeadSubmission {
@@ -103,4 +105,25 @@ export interface ComparisonItem {
   ranking: string;
   workVisa: string;
   ielts: string;
+}
+
+export interface CourseItem {
+  id: string;
+  slug: string;
+  name: string;
+  universityName: string;
+  universitySlug: string;
+  city: string;
+  country: string;
+  flagEmoji: string;
+  level: string;
+  duration: string;
+  tuitionFeeINR: string;
+  tuitionFeeLocal: string;
+  ieltsMinScore: number | string;
+  greGmatRequired: boolean;
+  postStudyWorkMonths: number;
+  intakeDeadline: string;
+  roiScore: number;
+  coreModules: string[];
 }

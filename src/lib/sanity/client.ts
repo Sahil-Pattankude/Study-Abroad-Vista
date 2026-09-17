@@ -1,10 +1,10 @@
 import { createClient } from "@sanity/client";
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "placeholder-id",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "1z6ctbcw",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2024-01-01",
-  useCdn: true, // `false` if you want to ensure fresh data
+  useCdn: false, // `false` ensures fresh live data instantly
 });
 
 /**

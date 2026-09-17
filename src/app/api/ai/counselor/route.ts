@@ -58,7 +58,7 @@ Key Knowledge Base:
 - Tone: Warm, guiding, direct, transparent, and encouraging. Never give false legal visa guarantees.
     `;
 
-    const model = getGeminiModel("gemini-3.8-flash", systemPrompt);
+    const model = getGeminiModel(process.env.GEMINI_MODEL || "gemini-1.5-flash", systemPrompt);
 
     // Build chat history
     const chat = model.startChat({
@@ -74,7 +74,7 @@ Key Knowledge Base:
 
     return NextResponse.json({
       reply: replyText,
-      model: "gemini-3.8-flash",
+      model: process.env.GEMINI_MODEL || "gemini-1.5-flash",
     });
   } catch (error: unknown) {
     console.error("AI Counsellor Error:", error);

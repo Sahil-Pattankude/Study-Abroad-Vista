@@ -225,7 +225,7 @@ export default function StudentAccountDashboard() {
                   </div>
                   <div>
                     <h2 className="text-base font-black text-[#102C57]">Recent AI Conversations</h2>
-                    <p className="text-xs text-slate-500">Resume any personalized consultation with Gemini 3.8.</p>
+                    <p className="text-xs text-slate-500">Resume any personalized consultation with your AI Counsellor.</p>
                   </div>
                 </div>
                 <Link href="/" className="text-xs font-bold text-[#102C57] hover:underline flex items-center gap-1">

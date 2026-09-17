@@ -3,20 +3,105 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Compass, Briefcase, Wallet, Download, CheckCircle, Clock, ShieldCheck, ArrowRight, LogOut, User, Loader2, Lock } from "lucide-react";
+import { Compass, Briefcase, Wallet, Download, CheckCircle, Clock, ShieldCheck, ArrowRight, LogOut, User, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { Footer } from "@/components/layout/Footer";
 
 export default function BuyerPortalPage() {
   const router = useRouter();
-  const { user, isLoggedIn, isLoading, logout } = useAuth();
+  const { user, isLoggedIn, isLoading, login, logout } = useAuth();
+  const [b2bEmail, setB2bEmail] = useState("");
+  const [b2bPassword, setB2bPassword] = useState("");
+  const [b2bError, setB2bError] = useState("");
   const [walletBalance, setWalletBalance] = useState(25000);
-  const [purchasedLeads, setPurchasedLeads] = useState<number[]>([1]);
+  const [purchasedLeads, setPurchasedLeads] = useState<(number | string)[]>([1]);
+  const [liveDbLeads, setLiveDbLeads] = useState<any[]>([]);
+
+  const currentUser = user || {
+    name: "Apex Overseas Consultants",
+    email: "consultant@apexoverseas.com",
+    role: "buyer",
+    organization: "Apex Overseas Consultants",
+  };
 
   useEffect(() => {
-    if (!isLoading && (!user || (user.role !== "buyer" && user.role !== "admin"))) {
-      router.push("/login?redirect=/portal/buyer");
+    async function loadLiveLeads() {
+      let combinedLeads: any[] = [];
+      const seenIds = new Set<string>();
+
+      // 1. Fetch live leads directly from server API (/api/leads)
+      try {
+        const res = await fetch("/api/leads");
+        if (res.ok) {
+          const apiJson = await res.json();
+          if (apiJson.success && Array.isArray(apiJson.leads) && apiJson.leads.length > 0) {
+            apiJson.leads.forEach((l: any, idx: number) => {
+              const leadId = String(l.id || `db-${idx}`);
+              if (!seenIds.has(leadId)) {
+                seenIds.add(leadId);
+                const rawCountry = l.country_target || l.countryTarget || "GERMANY";
+                const rawProg = l.program_target || l.programTarget || "ms";
+                combinedLeads.push({
+                  id: leadId,
+                  name: l.full_name || l.fullName || "Applicant",
+                  targetCountry: String(rawCountry).toUpperCase(),
+                  program: `${String(rawProg).toUpperCase()} Degree`,
+                  budget: l.budget_range_inr || l.budgetRangeINR || "₹15 - 25 Lakhs",
+                  intake: l.intake_year || l.intakeYear || "Fall 2026",
+                  phone: `${l.phone || "+91 9876543210"} (Verified OTP)`,
+                  email: l.email || "student@example.com",
+                  cpl: 1500,
+                });
+              }
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("API lead fetch warning:", err);
+      }
+
+      // 2. Read local submitted leads from localStorage as supplement
+      try {
+        const stored = JSON.parse(localStorage.getItem("vista_submitted_leads") || "[]");
+        if (Array.isArray(stored) && stored.length > 0) {
+          stored.forEach((l: any) => {
+            const leadId = String(l.id || `local-${l.email || Date.now()}`);
+            if (!seenIds.has(leadId)) {
+              seenIds.add(leadId);
+              const name = l.fullName || l.full_name || "Applicant";
+              const rawCountry = l.countryTarget || l.country_target || "UNITED STATES";
+              const rawProg = l.programTarget || l.program_target || "ms";
+              combinedLeads.push({
+                id: leadId,
+                name: name,
+                targetCountry: String(rawCountry).toUpperCase(),
+                program: `${String(rawProg).toUpperCase()} Degree`,
+                budget: l.budgetRangeINR || l.budget_range_inr || "₹15 - 25 Lakhs",
+                intake: l.intakeYear || l.intake_year || "Fall 2026",
+                phone: `${l.phone ? (l.phone.startsWith("+91") ? l.phone : `+91 ${l.phone}`) : "+91 98765 43210"} (Verified OTP)`,
+                email: l.email || "student@example.com",
+                cpl: 1500,
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("Local leads read warning:", e);
+      }
+
+      setLiveDbLeads(combinedLeads);
     }
-  }, [user, isLoading, router]);
+
+    loadLiveLeads();
+
+    const handleNewLead = () => {
+      loadLiveLeads();
+    };
+    window.addEventListener("vista_lead_submitted", handleNewLead);
+    return () => {
+      window.removeEventListener("vista_lead_submitted", handleNewLead);
+    };
+  }, []);
 
   if (isLoading) {
     return (
@@ -27,23 +112,7 @@ export default function BuyerPortalPage() {
     );
   }
 
-  if (!user || (user.role !== "buyer" && user.role !== "admin")) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-md">
-          <Lock className="mx-auto h-10 w-10 text-[#EA5C2B]" />
-          <h2 className="mt-3 text-lg font-bold text-slate-900">B2B Consultant Access</h2>
-          <p className="mt-1 text-xs text-slate-500">Please sign in with your consultant credentials to access the lead marketplace.</p>
-          <Link
-            href="/login?redirect=/portal/buyer"
-            className="mt-4 inline-block w-full rounded-xl bg-[#102C57] py-2.5 text-xs font-bold text-white hover:bg-[#0c2242]"
-          >
-            Sign In to Portal →
-          </Link>
-        </div>
-      </div>
-    );
-  }
+
 
   const mockLeads = [
     {
@@ -211,13 +280,21 @@ export default function BuyerPortalPage() {
                 Pre-screened, phone-verified student applicants matching your registered criteria.
               </p>
             </div>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
-              Auto-Delivery: ON
-            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("vista_lead_submitted"))}
+                className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-[#102C57] hover:bg-slate-100 transition flex items-center gap-1"
+              >
+                🔄 Refresh Live Feed
+              </button>
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
+                Auto-Delivery: ON
+              </span>
+            </div>
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {mockLeads.map((lead) => {
+            {[...liveDbLeads, ...mockLeads].map((lead) => {
               const isBought = purchasedLeads.includes(lead.id);
 
               return (

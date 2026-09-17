@@ -38,6 +38,7 @@ export const metadata: Metadata = {
 };
 
 import { AuthProvider } from "@/lib/auth/AuthContext";
+import { HomeModalProvider } from "@/components/home/HomeClientContext";
 
 export default function RootLayout({
   children,
@@ -50,7 +51,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <HomeModalProvider>{children}</HomeModalProvider>
+        </AuthProvider>
       </body>
     </html>
   );

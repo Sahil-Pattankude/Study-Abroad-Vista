@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Compass, 
@@ -15,9 +15,13 @@ import {
   Calculator, 
   Briefcase,
   Building2,
-  ArrowRight
+  ArrowRight,
+  GraduationCap,
+  ShieldCheck
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
+import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 
@@ -46,34 +50,43 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
   const [toolsOpen, setToolsOpen] = useState(false);
   const [testPrepOpen, setTestPrepOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [universitiesList, setUniversitiesList] = useState<University[]>(FEATURED_UNIVERSITIES);
+
+  useEffect(() => {
+    fetchLiveUniversities().then((res) => {
+      if (res && res.length > 0) {
+        setUniversitiesList(res);
+      }
+    });
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 gap-4">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#0d2346] text-white shadow-sm group-hover:shadow transition">
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#0d2346] text-white shadow-sm group-hover:shadow transition shrink-0">
             <Compass className="h-5 w-5 text-[#EA5C2B]" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
+            <span className="text-lg font-black tracking-tight text-[#102C57] leading-none whitespace-nowrap">
               StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
             </span>
-            <span className="hidden text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:block mt-0.5">
+            <span className="hidden text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:block mt-0.5 whitespace-nowrap">
               Authoritative Portal
             </span>
           </div>
         </Link>
 
         {/* Desktop Global Navigation - Clean & Refined */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-5 xl:gap-7 lg:flex shrink-0 whitespace-nowrap">
           {/* Destinations Mega Dropdown */}
           <div 
             className="relative"
             onMouseEnter={() => setDestinationsOpen(true)}
             onMouseLeave={() => setDestinationsOpen(false)}
           >
-            <button aria-label="Open destinations menu" aria-expanded={destinationsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+            <button aria-label="Open destinations menu" aria-expanded={destinationsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
               <span>Destinations</span>
               <span className="text-[10px] text-slate-400 font-normal">(19)</span>
               <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
@@ -142,8 +155,9 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
             onMouseEnter={() => setProgramsOpen(true)}
             onMouseLeave={() => setProgramsOpen(false)}
           >
-            <button aria-label="Open programs menu" aria-expanded={programsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+            <button aria-label="Open programs menu" aria-expanded={programsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
               <span>Programs</span>
+              <span className="text-[10px] text-slate-400 font-normal">(8)</span>
               <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
             </button>
 
@@ -171,8 +185,9 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
             onMouseEnter={() => setUniversitiesOpen(true)}
             onMouseLeave={() => setUniversitiesOpen(false)}
           >
-            <button aria-label="Open universities menu" aria-expanded={universitiesOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+            <button aria-label="Open universities menu" aria-expanded={universitiesOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
               <span>Universities</span>
+              <span className="text-[10px] text-slate-400 font-normal">({universitiesList.length || 18})</span>
               <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${universitiesOpen ? 'rotate-180 text-slate-700' : ''}`} />
             </button>
 
@@ -183,9 +198,9 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">Featured Institutions</span>
                     <span className="text-[10px] font-medium text-slate-400">QS Verified</span>
                   </div>
-                  <ul className="space-y-1">
-                    {FEATURED_UNIVERSITIES.map(u => (
-                      <li key={u.id}>
+                  <ul className="space-y-1 max-h-80 overflow-y-auto">
+                    {universitiesList.map((u) => (
+                      <li key={u.slug || u.id}>
                         <Link href={`/universities/${u.slug}`} className="block rounded-xl p-2 hover:bg-slate-50 transition group/uni">
                           <p className="text-xs font-bold text-[#102C57] group-hover/uni:text-[#EA5C2B] transition">{u.name}</p>
                           <p className="text-[11px] text-slate-400 mt-0.5">#{u.rankingGlobal} Global • {u.country}</p>
@@ -204,7 +219,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
             onMouseEnter={() => setTestPrepOpen(true)}
             onMouseLeave={() => setTestPrepOpen(false)}
           >
-            <button aria-label="Open test prep menu" aria-expanded={testPrepOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+            <button aria-label="Open test prep menu" aria-expanded={testPrepOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
               <span>Test Prep</span>
               <span className="text-[10px] text-slate-400 font-normal">(9)</span>
               <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${testPrepOpen ? 'rotate-180 text-slate-700' : ''}`} />
@@ -304,16 +319,18 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
             onMouseEnter={() => setToolsOpen(true)}
             onMouseLeave={() => setToolsOpen(false)}
           >
-            <button aria-label="Open tools menu" aria-expanded={toolsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+            <button aria-label="Open tools menu" aria-expanded={toolsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
               <span>Tools</span>
+              <span className="text-[10px] text-slate-400 font-normal">(6)</span>
               <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? 'rotate-180 text-slate-700' : ''}`} />
             </button>
 
             {toolsOpen && (
               <div className="absolute -left-8 top-full pt-2">
-                <div className="w-72 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
-                  <div className="mb-2 px-2 pb-2 border-b border-slate-100">
+                <div className="w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
+                  <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">Student Utilities</span>
+                    <span className="text-[10px] font-medium text-slate-400">6 Interactive Tools</span>
                   </div>
                   <ul className="space-y-1">
                     <li>
@@ -324,6 +341,28 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-[#EA5C2B]">Cost Calculator</p>
                           <p className="text-[10px] text-slate-400">Living + Tuition in INR</p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/compare" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                          <Building2 className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-blue-700">University Compare</p>
+                          <p className="text-[10px] text-slate-400">Side-by-side (2-5 unis)</p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/compare" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
+                          <GraduationCap className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-purple-700">Course & Degree Compare</p>
+                          <p className="text-[10px] text-slate-400">Fees, IELTS, Work Visa Matrix</p>
                         </div>
                       </Link>
                     </li>
@@ -341,6 +380,31 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         </div>
                       </button>
                     </li>
+                    <li>
+                      <Link href="/cost-calculator" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                          <ShieldCheck className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-emerald-700">EMBA & Master's ROI</p>
+                          <p className="text-[10px] text-slate-400">Salary multiplier /100 score</p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => { handleLead(); }}
+                        className="flex w-full items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool text-left"
+                      >
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                          <ArrowRight className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-amber-700">Eligibility & Shortlist Review</p>
+                          <p className="text-[10px] text-slate-400">Instant profile evaluation</p>
+                        </div>
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -348,18 +412,18 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* 6. Blog & Guides */}
-          <Link href="/blog" className="py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition">
+          <Link href="/blog" className="py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
             Blog & Guides
           </Link>
         </nav>
 
         {/* Right CTA Actions - Cleaned & Streamlined */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           {/* Search Icon Button */}
           <button 
             onClick={handleSearch}
             aria-label="Search universities, programs and destinations"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition shrink-0 cursor-pointer"
             title="Search universities, programs and destinations"
           >
             <Search className="h-4 w-4" />
@@ -367,7 +431,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
 
           {/* User Auth state & 4 Portals Dropdown */}
           {isLoggedIn ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <Link
                 href={
                   user?.role === "buyer"
@@ -378,19 +442,29 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     ? "/admin"
                     : "/dashboard/student"
                 }
-                className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 transition"
+                className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/90 px-3.5 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition shrink-0 shadow-2xs"
               >
-                <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                <span className="hidden sm:inline">My Portal</span>
-                <span className="text-[10px] text-slate-500 capitalize">({user?.role === "buyer" ? "B2B" : user?.role})</span>
+                <User className="h-3.5 w-3.5 text-[#EA5C2B] shrink-0" />
+                <span className="font-bold whitespace-nowrap">
+                  {user?.role === "buyer"
+                    ? "Consultant Portal"
+                    : user?.role === "university"
+                    ? "University Portal"
+                    : user?.role === "admin"
+                    ? "Admin Panel"
+                    : "My Dashboard"}
+                </span>
+                <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-extrabold text-indigo-700 capitalize shrink-0 border border-indigo-100/60">
+                  {user?.role === "buyer" ? "B2B" : user?.role}
+                </span>
               </Link>
               <button
                 onClick={logout}
                 aria-label="Sign out"
-                className="rounded-full p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                className="rounded-full p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition shrink-0 cursor-pointer"
                 title="Sign Out"
               >
-                <LogOut className="h-3.5 w-3.5" />
+                <LogOut className="h-4 w-4" />
               </button>
             </div>
           ) : (
@@ -484,7 +558,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
 
           {/* Primary Action Button */}
           <button
-            onClick={onOpenLeadModal}
+            onClick={() => handleLead()}
             className="inline-flex items-center gap-1.5 rounded-full bg-[#EA5C2B] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff7240] hover:shadow active:scale-98"
           >
             <span>Free Consultation</span>
@@ -550,6 +624,14 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
               className="block font-semibold text-slate-700 hover:text-[#102C57]"
             >
               Study Cost Calculator
+            </Link>
+
+            <Link 
+              href="/compare" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block font-bold text-[#EA5C2B] hover:text-[#102C57]"
+            >
+              University Compare Matrix
             </Link>
 
             <Link 

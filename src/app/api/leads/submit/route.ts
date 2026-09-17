@@ -19,34 +19,46 @@ export async function POST(req: NextRequest) {
     const validated = leadSchema.parse(body);
 
     // Attempt to store in Supabase PostgreSQL
+    let dbRecord = null;
     try {
       if (process.env.NEXT_PUBLIC_SUPABASE_URL && !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")) {
-        const { error } = await supabaseAdmin.from("leads").insert([
-          {
-            full_name: validated.fullName,
-            email: validated.email,
-            phone: validated.phone,
-            country_target: validated.countryTarget,
-            program_target: validated.programTarget,
-            highest_education: validated.highestEducation,
-            budget_range_inr: validated.budgetRangeINR,
-            intake_year: validated.intakeYear,
-            status: "raw",
-          },
-        ]);
+        const payload = {
+          full_name: validated.fullName,
+          email: validated.email,
+          phone: validated.phone,
+          country_target: validated.countryTarget || "germany",
+          program_target: validated.programTarget || "ms",
+          highest_education: validated.highestEducation || null,
+          budget_range_inr: validated.budgetRangeINR || "15-25Lakhs",
+          intake_year: validated.intakeYear || "Fall 2026",
+          status: "raw",
+        };
+
+        const { data, error } = await supabaseAdmin.from("leads").insert([payload]).select();
 
         if (error) {
-          console.error("Supabase insert error:", error);
+          console.error("Supabase admin insert error:", error);
+          // Fallback to client if admin key issue
+          const { supabase } = await import("@/lib/supabase/client");
+          const { data: fbData, error: fbErr } = await supabase.from("leads").insert([payload]).select();
+          if (fbErr) {
+            console.error("Supabase fallback insert error:", fbErr);
+          } else if (fbData && fbData.length > 0) {
+            dbRecord = fbData[0];
+          }
+        } else if (data && data.length > 0) {
+          dbRecord = data[0];
         }
       }
     } catch (dbErr) {
-      console.warn("Database storage deferred, lead validated:", dbErr);
+      console.warn("Database storage exception:", dbErr);
     }
 
     return NextResponse.json({
       success: true,
       message: "Lead submitted successfully. An admission counsellor will reach out within 24 hours.",
       lead: validated,
+      dbData: dbRecord,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

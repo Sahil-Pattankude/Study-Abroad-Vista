@@ -3,20 +3,13 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { 
   ChevronRight, 
-  Coins, 
-  Clock, 
-  GraduationCap, 
-  Building2, 
-  ShieldCheck, 
-  CheckCircle2, 
-  ArrowRight,
-  HelpCircle,
-  Award
+  CheckCircle2
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, getCountryBySlug, getProgramBySlug } from "@/lib/data/masterData";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CountryInquiryForm } from "@/components/country/CountryInquiryForm";
 
 interface Props {
   params: Promise<{ slug: string; program: string }>;
@@ -187,27 +180,11 @@ export default async function CountryProgramPage({ params }: Props) {
 
             {/* Right Rail Lead Form */}
             <div className="lg:col-span-4">
-              <div className="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
-                <h3 className="text-sm font-bold text-slate-900">Apply for {prog.name} in {country.name}</h3>
-                <p className="mt-1 text-xs text-slate-500">Get free shortlisted universities and admission support.</p>
-                <form className="mt-5 space-y-3 text-xs">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Full Name</label>
-                    <input type="text" required placeholder="Your name" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Email Address</label>
-                    <input type="email" required placeholder="student@example.com" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">WhatsApp (+91)</label>
-                    <input type="tel" required placeholder="9876543210" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" />
-                  </div>
-                  <button type="submit" className="w-full rounded-xl bg-[#EA5C2B] py-2.5 text-xs font-bold text-white hover:bg-[#d94f20] transition">
-                    Get Free Admissions Shortlist →
-                  </button>
-                </form>
-              </div>
+              <CountryInquiryForm
+                countryName={country.name}
+                countrySlug={country.slug}
+                availablePrograms={[{ id: prog.id, slug: prog.slug, name: prog.name }]}
+              />
             </div>
           </div>
         </div>

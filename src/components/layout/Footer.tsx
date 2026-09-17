@@ -91,6 +91,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/compare" className="text-slate-400 hover:text-white transition font-semibold text-[#EA5C2B]">
+                  University Compare Matrix
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className="text-slate-400 hover:text-white transition">
                   Editorial Guides
                 </Link>

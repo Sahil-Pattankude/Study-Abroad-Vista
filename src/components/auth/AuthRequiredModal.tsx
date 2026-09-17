@@ -14,7 +14,7 @@ export function AuthRequiredModal({
   isOpen,
   onClose,
   title = "AI Counsellor is reserved for logged-in members",
-  description = "Please sign in or create a free student account to unlock 24/7 personalized Gemini 3.8 admissions counselling, university shortlisting, and eligibility checks."
+  description = "Please sign in or create a free student account to unlock 24/7 personalized AI admissions counselling, university shortlisting, and eligibility checks."
 }: AuthRequiredModalProps) {
   if (!isOpen) return null;
 
@@ -57,7 +57,7 @@ export function AuthRequiredModal({
           </p>
           <div className="flex items-start gap-2 text-slate-700">
             <CheckCircle2 className="h-4 w-4 text-[#17B978] shrink-0 mt-0.5" />
-            <span><strong>Continuous 24/7 AI Guidance:</strong> Context-aware Gemini 3.8 responses tailored to your profile.</span>
+            <span><strong>Continuous 24/7 AI Guidance:</strong> Context-aware AI responses tailored to your profile.</span>
           </div>
           <div className="flex items-start gap-2 text-slate-700">
             <CheckCircle2 className="h-4 w-4 text-[#17B978] shrink-0 mt-0.5" />

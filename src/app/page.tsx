@@ -162,7 +162,7 @@ export default function Home() {
                     Ask Anything. Get Instant, Personalized Answers.
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                    Powered by Google Gemini 3.8 and trained on authentic admissions guidelines across 19 countries, real living costs in ₹ Lakhs, and visa eligibility rules.
+                    Powered by Advanced AI and trained on authentic admissions guidelines across 19 countries, real living costs in ₹ Lakhs, and visa eligibility rules.
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-slate-200">
@@ -188,7 +188,7 @@ export default function Home() {
                       Start Free AI Chat →
                     </AICounsellorTriggerButton>
                     <span className="text-[11px] text-slate-400">
-                      Member access • 24/7 Gemini 3.8 ready
+                      Member access • 24/7 AI Counsellor ready
                     </span>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function Home() {
                         </div>
                       </div>
                       <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-slate-300 flex items-center gap-1">
-                        Gemini 3.8
+                        Vista AI Engine
                       </span>
                     </div>
 
@@ -261,12 +261,21 @@ export default function Home() {
                     Interactive utilities designed to calculate real expenses, model career ROI, and progressively qualify your profile.
                   </p>
                 </div>
-                <Link
-                  href="/cost-calculator"
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#102C57] hover:bg-slate-100 transition shadow-xs"
-                >
-                  All Tools →
-                </Link>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link
+                    href="/compare"
+                    className="rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition shadow-xs flex items-center gap-1"
+                  >
+                    <span>Compare Universities Matrix</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                  </Link>
+                  <Link
+                    href="/cost-calculator"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#102C57] hover:bg-slate-100 transition shadow-xs"
+                  >
+                    Cost Calculator →
+                  </Link>
+                </div>
               </div>
 
               <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -304,11 +313,12 @@ export default function Home() {
                       Save up to 4 global institutions and compare tuition fees, IELTS cutoffs, QS rankings, and post-study work visas side by side.
                     </p>
                   </div>
-                  <LeadTriggerButton
+                  <Link
+                    href="/compare"
                     className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left"
                   >
                     Open University Comparator →
-                  </LeadTriggerButton>
+                  </Link>
                 </div>
 
                 {/* Tool 3 - EMBA ROI Calculator per Doc 1 v2.0 */}

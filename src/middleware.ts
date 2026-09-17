@@ -35,11 +35,14 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   let pathname = url.pathname;
 
-  // Ignore static assets, api routes, and Next.js internal files
+  // Ignore static assets, api routes, universities, studio, and admin routes
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/images") ||
+    pathname.startsWith("/universities") ||
+    pathname.startsWith("/studio") ||
+    pathname.startsWith("/admin") ||
     pathname.includes(".")
   ) {
     return NextResponse.next();

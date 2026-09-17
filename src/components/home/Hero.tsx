@@ -87,7 +87,7 @@ export function Hero() {
                   </div>
                 </div>
                 <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold text-slate-300 flex items-center gap-1">
-                  Gemini 3.8
+                  Vista AI Engine
                 </span>
               </div>
 

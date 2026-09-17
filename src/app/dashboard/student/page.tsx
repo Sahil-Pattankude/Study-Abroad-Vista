@@ -1,13 +1,70 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Compass, GraduationCap, Bookmark, FileText, Bot, ArrowLeft, Building2, User, LogOut } from "lucide-react";
+import { Compass, GraduationCap, Bookmark, FileText, Bot, ArrowLeft, Building2, User, LogOut, Trash2 } from "lucide-react";
 import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
+import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
   const displayName = user?.name || "Student";
+  const [shortlistedUnis, setShortlistedUnis] = useState<University[]>(FEATURED_UNIVERSITIES.slice(0, 4));
+
+  useEffect(() => {
+    async function loadShortlists() {
+      let allUnis = FEATURED_UNIVERSITIES;
+      try {
+        const live = await fetchLiveUniversities();
+        if (live && live.length > 0) {
+          allUnis = live;
+        }
+      } catch (e) {
+        console.warn("Live fetch error:", e);
+      }
+
+      try {
+        const stored = JSON.parse(localStorage.getItem("vista_saved_shortlist") || "[]");
+        if (Array.isArray(stored) && stored.length > 0) {
+          const matched = stored
+            .map((slug: string) => allUnis.find((u) => u.slug === slug))
+            .filter(Boolean) as University[];
+          if (matched.length > 0) {
+            setShortlistedUnis(matched);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Shortlist read error:", e);
+      }
+
+      setShortlistedUnis(allUnis.slice(0, 4));
+    }
+
+    loadShortlists();
+
+    const handleUpdate = () => {
+      loadShortlists();
+    };
+    window.addEventListener("vista_shortlist_updated", handleUpdate);
+    return () => {
+      window.removeEventListener("vista_shortlist_updated", handleUpdate);
+    };
+  }, []);
+
+  const removeShortlist = (slug: string) => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("vista_saved_shortlist") || "[]");
+      const updated = stored.filter((s: string) => s !== slug);
+      localStorage.setItem("vista_saved_shortlist", JSON.stringify(updated));
+      setShortlistedUnis((prev) => prev.filter((u) => u.slug !== slug));
+      window.dispatchEvent(new CustomEvent("vista_shortlist_updated"));
+    } catch (e) {
+      console.warn("Remove shortlist error:", e);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -76,7 +133,7 @@ export default function StudentDashboardPage() {
               <Bookmark className="h-5 w-5 text-[#EA5C2B]" />
               <span className="text-xs font-bold uppercase">Saved Shortlists</span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">4</p>
+            <p className="mt-3 text-2xl font-black text-[#102C57]">{shortlistedUnis.length}</p>
             <span className="text-[11px] text-slate-500">Universities in watchlist</span>
           </div>
 
@@ -137,11 +194,13 @@ export default function StudentDashboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {FEATURED_UNIVERSITIES.slice(0, 4).map((uni) => (
+                {shortlistedUnis.map((uni) => (
                   <tr key={uni.id} className="hover:bg-slate-50/70">
                     <td className="p-3 font-bold text-[#102C57] flex items-center gap-2">
                       <Building2 className="h-4 w-4 text-[#EA5C2B]" />
-                      {uni.name}
+                      <Link href={`/universities/${uni.slug}`} className="hover:underline">
+                        {uni.name}
+                      </Link>
                     </td>
                     <td className="p-3 font-medium text-slate-600">{uni.country}</td>
                     <td className="p-3 font-semibold text-slate-700">#{uni.rankingGlobal}</td>
@@ -149,9 +208,21 @@ export default function StudentDashboardPage() {
                     <td className="p-3 text-slate-700">{uni.ieltsMinScore} Bands</td>
                     <td className="p-3 text-emerald-700 font-medium">{uni.postStudyWorkMonths} Months</td>
                     <td className="p-3 text-right">
-                      <button className="rounded-lg bg-[#102C57] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242]">
-                        Apply
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={`/universities/${uni.slug}`}
+                          className="rounded-lg bg-[#102C57] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition"
+                        >
+                          View
+                        </Link>
+                        <button
+                          onClick={() => removeShortlist(uni.slug)}
+                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          title="Remove from shortlist"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

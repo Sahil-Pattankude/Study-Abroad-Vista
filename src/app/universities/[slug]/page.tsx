@@ -18,6 +18,10 @@ import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { UniversityInquiryForm } from "@/components/university/UniversityInquiryForm";
+import { UniversityActions } from "@/components/university/UniversityActions";
+
+export const dynamicParams = true;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -99,14 +103,13 @@ export default async function UniversityDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <button className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition">
-                  ★ Shortlist
-                </button>
-                <button className="rounded-xl bg-[#EA5C2B] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#d94f20] transition">
-                  Apply via Vista →
-                </button>
-              </div>
+              <UniversityActions
+                universityId={uni.id}
+                universitySlug={uni.slug}
+                universityName={uni.name}
+                countrySlug={uni.countrySlug}
+                claimedStatus={(uni as any).claimed_status || "unclaimed"}
+              />
             </div>
           </div>
         </section>
@@ -153,18 +156,10 @@ export default async function UniversityDetailPage({ params }: Props) {
 
             {/* Right Sticky Inquiry Card */}
             <div className="lg:col-span-4">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg sticky top-24">
-                <h3 className="text-sm font-bold text-slate-900">Free Admission Review</h3>
-                <p className="mt-1 text-xs text-slate-500">Check your admission eligibility for {uni.name}.</p>
-                <form className="mt-4 space-y-3 text-xs">
-                  <input type="text" required placeholder="Your Name" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none" />
-                  <input type="email" required placeholder="Your Email" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none" />
-                  <input type="tel" required placeholder="Phone / WhatsApp" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none" />
-                  <button type="submit" className="w-full rounded-xl bg-[#102C57] py-2.5 text-xs font-bold text-white hover:bg-[#0c2242]">
-                    Submit for Eligibility Check →
-                  </button>
-                </form>
-              </div>
+              <UniversityInquiryForm
+                universityName={uni.name}
+                countrySlug={uni.countrySlug}
+              />
             </div>
           </div>
         </div>

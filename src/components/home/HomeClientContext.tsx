@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Bot, Lock } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -46,6 +47,8 @@ export function useHomeModals() {
 }
 
 export function HomeModalProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const isStudioOrAdmin = Boolean(pathname?.startsWith("/studio") || pathname?.startsWith("/admin") || pathname?.startsWith("/portal"));
   const { isLoggedIn } = useAuth();
   const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -61,9 +64,11 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const openLeadModal = (countryOrProgram?: string) => {
-    if (countryOrProgram) {
+  const openLeadModal = (countryOrProgram?: unknown) => {
+    if (typeof countryOrProgram === "string") {
       setSelectedCountryName(countryOrProgram);
+    } else {
+      setSelectedCountryName("germany");
     }
     setLeadModalOpen(true);
   };
@@ -82,36 +87,40 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
     >
       {children}
 
-      {/* Sticky Mobile CTA Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white p-3 shadow-lg sm:hidden">
-        <button
-          onClick={() => openLeadModal()}
-          className="w-full rounded-xl bg-[#EA5C2B] py-3 text-center text-xs font-bold text-white shadow-lg transition active:scale-98"
-        >
-          Get Free Counselling →
-        </button>
-      </div>
+      {/* Sticky Mobile CTA Bar - Hidden on /studio, /admin, /portal */}
+      {!isStudioOrAdmin && (
+        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white p-3 shadow-lg sm:hidden">
+          <button
+            onClick={() => openLeadModal()}
+            className="w-full rounded-xl bg-[#EA5C2B] py-3 text-center text-xs font-bold text-white shadow-lg transition active:scale-98"
+          >
+            Get Free Counselling →
+          </button>
+        </div>
+      )}
 
-      {/* Floating AI Counsellor Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={openAICounsellor}
-          aria-label="Talk to AI counsellor"
-          className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition hover:scale-105 hover:bg-[#0c2242]"
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white">
-            <Bot className="h-5 w-5 text-[#EA5C2B]" />
-          </div>
-          <span className="pr-2 text-xs font-bold hidden sm:inline flex items-center gap-1.5">
-            Talk to AI Counsellor
-            {!isLoggedIn && <Lock className="h-3 w-3 text-amber-300" />}
-          </span>
-          <span className="relative flex h-2.5 w-2.5 sm:hidden">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-          </span>
-        </button>
-      </div>
+      {/* Floating AI Counsellor Button - Hidden on /studio, /admin, /portal */}
+      {!isStudioOrAdmin && (
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
+            onClick={openAICounsellor}
+            aria-label="Talk to AI counsellor"
+            className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition hover:scale-105 hover:bg-[#0c2242]"
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white">
+              <Bot className="h-5 w-5 text-[#EA5C2B]" />
+            </div>
+            <span className="pr-2 text-xs font-bold hidden sm:inline flex items-center gap-1.5">
+              Talk to AI Counsellor
+              {!isLoggedIn && <Lock className="h-3 w-3 text-amber-300" />}
+            </span>
+            <span className="relative flex h-2.5 w-2.5 sm:hidden">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Slide-over AI Counsellor Drawer */}
       {aiDrawerOpen && (

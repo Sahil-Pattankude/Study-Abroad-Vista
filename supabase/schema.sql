@@ -72,12 +72,29 @@ CREATE TABLE IF NOT EXISTS universities (
     featured BOOLEAN DEFAULT FALSE,
     logo_url TEXT,
     banner_url TEXT,
+    claimed_status VARCHAR(32) DEFAULT 'unclaimed', -- 'unclaimed' | 'pending' | 'verified'
+    claimed_by_user_id UUID,
     -- PostgreSQL Native Full-Text Search Generated Column
     search_vector tsvector GENERATED ALWAYS AS (
         to_tsvector('english', coalesce(name, '') || ' ' || coalesce(city, ''))
     ) STORED,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- University Profile Claims Table
+CREATE TABLE IF NOT EXISTS university_claims (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    university_id TEXT NOT NULL,
+    university_name VARCHAR(255) NOT NULL,
+    user_id UUID,
+    applicant_name VARCHAR(128) NOT NULL,
+    official_email VARCHAR(128) NOT NULL,
+    designation VARCHAR(128) DEFAULT 'Admissions Representative',
+    proof_document_url TEXT,
+    verification_status VARCHAR(32) DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+    reviewed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- GIN Index for Sub-10ms Full-Text Search

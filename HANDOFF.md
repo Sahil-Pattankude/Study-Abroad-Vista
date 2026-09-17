@@ -109,12 +109,29 @@ The project explicitly **rejected** enterprise over-engineering in Document W4 (
    * **CSS Rendering Deferral (`content-visibility: auto`):** Below-the-fold sections (`CountryGrid`, `ProgramStreamGrid`, `CostCalculatorWidget`, `AI Showcase`, `Tools Grid`, `Guides`, `Footer`) tagged with `.cv-auto` and `contain-intrinsic-size`, skipping layout/paint for offscreen content on mobile.
    * **Mobile GPU Compositing Relief:** Removed expensive `blur-3xl` and multi-layer `backdrop-blur-xl` on mobile viewports, eliminating composite layer recalculation and scroll jank.
    * **Font & Viewport Optimization:** Cleaned font preloads in `layout.tsx` (removed unused `Geist_Mono`, added `display: "swap"`), and added optimal `viewport` metadata with `width: "device-width"` and `themeColor: "#102C57"`.
-10. **Embedded Sanity Studio & Editorial Content Engine (`/studio`):**
+11. **Embedded Sanity Studio & Editorial Content Engine (`/studio`):**
     * **Embedded NextStudio:** Mounted visual Sanity Studio v4 at `/studio` with isolated full-bleed viewport layout.
-    * **Content Schemas:** Configured modular schemas for `article`, `pillarGuide`, and `author`.
+    * **Strict Architectural Scope:** Streamlined Sanity Studio schemas to focus strictly on editorial articles and author profiles (`article`, `author`). All country destination guides, universities, and program data are owned exclusively by Supabase PostgreSQL.
     * **Resilient Fetchers:** Built `src/lib/sanity/fetchers.ts` with Next.js 15 ISR (`next: { revalidate: 60 }`) and automatic fallbacks (`FALLBACK_ARTICLES`).
     * **Article Reader Routes (`/articles/[slug]`):** Dedicated dynamic reader pages for admissions guides and regulatory updates.
     * **Build Verification:** 107 total static pages prerendered with 0 errors.
+12. **University Profile Claiming & Editing Engine:**
+    * Public claim flow (`ClaimProfileModal.tsx` ➔ `/api/claims/submit` ➔ `/admin` Approval Queue ➔ `/portal/university` live editor).
+    * Dynamic Supabase PostgreSQL database hydration for verified institutional profiles.
+13. **Course & Program Comparison Matrix (Template T-09):**
+    * Dual-tab `/compare` interface featuring University Comparison & Course/Program Comparison across 10 academic parameters with difference highlighting.
+    * **Dynamic Supabase Database Fetching:** Created `/api/courses` endpoint and `fetchLiveCourses()` in `dataFetchers.ts` to dynamically fetch all academic programs, tuition fees, and admission criteria from Supabase PostgreSQL database in real-time.
+14. **React Duplicate Key & Navbar Layout Fixes:**
+    * Deduplicated `stanford` university entry in `masterData.ts`.
+    * Added `shrink-0` & `whitespace-nowrap` to layout Header to prevent collapse on multi-role authentication.
+15. **Production Build Verification (`npm run build`):**
+    * **100% Clean Compilation:** Resolved type errors in `admin/page.tsx`, `buyer/page.tsx`, and `types/index.ts`.
+    * **187 Static Pages Prerendered:** Next.js 15 App Router production build succeeded with **code 0 and 0 errors** across all 187 routes (destinations, programs, articles, test prep, portals, and university profiles).
+16. **Navbar Dropdown Count Tags Added:**
+    * Standardized count badges across top navigation header in `Header.tsx`: `Destinations (19)`, `Programs (8)`, `Universities (18)`, `Test Prep (9)`, `Tools (6)`.
+17. **Admin Profile Claims Queue Live Hydration (`/api/claims`):**
+    * Created `/api/claims/route.ts` using `supabaseAdmin` service role to query all pending and approved institutional profile claims without client-side RLS blocking.
+    * Updated `fetchLiveClaims()` in `dataFetchers.ts` to call `/api/claims`, populating submitted claims (e.g. University of Toronto claim `e1665541-22c2-43d6-95bc-749743d6184e` submitted by Dr. ABC XYZ) live in the `/admin` queue.
 
 ---
 

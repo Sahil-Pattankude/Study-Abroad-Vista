@@ -81,7 +81,7 @@ export const FALLBACK_ARTICLES: SanityArticle[] = [
   },
 ];
 
-const LATEST_ARTICLES_QUERY = `*[_type == "article"] | order(publishedAt desc)[0...4] {
+const LATEST_ARTICLES_QUERY = `*[_type == "article" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc)[0...4] {
   _id,
   title,
   "slug": slug.current,
@@ -98,7 +98,7 @@ const LATEST_ARTICLES_QUERY = `*[_type == "article"] | order(publishedAt desc)[0
   }
 }`;
 
-const ARTICLE_BY_SLUG_QUERY = `*[_type == "article" && slug.current == $slug][0] {
+const ARTICLE_BY_SLUG_QUERY = `*[_type == "article" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
   _id,
   title,
   "slug": slug.current,
@@ -116,7 +116,7 @@ const ARTICLE_BY_SLUG_QUERY = `*[_type == "article" && slug.current == $slug][0]
   }
 }`;
 
-const PILLAR_GUIDE_BY_COUNTRY_QUERY = `*[_type == "pillarGuide" && country == $country][0] {
+const PILLAR_GUIDE_BY_COUNTRY_QUERY = `*[_type == "pillarGuide" && country == $country && !(_id in path("drafts.**"))][0] {
   _id,
   title,
   "slug": slug.current,
@@ -129,7 +129,7 @@ const PILLAR_GUIDE_BY_COUNTRY_QUERY = `*[_type == "pillarGuide" && country == $c
   updatedAt
 }`;
 
-const ALL_ARTICLES_QUERY = `*[_type == "article"] | order(publishedAt desc) {
+const ALL_ARTICLES_QUERY = `*[_type == "article" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc) {
   _id,
   title,
   "slug": slug.current,
@@ -200,46 +200,15 @@ export async function getArticleBySlug(slug: string): Promise<SanityArticle | nu
 }
 
 export async function getPillarGuideByCountry(countrySlug: string): Promise<SanityPillarGuide | null> {
-  try {
-    const data = await client.fetch(PILLAR_GUIDE_BY_COUNTRY_QUERY, { country: countrySlug.toLowerCase() }, {
-      next: { revalidate: 60 },
-    });
-    if (data) {
-      return data;
-    }
-  } catch (error) {
-    console.warn(`Sanity pillarGuide fetch for '${countrySlug}' failed:`, error);
-  }
   return null;
 }
 
-const ALL_SANITY_UNIVERSITIES_QUERY = `*[_type == "university"] {
-  _id,
-  name,
-  "slug": slug.current,
-  country,
-  city,
-  rankingGlobal,
-  rankingNational,
-  tuitionFeeRangeINR,
-  ieltsMinScore,
-  greGmatRequired,
-  acceptanceRate,
-  postStudyWorkMonths,
-  featured
-}`;
-
 export async function getSanityUniversities() {
-  try {
-    const data = await client.fetch(ALL_SANITY_UNIVERSITIES_QUERY, {}, {
-      next: { revalidate: 60 },
-    });
-    if (Array.isArray(data) && data.length > 0) {
-      return data;
-    }
-  } catch (error) {
-    console.warn("Sanity getSanityUniversities fetch failed:", error);
-  }
   return [];
 }
+
+export async function getSanityCountries() {
+  return [];
+}
+
 

@@ -2,13 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { 
-  Compass, 
-  MapPin, 
-  GraduationCap, 
-  Clock, 
-  Coins, 
-  ShieldCheck, 
-  Award, 
   ChevronRight, 
   CheckCircle2, 
   AlertCircle, 
@@ -16,7 +9,7 @@ import {
   Building2, 
   ArrowRight,
   Plane,
-  FileText
+  Coins
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES, COUNTRY_ALIASES, getCountryBySlug } from "@/lib/data/masterData";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
@@ -24,6 +17,7 @@ import { getCountryEditorial } from "@/lib/data/contentData";
 import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CountryInquiryForm } from "@/components/country/CountryInquiryForm";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -56,8 +50,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CountryHubPage({ params }: Props) {
-  const { slug } = await params;
-  const country = getCountryBySlug(slug || "");
+  const resolvedParams = await params;
+  let rawSlug = resolvedParams?.slug || "";
+  if (rawSlug.startsWith("study-in-")) {
+    rawSlug = rawSlug.replace("study-in-", "");
+  }
+  const country = getCountryBySlug(rawSlug);
 
   if (!country) {
     notFound();
@@ -371,78 +369,13 @@ export default async function CountryHubPage({ params }: Props) {
               )}
             </div>
 
-            {/* Right Sticky Rail: Level 3 Lead Capture Widget */}
+            {/* Right Sticky Rail: Interactive Lead Capture Widget */}
             <div className="lg:col-span-4">
-              <div className="sticky top-24 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xl">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#102C57] text-white">
-                    <Compass className="h-4 w-4 text-[#EA5C2B]" />
-                  </div>
-                  <h3 className="text-sm font-bold text-slate-900">Free {country.name} Counselling</h3>
-                </div>
-                <p className="mt-1 text-xs text-slate-500">
-                  Get personalized shortlist, tuition waivers, and visa guidance.
-                </p>
-
-                <form className="mt-5 space-y-3 text-xs">
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Full Name</label>
-                    <input 
-                      type="text" 
-                      required 
-                      placeholder="Your name" 
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Email Address</label>
-                    <input 
-                      type="email" 
-                      required 
-                      placeholder="student@example.com" 
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">WhatsApp / Phone (+91)</label>
-                    <input 
-                      type="tel" 
-                      required 
-                      placeholder="9876543210" 
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57]" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">Target Program</label>
-                    <select className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-[#102C57] bg-white">
-                      {availablePrograms.map((p) => (
-                        <option key={p.id} value={p.slug}>{p.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="pt-2">
-                    <label className="flex items-start gap-2 cursor-pointer">
-                      <input type="checkbox" required defaultChecked className="mt-0.5 accent-[#102C57]" />
-                      <span className="text-[10px] text-slate-500 leading-snug">
-                        I consent to receive guidance under the <strong>DPDP Act 2023</strong>.
-                      </span>
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl bg-[#EA5C2B] py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#d94f20] transition"
-                  >
-                    Get Free {country.name} Guidance →
-                  </button>
-                </form>
-
-                <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-center gap-1 text-[10px] text-slate-400">
-                  <ShieldCheck className="h-3 w-3 text-emerald-600" />
-                  <span>Verified Advisors • No Spam Guarantee</span>
-                </div>
-              </div>
+              <CountryInquiryForm
+                countryName={country.name}
+                countrySlug={country.slug}
+                availablePrograms={availablePrograms}
+              />
             </div>
           </div>
         </div>

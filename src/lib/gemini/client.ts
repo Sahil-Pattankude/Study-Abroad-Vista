@@ -4,7 +4,7 @@ const apiKey = process.env.GEMINI_API_KEY || "";
 
 export const genAI = new GoogleGenerativeAI(apiKey);
 
-export const GEMINI_CHAT_MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+export const GEMINI_CHAT_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 export const GEMINI_EMBED_MODEL = process.env.GEMINI_EMBEDDING_MODEL || "text-embedding-004";
 
 /**

@@ -123,7 +123,7 @@ export function AICounsellorDrawer({
                 )}
               </div>
               <p className="text-[10px] text-slate-300">
-                {isLoggedIn ? `Active Session: ${user?.name || user?.email}` : "Gemini 3.8 • Member Access"}
+                {isLoggedIn ? `Active Session: ${user?.name || user?.email}` : "Vista AI Engine • Member Access"}
               </p>
             </div>
           </div>

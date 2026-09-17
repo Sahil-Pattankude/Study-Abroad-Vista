@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, CheckCircle, ShieldCheck, ArrowRight, Loader2, Sparkles } from "lucide-react";
 import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
 
@@ -10,11 +10,29 @@ interface LeadModalProps {
   defaultCountry?: string;
 }
 
+function safeJsonStringify(obj: Record<string, any>): string {
+  try {
+    const clean: Record<string, string> = {};
+    for (const k in obj) {
+      const v = obj[k];
+      if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
+        clean[k] = String(v);
+      } else {
+        clean[k] = "";
+      }
+    }
+    return JSON.stringify(clean);
+  } catch {
+    return "{}";
+  }
+}
+
 export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
+  const initialCountry = typeof defaultCountry === "string" ? defaultCountry : "germany";
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [countryTarget, setCountryTarget] = useState(defaultCountry || "germany");
+  const [countryTarget, setCountryTarget] = useState(initialCountry);
   const [programTarget, setProgramTarget] = useState("ms");
   const [budgetRangeINR, setBudgetRangeINR] = useState("15-25Lakhs");
   const [intakeYear, setIntakeYear] = useState("2026 / 2027");
@@ -22,6 +40,16 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setErrorMsg("");
+      setSubmitted(false);
+      if (typeof defaultCountry === "string" && defaultCountry) {
+        setCountryTarget(defaultCountry);
+      }
+    }
+  }, [isOpen, defaultCountry]);
 
   if (!isOpen) return null;
 
@@ -37,24 +65,63 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
     setLoading(true);
 
     try {
+      const payload = {
+        fullName: String(fullName || ""),
+        email: String(email || ""),
+        phone: String(phone || ""),
+        countryTarget: String(typeof countryTarget === "string" ? countryTarget : "germany"),
+        programTarget: String(typeof programTarget === "string" ? programTarget : "ms"),
+        budgetRangeINR: String(typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs"),
+        intakeYear: String(typeof intakeYear === "string" ? intakeYear : "2026 / 2027"),
+      };
+
       const res = await fetch("/api/leads/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName,
-          email,
-          phone,
-          countryTarget,
-          programTarget,
-          budgetRangeINR,
-          intakeYear,
-        }),
+        body: safeJsonStringify(payload),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         throw new Error(data.error || "Submission failed");
+      }
+
+      // Store lead in client storage for instant live feed synchronization
+      try {
+        const localLead = {
+          id: `live-${Date.now()}`,
+          fullName: String(fullName || ""),
+          email: String(email || ""),
+          phone: String(phone || ""),
+          countryTarget: String(typeof countryTarget === "string" ? countryTarget : "germany"),
+          programTarget: String(typeof programTarget === "string" ? programTarget : "ms"),
+          budgetRangeINR: String(typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs"),
+          intakeYear: String(typeof intakeYear === "string" ? intakeYear : "2026 / 2027"),
+          createdAt: new Date().toISOString(),
+        };
+        
+        let existing: any[] = [];
+        try {
+          const raw = localStorage.getItem("vista_submitted_leads");
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              existing = parsed.filter(item => item && typeof item === "object" && typeof item.fullName === "string");
+            }
+          }
+        } catch {
+          existing = [];
+        }
+
+        try {
+          localStorage.setItem("vista_submitted_leads", JSON.stringify([localLead, ...existing]));
+        } catch (stErr) {
+          console.warn("localStorage setItem warning:", stErr);
+        }
+        window.dispatchEvent(new CustomEvent("vista_lead_submitted"));
+      } catch (e) {
+        console.warn("Client lead storage warning:", e);
       }
 
       setSubmitted(true);
@@ -84,7 +151,7 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               Application Profile Received!
             </h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              Thank you, <span className="font-semibold text-slate-900">{fullName}</span>. A certified university admissions counselor will review your profile for <span className="font-semibold text-slate-900">{countryTarget.toUpperCase()}</span> and connect via WhatsApp/Phone within 24 hours.
+              Thank you, <span className="font-semibold text-slate-900">{fullName}</span>. A certified university admissions counselor will review your profile for <span className="font-semibold text-slate-900">{(typeof countryTarget === "string" ? countryTarget : "GERMANY").toUpperCase()}</span> and connect via WhatsApp/Phone within 24 hours.
             </p>
             <button
               onClick={() => {
@@ -230,10 +297,7 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 pt-1 text-[10px] text-slate-500">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                <span>Your information is protected under India DPDP Act 2023. Zero spam.</span>
-              </div>
+
 
               <button
                 type="submit"
