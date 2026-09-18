@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,11 +13,12 @@ import {
   Briefcase,
   ShieldCheck,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectParam = searchParams.get("redirect") || "";
@@ -412,5 +413,25 @@ export default function LoginPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-[#102C57] mb-3 animate-pulse">
+            <Compass className="h-6 w-6 text-[#EA5C2B]" />
+          </div>
+          <p className="text-xs font-semibold text-slate-500 flex items-center gap-2">
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#102C57]" />
+            Loading Portal Switchboard...
+          </p>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
