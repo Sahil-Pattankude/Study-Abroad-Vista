@@ -533,6 +533,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 8,
     postStudyWorkMonths: 18,
     featured: true,
+    official_email_address: "admissions@tum.de",
   },
   {
     id: "gatech",
@@ -551,6 +552,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 16,
     postStudyWorkMonths: 36,
     featured: true,
+    official_email_address: "admissions@gatech.edu",
   },
   {
     id: "oxford",
@@ -569,6 +571,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 17,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@ox.ac.uk",
   },
   {
     id: "stanford",
@@ -587,6 +590,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 4,
     postStudyWorkMonths: 36,
     featured: true,
+    official_email_address: "admissions@stanford.edu",
   },
   {
     id: "manchester",
@@ -605,6 +609,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 27,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@manchester.ac.uk",
   },
   {
     id: "tcd",
@@ -623,6 +628,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 33,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@tcd.ie",
   },
   {
     id: "unimelb",
@@ -641,6 +647,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 40,
     postStudyWorkMonths: 36,
     featured: true,
+    official_email_address: "admissions@unimelb.edu.au",
   },
   {
     id: "tashkent",
@@ -660,6 +667,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     nmcCompliant: true,
     postStudyWorkMonths: 12,
     featured: true,
+    official_email_address: "admissions@tma.uz",
   },
   {
     id: "utoronto",
@@ -679,6 +687,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     postStudyWorkMonths: 36,
     featured: true,
     tierBadge: "Platinum Partner",
+    official_email_address: "admissions@utoronto.ca",
   },
   {
     id: "sorbonne",
@@ -697,6 +706,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 15,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@sorbonne-universite.fr",
   },
   {
     id: "hec-paris",
@@ -715,6 +725,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 8,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@hec.fr",
   },
   {
     id: "polytechnique",
@@ -733,6 +744,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 10,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@polytechnique.edu",
   },
   {
     id: "essec",
@@ -751,6 +763,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 18,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@essec.edu",
   },
   {
     id: "psl",
@@ -769,6 +782,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 12,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@psl.eu",
   },
   {
     id: "tudelft",
@@ -787,6 +801,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 20,
     postStudyWorkMonths: 12,
     featured: true,
+    official_email_address: "admissions@tudelft.nl",
   },
   {
     id: "sapienza",
@@ -805,6 +820,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 35,
     postStudyWorkMonths: 12,
     featured: true,
+    official_email_address: "admissions@uniroma1.it",
   },
   {
     id: "nus",
@@ -823,6 +839,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 7,
     postStudyWorkMonths: 24,
     featured: true,
+    official_email_address: "admissions@nus.edu.sg",
   },
   {
     id: "auckland",
@@ -841,5 +858,6 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 45,
     postStudyWorkMonths: 36,
     featured: true,
+    official_email_address: "admissions@auckland.ac.nz",
   },
 ];

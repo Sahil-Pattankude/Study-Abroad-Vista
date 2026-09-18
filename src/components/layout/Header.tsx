@@ -17,14 +17,18 @@ import {
   Building2,
   ArrowRight,
   GraduationCap,
-  ShieldCheck
+  ShieldCheck,
+  ChevronRight
 } from "lucide-react";
 import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useHomeModals } from "@/components/home/HomeClientContext";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
+const ANCHOR_SLUGS = ["usa", "uk", "canada", "australia", "germany", "ireland"];
+const ANCHOR_COUNTRIES = COUNTRIES.filter(c => ANCHOR_SLUGS.includes(c.slug));
 const TIER_1_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 1");
 const TIER_2_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 2");
 const TIER_3_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 3");
@@ -104,7 +108,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         {TIER_1_COUNTRIES.map(c => (
                           <li key={c.id}>
                             <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <span>{c.flagEmoji}</span>
+                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -120,7 +124,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         {TIER_2_COUNTRIES.map(c => (
                           <li key={c.id}>
                             <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <span>{c.flagEmoji}</span>
+                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -136,7 +140,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         {TIER_3_COUNTRIES.map(c => (
                           <li key={c.id}>
                             <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <span>{c.flagEmoji}</span>
+                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -576,149 +580,251 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer (W10 Template Standard: Slide-over Drawer with Flag Badges & Ecosystem Portals) */}
       {mobileMenuOpen && (
-        <div className="border-t border-slate-200 bg-white px-4 py-6 lg:hidden">
-          <div className="space-y-4">
-            <button 
-              onClick={() => { setMobileMenuOpen(false); handleAI(); }}
-              className="flex w-full items-center justify-between rounded-xl bg-indigo-50 p-3 text-sm font-bold text-indigo-900"
-            >
-              <span className="flex items-center gap-2">
-                <Bot className="h-5 w-5 text-[#EA5C2B]" />
-                Talk to AI Counsellor (24/7)
-                {!isLoggedIn && <Lock className="h-3.5 w-3.5 text-amber-600 ml-1" />}
-              </span>
-              <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] text-white">
-                {isLoggedIn ? "Live" : "Login Req"}
-              </span>
-            </button>
-
-            <Link 
-              href="/#destinations-grid" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              All 19 Destinations
+        <div className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden overflow-y-auto animate-in fade-in slide-in-from-right duration-200">
+          {/* Mobile Drawer Top Header */}
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-3.5 backdrop-blur-md">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-sm">
+                <Compass className="h-5 w-5 text-[#EA5C2B]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
+                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
+                </span>
+                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                  Global Admissions Engine
+                </span>
+              </div>
             </Link>
-
-            <Link 
-              href="/#programs-grid" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              All 8 Disciplines & Programs
-            </Link>
-
-            <Link 
-              href="/universities/technical-university-of-munich" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              Featured Universities
-            </Link>
-
-            <Link 
-              href="/cost-calculator" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              Study Cost Calculator
-            </Link>
-
-            <Link 
-              href="/compare" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-bold text-[#EA5C2B] hover:text-[#102C57]"
-            >
-              University Compare Matrix
-            </Link>
-
-            <Link 
-              href="/test-prep" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              Test Prep & Licensing (9 Exams)
-            </Link>
-
-            <Link 
-              href="/blog" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block font-semibold text-slate-700 hover:text-[#102C57]"
-            >
-              Blog & Admissions Guides
-            </Link>
-
             <button
-              onClick={() => { setMobileMenuOpen(false); handleLead(); }}
-              className="w-full rounded-xl bg-[#EA5C2B] py-3 text-center text-sm font-bold text-white shadow-sm"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+              aria-label="Close Mobile Navigation Drawer"
             >
-              Book Free Consultation Call
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Mobile Drawer Main Scroll Area */}
+          <div className="flex-1 p-4 space-y-6 pb-24">
+            {/* 1. AI Counsellor Banner */}
+            <button
+              onClick={() => { setMobileMenuOpen(false); handleAI(); }}
+              className="w-full text-left rounded-2xl bg-gradient-to-r from-[#102C57] to-[#1e457e] p-4 text-white shadow-md relative overflow-hidden group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#EA5C2B] backdrop-blur-sm border border-white/10">
+                    <Bot className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-extrabold text-white">AI Admissions Counsellor</span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-300 border border-emerald-500/30">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        24/7 Live
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 mt-0.5">Instant eligibility, fee calculation & university shortlists</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
+              </div>
             </button>
 
-            {/* Mobile Auth Portals — 4 Portals */}
-            <div className="pt-3 border-t border-slate-100 space-y-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                4 Ecosystem Portals & Access
-              </p>
+            {/* 2. Anchor Destinations & 19 Countries */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                  Primary Destinations (19 Countries)
+                </h3>
+                <Link
+                  href="/#destinations-grid"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
+                >
+                  View All →
+                </Link>
+              </div>
+
+              {/* Anchor Six Grid Cards */}
+              <div className="grid grid-cols-2 gap-2">
+                {ANCHOR_COUNTRIES.map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/study-in-${c.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/70 p-2.5 hover:bg-white hover:border-slate-300 transition"
+                  >
+                    <CountryFlag code={c.code} name={c.name} size="sm" />
+                    <div className="overflow-hidden">
+                      <p className="text-xs font-bold text-slate-900 truncate">{c.name}</p>
+                      <p className="text-[10px] text-slate-500 truncate">{c.avgTuitionINR}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* Secondary Tier 2 & Tier 3 quick chips */}
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {TIER_2_COUNTRIES.slice(0, 4).concat(TIER_3_COUNTRIES.slice(0, 3)).map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/study-in-${c.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
+                  >
+                    <CountryFlag code={c.code} name={c.name} size="sm" />
+                    <span>{c.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Study Programs & Disciplines */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Study Streams (8 Disciplines)
+              </h3>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {PROGRAMS.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/programs/${p.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 hover:bg-slate-100 transition"
+                  >
+                    <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
+                    <span className="font-semibold text-slate-800 truncate">{p.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* 4. Interactive Student Tools */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Discovery Tools & Matrices
+              </h3>
+              <div className="space-y-2 text-xs">
+                <Link
+                  href="/cost-calculator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B]">
+                    <Calculator className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">INR Tuition & Living Calculator</p>
+                    <p className="text-[10px] text-slate-500">Living costs, rent & tuition converted to INR</p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/compare"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">University Compare Matrix</p>
+                    <p className="text-[10px] text-slate-500">Side-by-side comparison for up to 5 universities</p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/test-prep"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">Test Prep Hub (All 9 Exams)</p>
+                    <p className="text-[10px] text-slate-500">IELTS, GRE, GMAT, NCLEX, PLAB, OET & PTE</p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* 5. 4 Ecosystem Portals & User Auth */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Portals & User Access
+              </h3>
               {isLoggedIn ? (
-                <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900 text-white">
+                  <div className="flex items-center gap-2.5">
                     <User className="h-4 w-4 text-[#EA5C2B]" />
-                    <span className="text-xs font-bold text-[#102C57]">
-                      {user?.name || user?.email} <span className="text-[10px] text-slate-500 font-normal">({user?.role})</span>
-                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-white">{user?.name || user?.email}</p>
+                      <p className="text-[10px] text-slate-400 capitalize">Role: {user?.role}</p>
+                    </div>
                   </div>
                   <button
                     onClick={() => {
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-xs font-bold text-rose-600 hover:underline"
+                    className="text-xs font-bold text-rose-400 hover:underline"
                   >
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-700 hover:bg-slate-50 text-center"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                    <span>Student Login</span>
+                    <span className="font-bold text-[#102C57]">Student Login</span>
+                    <span className="text-[10px] text-slate-500">Dashboard & AI history</span>
                   </Link>
-
                   <Link
                     href="/portal/buyer"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-700 hover:bg-slate-50 text-center"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <Briefcase className="h-3.5 w-3.5 text-blue-700" />
-                    <span>B2B Consultant</span>
+                    <span className="font-bold text-blue-700">B2B Consultant</span>
+                    <span className="text-[10px] text-slate-500">Lead marketplace feed</span>
                   </Link>
-
                   <Link
                     href="/portal/university"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-700 hover:bg-slate-50 text-center"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <Building2 className="h-3.5 w-3.5 text-emerald-700" />
-                    <span>University Portal</span>
+                    <span className="font-bold text-emerald-700">University Portal</span>
+                    <span className="text-[10px] text-slate-500">Institution profiles</span>
                   </Link>
-
                   <Link
                     href="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="sm:col-span-3 text-center py-2.5 rounded-xl bg-slate-900 text-xs font-bold text-white hover:bg-slate-800"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl bg-slate-900 text-white"
                   >
-                    Create Free Student Account / Register
+                    <span className="font-bold text-[#EA5C2B]">Create Account</span>
+                    <span className="text-[10px] text-slate-300">Free student registration</span>
                   </Link>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Mobile Drawer Bottom Fixed CTA */}
+          <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white p-4 shadow-lg">
+            <button
+              onClick={() => { setMobileMenuOpen(false); handleLead(); }}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 text-sm font-bold text-white shadow-md active:scale-98 transition"
+            >
+              <span>Book Free Consultation Call</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       )}

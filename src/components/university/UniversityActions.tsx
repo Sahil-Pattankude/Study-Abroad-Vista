@@ -125,6 +125,7 @@ export function UniversityActions({
       <ClaimProfileModal
         universityId={universityId || universitySlug}
         universityName={universityName}
+        countrySlug={countrySlug}
         isOpen={isClaimModalOpen}
         onClose={() => setIsClaimModalOpen(false)}
         onSubmitted={() => setCurrentClaimStatus("pending")}

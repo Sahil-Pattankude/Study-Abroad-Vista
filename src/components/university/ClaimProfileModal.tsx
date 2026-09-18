@@ -7,12 +7,15 @@ import { useAuth } from "@/lib/auth/AuthContext";
 interface Props {
   universityId: string;
   universityName: string;
+  countryId?: string;
+  countrySlug?: string;
+  countryName?: string;
   isOpen: boolean;
   onClose: () => void;
   onSubmitted?: () => void;
 }
 
-export function ClaimProfileModal({ universityId, universityName, isOpen, onClose, onSubmitted }: Props) {
+export function ClaimProfileModal({ universityId, universityName, countryId, countrySlug, countryName, isOpen, onClose, onSubmitted }: Props) {
   if (!isOpen) return null;
 
   const { user } = useAuth();
@@ -43,6 +46,9 @@ export function ClaimProfileModal({ universityId, universityName, isOpen, onClos
         body: JSON.stringify({
           universityId,
           universityName,
+          countryId: countryId || countrySlug,
+          countrySlug: countrySlug || countryId,
+          countryName,
           userId: user?.id,
           applicantName: applicantName.trim(),
           officialEmail: officialEmail.trim(),

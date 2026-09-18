@@ -10,6 +10,7 @@ import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CountryInquiryForm } from "@/components/country/CountryInquiryForm";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 interface Props {
   params: Promise<{ slug: string; program: string }>;
@@ -76,7 +77,7 @@ export default async function CountryProgramPage({ params }: Props) {
         <section className="bg-gradient-to-b from-[#102C57] to-[#091A36] text-white py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold">
-              <span>{country.flagEmoji}</span>
+              <CountryFlag countryCode={country.code} countryName={country.name} size="sm" />
               <span>{prog.level} Program Track</span>
             </div>
 

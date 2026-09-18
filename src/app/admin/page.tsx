@@ -3,27 +3,32 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { 
-  Compass, 
-  ShieldAlert, 
-  Users, 
-  IndianRupee, 
-  Globe2, 
-  FileCheck, 
-  CheckCircle2, 
-  Lock, 
-  LogOut, 
+import {
+  Compass,
+  ShieldAlert,
+  Users,
+  IndianRupee,
+  Globe2,
+  FileCheck,
+  CheckCircle2,
+  Lock,
+  LogOut,
   Loader2,
   AlertOctagon,
   ArrowRight,
   ShieldCheck,
-  Pencil
+  Pencil,
 } from "lucide-react";
 import { useState } from "react";
 import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
 import { Country, University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
-import { fetchLiveCountries, fetchLiveUniversities, fetchLiveClaims } from "@/lib/supabase/dataFetchers";
+import { CountryFlag } from "@/components/ui/CountryFlag";
+import {
+  fetchLiveCountries,
+  fetchLiveUniversities,
+  fetchLiveClaims,
+} from "@/lib/supabase/dataFetchers";
 import { EditUniversityModal } from "@/components/admin/EditUniversityModal";
 
 export default function AdminPortalPage() {
@@ -31,23 +36,32 @@ export default function AdminPortalPage() {
   const { user, isLoggedIn, isLoading, login, logout } = useAuth();
   const [countriesList, setCountriesList] = useState<Country[]>(COUNTRIES);
   const [universitiesList, setUniversitiesList] = useState<University[]>([]);
-  const [selectedUniToEdit, setSelectedUniToEdit] = useState<University | null>(null);
+  const [selectedUniToEdit, setSelectedUniToEdit] = useState<University | null>(
+    null,
+  );
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [claimsList, setClaimsList] = useState<any[]>([]);
 
-  const handleApproveClaim = async (claimId: string, universityName: string) => {
+  const handleApproveClaim = async (
+    claimId: string,
+    universityName: string,
+  ) => {
     try {
       await fetch("/api/claims/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ claimId, action: "approved", universityId: "tum" }),
+        body: JSON.stringify({
+          claimId,
+          action: "approved",
+          universityId: "tum",
+        }),
       });
     } catch {
       // ignore
     }
 
     setClaimsList((prev) =>
-      prev.map((c) => (c.id === claimId ? { ...c, status: "approved" } : c))
+      prev.map((c) => (c.id === claimId ? { ...c, status: "approved" } : c)),
     );
   };
 
@@ -100,13 +114,18 @@ export default function AdminPortalPage() {
             Authentication Required
           </h1>
           <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-            The StudyAbroad Vista Operations & Lead Distribution Engine is restricted to authorized platform administrators only.
+            The StudyAbroad Vista Operations & Lead Distribution Engine is
+            restricted to authorized platform administrators only.
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
             <button
               onClick={() => {
-                login("admin@studyabroadvista.com", "admin", "Super Admin (Operations Lead)");
+                login(
+                  "admin@studyabroadvista.com",
+                  "admin",
+                  "Super Admin (Operations Lead)",
+                );
                 router.push("/admin");
               }}
               className="flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3 text-xs font-bold text-white shadow-lg transition hover:bg-[#d94f20] active:scale-[0.99] cursor-pointer"
@@ -156,13 +175,22 @@ export default function AdminPortalPage() {
             Super Admin Access Required
           </h1>
           <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-            You are signed in as <strong className="text-white">{user.email}</strong> (Role: <span className="text-amber-400 font-bold uppercase">{user.role}</span>). This account does not possess Super Administrator permissions.
+            You are signed in as{" "}
+            <strong className="text-white">{user.email}</strong> (Role:{" "}
+            <span className="text-amber-400 font-bold uppercase">
+              {user.role}
+            </span>
+            ). This account does not possess Super Administrator permissions.
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
             <button
               onClick={() => {
-                login("admin@studyabroadvista.com", "admin", "Super Admin (Operations Lead)");
+                login(
+                  "admin@studyabroadvista.com",
+                  "admin",
+                  "Super Admin (Operations Lead)",
+                );
                 router.push("/admin");
               }}
               className="flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3 text-xs font-bold text-white shadow-lg transition hover:bg-[#d94f20] cursor-pointer"
@@ -210,8 +238,12 @@ export default function AdminPortalPage() {
           <div className="flex items-center gap-4 text-xs">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-slate-300 font-semibold">{user.name || "Super Admin (Operations Lead)"}</span>
-              <span className="text-[10px] text-slate-400 font-mono">({user.email})</span>
+              <span className="text-slate-300 font-semibold">
+                {user.name || "Super Admin (Operations Lead)"}
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono">
+                ({user.email})
+              </span>
             </div>
             <button
               onClick={() => {
@@ -231,8 +263,13 @@ export default function AdminPortalPage() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black text-slate-900">Operations & Lead Distribution Engine (LDE)</h1>
-            <p className="text-xs text-slate-600">Dnyanal Educon Pvt. Ltd. • Master control center for all 19 destinations and B2B buyers.</p>
+            <h1 className="text-2xl font-black text-slate-900">
+              Operations & Lead Distribution Engine (LDE)
+            </h1>
+            <p className="text-xs text-slate-600">
+              Dnyanal Educon Pvt. Ltd. • Master control center for all 19
+              destinations and B2B buyers.
+            </p>
           </div>
           <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 flex items-center gap-1.5 self-start sm:self-auto">
             <CheckCircle2 className="h-4 w-4" />
@@ -245,37 +282,59 @@ export default function AdminPortalPage() {
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <div className="flex items-center gap-2 text-slate-500">
               <Users className="h-4 w-4 text-[#102C57]" />
-              <span className="text-xs font-bold uppercase">Total Leads Captured</span>
+              <span className="text-xs font-bold uppercase">
+                Total Leads Captured
+              </span>
             </div>
             <p className="mt-3 text-3xl font-black text-[#102C57]">3,420</p>
-            <span className="text-[11px] text-slate-500">100% Indian SMS OTP verified</span>
+            <span className="text-[11px] text-slate-500">
+              100% Indian SMS OTP verified
+            </span>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <div className="flex items-center gap-2 text-slate-500">
               <IndianRupee className="h-4 w-4 text-emerald-600" />
-              <span className="text-xs font-bold uppercase">Prepaid Wallet Revenue</span>
+              <span className="text-xs font-bold uppercase">
+                Prepaid Wallet Revenue
+              </span>
             </div>
-            <p className="mt-3 text-3xl font-black text-emerald-700">₹4.85 Lakhs</p>
-            <span className="text-[11px] text-slate-500">B2B Consultant top-ups</span>
+            <p className="mt-3 text-3xl font-black text-emerald-700">
+              ₹4.85 Lakhs
+            </p>
+            <span className="text-[11px] text-slate-500">
+              B2B Consultant top-ups
+            </span>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <div className="flex items-center gap-2 text-slate-500">
               <Globe2 className="h-4 w-4 text-[#EA5C2B]" />
-              <span className="text-xs font-bold uppercase">Catalog Coverage</span>
+              <span className="text-xs font-bold uppercase">
+                Catalog Coverage
+              </span>
             </div>
-            <p className="mt-3 text-3xl font-black text-[#102C57]">{COUNTRIES.length} Countries</p>
-            <span className="text-[11px] text-slate-500">6 Launch Program Streams</span>
+            <p className="mt-3 text-3xl font-black text-[#102C57]">
+              {COUNTRIES.length} Countries
+            </p>
+            <span className="text-[11px] text-slate-500">
+              6 Launch Program Streams
+            </span>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <div className="flex items-center gap-2 text-slate-500">
               <ShieldAlert className="h-4 w-4 text-purple-600" />
-              <span className="text-xs font-bold uppercase">DPDP Audit Status</span>
+              <span className="text-xs font-bold uppercase">
+                DPDP Audit Status
+              </span>
             </div>
-            <p className="mt-3 text-3xl font-black text-purple-700">100% Valid</p>
-            <span className="text-[11px] text-slate-500">Zero data breaches</span>
+            <p className="mt-3 text-3xl font-black text-purple-700">
+              100% Valid
+            </p>
+            <span className="text-[11px] text-slate-500">
+              Zero data breaches
+            </span>
           </div>
         </div>
 
@@ -285,12 +344,18 @@ export default function AdminPortalPage() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-[#EA5C2B]" />
               <div>
-                <h2 className="text-base font-black text-[#102C57]">Pending Profile Claims Queue</h2>
-                <p className="text-xs text-slate-500">Review official domain email and authorization requests from university representatives.</p>
+                <h2 className="text-base font-black text-[#102C57]">
+                  Pending Profile Claims Queue
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Review official domain email and authorization requests from
+                  university representatives.
+                </p>
               </div>
             </div>
             <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
-              {claimsList.filter((c) => c.status === "pending").length} Action Required
+              {claimsList.filter((c) => c.status === "pending").length} Action
+              Required
             </span>
           </div>
 
@@ -302,7 +367,17 @@ export default function AdminPortalPage() {
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="text-xs font-bold text-[#102C57]">{c.universityName}</h4>
+                    <CountryFlag
+                      code={c.countryCode || c.countryId}
+                      name={c.countryName}
+                      size="sm"
+                    />
+                    <h4 className="text-xs font-bold text-[#102C57]">
+                      {c.universityName}
+                    </h4>
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                      {c.countryName || c.countryId}
+                    </span>
                     <span
                       className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                         c.status === "approved"
@@ -314,8 +389,14 @@ export default function AdminPortalPage() {
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-600 mt-1">
-                    Applicant: <strong className="text-slate-800">{c.applicantName}</strong> ({c.designation}) • Email:{" "}
-                    <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-semibold">{c.officialEmail}</code>
+                    Applicant:{" "}
+                    <strong className="text-slate-800">
+                      {c.applicantName}
+                    </strong>{" "}
+                    ({c.designation}) • Email:{" "}
+                    <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-semibold">
+                      {c.officialEmail}
+                    </code>
                   </p>
                 </div>
 
@@ -345,18 +426,29 @@ export default function AdminPortalPage() {
           {/* 19 Countries Catalog */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-[#102C57]">Country Records ({countriesList.length})</h3>
-              <span className="text-xs font-semibold text-emerald-600">Supabase Connected</span>
+              <h3 className="text-sm font-black text-[#102C57]">
+                Country Records ({countriesList.length})
+              </h3>
+              <span className="text-xs font-semibold text-emerald-600">
+                Supabase Connected
+              </span>
             </div>
             <div className="mt-3 max-h-64 overflow-y-auto space-y-1.5 text-xs">
               {countriesList.map((c) => (
-                <div key={c.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 border border-slate-100/60">
+                <div
+                  key={c.id}
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 border border-slate-100/60"
+                >
                   <div className="flex items-center gap-2 font-bold text-slate-800">
                     <span>{c.flagEmoji}</span>
                     <span>{c.name}</span>
-                    <span className="text-[10px] text-slate-400 font-normal">({c.tier})</span>
+                    <span className="text-[10px] text-slate-400 font-normal">
+                      ({c.tier})
+                    </span>
                   </div>
-                  <span className="text-[11px] text-emerald-700 font-semibold">{c.currency} ≈ ₹{c.exchangeRateToINR}</span>
+                  <span className="text-[11px] text-emerald-700 font-semibold">
+                    {c.currency} ≈ ₹{c.exchangeRateToINR}
+                  </span>
                 </div>
               ))}
             </div>
@@ -365,15 +457,24 @@ export default function AdminPortalPage() {
           {/* Live Universities Catalog */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-[#102C57]">Live Universities ({universitiesList.length})</h3>
-              <span className="text-xs font-semibold text-emerald-600">Supabase Connected</span>
+              <h3 className="text-sm font-black text-[#102C57]">
+                Live Universities ({universitiesList.length})
+              </h3>
+              <span className="text-xs font-semibold text-emerald-600">
+                Supabase Connected
+              </span>
             </div>
             <div className="mt-3 max-h-72 overflow-y-auto space-y-2 text-xs">
               {universitiesList.map((u) => (
-                <div key={u.slug} className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50 transition">
+                <div
+                  key={u.slug}
+                  className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50 transition"
+                >
                   <div>
                     <h4 className="font-bold text-[#102C57]">{u.name}</h4>
-                    <p className="text-[10px] text-slate-500">{u.city}, {u.country} • Rank #{u.rankingGlobal}</p>
+                    <p className="text-[10px] text-slate-500">
+                      {u.city}, {u.country} • Rank #{u.rankingGlobal}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
@@ -398,15 +499,22 @@ export default function AdminPortalPage() {
           {/* 6 Programs Catalog */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-[#102C57]">Program Disciplines (6)</h3>
+              <h3 className="text-sm font-black text-[#102C57]">
+                Program Disciplines (6)
+              </h3>
               <span className="text-xs text-slate-400">All Live</span>
             </div>
             <div className="mt-3 space-y-2 text-xs">
               {PROGRAMS.map((p) => (
-                <div key={p.id} className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100">
+                <div
+                  key={p.id}
+                  className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100"
+                >
                   <div>
                     <h4 className="font-bold text-[#102C57]">{p.name}</h4>
-                    <p className="text-[10px] text-slate-500">{p.level} • {p.duration}</p>
+                    <p className="text-[10px] text-slate-500">
+                      {p.level} • {p.duration}
+                    </p>
                   </div>
                   <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                     ROI {p.roiScore}/100
@@ -428,7 +536,9 @@ export default function AdminPortalPage() {
         }}
         onSave={(updatedUni) => {
           setUniversitiesList((prev) =>
-            prev.map((item) => (item.slug === updatedUni.slug ? updatedUni : item))
+            prev.map((item) =>
+              item.slug === updatedUni.slug ? updatedUni : item,
+            ),
           );
         }}
       />

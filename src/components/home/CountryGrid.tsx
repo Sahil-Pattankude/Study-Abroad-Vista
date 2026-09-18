@@ -2,6 +2,7 @@ import { COUNTRIES } from "@/lib/data/masterData";
 import { ArrowRight, Clock, Banknote, ShieldCheck } from "lucide-react";
 import { CountryGridTabs } from "./CountryGridTabs";
 import { LeadTriggerButton } from "@/components/home/HomeClientContext";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 export function CountryGrid() {
   const anchorSixSlugs = ["usa", "uk", "canada", "australia", "germany", "ireland"];
@@ -43,7 +44,7 @@ export function CountryGrid() {
                   {/* Header with Flag and Tier */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{country.flagEmoji}</span>
+                      <CountryFlag countryCode={country.code} countryName={country.name} size="lg" />
                       <div>
                         <h3 className="text-lg font-black text-[#102C57] transition group-hover:text-[#EA5C2B]">
                           {country.name}

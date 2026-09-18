@@ -18,6 +18,7 @@ import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CountryInquiryForm } from "@/components/country/CountryInquiryForm";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,7 @@ export default async function CountryHubPage({ params }: Props) {
           <div className="pointer-events-none absolute -top-24 left-1/2 -z-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#EA5C2B]/20 blur-3xl" />
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur-md">
-              <span className="text-base">{country.flagEmoji}</span>
+              <CountryFlag countryCode={country.code} countryName={country.name} size="sm" />
               <span>Destination Guide • {country.tier}</span>
             </div>
 

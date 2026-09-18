@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Compass, ShieldCheck, Award, HeartHandshake } from "lucide-react";
 import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 export function Footer() {
   return (
@@ -110,43 +111,51 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/study-in-usa" className="text-slate-400 hover:text-white transition">
-                  🇺🇸 Study in USA
+                <Link href="/study-in-usa" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="US" name="United States" size="sm" />
+                  <span>Study in USA</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-uk" className="text-slate-400 hover:text-white transition">
-                  🇬🇧 Study in UK
+                <Link href="/study-in-uk" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="GB" name="United Kingdom" size="sm" />
+                  <span>Study in UK</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-germany" className="text-slate-400 hover:text-white transition">
-                  🇩🇪 Study in Germany
+                <Link href="/study-in-germany" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="DE" name="Germany" size="sm" />
+                  <span>Study in Germany</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-canada" className="text-slate-400 hover:text-white transition">
-                  🇨🇦 Study in Canada
+                <Link href="/study-in-canada" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="CA" name="Canada" size="sm" />
+                  <span>Study in Canada</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-australia" className="text-slate-400 hover:text-white transition">
-                  🇦🇺 Study in Australia
+                <Link href="/study-in-australia" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="AU" name="Australia" size="sm" />
+                  <span>Study in Australia</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-ireland" className="text-slate-400 hover:text-white transition">
-                  🇮🇪 Study in Ireland
+                <Link href="/study-in-ireland" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="IE" name="Ireland" size="sm" />
+                  <span>Study in Ireland</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-russia" className="text-slate-400 hover:text-white transition">
-                  🇷🇺 MBBS in Russia
+                <Link href="/study-in-russia" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="RU" name="Russia" size="sm" />
+                  <span>MBBS in Russia</span>
                 </Link>
               </li>
               <li>
-                <Link href="/study-in-georgia" className="text-slate-400 hover:text-white transition">
-                  🇬🇪 MBBS in Georgia
+                <Link href="/study-in-georgia" className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+                  <CountryFlag code="GE" name="Georgia" size="sm" />
+                  <span>MBBS in Georgia</span>
                 </Link>
               </li>
             </ul>

@@ -69,6 +69,7 @@ export interface University {
   bannerUrl?: string;
   claimed_status?: "claimed" | "unclaimed" | "verified";
   claimed_by_user_id?: string;
+  official_email_address?: string;
   tierBadge?: "Platinum Partner" | "Gold Partner" | "Silver Partner";
 }
 
