@@ -18,6 +18,7 @@ import {
   ArrowRight,
   ShieldCheck,
   Pencil,
+  RefreshCw,
 } from "lucide-react";
 import { useState } from "react";
 import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
@@ -42,18 +43,17 @@ export default function AdminPortalPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [claimsList, setClaimsList] = useState<any[]>([]);
 
-  const handleApproveClaim = async (
-    claimId: string,
-    universityName: string,
-  ) => {
+  const handleApproveClaim = async (claim: any) => {
     try {
       await fetch("/api/claims/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          claimId,
+          claimId: claim.id,
           action: "approved",
-          universityId: "tum",
+          universityId: claim.universityId || claim.universitySlug,
+          universityName: claim.universityName,
+          userId: claim.userId,
         }),
       });
     } catch {
@@ -61,7 +61,7 @@ export default function AdminPortalPage() {
     }
 
     setClaimsList((prev) =>
-      prev.map((c) => (c.id === claimId ? { ...c, status: "approved" } : c)),
+      prev.map((c) => (c.id === claim.id ? { ...c, status: "approved" } : c)),
     );
   };
 
@@ -74,11 +74,30 @@ export default function AdminPortalPage() {
     }
   }, [user, isLoading, router]);
 
+  const [isRefreshingClaims, setIsRefreshingClaims] = useState(false);
+
+  const refreshClaims = async () => {
+    setIsRefreshingClaims(true);
+    try {
+      const claims = await fetchLiveClaims();
+      setClaimsList(claims);
+    } finally {
+      setIsRefreshingClaims(false);
+    }
+  };
+
   useEffect(() => {
     if (user && user.role === "admin") {
       fetchLiveCountries().then((res) => setCountriesList(res));
       fetchLiveUniversities().then((res) => setUniversitiesList(res));
       fetchLiveClaims().then((res) => setClaimsList(res));
+      refreshClaims();
+
+      const pollInterval = setInterval(() => {
+        fetchLiveClaims().then((res) => setClaimsList(res));
+      }, 5000);
+
+      return () => clearInterval(pollInterval);
     }
   }, [user]);
 
@@ -357,6 +376,22 @@ export default function AdminPortalPage() {
               {claimsList.filter((c) => c.status === "pending").length} Action
               Required
             </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={refreshClaims}
+                disabled={isRefreshingClaims}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              >
+                <RefreshCw
+                  className={`h-3.5 w-3.5 text-[#EA5C2B] ${isRefreshingClaims ? "animate-spin" : ""}`}
+                />
+                <span>Refresh Queue</span>
+              </button>
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+                {claimsList.filter((c) => c.status === "pending").length} Action
+                Required
+              </span>
+            </div>
           </div>
 
           <div className="mt-4 space-y-3">
@@ -403,7 +438,7 @@ export default function AdminPortalPage() {
                 <div className="mt-3 sm:mt-0 flex items-center gap-3">
                   {c.status === "pending" ? (
                     <button
-                      onClick={() => handleApproveClaim(c.id, c.universityName)}
+                      onClick={() => handleApproveClaim(c)}
                       className="rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition cursor-pointer flex items-center gap-1.5"
                     >
                       <ShieldCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />

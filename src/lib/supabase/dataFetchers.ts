@@ -2,7 +2,10 @@ import { supabase } from "./client";
 import { supabaseAdmin } from "./server";
 import { COUNTRIES, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { Country, University, CourseItem } from "@/types";
-import { getSanityUniversities, getSanityCountries } from "@/lib/sanity/fetchers";
+import {
+  getSanityUniversities,
+  getSanityCountries,
+} from "@/lib/sanity/fetchers";
 
 export async function fetchLiveCountries(): Promise<Country[]> {
   let list: Country[] = [];
@@ -10,7 +13,10 @@ export async function fetchLiveCountries(): Promise<Country[]> {
   // 1. Fetch Supabase Countries
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
-    const { data, error } = await client.from("countries").select("*").eq("is_active", true);
+    const { data, error } = await client
+      .from("countries")
+      .select("*")
+      .eq("is_active", true);
     if (!error && data && data.length > 0) {
       list = data.map((c: any) => ({
         id: c.id,
@@ -47,7 +53,8 @@ export async function fetchLiveCountries(): Promise<Country[]> {
       const map = new Map<string, Country>();
 
       sanityCountries.forEach((sc: any) => {
-        const slugStr = typeof sc.slug === "string" ? sc.slug : sc.slug?.current;
+        const slugStr =
+          typeof sc.slug === "string" ? sc.slug : sc.slug?.current;
         if (slugStr) {
           map.set(slugStr, {
             id: sc._id,
@@ -87,7 +94,6 @@ export async function fetchLiveCountries(): Promise<Country[]> {
   return list;
 }
 
-
 export async function fetchLiveUniversities(): Promise<University[]> {
   const uniMap = new Map<string, University>();
 
@@ -113,7 +119,8 @@ export async function fetchLiveUniversities(): Promise<University[]> {
             rankingGlobal: u.ranking_global || 100,
             rankingNational: u.ranking_national || 10,
             programsOffered: u.programs_offered || ["ms", "mba"],
-            tuitionFeeRangeINR: u.tuition_fee_range_inr || "₹15 - 30 Lakhs / yr",
+            tuitionFeeRangeINR:
+              u.tuition_fee_range_inr || "₹15 - 30 Lakhs / yr",
             ieltsMinScore: Number(u.ielts_min_score) || 6.5,
             greGmatRequired: u.gre_gmat_required || false,
             intakes: u.intakes || ["Fall (Sep)", "Spring (Jan)"],
@@ -135,7 +142,8 @@ export async function fetchLiveUniversities(): Promise<University[]> {
     const sanityUnis = await getSanityUniversities();
     if (sanityUnis && sanityUnis.length > 0) {
       sanityUnis.forEach((su: any) => {
-        const slugStr = typeof su.slug === "string" ? su.slug : su.slug?.current;
+        const slugStr =
+          typeof su.slug === "string" ? su.slug : su.slug?.current;
         if (slugStr) {
           uniMap.set(slugStr, {
             id: su._id,
@@ -181,7 +189,7 @@ export interface ClaimItem {
 export async function fetchLiveClaims(): Promise<ClaimItem[]> {
   try {
     if (typeof window !== "undefined") {
-      const res = await fetch("/api/claims");
+      const res = await fetch("/api/claims", { cache: "no-store" });
       const json = await res.json();
       if (json.success && json.claims && json.claims.length > 0) {
         return json.claims;
@@ -247,7 +255,13 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       postStudyWorkMonths: 18,
       intakeDeadline: "May 31, 2026 (Winter Intake)",
       roiScore: 98,
-      coreModules: ["Distributed Systems", "Big Data Analytics", "Machine Learning", "Database Internals", "Cloud Infrastructure"],
+      coreModules: [
+        "Distributed Systems",
+        "Big Data Analytics",
+        "Machine Learning",
+        "Database Internals",
+        "Cloud Infrastructure",
+      ],
     },
     {
       id: "tum-robotics",
@@ -267,7 +281,13 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       postStudyWorkMonths: 18,
       intakeDeadline: "May 31, 2026 (Winter Intake)",
       roiScore: 96,
-      coreModules: ["Autonomous Systems", "Computer Vision", "Cognitive Systems", "Control Theory", "Embedded Systems"],
+      coreModules: [
+        "Autonomous Systems",
+        "Computer Vision",
+        "Cognitive Systems",
+        "Control Theory",
+        "Embedded Systems",
+      ],
     },
     {
       id: "stanford-cs",
@@ -287,7 +307,13 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       postStudyWorkMonths: 36,
       intakeDeadline: "December 15, 2025 (Fall Intake)",
       roiScore: 99,
-      coreModules: ["Artificial Intelligence", "Deep Learning", "Systems Architecture", "Cybersecurity", "Quantum Computing"],
+      coreModules: [
+        "Artificial Intelligence",
+        "Deep Learning",
+        "Systems Architecture",
+        "Cybersecurity",
+        "Quantum Computing",
+      ],
     },
     {
       id: "oxford-cs",
@@ -307,7 +333,13 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       postStudyWorkMonths: 24,
       intakeDeadline: "January 8, 2026 (Fall Intake)",
       roiScore: 97,
-      coreModules: ["Advanced Machine Learning", "Quantum Information", "Formal Verification", "Computational Complexity", "Algorithms"],
+      coreModules: [
+        "Advanced Machine Learning",
+        "Quantum Information",
+        "Formal Verification",
+        "Computational Complexity",
+        "Algorithms",
+      ],
     },
     {
       id: "tum-mgmt",
@@ -327,7 +359,13 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       postStudyWorkMonths: 18,
       intakeDeadline: "May 31, 2026 (Winter Intake)",
       roiScore: 94,
-      coreModules: ["Technology Strategy", "Corporate Finance", "Innovation Management", "Entrepreneurship", "Digital Transformation"],
+      coreModules: [
+        "Technology Strategy",
+        "Corporate Finance",
+        "Innovation Management",
+        "Entrepreneurship",
+        "Digital Transformation",
+      ],
     },
   ];
 
@@ -360,38 +398,73 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
       let programTitle = "";
       let level = "Postgraduate (Master's)";
       let duration = "2 Years";
-      let coreModules = ["Core Academic Curriculum", "Applied Project", "Research Thesis", "Specialization Elective"];
+      let coreModules = [
+        "Core Academic Curriculum",
+        "Applied Project",
+        "Research Thesis",
+        "Specialization Elective",
+      ];
 
       if (prog === "ms") {
         programTitle = `M.Sc. in ${u.name.includes("Technical") ? "Engineering & Data Science" : "Computer Science & Analytics"}`;
         level = "Postgraduate (Master's)";
         duration = u.countrySlug === "uk" ? "1 Year (Full-time)" : "2 Years";
-        coreModules = ["Machine Learning & AI", "Distributed Systems", "Cloud Computing", "Advanced Algorithms"];
+        coreModules = [
+          "Machine Learning & AI",
+          "Distributed Systems",
+          "Cloud Computing",
+          "Advanced Algorithms",
+        ];
       } else if (prog === "mba") {
         programTitle = `Master of Business Administration (MBA)`;
         level = "Postgraduate (MBA)";
         duration = u.countrySlug === "uk" ? "1 Year" : "16 - 24 Months";
-        coreModules = ["Strategic Leadership", "Corporate Finance", "Global Marketing", "Venture Capital & Innovation"];
+        coreModules = [
+          "Strategic Leadership",
+          "Corporate Finance",
+          "Global Marketing",
+          "Venture Capital & Innovation",
+        ];
       } else if (prog === "mbbs") {
         programTitle = `Doctor of Medicine (MD / MBBS - NMC Compliant)`;
         level = "Undergraduate (Medicine)";
         duration = "6 Years (5 Yrs + 1 Yr Clinical)";
-        coreModules = ["Human Anatomy", "Pathology & Histology", "Clinical Surgery", "Internal Medicine"];
+        coreModules = [
+          "Human Anatomy",
+          "Pathology & Histology",
+          "Clinical Surgery",
+          "Internal Medicine",
+        ];
       } else if (prog === "bachelors") {
         programTitle = `Bachelor of Science (B.Sc.) in Computer Engineering`;
         level = "Undergraduate (Bachelor's)";
         duration = u.countrySlug === "usa" ? "4 Years" : "3 Years";
-        coreModules = ["Computer Systems", "Linear Algebra", "Data Structures", "Software Engineering"];
+        coreModules = [
+          "Computer Systems",
+          "Linear Algebra",
+          "Data Structures",
+          "Software Engineering",
+        ];
       } else if (prog === "nursing") {
         programTitle = `B.Sc. / M.Sc. in Nursing & Healthcare Leadership`;
         level = "Postgraduate / Undergraduate";
         duration = "2 - 3 Years";
-        coreModules = ["Clinical Care", "Patient Safety", "Healthcare Management", "Pharmacology"];
+        coreModules = [
+          "Clinical Care",
+          "Patient Safety",
+          "Healthcare Management",
+          "Pharmacology",
+        ];
       } else if (prog === "ausbildung") {
         programTitle = `Pflegefachfrau/mann Dual Vocational Nursing Ausbildung`;
         level = "Vocational Diploma";
         duration = "3 Years (Paid Apprenticeship)";
-        coreModules = ["General Nursing", "Anatomy & Physiology", "Clinical Practice", "Geriatric Care"];
+        coreModules = [
+          "General Nursing",
+          "Anatomy & Physiology",
+          "Clinical Practice",
+          "Geriatric Care",
+        ];
       } else {
         programTitle = `${prog.toUpperCase()} Program`;
       }
@@ -410,12 +483,23 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
           level,
           duration,
           tuitionFeeINR: u.tuitionFeeRangeINR,
-          tuitionFeeLocal: u.countrySlug === "germany" ? "€0 / yr (Semester Fee ~€150)" : `${u.tuitionFeeRangeINR}`,
+          tuitionFeeLocal:
+            u.countrySlug === "germany"
+              ? "€0 / yr (Semester Fee ~€150)"
+              : `${u.tuitionFeeRangeINR}`,
           ieltsMinScore: u.ieltsMinScore,
           greGmatRequired: u.greGmatRequired,
           postStudyWorkMonths: u.postStudyWorkMonths,
-          intakeDeadline: u.intakes?.[0] ? `${u.intakes[0]} Intake` : "Fall Intake",
-          roiScore: Math.min(99, 85 + (u.rankingGlobal ? Math.max(0, 15 - Math.floor(u.rankingGlobal / 20)) : 5)),
+          intakeDeadline: u.intakes?.[0]
+            ? `${u.intakes[0]} Intake`
+            : "Fall Intake",
+          roiScore: Math.min(
+            99,
+            85 +
+              (u.rankingGlobal
+                ? Math.max(0, 15 - Math.floor(u.rankingGlobal / 20))
+                : 5),
+          ),
           coreModules,
         });
       }
@@ -458,4 +542,3 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
 
   return Array.from(courseMap.values());
 }
-

@@ -1,19 +1,23 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import { 
-  Building2, 
-  MapPin, 
-  Award, 
-  ChevronRight, 
-  CheckCircle2, 
-  Coins, 
-  Calendar, 
-  Clock, 
+import {
+  Building2,
+  MapPin,
+  Award,
+  ChevronRight,
+  CheckCircle2,
+  Coins,
+  Calendar,
+  Clock,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import {
+  COUNTRIES,
+  PROGRAMS,
+  FEATURED_UNIVERSITIES,
+} from "@/lib/data/masterData";
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
@@ -21,6 +25,8 @@ import { Footer } from "@/components/layout/Footer";
 import { UniversityInquiryForm } from "@/components/university/UniversityInquiryForm";
 import { UniversityActions } from "@/components/university/UniversityActions";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export const dynamicParams = true;
 
 interface Props {
@@ -37,7 +43,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const unis = await fetchLiveUniversities();
-  const uni = unis.find((u) => u.slug === slug) || FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
+  const uni =
+    unis.find((u) => u.slug === slug) ||
+    FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
   if (!uni) return { title: "University Not Found" };
 
   const rawDescription = `Admissions guide for ${uni.name} in ${uni.city}, ${uni.country}. Global QS rank #${uni.rankingGlobal}, tuition fees (${uni.tuitionFeeRangeINR}), IELTS score cutoffs, and Indian student application deadlines.`;
@@ -54,7 +62,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function UniversityDetailPage({ params }: Props) {
   const { slug } = await params;
   const unis = await fetchLiveUniversities();
-  const uni = unis.find((u) => u.slug === slug) || FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
+  const uni =
+    unis.find((u) => u.slug === slug) ||
+    FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
 
   if (!uni) {
     notFound();
@@ -70,9 +80,16 @@ export default async function UniversityDetailPage({ params }: Props) {
         {/* Breadcrumb */}
         <div className="border-b border-slate-200/80 bg-white py-2.5 px-4 sm:px-8">
           <div className="mx-auto flex max-w-7xl items-center gap-2 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57]">Home</Link>
+            <Link href="/" className="hover:text-[#102C57]">
+              Home
+            </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <Link href={`/study-in-${uni.countrySlug}`} className="hover:text-[#102C57]">{uni.country}</Link>
+            <Link
+              href={`/study-in-${uni.countrySlug}`}
+              className="hover:text-[#102C57]"
+            >
+              {uni.country}
+            </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
             <span className="text-[#102C57] font-bold">{uni.name}</span>
           </div>
@@ -95,7 +112,9 @@ export default async function UniversityDetailPage({ params }: Props) {
                       National #{uni.rankingNational}
                     </span>
                   </div>
-                  <h1 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">{uni.name}</h1>
+                  <h1 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
+                    {uni.name}
+                  </h1>
                   <p className="mt-1 text-xs text-slate-500 flex items-center gap-1">
                     <MapPin className="h-3.5 w-3.5 text-[#EA5C2B]" />
                     {uni.city}, {uni.country}
@@ -121,35 +140,59 @@ export default async function UniversityDetailPage({ params }: Props) {
               {/* Key Overview Facts */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                 <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Tuition Estimate</span>
-                  <span className="text-slate-900 font-bold mt-1 block">{uni.tuitionFeeRangeINR}</span>
+                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                    Tuition Estimate
+                  </span>
+                  <span className="text-slate-900 font-bold mt-1 block">
+                    {uni.tuitionFeeRangeINR}
+                  </span>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Min. IELTS</span>
-                  <span className="text-slate-900 font-bold mt-1 block">{uni.ieltsMinScore} Bands</span>
+                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                    Min. IELTS
+                  </span>
+                  <span className="text-slate-900 font-bold mt-1 block">
+                    {uni.ieltsMinScore} Bands
+                  </span>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Acceptance Rate</span>
-                  <span className="text-slate-900 font-bold mt-1 block">{uni.acceptanceRate}%</span>
+                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                    Acceptance Rate
+                  </span>
+                  <span className="text-slate-900 font-bold mt-1 block">
+                    {uni.acceptanceRate}%
+                  </span>
                 </div>
                 <div className="rounded-xl border border-slate-200 bg-white p-4">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">PSW Duration</span>
-                  <span className="text-[#EA5C2B] font-bold mt-1 block">{uni.postStudyWorkMonths} Months</span>
+                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                    PSW Duration
+                  </span>
+                  <span className="text-[#EA5C2B] font-bold mt-1 block">
+                    {uni.postStudyWorkMonths} Months
+                  </span>
                 </div>
               </div>
 
               {/* Admissions & Intakes */}
               <div className="rounded-2xl border border-slate-200 bg-white p-6">
-                <h2 className="text-lg font-bold text-slate-900">Upcoming Intakes & Application Windows</h2>
+                <h2 className="text-lg font-bold text-slate-900">
+                  Upcoming Intakes & Application Windows
+                </h2>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {uni.intakes.map((intake, i) => (
-                    <span key={i} className="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-900">
+                    <span
+                      key={i}
+                      className="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-900"
+                    >
                       {intake}
                     </span>
                   ))}
                 </div>
                 <p className="mt-4 text-xs text-slate-600 leading-relaxed">
-                  Indian applicants are strongly advised to apply 4–6 months prior to intake deadlines to ensure adequate time for document verification, scholarship consideration, and student visa processing.
+                  Indian applicants are strongly advised to apply 4–6 months
+                  prior to intake deadlines to ensure adequate time for document
+                  verification, scholarship consideration, and student visa
+                  processing.
                 </p>
               </div>
             </div>

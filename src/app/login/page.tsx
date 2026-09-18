@@ -1,28 +1,95 @@
-// Force Next.js HMR rebuild - 2026-09-16
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Compass, Mail, Lock, ArrowRight } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Compass,
+  Mail,
+  Lock,
+  ArrowRight,
+  GraduationCap,
+  Building2,
+  Briefcase,
+  ShieldCheck,
+  CheckCircle2,
+} from "lucide-react";
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams.get("redirect") || "";
+
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [activeRoleTab, setActiveRoleTab] = useState<UserRole>("university");
+  const [email, setEmail] = useState("toronto@utoronto.ca");
+  const [password, setPassword] = useState("Toronto@2026");
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (redirectParam.includes("university")) {
+      setActiveRoleTab("university");
+      setEmail("toronto@utoronto.ca");
+    } else if (redirectParam.includes("buyer")) {
+      setActiveRoleTab("buyer");
+      setEmail("consultant@apexoverseas.com");
+    } else if (redirectParam.includes("admin")) {
+      setActiveRoleTab("admin");
+      setEmail("admin@studyabroadvista.com");
+    }
+  }, [redirectParam]);
+
+  const handleRoleTabChange = (role: UserRole) => {
+    setActiveRoleTab(role);
+    if (role === "university") {
+      setEmail("toronto@utoronto.ca");
+      setPassword("Toronto@2026");
+    } else if (role === "buyer") {
+      setEmail("consultant@apexoverseas.com");
+      setPassword("Apex@2026");
+    } else if (role === "admin") {
+      setEmail("admin@studyabroadvista.com");
+      setPassword("Admin@2026");
+    } else {
+      setEmail("rahul.sharma@gmail.com");
+      setPassword("Student@2026");
+    }
+  };
+
   const detectRole = (userEmail: string): UserRole => {
     const lower = userEmail.toLowerCase();
-    if (lower.includes("consult") || lower.includes("agency") || lower.includes("buyer") || lower.includes("b2b") || lower.includes("apex")) return "buyer";
-    if (lower.includes(".edu") || lower.includes(".ac.") || lower.includes("uni") || lower.includes("admissions")) return "university";
-    if (lower.includes("admin@studyabroadvista")) return "admin";
-    return "student";
+    if (
+      lower.includes("consult") ||
+      lower.includes("agency") ||
+      lower.includes("buyer") ||
+      lower.includes("b2b") ||
+      lower.includes("apex")
+    )
+      return "buyer";
+    if (
+      lower.includes(".edu") ||
+      lower.includes(".ac.") ||
+      lower.includes("uni") ||
+      lower.includes("admissions") ||
+      lower.includes("utoronto") ||
+      lower.includes("toronto") ||
+      lower.includes("tum.de") ||
+      lower.includes("tcd.ie") ||
+      lower.includes("tma.uz") ||
+      lower.includes("hec.fr") ||
+      lower.includes("psl.eu") ||
+      lower.includes("tudelft.nl") ||
+      lower.includes("uniroma1.it") ||
+      lower.includes("auckland.ac.nz")
+    )
+      return "university";
+    if (lower.includes("admin@studyabroadvista") || lower.includes("admin"))
+      return "admin";
+    return activeRoleTab;
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -30,50 +97,104 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const userEmail = email.trim() || "consultant@apexoverseas.com";
+    const userEmail = email.trim() || "toronto@utoronto.ca";
 
     try {
-      // 1. Determine user role from email or active role tab
-      const userRole = detectRole(userEmail);
-      const userName = userEmail.split("@")[0].replace(/[._]/g, " ") || "B2B Consultant";
+      // 1. Determine user role from redirect param, active role tab, or email
+      let userRole = activeRoleTab;
+      if (redirectParam.includes("university")) {
+        userRole = "university";
+      } else if (redirectParam.includes("buyer")) {
+        userRole = "buyer";
+      } else if (redirectParam.includes("admin")) {
+        userRole = "admin";
+      } else {
+        const detected = detectRole(userEmail);
+        if (detected !== "student") {
+          userRole = detected;
+        }
+      }
 
-      // 2. Perform instant login into AuthContext and localStorage
-      login(userEmail, userRole, userName);
-
-      // 3. Silently attempt Supabase Auth if session exists, never blocking local auth
+      // 2. Attempt Supabase Auth
+      let authedUser: any = null;
       try {
         if (password) {
-          await supabase.auth.signInWithPassword({
+          const { data } = await supabase.auth.signInWithPassword({
             email: userEmail,
             password: password,
           });
+          if (data?.user) {
+            authedUser = data.user;
+          }
         }
       } catch {
-        // Ignore Supabase Auth remote credential check for local demo flow
+        // demo fallback
       }
 
-      // 4. Guaranteed routing per role
-      if (userRole === "buyer") {
-        router.push("/portal/buyer");
-      } else if (userRole === "university") {
-        router.push("/portal/university");
+      let finalOrg = "University of Toronto";
+      let finalCountry = "Canada";
+      let finalName = "Admissions Representative";
+
+      if (userRole === "university") {
+        finalOrg = "University of Toronto";
+        finalCountry = "Canada";
+        finalName = "University Partner (U of T)";
+      } else if (userRole === "buyer") {
+        finalOrg = "Apex Overseas Consultants";
+        finalCountry = "India";
+        finalName = "Apex Lead Manager";
       } else if (userRole === "admin") {
-        router.push("/admin");
+        finalOrg = "StudyAbroad Vista HQ";
+        finalCountry = "Global";
+        finalName = "Super Admin";
       } else {
-        router.push("/dashboard/student");
+        finalOrg = "";
+        finalCountry = "India";
+        finalName = "Rahul Sharma";
       }
-    } catch (err) {
+
+      // 3. Login into session
+      login(
+        userEmail,
+        userRole,
+        authedUser?.user_metadata?.name || finalName,
+        authedUser?.id,
+        authedUser?.user_metadata?.organization || finalOrg,
+        authedUser?.user_metadata?.country_name || finalCountry,
+        authedUser?.user_metadata,
+      );
+
+      // 4. Guaranteed routing per selected role and redirect param
+      if (redirectParam && redirectParam.startsWith("/")) {
+        window.location.href = redirectParam;
+      } else if (userRole === "university") {
+        window.location.href = "/portal/university";
+      } else if (userRole === "buyer") {
+        window.location.href = "/portal/buyer";
+      } else if (userRole === "admin") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/dashboard/student";
+      }
+    } catch (err: any) {
       console.warn("Sign-in fallback triggered:", err);
-      login("consultant@apexoverseas.com", "buyer", "Apex Overseas Consultants");
-      router.push("/portal/buyer");
+      login(
+        "toronto@utoronto.ca",
+        "university",
+        "University Partner (U of T)",
+        undefined,
+        "University of Toronto",
+        "Canada",
+      );
+      window.location.href = "/portal/university";
     } finally {
       setLoading(false);
     }
   };
 
   const handleOAuth = (provider: "google" | "linkedin") => {
-    login(`student.${provider}@gmail.com`, "student", "Student");
-    router.push("/account/dashboard");
+    login(`student.${provider}@gmail.com`, "student", "Student Applicant");
+    window.location.href = "/dashboard/student";
   };
 
   return (
@@ -81,7 +202,10 @@ export default function LoginPage() {
       {/* Top Navbar */}
       <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 transition hover:opacity-95">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 transition hover:opacity-95"
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white shadow-xs">
               <Compass className="h-4 w-4 text-[#EA5C2B]" />
             </div>
@@ -89,130 +213,204 @@ export default function LoginPage() {
               StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
             </span>
           </Link>
-          <Link href="/" className="text-xs font-semibold text-slate-500 hover:text-[#102C57]">
+          <Link
+            href="/"
+            className="text-xs font-semibold text-slate-500 hover:text-[#102C57]"
+          >
             ← Back to Home
           </Link>
         </div>
       </header>
 
-      {/* Main Login Card - Template T-11 */}
+      {/* Main Login Card - Template T-11 Multi-Portal Switchboard */}
       <main className="flex-1 flex items-center justify-center py-8 px-4 sm:px-6">
-        <div className="w-full max-w-sm rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.03)]">
+        <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xl">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-200/60 text-[#102C57]">
-              <Compass className="h-5 w-5 text-[#EA5C2B]" />
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-[#102C57]">
+              <Compass className="h-6 w-6 text-[#EA5C2B]" />
             </div>
             <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
-              Welcome back
+              Sign In to Your Portal
             </h1>
             <p className="mt-1 text-xs text-slate-500">
-              Sign in to your StudyAbroad Vista account
+              Select your role to access your dedicated workspace
             </p>
           </div>
 
-          {/* OAuth Buttons */}
-          <div className="mt-5 space-y-2.5">
+          {/* 4 Role Selector Tabs */}
+          <div className="mt-6 grid grid-cols-2 gap-1.5 rounded-2xl bg-slate-100/90 p-1 text-xs font-bold sm:grid-cols-4">
             <button
               type="button"
-              onClick={() => handleOAuth("google")}
-              className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              onClick={() => handleRoleTabChange("student")}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+                activeRoleTab === "student"
+                  ? "bg-white text-[#102C57] shadow-xs"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
             >
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-              </svg>
-              <span>Continue with Google</span>
+              <GraduationCap className="h-4 w-4 text-[#EA5C2B]" />
+              <span>Student</span>
             </button>
 
             <button
               type="button"
-              onClick={() => handleOAuth("linkedin")}
-              className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              onClick={() => handleRoleTabChange("buyer")}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+                activeRoleTab === "buyer"
+                  ? "bg-white text-[#102C57] shadow-xs"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
             >
-              <svg className="h-3.5 w-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-              <span>Continue with LinkedIn</span>
+              <Briefcase className="h-4 w-4 text-emerald-600" />
+              <span>B2B Buyer</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleTabChange("university")}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+                activeRoleTab === "university"
+                  ? "bg-white text-[#102C57] shadow-xs"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <Building2 className="h-4 w-4 text-indigo-600" />
+              <span>University</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleTabChange("admin")}
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+                activeRoleTab === "admin"
+                  ? "bg-white text-[#102C57] shadow-xs"
+                  : "text-slate-500 hover:text-slate-900"
+              }`}
+            >
+              <ShieldCheck className="h-4 w-4 text-rose-600" />
+              <span>Admin</span>
+            </button>
+          </div>
+
+          {/* Active Role Quick Banner */}
+          <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/50 p-2.5 text-center text-xs">
+            <span className="font-semibold text-slate-600">Logging into: </span>
+            <strong className="text-[#102C57]">
+              {activeRoleTab === "university"
+                ? "🏛️ University Partner Portal (/portal/university)"
+                : activeRoleTab === "buyer"
+                  ? "🏢 B2B Consultant Lead Portal (/portal/buyer)"
+                  : activeRoleTab === "admin"
+                    ? "🛡️ Master Operations Control (/admin)"
+                    : "🎓 Student Dashboard (/dashboard/student)"}
+            </strong>
           </div>
 
           {/* Error notice */}
           {error && (
-            <div className="mb-3 rounded-lg border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
+            <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
               {error}
             </div>
           )}
 
           {/* Email + Password Form */}
-          <form onSubmit={handleSignIn} className="mt-5 space-y-3">
+          <form onSubmit={handleSignIn} className="mt-4 space-y-3 text-xs">
             <div>
-              <label className="block text-[11px] font-semibold text-slate-700 mb-1">Email Address</label>
-              <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                Official Email Address
+              </label>
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="student@example.com"
-                  className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  placeholder={
+                    activeRoleTab === "university"
+                      ? "toronto@utoronto.ca"
+                      : activeRoleTab === "buyer"
+                        ? "consultant@apexoverseas.com"
+                        : activeRoleTab === "admin"
+                          ? "admin@studyabroadvista.com"
+                          : "student@example.com"
+                  }
+                  className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-[11px] font-semibold text-slate-700">Password</label>
-                <Link href="/forgot-password" className="text-[11px] font-medium text-[#EA5C2B] hover:underline">
+                <label className="block text-[11px] font-bold text-slate-700">
+                  Password
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-[11px] font-medium text-[#EA5C2B] hover:underline"
+                >
                   Forgot password?
                 </Link>
               </div>
-              <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-1 text-xs text-slate-600">
-              <input
-                type="checkbox"
-                id="rememberMe"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-3.5 w-3.5 rounded border-slate-300 text-[#102C57] accent-[#102C57] cursor-pointer"
-              />
-              <label htmlFor="rememberMe" className="text-[11px] text-slate-500 cursor-pointer select-none">
-                Remember this device
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 text-slate-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-3.5 w-3.5 rounded border-slate-300 text-[#102C57] accent-[#102C57]"
+                />
+                <span className="text-[11px] text-slate-500">
+                  Remember this session
+                </span>
               </label>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full rounded-xl bg-[#102C57] py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#0c2242] active:scale-[0.99] disabled:opacity-50"
+              className="mt-2 w-full rounded-xl bg-[#102C57] py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#0c2242] active:scale-[0.99] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
             >
-              {loading ? "Signing in..." : "Sign in →"}
+              <span>
+                {loading
+                  ? "Verifying Credentials..."
+                  : `Sign In to ${
+                      activeRoleTab === "university"
+                        ? "University Portal"
+                        : activeRoleTab === "buyer"
+                          ? "Consultant Portal"
+                          : activeRoleTab === "admin"
+                            ? "Admin Zone"
+                            : "Student Dashboard"
+                    } →`}
+              </span>
             </button>
           </form>
 
-          {/* Micro Footer inside Card */}
-          <div className="mt-5 text-center text-xs text-slate-500">
-            <span>Don&apos;t have an account? </span>
-            <Link href="/signup" className="font-bold text-[#EA5C2B] hover:underline">
-              Sign up →
+          {/* Micro Footer */}
+          <div className="mt-5 border-t border-slate-100 pt-4 text-center text-xs text-slate-500">
+            <span>Need an institutional or consultant account? </span>
+            <Link
+              href="/signup"
+              className="font-bold text-[#EA5C2B] hover:underline"
+            >
+              Register here →
             </Link>
           </div>
         </div>
       </main>
-
     </div>
   );
 }

@@ -17,8 +17,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹10 - 15 Lakhs / yr",
     postStudyWorkVisa: "1 to 3 Years (STEM OPT)",
     topIntakes: ["Fall (Aug/Sep)", "Spring (Jan)"],
-    heroTagline: "The world leader in STEM research, Ivy League prestige, and 3-year STEM OPT.",
-    overview: "Home to the world's most prestigious universities and tech hubs in Silicon Valley, Boston, and New York.",
+    heroTagline:
+      "The world leader in STEM research, Ivy League prestige, and 3-year STEM OPT.",
+    overview:
+      "Home to the world's most prestigious universities and tech hubs in Silicon Valley, Boston, and New York.",
     safetyRating: 4.5,
   },
   {
@@ -36,8 +38,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹10 - 14 Lakhs / yr",
     postStudyWorkVisa: "2 Years (Graduate Route)",
     topIntakes: ["September", "January"],
-    heroTagline: "1-year fast-track master’s degrees and globally renowned Russell Group institutions.",
-    overview: "Historic academia combined with vibrant global commercial and financial capitals.",
+    heroTagline:
+      "1-year fast-track master’s degrees and globally renowned Russell Group institutions.",
+    overview:
+      "Historic academia combined with vibrant global commercial and financial capitals.",
     safetyRating: 4.7,
   },
   {
@@ -55,8 +59,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹9 - 13 Lakhs / yr",
     postStudyWorkVisa: "Up to 3 Years (PGWP)",
     topIntakes: ["Fall (Sep)", "Winter (Jan)"],
-    heroTagline: "Clear PR pathways, world-class education, and welcoming multicultural communities.",
-    overview: "A premier destination offering top universities and high post-study work authorization.",
+    heroTagline:
+      "Clear PR pathways, world-class education, and welcoming multicultural communities.",
+    overview:
+      "A premier destination offering top universities and high post-study work authorization.",
     safetyRating: 4.8,
   },
   {
@@ -74,8 +80,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹11 - 15 Lakhs / yr",
     postStudyWorkVisa: "2 to 4 Years (Subclass 485)",
     topIntakes: ["February", "July"],
-    heroTagline: "Group of Eight universities, exceptional lifestyle, and robust healthcare careers.",
-    overview: "High standard of living, high minimum wage for student work, and strong post-graduation demand.",
+    heroTagline:
+      "Group of Eight universities, exceptional lifestyle, and robust healthcare careers.",
+    overview:
+      "High standard of living, high minimum wage for student work, and strong post-graduation demand.",
     safetyRating: 4.8,
   },
   {
@@ -93,8 +101,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹8 - 12 Lakhs / yr",
     postStudyWorkVisa: "2 Years (Third Level Scheme)",
     topIntakes: ["September", "January"],
-    heroTagline: "Silicon Docks of Europe, hosting European HQs of Google, Apple, Meta & Pfizer.",
-    overview: "The only English-speaking tech hub in the Eurozone with top ROI and high placement rates.",
+    heroTagline:
+      "Silicon Docks of Europe, hosting European HQs of Google, Apple, Meta & Pfizer.",
+    overview:
+      "The only English-speaking tech hub in the Eurozone with top ROI and high placement rates.",
     safetyRating: 4.9,
   },
   {
@@ -112,8 +122,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹9 - 13 Lakhs / yr",
     postStudyWorkVisa: "Up to 3 Years",
     topIntakes: ["February", "July"],
-    heroTagline: "Scenic, safe, and progressive with all 8 universities ranked in the global top 3%.",
-    overview: "Excellent work-life balance, high global rankings, and student protection frameworks.",
+    heroTagline:
+      "Scenic, safe, and progressive with all 8 universities ranked in the global top 3%.",
+    overview:
+      "Excellent work-life balance, high global rankings, and student protection frameworks.",
     safetyRating: 4.9,
   },
 
@@ -133,8 +145,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹8 - 11 Lakhs / yr (Blocked Account)",
     postStudyWorkVisa: "18 Months Jobseeker Visa",
     topIntakes: ["Winter (Oct)", "Summer (Apr)"],
-    heroTagline: "Zero tuition fees at public universities and the industrial powerhouse of Europe.",
-    overview: "Unmatched automotive, robotics, and engineering careers with virtually free education.",
+    heroTagline:
+      "Zero tuition fees at public universities and the industrial powerhouse of Europe.",
+    overview:
+      "Unmatched automotive, robotics, and engineering careers with virtually free education.",
     safetyRating: 4.8,
   },
   {
@@ -150,10 +164,13 @@ export const COUNTRIES: Country[] = [
     popularPrograms: ["mba", "ms", "bachelors"],
     avgTuitionINR: "₹10 - 22 Lakhs / yr",
     avgLivingCostINR: "₹7 - 10 Lakhs / yr",
-    postStudyWorkVisa: "2 Years (5-year Schengen visa for Indian Master's alumni)",
+    postStudyWorkVisa:
+      "2 Years (5-year Schengen visa for Indian Master's alumni)",
     topIntakes: ["September", "January"],
-    heroTagline: "Top global business schools (INSEAD, HEC) and special 5-year post-study Schengen visa.",
-    overview: "World capital of luxury management, aerospace, and globally ranked business schools.",
+    heroTagline:
+      "Top global business schools (INSEAD, HEC) and special 5-year post-study Schengen visa.",
+    overview:
+      "World capital of luxury management, aerospace, and globally ranked business schools.",
     safetyRating: 4.6,
   },
   {
@@ -171,8 +188,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹6 - 9 Lakhs / yr",
     postStudyWorkVisa: "12 Months",
     topIntakes: ["September/October"],
-    heroTagline: "Affordable European education with 100% regional tuition waivers (DSU scholarships).",
-    overview: "Europe's historic cradle of design, architecture, engineering, and medical studies via IMAT.",
+    heroTagline:
+      "Affordable European education with 100% regional tuition waivers (DSU scholarships).",
+    overview:
+      "Europe's historic cradle of design, architecture, engineering, and medical studies via IMAT.",
     safetyRating: 4.5,
   },
   {
@@ -190,8 +209,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹9 - 13 Lakhs / yr",
     postStudyWorkVisa: "1 Year Orientation Year (Zoekjaar)",
     topIntakes: ["September", "February"],
-    heroTagline: "Over 2,100 English-taught programs and the European hub for tech and international law.",
-    overview: "95% English proficiency among locals, cutting-edge research, and liberal work culture.",
+    heroTagline:
+      "Over 2,100 English-taught programs and the European hub for tech and international law.",
+    overview:
+      "95% English proficiency among locals, cutting-edge research, and liberal work culture.",
     safetyRating: 4.8,
   },
   {
@@ -209,8 +230,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹10 - 15 Lakhs / yr",
     postStudyWorkVisa: "1 to 2 Years (Tuition Grant Bond Option)",
     topIntakes: ["August", "January"],
-    heroTagline: "Asia’s premier financial hub with NUS and NTU consistently ranked in global top 15.",
-    overview: "Unmatched safety, clean infrastructure, and proximity to India with global corporate exposure.",
+    heroTagline:
+      "Asia’s premier financial hub with NUS and NTU consistently ranked in global top 15.",
+    overview:
+      "Unmatched safety, clean infrastructure, and proximity to India with global corporate exposure.",
     safetyRating: 5.0,
   },
   {
@@ -228,8 +251,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹3 - 5 Lakhs / yr",
     postStudyWorkVisa: "Employment Pass Sponsorship",
     topIntakes: ["March", "October"],
-    heroTagline: "High-value UK and Australian twin degrees (Monash, Nottingham) at 1/3rd the cost.",
-    overview: "Extremely affordable, culturally friendly, and top international branch campuses.",
+    heroTagline:
+      "High-value UK and Australian twin degrees (Monash, Nottingham) at 1/3rd the cost.",
+    overview:
+      "Extremely affordable, culturally friendly, and top international branch campuses.",
     safetyRating: 4.6,
   },
   {
@@ -247,8 +272,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹8 - 12 Lakhs / yr",
     postStudyWorkVisa: "Green Visa & Golden Visa pathways",
     topIntakes: ["September", "January"],
-    heroTagline: "Zero income tax, 3.5 hours flight from India, and prestigious Dubai/Abu Dhabi campuses.",
-    overview: "Fast-growing global trade nexus offering world-class campuses like NYU Abu Dhabi and Wollongong.",
+    heroTagline:
+      "Zero income tax, 3.5 hours flight from India, and prestigious Dubai/Abu Dhabi campuses.",
+    overview:
+      "Fast-growing global trade nexus offering world-class campuses like NYU Abu Dhabi and Wollongong.",
     safetyRating: 4.9,
   },
 
@@ -268,8 +295,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹2 - 3.5 Lakhs / yr",
     postStudyWorkVisa: "Medical Internship / Residency",
     topIntakes: ["September/October"],
-    heroTagline: "Over 30 years of medical trust for Indian doctors with NMC/WHO recognized universities.",
-    overview: "Oldest medical study destination for Indians with high clinical exposure and low total costs.",
+    heroTagline:
+      "Over 30 years of medical trust for Indian doctors with NMC/WHO recognized universities.",
+    overview:
+      "Oldest medical study destination for Indians with high clinical exposure and low total costs.",
     safetyRating: 4.2,
   },
   {
@@ -287,8 +316,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹1.5 - 2.5 Lakhs / yr",
     postStudyWorkVisa: "Clinical Internship",
     topIntakes: ["September", "February"],
-    heroTagline: "Affordable 5+1 year NMC compliant medical curriculum with dedicated Indian food messes.",
-    overview: "Modernized medical academies with English medium and high FMGE pass-rate focus.",
+    heroTagline:
+      "Affordable 5+1 year NMC compliant medical curriculum with dedicated Indian food messes.",
+    overview:
+      "Modernized medical academies with English medium and high FMGE pass-rate focus.",
     safetyRating: 4.7,
   },
   {
@@ -306,8 +337,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹2 - 3 Lakhs / yr",
     postStudyWorkVisa: "Clinical Internship",
     topIntakes: ["September/October"],
-    heroTagline: "National universities with 5-year English medium medical programs and top infrastructure.",
-    overview: "Central Asia's largest economy with premier national medical universities like Kazakh National.",
+    heroTagline:
+      "National universities with 5-year English medium medical programs and top infrastructure.",
+    overview:
+      "Central Asia's largest economy with premier national medical universities like Kazakh National.",
     safetyRating: 4.6,
   },
   {
@@ -325,8 +358,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹1.5 - 2.2 Lakhs / yr",
     postStudyWorkVisa: "Clinical Internship",
     topIntakes: ["September/October"],
-    heroTagline: "Most economical MBBS packages (total package under ₹18-22 Lakhs including hostel).",
-    overview: "Budget-friendly destination with large Indian student communities in Bishkek and Osh.",
+    heroTagline:
+      "Most economical MBBS packages (total package under ₹18-22 Lakhs including hostel).",
+    overview:
+      "Budget-friendly destination with large Indian student communities in Bishkek and Osh.",
     safetyRating: 4.3,
   },
   {
@@ -344,8 +379,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹2.5 - 4 Lakhs / yr",
     postStudyWorkVisa: "USMLE / PLAB Clinical Prep",
     topIntakes: ["September", "March"],
-    heroTagline: "European medical curriculum (WFME & ECFMG accredited) with USMLE clinical rotations.",
-    overview: "Bridging Europe and Asia with high-grade European healthcare standards and English tuition.",
+    heroTagline:
+      "European medical curriculum (WFME & ECFMG accredited) with USMLE clinical rotations.",
+    overview:
+      "Bridging Europe and Asia with high-grade European healthcare standards and English tuition.",
     safetyRating: 4.8,
   },
   {
@@ -363,8 +400,10 @@ export const COUNTRIES: Country[] = [
     avgLivingCostINR: "₹2 - 3.5 Lakhs / yr",
     postStudyWorkVisa: "USMLE Pathway / Clinical Practice",
     topIntakes: ["August/September"],
-    heroTagline: "US-pattern MD curriculum with 100% English medium across everyday life and hospitals.",
-    overview: "Tropical climate with identical disease patterns to India, preparing students for FMGE and USMLE.",
+    heroTagline:
+      "US-pattern MD curriculum with 100% English medium across everyday life and hospitals.",
+    overview:
+      "Tropical climate with identical disease patterns to India, preparing students for FMGE and USMLE.",
     safetyRating: 4.4,
   },
 ];
@@ -376,9 +415,16 @@ export const PROGRAMS: Program[] = [
     slug: "ms",
     level: "Postgraduate",
     duration: "1 to 2 Years",
-    keyFields: ["Computer Science", "Data Science & AI", "Mechanical Engg", "Biotech", "Robotics"],
+    keyFields: [
+      "Computer Science",
+      "Data Science & AI",
+      "Mechanical Engg",
+      "Biotech",
+      "Robotics",
+    ],
     topDestinations: ["USA", "Germany", "UK", "Canada", "Ireland"],
-    summary: "STEM-designated degrees with high starting salaries and generous post-study work authorization.",
+    summary:
+      "STEM-designated degrees with high starting salaries and generous post-study work authorization.",
     roiScore: 94,
   },
   {
@@ -387,9 +433,16 @@ export const PROGRAMS: Program[] = [
     slug: "mba",
     level: "Postgraduate",
     duration: "1 to 2 Years",
-    keyFields: ["Business Analytics", "Finance", "Strategy & Consulting", "Marketing", "Supply Chain"],
+    keyFields: [
+      "Business Analytics",
+      "Finance",
+      "Strategy & Consulting",
+      "Marketing",
+      "Supply Chain",
+    ],
     topDestinations: ["USA", "UK", "France", "Singapore", "Australia"],
-    summary: "High-impact leadership degrees offering strategic networking and strong corporate placements.",
+    summary:
+      "High-impact leadership degrees offering strategic networking and strong corporate placements.",
     roiScore: 91,
   },
   {
@@ -398,9 +451,22 @@ export const PROGRAMS: Program[] = [
     slug: "mbbs",
     level: "Undergraduate",
     duration: "5 to 6 Years",
-    keyFields: ["General Medicine", "Surgery", "Pediatrics", "Cardiology", "Pathology"],
-    topDestinations: ["Russia", "Georgia", "Uzbekistan", "Kazakhstan", "Philippines"],
-    summary: "NMC and WHO compliant global medical education with English instruction at a fraction of Indian private college costs.",
+    keyFields: [
+      "General Medicine",
+      "Surgery",
+      "Pediatrics",
+      "Cardiology",
+      "Pathology",
+    ],
+    topDestinations: [
+      "Russia",
+      "Georgia",
+      "Uzbekistan",
+      "Kazakhstan",
+      "Philippines",
+    ],
+    summary:
+      "NMC and WHO compliant global medical education with English instruction at a fraction of Indian private college costs.",
     roiScore: 89,
   },
   {
@@ -409,9 +475,16 @@ export const PROGRAMS: Program[] = [
     slug: "bachelors",
     level: "Undergraduate",
     duration: "3 to 4 Years",
-    keyFields: ["Computer Science", "Business Admin", "Economics", "Mechanical Engg", "Psychology"],
+    keyFields: [
+      "Computer Science",
+      "Business Admin",
+      "Economics",
+      "Mechanical Engg",
+      "Psychology",
+    ],
     topDestinations: ["USA", "Canada", "UK", "Australia", "Germany"],
-    summary: "Comprehensive undergraduate degrees built on practical labs, co-op work terms, and global campus life.",
+    summary:
+      "Comprehensive undergraduate degrees built on practical labs, co-op work terms, and global campus life.",
     roiScore: 86,
   },
   {
@@ -420,9 +493,16 @@ export const PROGRAMS: Program[] = [
     slug: "nursing",
     level: "Undergraduate",
     duration: "3 to 4 Years",
-    keyFields: ["Clinical Nursing", "Adult Care", "Pediatric Nursing", "Mental Health", "Midwifery"],
+    keyFields: [
+      "Clinical Nursing",
+      "Adult Care",
+      "Pediatric Nursing",
+      "Mental Health",
+      "Midwifery",
+    ],
     topDestinations: ["UK", "Ireland", "Australia", "Germany", "USA"],
-    summary: "High-demand healthcare career with fast-track licensing pathways (NCLEX, OSCE, NMC UK) and hospital placements.",
+    summary:
+      "High-demand healthcare career with fast-track licensing pathways (NCLEX, OSCE, NMC UK) and hospital placements.",
     roiScore: 95,
   },
   {
@@ -431,9 +511,16 @@ export const PROGRAMS: Program[] = [
     slug: "emba",
     level: "Executive",
     duration: "1 to 2 Years",
-    keyFields: ["Global Strategy", "C-Suite Leadership", "Healthcare Mgmt", "Finance & M&A", "AI Transformation"],
+    keyFields: [
+      "Global Strategy",
+      "C-Suite Leadership",
+      "Healthcare Mgmt",
+      "Finance & M&A",
+      "AI Transformation",
+    ],
     topDestinations: ["USA", "UK", "France", "Singapore", "UAE"],
-    summary: "Senior leadership credentials for working professionals offering weekend/modular formats and accelerated ROI.",
+    summary:
+      "Senior leadership credentials for working professionals offering weekend/modular formats and accelerated ROI.",
     roiScore: 96,
   },
   {
@@ -442,9 +529,16 @@ export const PROGRAMS: Program[] = [
     slug: "phd",
     level: "Postgraduate",
     duration: "3 to 5 Years",
-    keyFields: ["AI & Data Science", "Biomedical Sciences", "Renewable Energy", "Quantum Computing", "Economics"],
+    keyFields: [
+      "AI & Data Science",
+      "Biomedical Sciences",
+      "Renewable Energy",
+      "Quantum Computing",
+      "Economics",
+    ],
     topDestinations: ["USA", "Germany", "UK", "Netherlands", "Canada"],
-    summary: "Fully funded research fellowships with full tuition coverage, research grants, and living stipends.",
+    summary:
+      "Fully funded research fellowships with full tuition coverage, research grants, and living stipends.",
     roiScore: 92,
   },
   {
@@ -453,9 +547,16 @@ export const PROGRAMS: Program[] = [
     slug: "ausbildung",
     level: "Vocational",
     duration: "3 Years",
-    keyFields: ["Healthcare & Nursing", "IT Specialist", "Mechatronics", "Hospitality", "Logistics"],
+    keyFields: [
+      "Healthcare & Nursing",
+      "IT Specialist",
+      "Mechatronics",
+      "Hospitality",
+      "Logistics",
+    ],
     topDestinations: ["Germany"],
-    summary: "Government-accredited dual vocational training in Germany with €1,000–€1,400 monthly stipends and zero tuition fees.",
+    summary:
+      "Government-accredited dual vocational training in Germany with €1,000–€1,400 monthly stipends and zero tuition fees.",
     roiScore: 98,
   },
 ];
@@ -466,24 +567,24 @@ export const PROGRAM_ALIASES: Record<string, string> = {
   "emba-abroad": "emba",
   "masters-stem": "ms",
   "stem-masters": "ms",
-  "masters": "ms",
+  masters: "ms",
   "masters-abroad": "ms",
   "mba-management": "mba",
   "mba-abroad": "mba",
   "mbbs-medicine": "mbbs",
-  "medicine": "mbbs",
+  medicine: "mbbs",
   "mbbs-abroad": "mbbs",
   "nursing-healthcare": "nursing",
   "nursing-abroad": "nursing",
   "germany-ausbildung": "ausbildung",
   "ausbildung-germany": "ausbildung",
   "bachelors-ug": "bachelors",
-  "undergraduate": "bachelors",
+  undergraduate: "bachelors",
   "bachelors-abroad": "bachelors",
   "phd-doctoral": "phd",
   "phd-research": "phd",
   "phd-abroad": "phd",
-  "doctoral": "phd",
+  doctoral: "phd",
 };
 
 export function getProgramBySlug(slug: string): Program | undefined {
@@ -496,13 +597,13 @@ export function getProgramBySlug(slug: string): Program | undefined {
 export const COUNTRY_ALIASES: Record<string, string> = {
   "united-states": "usa",
   "united-kingdom": "uk",
-  "america": "usa",
-  "britain": "uk",
-  "england": "uk",
-  "holland": "netherlands",
-  "dubai": "uae",
+  america: "usa",
+  britain: "uk",
+  england: "uk",
+  holland: "netherlands",
+  dubai: "uae",
   "united-arab-emirates": "uae",
-  "nz": "new-zealand",
+  nz: "new-zealand",
 };
 
 export function getCountryBySlug(slug: string): Country | undefined {
@@ -533,7 +634,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 8,
     postStudyWorkMonths: 18,
     featured: true,
-    official_email_address: "admissions@tum.de",
+    official_email_domain: "tum.de",
   },
   {
     id: "gatech",
@@ -552,7 +653,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 16,
     postStudyWorkMonths: 36,
     featured: true,
-    official_email_address: "admissions@gatech.edu",
+    official_email_domain: "gatech.edu",
   },
   {
     id: "oxford",
@@ -571,7 +672,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 17,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@ox.ac.uk",
+    official_email_domain: "ox.ac.uk",
   },
   {
     id: "stanford",
@@ -590,7 +691,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 4,
     postStudyWorkMonths: 36,
     featured: true,
-    official_email_address: "admissions@stanford.edu",
+    official_email_domain: "stanford.edu",
   },
   {
     id: "manchester",
@@ -609,7 +710,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 27,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@manchester.ac.uk",
+    official_email_domain: "manchester.ac.uk",
   },
   {
     id: "tcd",
@@ -628,7 +729,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 33,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@tcd.ie",
+    official_email_domain: "tcd.ie",
   },
   {
     id: "unimelb",
@@ -647,7 +748,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 40,
     postStudyWorkMonths: 36,
     featured: true,
-    official_email_address: "admissions@unimelb.edu.au",
+    official_email_domain: "unimelb.edu.au",
   },
   {
     id: "tashkent",
@@ -667,7 +768,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     nmcCompliant: true,
     postStudyWorkMonths: 12,
     featured: true,
-    official_email_address: "admissions@tma.uz",
+    official_email_domain: "tma.uz",
   },
   {
     id: "utoronto",
@@ -687,7 +788,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     postStudyWorkMonths: 36,
     featured: true,
     tierBadge: "Platinum Partner",
-    official_email_address: "admissions@utoronto.ca",
+    official_email_domain: "utoronto.ca",
   },
   {
     id: "sorbonne",
@@ -706,7 +807,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 15,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@sorbonne-universite.fr",
+    official_email_domain: "sorbonne-universite.fr",
   },
   {
     id: "hec-paris",
@@ -725,7 +826,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 8,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@hec.fr",
+    official_email_domain: "hec.fr",
   },
   {
     id: "polytechnique",
@@ -744,7 +845,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 10,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@polytechnique.edu",
+    official_email_domain: "polytechnique.edu",
   },
   {
     id: "essec",
@@ -763,7 +864,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 18,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@essec.edu",
+    official_email_domain: "essec.edu",
   },
   {
     id: "psl",
@@ -782,7 +883,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 12,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@psl.eu",
+    official_email_domain: "psl.eu",
   },
   {
     id: "tudelft",
@@ -801,7 +902,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 20,
     postStudyWorkMonths: 12,
     featured: true,
-    official_email_address: "admissions@tudelft.nl",
+    official_email_domain: "tudelft.nl",
   },
   {
     id: "sapienza",
@@ -820,7 +921,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 35,
     postStudyWorkMonths: 12,
     featured: true,
-    official_email_address: "admissions@uniroma1.it",
+    official_email_domain: "uniroma1.it",
   },
   {
     id: "nus",
@@ -839,7 +940,7 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 7,
     postStudyWorkMonths: 24,
     featured: true,
-    official_email_address: "admissions@nus.edu.sg",
+    official_email_domain: "nus.edu.sg",
   },
   {
     id: "auckland",
@@ -858,6 +959,8 @@ export const FEATURED_UNIVERSITIES: University[] = [
     acceptanceRate: 45,
     postStudyWorkMonths: 36,
     featured: true,
-    official_email_address: "admissions@auckland.ac.nz",
+    official_email_domain: "auckland.ac.nz",
   },
 ];
+
+export const UNIVERSITIES: University[] = FEATURED_UNIVERSITIES;

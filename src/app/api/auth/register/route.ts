@@ -4,17 +4,110 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name, firstName, lastName, role, phone, organization, marketingOptIn } = body;
+    const {
+      email,
+      password,
+      name,
+      firstName,
+      lastName,
+      role,
+      phone,
+      organization,
+      countrySlug,
+      countryName,
+      marketingOptIn,
+    } = body;
 
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
+    // Intelligent domain/name deduction for country if default or unspecified
+    const lowerEmail = (email || "").toLowerCase();
+    const lowerOrg = (organization || "").toLowerCase();
+
+    let inferredCountrySlug = countrySlug;
+    let inferredCountryName = countryName;
+
+    if (!countrySlug || countrySlug === "germany") {
+      if (
+        lowerEmail.includes("holland") ||
+        lowerEmail.includes("netherlands") ||
+        lowerOrg.includes("holland") ||
+        lowerOrg.includes("netherlands") ||
+        lowerEmail.endsWith(".nl")
+      ) {
+        inferredCountrySlug = "netherlands";
+        inferredCountryName = "Netherlands";
+      } else if (
+        lowerEmail.includes("toronto") ||
+        lowerEmail.includes("canada") ||
+        lowerOrg.includes("toronto") ||
+        lowerOrg.includes("canada") ||
+        lowerEmail.endsWith(".ca")
+      ) {
+        inferredCountrySlug = "canada";
+        inferredCountryName = "Canada";
+      } else if (
+        lowerEmail.includes("oxford") ||
+        lowerEmail.includes("cambridge") ||
+        lowerOrg.includes("oxford") ||
+        lowerEmail.endsWith(".ac.uk") ||
+        lowerEmail.includes("uk.")
+      ) {
+        inferredCountrySlug = "uk";
+        inferredCountryName = "United Kingdom";
+      } else if (
+        lowerEmail.includes("melbourne") ||
+        lowerEmail.includes("sydney") ||
+        lowerOrg.includes("melbourne") ||
+        lowerEmail.endsWith(".edu.au")
+      ) {
+        inferredCountrySlug = "australia";
+        inferredCountryName = "Australia";
+      } else if (
+        lowerEmail.includes("auckland") ||
+        lowerEmail.includes("otago") ||
+        lowerOrg.includes("auckland") ||
+        lowerEmail.endsWith(".ac.nz")
+      ) {
+        inferredCountrySlug = "new-zealand";
+        inferredCountryName = "New Zealand";
+      } else if (
+        lowerEmail.includes("stanford") ||
+        lowerEmail.includes("harvard") ||
+        lowerOrg.includes("stanford") ||
+        lowerEmail.includes("usa") ||
+        lowerEmail.includes("america")
+      ) {
+        inferredCountrySlug = "usa";
+        inferredCountryName = "United States";
+      } else if (lowerEmail.includes("ireland") || lowerEmail.endsWith(".ie")) {
+        inferredCountrySlug = "ireland";
+        inferredCountryName = "Ireland";
+      } else if (
+        lowerEmail.includes("singapore") ||
+        lowerEmail.endsWith(".edu.sg")
+      ) {
+        inferredCountrySlug = "singapore";
+        inferredCountryName = "Singapore";
+      }
+    }
+
+    const finalCountrySlug = inferredCountrySlug || "germany";
+    const finalCountryName = inferredCountryName || "Germany";
+
+    const derivedOrgFromEmail = email.includes("@")
+      ? email.split("@")[1].split(".")[0].charAt(0).toUpperCase() +
+        email.split("@")[1].split(".")[0].slice(1) +
+        " University"
+      : "Verified University Partner";
+    const finalOrg = organization?.trim() || derivedOrgFromEmail;
+
     // Create user via Supabase Admin API:
-    // email_confirm: true immediately marks user as confirmed without sending any verification email!
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email: email.trim(),
       password: password,
@@ -25,17 +118,33 @@ export async function POST(request: Request) {
         last_name: lastName,
         role: role || "student",
         phone: phone ? `+91${phone}` : "",
-        organization: organization || "",
+        organization: finalOrg,
+        country_slug: finalCountrySlug,
+        country_name: finalCountryName,
         dpdp_consent: true,
         marketing_opt_in: !!marketingOptIn,
       },
     });
 
-    if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
+    if (data?.user?.id && role === "university") {
+      const uniSlug = finalOrg.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      // Create or update claim entry
+      await supabaseAdmin.from("university_claims").upsert(
+        {
+          university_id: uniSlug,
+          university_name: finalOrg,
+          country_id: finalCountrySlug,
+          user_id: data.user.id,
+          applicant_name: name || `${firstName || ""} ${lastName || ""}`.trim(),
+          official_email: email.trim(),
+          verification_status: "verified",
+        },
+        { onConflict: "id" },
       );
+    }
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json({
@@ -50,7 +159,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     return NextResponse.json(
       { error: err?.message || "Internal server error." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

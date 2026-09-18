@@ -5,87 +5,118 @@ import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 // Known official domain map for domain verification fallback
 const DOMAIN_MAP: Record<string, string> = {
   "georgia-tech": "gatech.edu",
-  "gatech": "gatech.edu",
+  gatech: "gatech.edu",
   "technical-university-of-munich": "tum.de",
-  "tum": "tum.de",
+  tum: "tum.de",
   "university-of-stanford": "stanford.edu",
   "stanford-university": "stanford.edu",
-  "stanford": "stanford.edu",
+  stanford: "stanford.edu",
   "university-of-oxford": "ox.ac.uk",
-  "oxford": "ox.ac.uk",
+  oxford: "ox.ac.uk",
   "university-of-melbourne": "unimelb.edu.au",
-  "unimelb": "unimelb.edu.au",
+  unimelb: "unimelb.edu.au",
   "university-of-toronto": "utoronto.ca",
-  "utoronto": "utoronto.ca",
+  utoronto: "utoronto.ca",
   "university-of-manchester": "manchester.ac.uk",
-  "manchester": "manchester.ac.uk",
+  manchester: "manchester.ac.uk",
   "trinity-college-dublin": "tcd.ie",
-  "tcd": "tcd.ie",
+  tcd: "tcd.ie",
   "tashkent-medical-academy": "tma.uz",
-  "tashkent": "tma.uz",
+  tashkent: "tma.uz",
   "sorbonne-university": "sorbonne-universite.fr",
-  "sorbonne": "sorbonne-universite.fr",
+  sorbonne: "sorbonne-universite.fr",
   "hec-paris": "hec.fr",
   "polytechnique-paris": "polytechnique.edu",
-  "polytechnique": "polytechnique.edu",
+  polytechnique: "polytechnique.edu",
   "essec-business-school": "essec.edu",
-  "essec": "essec.edu",
+  essec: "essec.edu",
   "psl-university": "psl.eu",
-  "psl": "psl.eu",
+  psl: "psl.eu",
   "tu-delft": "tudelft.nl",
-  "tudelft": "tudelft.nl",
+  tudelft: "tudelft.nl",
   "sapienza-university-of-rome": "uniroma1.it",
-  "sapienza": "uniroma1.it",
+  sapienza: "uniroma1.it",
   "national-university-of-singapore": "nus.edu.sg",
-  "nus": "nus.edu.sg",
+  nus: "nus.edu.sg",
   "university-of-auckland": "auckland.ac.nz",
-  "auckland": "auckland.ac.nz",
+  auckland: "auckland.ac.nz",
 };
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { universityId, universityName, countryId, countrySlug, countryName, userId, applicantName, officialEmail, designation, proofDocumentUrl } = body;
+    const {
+      universityId,
+      universityName,
+      countryId,
+      countrySlug,
+      countryName,
+      userId,
+      applicantName,
+      officialEmail,
+      designation,
+      proofDocumentUrl,
+    } = body;
 
     if (!officialEmail || !applicantName || !universityName) {
       return NextResponse.json(
-        { error: "Applicant name, official email, and university name are required." },
-        { status: 400 }
+        {
+          error:
+            "Applicant name, official email, and university name are required.",
+        },
+        { status: 400 },
       );
     }
 
-    // 0. Verify claim official email against university's official_email_address / domain
-    let registeredOfficialEmail = "";
+    // 0. Verify claim official email against university's official_email_domain
+    let registeredDomain = "";
     const uniKey = (universityId || universityName || "").toLowerCase().trim();
 
-    // Query Supabase for registered official_email_address
+    // Query Supabase for registered official_email_domain
     try {
       const { data: uniData } = await supabaseAdmin
         .from("universities")
-        .select("official_email_address, slug, name")
-        .or(`slug.eq.${universityId},id.eq.${universityId},name.ilike.%${universityName}%`)
+        .select("*")
+        .or(
+          `slug.eq.${universityId},id.eq.${universityId},name.ilike.%${universityName}%`,
+        )
         .maybeSingle();
 
-      if (uniData && uniData.official_email_address) {
-        registeredOfficialEmail = uniData.official_email_address;
+      if (uniData) {
+        const raw =
+          uniData.official_email_domain || uniData.official_email_address || "";
+        registeredDomain = raw.includes("@")
+          ? raw.split("@")[1].toLowerCase().trim()
+          : raw.toLowerCase().trim();
       }
     } catch {
       // ignore db lookup failure
     }
 
     // Fallback to FEATURED_UNIVERSITIES in masterData
-    if (!registeredOfficialEmail) {
+    if (!registeredDomain) {
       const matchedUni = FEATURED_UNIVERSITIES.find(
-        u => u.id === universityId || u.slug === universityId || u.name.toLowerCase().includes(universityName.toLowerCase())
+        (u) =>
+          u.id === universityId ||
+          u.slug === universityId ||
+          u.name.toLowerCase().includes(universityName.toLowerCase()),
       );
-      if (matchedUni && matchedUni.official_email_address) {
-        registeredOfficialEmail = matchedUni.official_email_address;
+      if (matchedUni) {
+        const raw =
+          matchedUni.official_email_domain ||
+          matchedUni.official_email_address ||
+          "";
+        registeredDomain = raw.includes("@")
+          ? raw.split("@")[1].toLowerCase().trim()
+          : raw.toLowerCase().trim();
       }
     }
 
-    // Extract domains
-    const applicantDomain = (officialEmail.split("@")[1] || "").toLowerCase().trim();
-    let expectedDomain = (registeredOfficialEmail.split("@")[1] || "").toLowerCase().trim();
+    // Extract applicant email domain
+    const applicantDomain = (officialEmail.split("@")[1] || "")
+      .toLowerCase()
+      .trim();
+    let expectedDomain = registeredDomain;
 
     if (!expectedDomain) {
       // Check DOMAIN_MAP
@@ -98,12 +129,17 @@ export async function POST(request: Request) {
     }
 
     // Perform domain verification check if expectedDomain is known
-    if (expectedDomain && applicantDomain && applicantDomain !== expectedDomain && !applicantDomain.endsWith("." + expectedDomain)) {
+    if (
+      expectedDomain &&
+      applicantDomain &&
+      applicantDomain !== expectedDomain &&
+      !applicantDomain.endsWith("." + expectedDomain)
+    ) {
       return NextResponse.json(
-        { 
-          error: `Verification Failed: Your email domain (@${applicantDomain}) does not match the official institutional domain (@${expectedDomain}) for ${universityName}. Please use your official university email.` 
+        {
+          error: `Verification Failed: Your email domain (@${applicantDomain}) does not match the official institutional domain (@${expectedDomain}) for ${universityName}. Please use your official university email.`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -111,7 +147,11 @@ export async function POST(request: Request) {
     let realId = claimId;
     const finalCountryId = countryId || countrySlug || "global";
 
-    const isValidUuid = (id: any) => typeof id === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    const isValidUuid = (id: any) =>
+      typeof id === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        id,
+      );
     const validUserId = isValidUuid(userId) ? userId : null;
 
     // 1. Attempt Supabase Table Insert
@@ -151,13 +191,14 @@ export async function POST(request: Request) {
         applicantName,
         officialEmail,
         status: "pending",
-        message: "Claim request submitted successfully. Admin review pending in /admin queue.",
+        message:
+          "Claim request submitted successfully. Admin review pending in /admin queue.",
       },
     });
   } catch (err: any) {
     return NextResponse.json(
       { error: err?.message || "Failed to submit claim request." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -4,13 +4,13 @@
 
 export type TierCategory = "Tier 1" | "Tier 2" | "Tier 3";
 
-export type ProgramCategory = 
-  | "ms" 
-  | "mba" 
+export type ProgramCategory =
+  | "ms"
+  | "mba"
   | "emba"
-  | "mbbs" 
-  | "bachelors" 
-  | "nursing" 
+  | "mbbs"
+  | "bachelors"
+  | "nursing"
   | "phd"
   | "ausbildung";
 
@@ -38,7 +38,8 @@ export interface Program {
   id: string;
   name: string;
   slug: ProgramCategory;
-  level: "Postgraduate" | "Undergraduate" | "Vocational" | "Doctoral" | "Executive";
+  level:
+    "Postgraduate" | "Undergraduate" | "Vocational" | "Doctoral" | "Executive";
   duration: string;
   keyFields: string[];
   topDestinations: string[];
@@ -69,6 +70,7 @@ export interface University {
   bannerUrl?: string;
   claimed_status?: "claimed" | "unclaimed" | "verified";
   claimed_by_user_id?: string;
+  official_email_domain?: string;
   official_email_address?: string;
   tierBadge?: "Platinum Partner" | "Gold Partner" | "Silver Partner";
 }

@@ -8,70 +8,157 @@ export async function POST(request: Request) {
 
     if (!claimId || !action) {
       return NextResponse.json(
-        { error: "Claim ID and action ('approved' | 'rejected') are required." },
-        { status: 400 }
+        {
+          error: "Claim ID and action ('approved' | 'rejected') are required.",
+        },
+        { status: 400 },
       );
     }
 
     const newStatus = action === "approved" ? "approved" : "rejected";
 
-    // 1. Update claim status in Supabase
-    try {
-      // Try updating by UUID id first, or fallback to email/universityId
-      const { error } = await supabaseAdmin
-        .from("university_claims")
-        .update({
-          verification_status: newStatus,
-          reviewed_at: new Date().toISOString(),
-        })
-        .or(`id.eq.${claimId},official_email.ilike.%${claimId}%,university_id.eq.${universityId || 'tum'}`);
+    const isValidUuid = (id: any) =>
+      typeof id === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        id,
+      );
 
-      if (error) {
-        // Fallback simple update by university_id or email
+    const validUserId = isValidUuid(userId) ? userId : null;
+
+    // Known slug alias mapping
+    const SLUG_ALIAS_MAP: Record<string, string> = {
+      utoronto: "university-of-toronto",
+      tum: "technical-university-of-munich",
+      gatech: "georgia-tech",
+      oxford: "university-of-oxford",
+      stanford: "stanford-university",
+      manchester: "university-of-manchester",
+      tcd: "trinity-college-dublin",
+      unimelb: "university-of-melbourne",
+      tashkent: "tashkent-medical-academy",
+      sorbonne: "sorbonne-university",
+      hec: "hec-paris",
+      polytechnique: "polytechnique-paris",
+      essec: "essec-business-school",
+      psl: "psl-university",
+      tudelft: "tu-delft",
+      sapienza: "sapienza-university-of-rome",
+      nus: "national-university-of-singapore",
+      auckland: "university-of-auckland",
+    };
+
+    // 1. Fetch existing claim record if available
+    let claimRecord: any = null;
+    try {
+      if (isValidUuid(claimId)) {
+        const { data } = await supabaseAdmin
+          .from("university_claims")
+          .select("*")
+          .eq("id", claimId)
+          .maybeSingle();
+        claimRecord = data;
+      }
+    } catch (e) {
+      console.warn("Could not fetch claim record:", e);
+    }
+
+    // 2. Update claim status in Supabase university_claims table
+    try {
+      if (isValidUuid(claimId)) {
         await supabaseAdmin
           .from("university_claims")
           .update({
             verification_status: newStatus,
             reviewed_at: new Date().toISOString(),
           })
-          .eq("university_id", universityId || "tum");
+          .eq("id", claimId);
+      } else if (universityId) {
+        await supabaseAdmin
+          .from("university_claims")
+          .update({
+            verification_status: newStatus,
+            reviewed_at: new Date().toISOString(),
+          })
+          .eq("university_id", universityId);
       }
 
-      // 2. If approved, link university ownership or insert university into universities table
-      if (newStatus === "approved" && universityId) {
-        // Try updating existing university by slug or id
-        const { data: updatedUnis } = await supabaseAdmin
-          .from("universities")
-          .update({
-            claimed_status: "verified",
-            claimed_by_user_id: userId || null,
-            updated_at: new Date().toISOString(),
-          })
-          .or(`slug.eq.${universityId},id.eq.${universityId}`)
-          .select();
+      // 3. If approved, link university ownership in universities table
+      if (newStatus === "approved") {
+        const rawUniId = (universityId || claimRecord?.university_id || "")
+          .toLowerCase()
+          .trim();
+        const rawUniName = (
+          body.universityName ||
+          claimRecord?.university_name ||
+          ""
+        ).trim();
+        const rawEmail = (
+          claimRecord?.official_email ||
+          body.officialEmail ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+        const emailDomain = rawEmail.includes("@")
+          ? rawEmail.split("@")[1].trim()
+          : "";
 
-        // If university does not exist in universities table yet, auto-upsert it!
-        if (!updatedUnis || updatedUnis.length === 0) {
-          const uniSlug = universityId.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-          const formattedName = universityId
-            .split("-")
-            .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
+        const normalizedSlug = SLUG_ALIAS_MAP[rawUniId] || rawUniId;
+        const targetUserId =
+          validUserId ||
+          (isValidUuid(claimRecord?.user_id) ? claimRecord.user_id : null);
 
-          await supabaseAdmin.from("universities").upsert({
-            name: formattedName || "University Partner",
-            slug: uniSlug,
-            country_id: "global",
-            city: "Campus City",
-            ranking_global: 50,
-            tuition_fee_range_inr: "₹15 - 30 Lakhs / yr",
-            claimed_status: "verified",
-            claimed_by_user_id: userId || null,
-          }, { onConflict: "slug" });
+        const updateData: Record<string, any> = {
+          claimed_status: "verified",
+          updated_at: new Date().toISOString(),
+        };
+        if (targetUserId) {
+          updateData.claimed_by_user_id = targetUserId;
         }
 
-        if (userId) {
-          await supabaseAdmin.auth.admin.updateUserById(userId, {
+        // Strategy A: Update by normalized slug
+        if (normalizedSlug) {
+          const { data, error } = await supabaseAdmin
+            .from("universities")
+            .update(updateData)
+            .eq("slug", normalizedSlug)
+            .select();
+          console.log(
+            "Approval update by slug:",
+            normalizedSlug,
+            "Result:",
+            data?.length,
+            error?.message,
+          );
+        }
+
+        // Strategy B: Update by alias/raw id
+        if (rawUniId && rawUniId !== normalizedSlug) {
+          await supabaseAdmin
+            .from("universities")
+            .update(updateData)
+            .eq("slug", rawUniId);
+        }
+
+        // Strategy C: Update by official email domain
+        if (emailDomain) {
+          await supabaseAdmin
+            .from("universities")
+            .update(updateData)
+            .eq("official_email_domain", emailDomain);
+        }
+
+        // Strategy D: Update by name (ilike)
+        if (rawUniName) {
+          await supabaseAdmin
+            .from("universities")
+            .update(updateData)
+            .ilike("name", `%${rawUniName}%`);
+        }
+
+        // If user ID provided, upgrade user metadata role to university
+        if (targetUserId) {
+          await supabaseAdmin.auth.admin.updateUserById(targetUserId, {
             user_metadata: { role: "university" },
           });
         }
@@ -89,7 +176,7 @@ export async function POST(request: Request) {
   } catch (err: any) {
     return NextResponse.json(
       { error: err?.message || "Failed to process claim request." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

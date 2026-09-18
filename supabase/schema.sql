@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS universities (
     banner_url TEXT,
     claimed_status VARCHAR(32) DEFAULT 'unclaimed', -- 'unclaimed' | 'pending' | 'verified'
     claimed_by_user_id UUID,
+    official_email_domain VARCHAR(128),
     official_email_address VARCHAR(128),
     -- PostgreSQL Native Full-Text Search Generated Column
     search_vector tsvector GENERATED ALWAYS AS (

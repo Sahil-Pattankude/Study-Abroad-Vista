@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export type UserRole = "student" | "buyer" | "university" | "admin";
 
@@ -11,13 +17,23 @@ export interface AuthUser {
   role: UserRole;
   phone?: string;
   organization?: string;
+  country?: string;
+  user_metadata?: any;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
   isLoggedIn: boolean;
   isLoading: boolean;
-  login: (email: string, role?: UserRole, name?: string, id?: string) => void;
+  login: (
+    email: string,
+    role?: UserRole,
+    name?: string,
+    id?: string,
+    organization?: string,
+    country?: string,
+    user_metadata?: any,
+  ) => void;
   logout: () => void;
 }
 
@@ -38,9 +54,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // ignore
     }
 
-    // Public pages must become interactive before loading the auth SDK. The
-    // cache above preserves the signed-in experience; live reconciliation is
-    // deferred until the visitor actually interacts with the page.
     setIsLoading(false);
     let cancelled = false;
     const reconcileSession = async () => {
@@ -53,25 +66,89 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (cancelled) return;
 
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (cancelled) return;
         if (session?.user) {
-          const role = (session.user.user_metadata?.role as UserRole) || "student";
+          const emailLower = (session.user.email || "").toLowerCase();
+          const metaRole = session.user.user_metadata?.role as UserRole;
+
+          // Check if user is already logged in with an institutional role
+          let existingStored: AuthUser | null = null;
+          try {
+            const raw = localStorage.getItem("vista_user_session");
+            if (raw) existingStored = JSON.parse(raw);
+          } catch {}
+
+          if (
+            existingStored &&
+            existingStored.role &&
+            existingStored.role !== "student"
+          ) {
+            // Never downgrade an active university, buyer, or admin session
+            return;
+          }
+
+          let role: UserRole = metaRole || "student";
+          if (
+            emailLower.includes(".edu") ||
+            emailLower.includes(".ac.") ||
+            emailLower.includes("uni") ||
+            emailLower.includes("admissions") ||
+            emailLower.includes("utoronto") ||
+            emailLower.includes("toronto") ||
+            emailLower.includes("tum.de") ||
+            emailLower.includes("tcd.ie") ||
+            emailLower.includes("tma.uz") ||
+            emailLower.includes("hec.fr") ||
+            emailLower.includes("psl.eu") ||
+            emailLower.includes("tudelft.nl") ||
+            emailLower.includes("uniroma1.it") ||
+            emailLower.includes("auckland.ac.nz")
+          ) {
+            role = "university";
+          } else if (
+            emailLower.includes("admin@studyabroadvista") ||
+            emailLower.includes("admin")
+          ) {
+            role = "admin";
+          } else if (
+            emailLower.includes("consult") ||
+            emailLower.includes("agency") ||
+            emailLower.includes("buyer") ||
+            emailLower.includes("b2b") ||
+            emailLower.includes("apex")
+          ) {
+            role = "buyer";
+          }
+
           const currentUser: AuthUser = {
             id: session.user.id,
             email: session.user.email || "",
-            name: session.user.user_metadata?.name || session.user.email?.split("@")[0],
+            name:
+              session.user.user_metadata?.name ||
+              session.user.email?.split("@")[0],
             role: role,
+            organization: session.user.user_metadata?.organization,
+            country: session.user.user_metadata?.country_name,
+            user_metadata: session.user.user_metadata,
           };
           setUser(currentUser);
-          localStorage.setItem("vista_user_session", JSON.stringify(currentUser));
+          localStorage.setItem(
+            "vista_user_session",
+            JSON.stringify(currentUser),
+          );
         }
       } catch {
         // A failed reconciliation must not disturb the cached public session.
       }
     };
 
-    window.addEventListener("pointerdown", reconcileSession, { once: true, passive: true });
+    window.addEventListener("pointerdown", reconcileSession, {
+      once: true,
+      passive: true,
+    });
     window.addEventListener("keydown", reconcileSession, { once: true });
 
     return () => {
@@ -81,12 +158,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const login = (email: string, role: UserRole = "student", name?: string, id?: string) => {
+  const login = (
+    email: string,
+    role: UserRole = "student",
+    name?: string,
+    id?: string,
+    organization?: string,
+    country?: string,
+    user_metadata?: any,
+  ) => {
     const newUser: AuthUser = {
       id,
       email,
       role,
       name: name || email.split("@")[0],
+      organization,
+      country,
+      user_metadata,
     };
     setUser(newUser);
     try {
@@ -109,7 +197,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn: !!user, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
