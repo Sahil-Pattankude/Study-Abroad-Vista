@@ -1,7 +1,5 @@
 import { supabase } from "./client";
 import { supabaseAdmin } from "./server";
-import { COUNTRIES, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
-import { Country, University, CourseItem } from "@/types";
 import { Country, University, CourseItem, Program } from "@/types";
 import {
   mapSupabaseCountry,
@@ -26,7 +24,6 @@ async function queryWithTimeout<T>(
   try {
     const result = await Promise.race([promiseFactory(), timeoutPromise]);
     return result as T;
-  } catch (err) {
   } catch {
     return null;
   } finally {
@@ -37,7 +34,6 @@ async function queryWithTimeout<T>(
 export async function fetchLiveCountries(): Promise<Country[]> {
   let list: Country[] = [];
 
-  // 1. Fetch Supabase Countries
   // 1. Fetch Supabase Countries directly (no static masterData fallback)
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
@@ -54,12 +50,7 @@ export async function fetchLiveCountries(): Promise<Country[]> {
       list = (response as any).data.map(mapSupabaseCountry);
     }
   } catch (err) {
-    console.warn("Supabase countries fetch fallback:", err);
     console.warn("Supabase countries fetch error:", err);
-  }
-
-  if (list.length === 0) {
-    list = [...COUNTRIES];
   }
 
   // 2. Merge Sanity CMS Countries (Prepend / update by slug)
@@ -78,7 +69,6 @@ export async function fetchLiveCountries(): Promise<Country[]> {
         }
       });
 
-      // Append existing countries if not already covered by Sanity
       list.forEach((c) => {
         if (!map.has(c.slug)) {
           map.set(c.slug, c);
@@ -97,12 +87,6 @@ export async function fetchLiveCountries(): Promise<Country[]> {
 export async function fetchLiveUniversities(): Promise<University[]> {
   const uniMap = new Map<string, University>();
 
-  // 1. Static Master Data Fallback Base
-  FEATURED_UNIVERSITIES.forEach((u) => {
-    uniMap.set(u.slug, u);
-  });
-
-  // 2. Fetch Supabase Universities & Merge
   // 1. Fetch Supabase Universities directly (no static masterData fallback)
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
@@ -124,11 +108,9 @@ export async function fetchLiveUniversities(): Promise<University[]> {
       });
     }
   } catch (err) {
-    console.warn("Supabase universities fetch fallback to masterData:", err);
     console.warn("Supabase universities fetch error:", err);
   }
 
-  // 3. Merge Sanity CMS Universities
   // 2. Merge Sanity CMS Universities
   try {
     const sanityUnis = await queryWithTimeout(
@@ -170,7 +152,9 @@ export async function fetchLivePrograms(): Promise<Program[]> {
         level: p.level || "Postgraduate",
         duration: p.duration || "2 Years",
         keyFields: Array.isArray(p.key_fields) ? p.key_fields : [],
-        topDestinations: Array.isArray(p.top_destinations) ? p.top_destinations : [],
+        topDestinations: Array.isArray(p.top_destinations)
+          ? p.top_destinations
+          : [],
         summary: p.summary || "",
         roiScore: Number(p.roi_score) || 90,
       }));
@@ -235,168 +219,15 @@ export async function fetchLiveClaims(): Promise<ClaimItem[]> {
     console.warn("Supabase claims fetch error:", err);
   }
 
-  return [
-    {
-      id: "claim-101",
-      universityId: "tum",
-      universityName: "Technical University of Munich (TUM)",
-      applicantName: "Dr. Sahil Pattankude",
-      officialEmail: "admissions@tum.de",
-      designation: "Director of International Admissions",
-      status: "approved",
-      createdAt: "Just now",
-    },
-  ];
   return [];
 }
 
 export async function fetchLiveCourses(): Promise<CourseItem[]> {
   const courseMap = new Map<string, CourseItem>();
 
-  // 0. Seed explicit base courses
-  const baseCourses: CourseItem[] = [
-    {
-      id: "tum-data-eng",
-      slug: "msc-data-engineering",
-      name: "M.Sc. in Data Engineering and Analytics",
-      universityName: "Technical University of Munich (TUM)",
-      universitySlug: "technical-university-of-munich",
-      city: "Munich",
-      country: "Germany",
-      flagEmoji: "🇩🇪",
-      level: "Postgraduate (Master's)",
-      duration: "2 Years (4 Semesters)",
-      tuitionFeeINR: "€0 (Public University)",
-      tuitionFeeLocal: "€0 / yr (Semester Fee ~€150)",
-      ieltsMinScore: 6.5,
-      greGmatRequired: false,
-      postStudyWorkMonths: 18,
-      intakeDeadline: "May 31, 2026 (Winter Intake)",
-      roiScore: 98,
-      coreModules: [
-        "Distributed Systems",
-        "Big Data Analytics",
-        "Machine Learning",
-        "Database Internals",
-        "Cloud Infrastructure",
-      ],
-    },
-    {
-      id: "tum-robotics",
-      slug: "msc-robotics-cognition",
-      name: "M.Sc. in Robotics, Cognition, Intelligence",
-      universityName: "Technical University of Munich (TUM)",
-      universitySlug: "technical-university-of-munich",
-      city: "Munich",
-      country: "Germany",
-      flagEmoji: "🇩🇪",
-      level: "Postgraduate (Master's)",
-      duration: "2 Years (4 Semesters)",
-      tuitionFeeINR: "€0 (Public University)",
-      tuitionFeeLocal: "€0 / yr (Semester Fee ~€150)",
-      ieltsMinScore: 6.5,
-      greGmatRequired: false,
-      postStudyWorkMonths: 18,
-      intakeDeadline: "May 31, 2026 (Winter Intake)",
-      roiScore: 96,
-      coreModules: [
-        "Autonomous Systems",
-        "Computer Vision",
-        "Cognitive Systems",
-        "Control Theory",
-        "Embedded Systems",
-      ],
-    },
-    {
-      id: "stanford-cs",
-      slug: "ms-computer-science",
-      name: "MS in Computer Science",
-      universityName: "Stanford University",
-      universitySlug: "stanford-university",
-      city: "Stanford, CA",
-      country: "USA",
-      flagEmoji: "🇺🇸",
-      level: "Postgraduate (Master's)",
-      duration: "2 Years",
-      tuitionFeeINR: "₹48 - 58 Lakhs / yr",
-      tuitionFeeLocal: "$58,746 / yr",
-      ieltsMinScore: 7.5,
-      greGmatRequired: true,
-      postStudyWorkMonths: 36,
-      intakeDeadline: "December 15, 2025 (Fall Intake)",
-      roiScore: 99,
-      coreModules: [
-        "Artificial Intelligence",
-        "Deep Learning",
-        "Systems Architecture",
-        "Cybersecurity",
-        "Quantum Computing",
-      ],
-    },
-    {
-      id: "oxford-cs",
-      slug: "msc-advanced-cs",
-      name: "M.Sc. in Advanced Computer Science",
-      universityName: "University of Oxford",
-      universitySlug: "university-of-oxford",
-      city: "Oxford",
-      country: "United Kingdom",
-      flagEmoji: "🇬🇧",
-      level: "Postgraduate (Master's)",
-      duration: "1 Year (Full-time)",
-      tuitionFeeINR: "₹34 - 42 Lakhs / yr",
-      tuitionFeeLocal: "£33,970 / yr",
-      ieltsMinScore: 7.5,
-      greGmatRequired: false,
-      postStudyWorkMonths: 24,
-      intakeDeadline: "January 8, 2026 (Fall Intake)",
-      roiScore: 97,
-      coreModules: [
-        "Advanced Machine Learning",
-        "Quantum Information",
-        "Formal Verification",
-        "Computational Complexity",
-        "Algorithms",
-      ],
-    },
-    {
-      id: "tum-mgmt",
-      slug: "msc-management-technology",
-      name: "M.Sc. in Management & Technology",
-      universityName: "Technical University of Munich (TUM)",
-      universitySlug: "technical-university-of-munich",
-      city: "Munich",
-      country: "Germany",
-      flagEmoji: "🇩🇪",
-      level: "Postgraduate (Master's)",
-      duration: "2 Years (4 Semesters)",
-      tuitionFeeINR: "€0 (Public University)",
-      tuitionFeeLocal: "€0 / yr (Semester Fee ~€150)",
-      ieltsMinScore: 6.5,
-      greGmatRequired: false,
-      postStudyWorkMonths: 18,
-      intakeDeadline: "May 31, 2026 (Winter Intake)",
-      roiScore: 94,
-      coreModules: [
-        "Technology Strategy",
-        "Corporate Finance",
-        "Innovation Management",
-        "Entrepreneurship",
-        "Digital Transformation",
-      ],
-    },
-  ];
-
-  baseCourses.forEach((c) => {
-    courseMap.set(c.slug, c);
-    courseMap.set(c.id, c);
-  });
-
-  // 1. Fetch live universities from Supabase / CMS / masterData
   // 1. Fetch live universities from Supabase
   const universities = await fetchLiveUniversities();
 
-  // Flag map for quick lookup
   const flagMap: Record<string, string> = {
     germany: "🇩🇪",
     usa: "🇺🇸",
@@ -409,12 +240,10 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
     global: "🌐",
   };
 
-  // 2. Build course catalog dynamically from fetched universities
   // 2. Build course catalog dynamically from fetched Supabase universities
   universities.forEach((u) => {
     const countryFlag = flagMap[u.countrySlug?.toLowerCase() || ""] || "🌐";
 
-    u.programsOffered.forEach((prog) => {
     (u.programsOffered || []).forEach((prog) => {
       let programTitle = "";
       let level = "Postgraduate (Master's)";
@@ -487,7 +316,6 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
           "Geriatric Care",
         ];
       } else {
-        programTitle = `${prog.toUpperCase()} Program`;
         programTitle = `${String(prog).toUpperCase()} Program`;
       }
 
@@ -528,7 +356,6 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
     });
   });
 
-  // 3. Direct fetch from Supabase `courses` table if user has added custom course rows
   // 3. Direct fetch from Supabase `courses` table
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;

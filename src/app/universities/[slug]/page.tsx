@@ -13,13 +13,11 @@ import {
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
+import { PROGRAMS } from "@/lib/data/masterData";
 import {
-  COUNTRIES,
-  PROGRAMS,
-  FEATURED_UNIVERSITIES,
-} from "@/lib/data/masterData";
-import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
-import { fetchLiveUniversities, fetchLiveCountries } from "@/lib/supabase/dataFetchers";
+  fetchLiveUniversities,
+  fetchLiveCountries,
+} from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -44,9 +42,6 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const unis = await fetchLiveUniversities();
-  const uni =
-    unis.find((u) => u.slug === slug) ||
-    FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
   const uni = unis.find((u) => u.slug === slug);
   if (!uni) return { title: "University Not Found" };
 
@@ -63,10 +58,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function UniversityDetailPage({ params }: Props) {
   const { slug } = await params;
-  const unis = await fetchLiveUniversities();
-  const uni =
-    unis.find((u) => u.slug === slug) ||
-    FEATURED_UNIVERSITIES.find((u) => u.slug === slug);
   const [unis, countries] = await Promise.all([
     fetchLiveUniversities(),
     fetchLiveCountries(),
@@ -77,7 +68,6 @@ export default async function UniversityDetailPage({ params }: Props) {
     notFound();
   }
 
-  const country = COUNTRIES.find((c) => c.slug === uni.countrySlug);
   const country = countries.find((c) => c.slug === uni.countrySlug);
 
   return (

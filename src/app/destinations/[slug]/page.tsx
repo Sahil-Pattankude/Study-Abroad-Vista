@@ -14,7 +14,6 @@ import {
 import {
   COUNTRIES,
   PROGRAMS,
-  FEATURED_UNIVERSITIES,
   COUNTRY_ALIASES,
   getCountryBySlug,
 } from "@/lib/data/masterData";
@@ -84,7 +83,6 @@ export default async function CountryHubPage({ params }: Props) {
             : baseEditorial.faqs,
       }
     : null;
-  const universitiesInCountry = FEATURED_UNIVERSITIES.filter(
   const allLiveUnis = await fetchLiveUniversities();
   const universitiesInCountry = allLiveUnis.filter(
     (u) => u.countrySlug === country.slug,
