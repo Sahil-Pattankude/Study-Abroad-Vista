@@ -1,21 +1,21 @@
-import { Country, University } from "@/types";
+import { Country, University, ProgramCategory } from "@/types";
 
 // ============================================================
 // Row mappers — shared by the fallback-tolerant fetchers in
 // lib/supabase/dataFetchers and the strict backend fetchers.
 // ============================================================
 
-function safeArray(val: any, fallback: string[]): string[] {
-  if (Array.isArray(val)) return val;
+function safeArray<T extends string = string>(val: any, fallback: T[]): T[] {
+  if (Array.isArray(val)) return val as T[];
   if (typeof val === "string") {
     try {
       const parsed = JSON.parse(val);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) return parsed as T[];
     } catch {
       const parts = val
         .split(",")
         .map((s) => s.trim())
-        .filter(Boolean);
+        .filter(Boolean) as T[];
       if (parts.length > 0) return parts;
     }
   }
@@ -33,11 +33,11 @@ export function mapSupabaseCountry(c: any): Country {
     currency: c.currency,
     currencySymbol: c.currency_symbol,
     exchangeRateToINR: Number(c.exchange_rate_inr) || 85.0,
-    popularPrograms: safeArray(c.popular_programs, ["ms", "mba"]),
+    popularPrograms: safeArray<ProgramCategory>(c.popular_programs, ["ms", "mba"]),
     avgTuitionINR: c.avg_tuition_inr || "₹15 - 30 Lakhs / yr",
     avgLivingCostINR: c.avg_living_cost_inr || "₹8 - 12 Lakhs / yr",
     postStudyWorkVisa: c.post_study_work_visa || "1 to 2 Years",
-    topIntakes: safeArray(c.top_intakes, ["Fall (Sep)", "Spring (Jan)"]),
+    topIntakes: safeArray<string>(c.top_intakes, ["Fall (Sep)", "Spring (Jan)"]),
     heroTagline: c.hero_tagline || `Study in ${c.name}`,
     overview: c.overview || `Overview for ${c.name}`,
     safetyRating: Number(c.safety_rating) || 4.5,
@@ -81,11 +81,11 @@ export function mapSupabaseUniversity(u: any): University | null {
     city: u.city,
     rankingGlobal: u.ranking_global || 100,
     rankingNational: u.ranking_national || 10,
-    programsOffered: safeArray(u.programs_offered, ["ms", "mba"]),
+    programsOffered: safeArray<ProgramCategory>(u.programs_offered, ["ms", "mba"]),
     tuitionFeeRangeINR: u.tuition_fee_range_inr || "₹15 - 30 Lakhs / yr",
     ieltsMinScore: Number(u.ielts_min_score) || 6.5,
     greGmatRequired: u.gre_gmat_required || false,
-    intakes: safeArray(u.intakes, ["Fall (Sep)", "Spring (Jan)"]),
+    intakes: safeArray<string>(u.intakes, ["Fall (Sep)", "Spring (Jan)"]),
     acceptanceRate: u.acceptance_rate || 30,
     nmcCompliant: u.nmc_compliant || false,
     postStudyWorkMonths: u.post_study_work_months || 24,
