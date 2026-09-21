@@ -62,21 +62,42 @@ export function Header({
   const [universitiesList, setUniversitiesList] = useState<University[]>([]);
 
   useEffect(() => {
-    fetchLiveUniversities().then((res) => {
-      if (res && res.length > 0) {
-        setUniversitiesList(res);
+    let isMounted = true;
+    async function loadCatalog() {
+      try {
+        const res = await fetch("/api/catalog");
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) {
+            if (data.countries && data.countries.length > 0)
+              setCountriesList(data.countries);
+            if (data.programs && data.programs.length > 0)
+              setProgramsList(data.programs);
+            if (data.universities && data.universities.length > 0)
+              setUniversitiesList(data.universities);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Catalog fetch error:", err);
       }
-    });
-    fetchLiveCountries().then((res) => {
-      if (res && res.length > 0) {
-        setCountriesList(res);
-      }
-    });
-    fetchLivePrograms().then((res) => {
-      if (res && res.length > 0) {
-        setProgramsList(res);
-      }
-    });
+
+      // Fallback to direct fetchers
+      fetchLiveCountries().then(
+        (res) => isMounted && res?.length && setCountriesList(res),
+      );
+      fetchLivePrograms().then(
+        (res) => isMounted && res?.length && setProgramsList(res),
+      );
+      fetchLiveUniversities().then(
+        (res) => isMounted && res?.length && setUniversitiesList(res),
+      );
+    }
+
+    loadCatalog();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const anchorCountries = countriesList.filter((c) =>

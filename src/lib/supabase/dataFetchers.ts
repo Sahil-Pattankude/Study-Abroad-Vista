@@ -32,9 +32,28 @@ async function queryWithTimeout<T>(
 }
 
 export async function fetchLiveCountries(): Promise<Country[]> {
+  // Client-side browser request: fetch via internal API route to bypass browser RLS constraints
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/countries");
+      if (res.ok) {
+        const json = await res.json();
+        if (
+          json.countries &&
+          Array.isArray(json.countries) &&
+          json.countries.length > 0
+        ) {
+          return json.countries;
+        }
+      }
+    } catch (err) {
+      console.warn("Client fetch /api/countries error:", err);
+    }
+  }
+
   let list: Country[] = [];
 
-  // 1. Fetch Supabase Countries directly (no static masterData fallback)
+  // Server-side: Direct Supabase query using supabaseAdmin
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(
@@ -85,9 +104,28 @@ export async function fetchLiveCountries(): Promise<Country[]> {
 }
 
 export async function fetchLiveUniversities(): Promise<University[]> {
+  // Client-side browser request: fetch via internal API route to bypass browser RLS constraints
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/universities");
+      if (res.ok) {
+        const json = await res.json();
+        if (
+          json.universities &&
+          Array.isArray(json.universities) &&
+          json.universities.length > 0
+        ) {
+          return json.universities;
+        }
+      }
+    } catch (err) {
+      console.warn("Client fetch /api/universities error:", err);
+    }
+  }
+
   const uniMap = new Map<string, University>();
 
-  // 1. Fetch Supabase Universities directly (no static masterData fallback)
+  // Server-side: Direct Supabase query using supabaseAdmin
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(
@@ -133,6 +171,26 @@ export async function fetchLiveUniversities(): Promise<University[]> {
 }
 
 export async function fetchLivePrograms(): Promise<Program[]> {
+  // Client-side browser request: fetch via internal API route to bypass browser RLS constraints
+  if (typeof window !== "undefined") {
+    try {
+      const res = await fetch("/api/programs");
+      if (res.ok) {
+        const json = await res.json();
+        if (
+          json.programs &&
+          Array.isArray(json.programs) &&
+          json.programs.length > 0
+        ) {
+          return json.programs;
+        }
+      }
+    } catch (err) {
+      console.warn("Client fetch /api/programs error:", err);
+    }
+  }
+
+  // Server-side: Direct Supabase query using supabaseAdmin
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(
