@@ -165,6 +165,79 @@ export async function fetchLivePrograms(): Promise<Program[]> {
   return [];
 }
 
+export const COUNTRY_ALIASES: Record<string, string> = {
+  "united-states": "usa",
+  "united-kingdom": "uk",
+  america: "usa",
+  britain: "uk",
+  england: "uk",
+  holland: "netherlands",
+  dubai: "uae",
+  "united-arab-emirates": "uae",
+  nz: "new-zealand",
+};
+
+export const PROGRAM_ALIASES: Record<string, string> = {
+  "emba-executive": "emba",
+  "executive-mba": "emba",
+  "emba-abroad": "emba",
+  "masters-stem": "ms",
+  "stem-masters": "ms",
+  masters: "ms",
+  "masters-abroad": "ms",
+  "mba-management": "mba",
+  "mba-abroad": "mba",
+  "mbbs-medicine": "mbbs",
+  medicine: "mbbs",
+  "mbbs-abroad": "mbbs",
+  "nursing-healthcare": "nursing",
+  "nursing-abroad": "nursing",
+  "germany-ausbildung": "ausbildung",
+  "ausbildung-germany": "ausbildung",
+  "bachelors-ug": "bachelors",
+  undergraduate: "bachelors",
+  "bachelors-abroad": "bachelors",
+  "phd-doctoral": "phd",
+  "phd-research": "phd",
+  "phd-abroad": "phd",
+  doctoral: "phd",
+};
+
+export async function getLiveCountryBySlug(
+  slug: string,
+): Promise<Country | undefined> {
+  if (!slug) return undefined;
+  let normalized = slug.toLowerCase().trim();
+  if (normalized.startsWith("study-in-")) {
+    normalized = normalized.replace("study-in-", "");
+  }
+  const canonical = COUNTRY_ALIASES[normalized] || normalized;
+  const countries = await fetchLiveCountries();
+  return countries.find((c) => c.slug === canonical || c.id === canonical);
+}
+
+export async function getLiveProgramBySlug(
+  slug: string,
+): Promise<Program | undefined> {
+  if (!slug) return undefined;
+  const normalized = slug.toLowerCase().trim();
+  const canonical = PROGRAM_ALIASES[normalized] || normalized;
+  const programs = await fetchLivePrograms();
+  return programs.find((p) => p.slug === canonical || p.id === canonical);
+}
+
+export async function getLiveUniversityBySlug(
+  slug: string,
+): Promise<University | undefined> {
+  if (!slug) return undefined;
+  const normalized = slug.toLowerCase().trim();
+  const universities = await fetchLiveUniversities();
+  return universities.find(
+    (u) =>
+      u.slug.toLowerCase() === normalized || u.id?.toLowerCase() === normalized,
+  );
+}
+
 export interface ClaimItem {
   id: string;
   universityId: string;

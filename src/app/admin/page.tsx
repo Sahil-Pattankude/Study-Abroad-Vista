@@ -21,13 +21,13 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useState } from "react";
-import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
-import { Country, University } from "@/types";
+import { Country, University, Program } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 import {
   fetchLiveCountries,
   fetchLiveUniversities,
+  fetchLivePrograms,
   fetchLiveClaims,
 } from "@/lib/supabase/dataFetchers";
 import { EditUniversityModal } from "@/components/admin/EditUniversityModal";
@@ -35,8 +35,9 @@ import { EditUniversityModal } from "@/components/admin/EditUniversityModal";
 export default function AdminPortalPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading, login, logout } = useAuth();
-  const [countriesList, setCountriesList] = useState<Country[]>(COUNTRIES);
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [universitiesList, setUniversitiesList] = useState<University[]>([]);
+  const [programsList, setProgramsList] = useState<Program[]>([]);
   const [selectedUniToEdit, setSelectedUniToEdit] = useState<University | null>(
     null,
   );
@@ -90,6 +91,7 @@ export default function AdminPortalPage() {
     if (user && user.role === "admin") {
       fetchLiveCountries().then((res) => setCountriesList(res));
       fetchLiveUniversities().then((res) => setUniversitiesList(res));
+      fetchLivePrograms().then((res) => setProgramsList(res));
       fetchLiveClaims().then((res) => setClaimsList(res));
       refreshClaims();
 
@@ -334,7 +336,7 @@ export default function AdminPortalPage() {
               </span>
             </div>
             <p className="mt-3 text-3xl font-black text-[#102C57]">
-              {COUNTRIES.length} Countries
+              {countriesList.length} Countries
             </p>
             <span className="text-[11px] text-slate-500">
               6 Launch Program Streams
@@ -540,7 +542,7 @@ export default function AdminPortalPage() {
               <span className="text-xs text-slate-400">All Live</span>
             </div>
             <div className="mt-3 space-y-2 text-xs">
-              {PROGRAMS.map((p) => (
+              {programsList.map((p) => (
                 <div
                   key={p.id}
                   className="flex items-center justify-between p-2.5 rounded-lg border border-slate-100"

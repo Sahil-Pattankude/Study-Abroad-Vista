@@ -1,8 +1,20 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Search, X, MapPin, GraduationCap, Building2, ArrowRight } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { useState, useMemo, useEffect } from "react";
+import {
+  Search,
+  X,
+  MapPin,
+  GraduationCap,
+  Building2,
+  ArrowRight,
+} from "lucide-react";
+import {
+  fetchLiveCountries,
+  fetchLivePrograms,
+  fetchLiveUniversities,
+} from "@/lib/supabase/dataFetchers";
+import { Country, Program, University } from "@/types";
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
 interface SearchDialogProps {
@@ -13,9 +25,27 @@ interface SearchDialogProps {
 
 export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   const [query, setQuery] = useState("");
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [universities, setUniversities] = useState<University[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchLiveCountries().then((c) => {
+        if (c && c.length > 0) setCountries(c);
+      });
+      fetchLivePrograms().then((p) => {
+        if (p && p.length > 0) setPrograms(p);
+      });
+      fetchLiveUniversities().then((u) => {
+        if (u && u.length > 0) setUniversities(u);
+      });
+    }
+  }, [isOpen]);
 
   const searchResults = useMemo(() => {
-    if (!query.trim()) return { countries: [], programs: [], universities: [], testPreps: [] };
+    if (!query.trim())
+      return { countries: [], programs: [], universities: [], testPreps: [] };
     const q = query.toLowerCase();
 
     return {
@@ -25,19 +55,35 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           t.shortName.toLowerCase().includes(q) ||
           t.fullName.toLowerCase().includes(q) ||
           t.category.toLowerCase().includes(q) ||
-          (q === "test prep" || q === "exam" || q === "ielts" || q === "gre" || q === "nclex")
+          q === "test prep" ||
+          q === "exam" ||
+          q === "ielts" ||
+          q === "gre" ||
+          q === "nclex",
       ).slice(0, 3),
-      countries: COUNTRIES.filter(
-        (c) => c.name.toLowerCase().includes(q) || c.heroTagline.toLowerCase().includes(q)
-      ).slice(0, 3),
-      programs: PROGRAMS.filter(
-        (p) => p.name.toLowerCase().includes(q) || p.keyFields.some((f) => f.toLowerCase().includes(q))
-      ).slice(0, 3),
-      universities: FEATURED_UNIVERSITIES.filter(
-        (u) => u.name.toLowerCase().includes(q) || u.city.toLowerCase().includes(q)
-      ).slice(0, 3),
+      countries: countries
+        .filter(
+          (c) =>
+            c.name.toLowerCase().includes(q) ||
+            (c.heroTagline || "").toLowerCase().includes(q),
+        )
+        .slice(0, 3),
+      programs: programs
+        .filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            (p.keyFields || []).some((f) => f.toLowerCase().includes(q)),
+        )
+        .slice(0, 3),
+      universities: universities
+        .filter(
+          (u) =>
+            u.name.toLowerCase().includes(q) ||
+            (u.city || "").toLowerCase().includes(q),
+        )
+        .slice(0, 3),
     };
-  }, [query]);
+  }, [query, countries, programs, universities]);
 
   if (!isOpen) return null;
 
@@ -69,7 +115,13 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <div className="py-6 text-center text-slate-400">
               <p className="font-semibold text-slate-600">Quick suggestions:</p>
               <div className="mt-2 flex flex-wrap justify-center gap-1.5">
-                {["Germany Free Tuition", "USA STEM OPT", "TUM Munich", "MBBS in Uzbekistan", "Ausbildung"].map((s) => (
+                {[
+                  "Germany Free Tuition",
+                  "USA STEM OPT",
+                  "TUM Munich",
+                  "MBBS in Uzbekistan",
+                  "Ausbildung",
+                ].map((s) => (
                   <button
                     key={s}
                     onClick={() => setQuery(s)}
@@ -102,7 +154,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                           </span>
                           <div>
                             <p className="font-bold text-slate-800">{t.name}</p>
-                            <p className="text-[11px] text-slate-500">{t.category} • Fee: {t.feeINR}</p>
+                            <p className="text-[11px] text-slate-500">
+                              {t.category} • Fee: {t.feeINR}
+                            </p>
                           </div>
                         </div>
                         <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
@@ -130,7 +184,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                           <span className="text-base">{c.flagEmoji}</span>
                           <div>
                             <p className="font-bold text-slate-800">{c.name}</p>
-                            <p className="text-[11px] text-slate-500">{c.postStudyWorkVisa} • {c.avgTuitionINR}</p>
+                            <p className="text-[11px] text-slate-500">
+                              {c.postStudyWorkVisa} • {c.avgTuitionINR}
+                            </p>
                           </div>
                         </div>
                         <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
@@ -156,7 +212,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                           <Building2 className="h-4 w-4 text-[#EA5C2B]" />
                           <div>
                             <p className="font-bold text-slate-800">{u.name}</p>
-                            <p className="text-[11px] text-slate-500">{u.city}, {u.country} • Rank #{u.rankingGlobal}</p>
+                            <p className="text-[11px] text-slate-500">
+                              {u.city}, {u.country} • Rank #{u.rankingGlobal}
+                            </p>
                           </div>
                         </div>
                         <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
@@ -186,7 +244,9 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                           <GraduationCap className="h-4 w-4 text-[#102C57]" />
                           <div>
                             <p className="font-bold text-slate-800">{p.name}</p>
-                            <p className="text-[11px] text-slate-500">{p.duration} • Top: {p.topDestinations.join(", ")}</p>
+                            <p className="text-[11px] text-slate-500">
+                              {p.duration} • Top: {p.topDestinations.join(", ")}
+                            </p>
                           </div>
                         </div>
                         <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
@@ -203,7 +263,8 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                   <div className="py-6 text-center text-slate-500">
                     <p>No direct matches found for &quot;{query}&quot;.</p>
                     <p className="mt-1 text-[11px] text-slate-400">
-                      Try searching with our 24/7 AI Counsellor for flexible recommendations!
+                      Try searching with our 24/7 AI Counsellor for flexible
+                      recommendations!
                     </p>
                   </div>
                 )}

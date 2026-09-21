@@ -18,10 +18,10 @@ import {
   Award,
 } from "lucide-react";
 import {
-  COUNTRIES,
-  PROGRAMS,
-  FEATURED_UNIVERSITIES,
-} from "@/lib/data/masterData";
+  fetchLiveCountries,
+  fetchLivePrograms,
+  fetchLiveUniversities,
+} from "@/lib/supabase/dataFetchers";
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
 export const metadata: Metadata = {
@@ -37,10 +37,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SitemapPage() {
-  const tier1Countries = COUNTRIES.filter((c) => c.tier === "Tier 1");
-  const tier2Countries = COUNTRIES.filter((c) => c.tier === "Tier 2");
-  const tier3Countries = COUNTRIES.filter((c) => c.tier === "Tier 3");
+export default async function SitemapPage() {
+  const [countries, programs, universities] = await Promise.all([
+    fetchLiveCountries(),
+    fetchLivePrograms(),
+    fetchLiveUniversities(),
+  ]);
+
+  const tier1Countries = countries.filter((c) => c.tier === "Tier 1");
+  const tier2Countries = countries.filter((c) => c.tier === "Tier 2");
+  const tier3Countries = countries.filter((c) => c.tier === "Tier 3");
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
@@ -241,7 +247,7 @@ export default function SitemapPage() {
               <span>Academic Degree Programs (8 Disciplines)</span>
             </h2>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-              {PROGRAMS.map((p) => (
+              {programs.map((p) => (
                 <Link
                   key={p.id}
                   href={`/programs/${p.slug}`}
@@ -270,7 +276,7 @@ export default function SitemapPage() {
               <BookOpen className="h-5 w-5 text-[#EA5C2B]" />
               <span>Test Prep & Licensing Blueprints (9 Global Exams)</span>
             </h2>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs">
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-xs">
               {/* English */}
               <div>
                 <p className="font-bold text-blue-700 uppercase tracking-wider text-[11px] mb-2.5">
@@ -312,12 +318,45 @@ export default function SitemapPage() {
                   </li>
                   <li>
                     <Link
-                      href="/test-prep/duolingo"
+                      href="/test-prep/duolingo-det"
                       className="block rounded-xl p-2.5 bg-slate-50 hover:bg-blue-50/70 border border-slate-100 transition"
                     >
-                      <p className="font-bold text-slate-900">Duolingo DET</p>
+                      <p className="font-bold text-slate-900">Duolingo (DET)</p>
                       <p className="text-[10px] text-slate-500">
-                        Duolingo • ₹5,400
+                        Duolingo • ₹4,900
+                      </p>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* German */}
+              <div>
+                <p className="font-bold text-amber-700 uppercase tracking-wider text-[11px] mb-2.5">
+                  German Language (Free Tuition)
+                </p>
+                <ul className="space-y-2">
+                  <li>
+                    <Link
+                      href="/test-prep/goethe-zertifikat"
+                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-amber-50/70 border border-slate-100 transition"
+                    >
+                      <p className="font-bold text-slate-900">
+                        Goethe-Zertifikat B1/B2
+                      </p>
+                      <p className="text-[10px] text-slate-500">
+                        Max Mueller Bhavan • ₹9,800
+                      </p>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/test-prep/testdaf"
+                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-amber-50/70 border border-slate-100 transition"
+                    >
+                      <p className="font-bold text-slate-900">TestDaF</p>
+                      <p className="text-[10px] text-slate-500">
+                        g.a.s.t. • TDN 4/5
                       </p>
                     </Link>
                   </li>
@@ -326,14 +365,14 @@ export default function SitemapPage() {
 
               {/* Graduate */}
               <div>
-                <p className="font-bold text-amber-800 uppercase tracking-wider text-[11px] mb-2.5">
-                  Graduate & Business Admissions
+                <p className="font-bold text-indigo-700 uppercase tracking-wider text-[11px] mb-2.5">
+                  Graduate Aptitude Tests
                 </p>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       href="/test-prep/gre"
-                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-amber-50/70 border border-slate-100 transition"
+                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-indigo-50/70 border border-slate-100 transition"
                     >
                       <p className="font-bold text-slate-900">
                         GRE General Test
@@ -346,7 +385,7 @@ export default function SitemapPage() {
                   <li>
                     <Link
                       href="/test-prep/gmat"
-                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-amber-50/70 border border-slate-100 transition"
+                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-indigo-50/70 border border-slate-100 transition"
                     >
                       <p className="font-bold text-slate-900">
                         GMAT Focus Edition
@@ -401,6 +440,19 @@ export default function SitemapPage() {
                       </p>
                       <p className="text-[10px] text-slate-500">
                         CBLA • ₹33,000
+                      </p>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/test-prep/fmge-next"
+                      className="block rounded-xl p-2.5 bg-slate-50 hover:bg-emerald-50/70 border border-slate-100 transition"
+                    >
+                      <p className="font-bold text-slate-900">
+                        FMGE / NExT (India)
+                      </p>
+                      <p className="text-[10px] text-slate-500">
+                        NBEMS • Licensing in India
                       </p>
                     </Link>
                   </li>
@@ -459,7 +511,7 @@ export default function SitemapPage() {
               <span>Featured Global Universities</span>
             </h2>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-              {FEATURED_UNIVERSITIES.map((u) => (
+              {universities.map((u) => (
                 <Link
                   key={u.id}
                   href={`/universities/${u.slug}`}

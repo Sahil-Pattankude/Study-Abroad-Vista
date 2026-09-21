@@ -21,7 +21,6 @@ import {
   Loader2,
   Lock,
 } from "lucide-react";
-import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { useAuth } from "@/lib/auth/AuthContext";
 
 import { useState } from "react";
@@ -36,7 +35,7 @@ export default function StudentAccountDashboard() {
 
   useEffect(() => {
     async function loadShortlists() {
-      let allUnis = FEATURED_UNIVERSITIES;
+      let allUnis: University[] = [];
       try {
         const live = await fetchLiveUniversities();
         if (live && live.length > 0) {

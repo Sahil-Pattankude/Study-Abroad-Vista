@@ -21,21 +21,16 @@ import {
   ChevronRight,
 } from "lucide-react";
 import {
-  COUNTRIES,
-  PROGRAMS,
-  FEATURED_UNIVERSITIES,
-} from "@/lib/data/masterData";
-import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
-import { University } from "@/types";
+  fetchLiveUniversities,
+  fetchLiveCountries,
+  fetchLivePrograms,
+} from "@/lib/supabase/dataFetchers";
+import { University, Country, Program } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 
 const ANCHOR_SLUGS = ["usa", "uk", "canada", "australia", "germany", "ireland"];
-const ANCHOR_COUNTRIES = COUNTRIES.filter((c) => ANCHOR_SLUGS.includes(c.slug));
-const TIER_1_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 1");
-const TIER_2_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 2");
-const TIER_3_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 3");
 
 interface HeaderProps {
   onOpenSearch?: () => void;
@@ -62,9 +57,9 @@ export function Header({
   const [toolsOpen, setToolsOpen] = useState(false);
   const [testPrepOpen, setTestPrepOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [universitiesList, setUniversitiesList] = useState<University[]>(
-    FEATURED_UNIVERSITIES,
-  );
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
+  const [programsList, setProgramsList] = useState<Program[]>([]);
+  const [universitiesList, setUniversitiesList] = useState<University[]>([]);
 
   useEffect(() => {
     fetchLiveUniversities().then((res) => {
@@ -72,7 +67,24 @@ export function Header({
         setUniversitiesList(res);
       }
     });
+    fetchLiveCountries().then((res) => {
+      if (res && res.length > 0) {
+        setCountriesList(res);
+      }
+    });
+    fetchLivePrograms().then((res) => {
+      if (res && res.length > 0) {
+        setProgramsList(res);
+      }
+    });
   }, []);
+
+  const anchorCountries = countriesList.filter((c) =>
+    ANCHOR_SLUGS.includes(c.slug),
+  );
+  const tier1Countries = countriesList.filter((c) => c.tier === "Tier 1");
+  const tier2Countries = countriesList.filter((c) => c.tier === "Tier 2");
+  const tier3Countries = countriesList.filter((c) => c.tier === "Tier 3");
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all">
@@ -121,7 +133,7 @@ export function Header({
                         Tier 1 (High Demand)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_1_COUNTRIES.map((c) => (
+                        {tier1Countries.map((c) => (
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
@@ -144,7 +156,7 @@ export function Header({
                         Tier 2 (Affordable / Low-Fee)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_2_COUNTRIES.map((c) => (
+                        {tier2Countries.map((c) => (
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
@@ -167,7 +179,7 @@ export function Header({
                         Tier 3 (Medical / Low-Cost)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_3_COUNTRIES.map((c) => (
+                        {tier3Countries.map((c) => (
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
@@ -199,7 +211,7 @@ export function Header({
             <button
               aria-label="Open programs menu"
               aria-expanded={programsOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#102C57] py-2 transition"
             >
               <span>Programs</span>
               <span className="text-[10px] text-slate-400 font-normal">
@@ -212,7 +224,7 @@ export function Header({
               <div className="absolute left-0 top-full pt-2">
                 <div className="w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
                   <ul className="space-y-1.5">
-                    {PROGRAMS.map((p) => (
+                    {programsList.map((p) => (
                       <li key={p.id}>
                         <Link
                           href={`/programs/${p.slug}`}
@@ -867,7 +879,7 @@ export function Header({
 
               {/* Anchor Six Grid Cards */}
               <div className="grid grid-cols-2 gap-2">
-                {ANCHOR_COUNTRIES.map((c) => (
+                {anchorCountries.map((c) => (
                   <Link
                     key={c.id}
                     href={`/study-in-${c.slug}`}
@@ -889,8 +901,9 @@ export function Header({
 
               {/* Secondary Tier 2 & Tier 3 quick chips */}
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {TIER_2_COUNTRIES.slice(0, 4)
-                  .concat(TIER_3_COUNTRIES.slice(0, 3))
+                {tier2Countries
+                  .slice(0, 4)
+                  .concat(tier3Countries.slice(0, 3))
                   .map((c) => (
                     <Link
                       key={c.id}
@@ -911,7 +924,7 @@ export function Header({
                 Study Streams (8 Disciplines)
               </h3>
               <div className="grid grid-cols-2 gap-2 text-xs">
-                {PROGRAMS.map((p) => (
+                {programsList.map((p) => (
                   <Link
                     key={p.id}
                     href={`/programs/${p.slug}`}

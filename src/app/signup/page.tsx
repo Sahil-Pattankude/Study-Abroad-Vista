@@ -14,9 +14,14 @@ import {
   User,
   ArrowRight,
 } from "lucide-react";
+import { useEffect } from "react";
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
-import { COUNTRIES, UNIVERSITIES } from "@/lib/data/masterData";
+import {
+  fetchLiveCountries,
+  fetchLiveUniversities,
+} from "@/lib/supabase/dataFetchers";
+import { Country, University } from "@/types";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 
 export default function SignupPage() {
@@ -25,6 +30,8 @@ export default function SignupPage() {
   const [role, setRole] = useState<"student" | "buyer" | "university">(
     "student",
   );
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
+  const [universitiesList, setUniversitiesList] = useState<University[]>([]);
   const [selectedCountrySlug, setSelectedCountrySlug] = useState("germany");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,6 +43,15 @@ export default function SignupPage() {
   const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchLiveCountries().then((c) => {
+      if (c && c.length > 0) setCountriesList(c);
+    });
+    fetchLiveUniversities().then((u) => {
+      if (u && u.length > 0) setUniversitiesList(u);
+    });
+  }, []);
 
   const handleEmailChange = (val: string) => {
     setEmail(val);
@@ -91,7 +107,7 @@ export default function SignupPage() {
   const handleOrgChange = (val: string) => {
     setOrganization(val);
     if (role === "university") {
-      const matched = UNIVERSITIES.find(
+      const matched = universitiesList.find(
         (u) =>
           u.name.toLowerCase() === val.toLowerCase() ||
           u.slug === val.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
@@ -165,7 +181,7 @@ export default function SignupPage() {
 
     try {
       // 1. Call server API to register user directly into Supabase (auto-confirmed, no verification email)
-      const matchedCountryObj = COUNTRIES.find(
+      const matchedCountryObj = countriesList.find(
         (c) => c.slug === selectedCountrySlug,
       );
 
@@ -242,7 +258,9 @@ export default function SignupPage() {
     }
   };
 
-  const currentCountry = COUNTRIES.find((c) => c.slug === selectedCountrySlug);
+  const currentCountry = countriesList.find(
+    (c) => c.slug === selectedCountrySlug,
+  );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between selection:bg-[#EA5C2B]/15">
@@ -465,8 +483,16 @@ export default function SignupPage() {
                     </label>
                     <div className="relative flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
                       <CountryFlag
-                        code={currentCountry?.code || "DE"}
-                        name={currentCountry?.name}
+                        code={
+                          countriesList.find(
+                            (c) => c.slug === selectedCountrySlug,
+                          )?.code || "DE"
+                        }
+                        name={
+                          countriesList.find(
+                            (c) => c.slug === selectedCountrySlug,
+                          )?.name
+                        }
                         size="sm"
                       />
                       <select
@@ -475,7 +501,7 @@ export default function SignupPage() {
                         onChange={(e) => setSelectedCountrySlug(e.target.value)}
                         className="w-full bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer pl-2"
                       >
-                        {COUNTRIES.map((c) => (
+                        {countriesList.map((c) => (
                           <option key={c.id} value={c.slug}>
                             {c.name} ({c.tier})
                           </option>
@@ -509,7 +535,7 @@ export default function SignupPage() {
                     />
                     {role === "university" && (
                       <datalist id="university-options">
-                        {UNIVERSITIES.map((u) => (
+                        {universitiesList.map((u) => (
                           <option key={u.id} value={u.name}>
                             {u.city}, {u.country}
                           </option>

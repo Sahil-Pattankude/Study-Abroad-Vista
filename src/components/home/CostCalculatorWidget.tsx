@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calculator, Banknote, HelpCircle, ArrowRight } from "lucide-react";
-import { COUNTRIES } from "@/lib/data/masterData";
+import { fetchLiveCountries } from "@/lib/supabase/dataFetchers";
+import { Country } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 
@@ -13,12 +14,22 @@ interface CostCalculatorProps {
 export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
   const homeModals = useHomeModals();
   const handleLead = onOpenLeadModal || homeModals.openLeadModal;
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [countrySlug, setCountrySlug] = useState("germany");
   const [durationYears, setDurationYears] = useState(2);
-  const [accommodation, setAccommodation] = useState<"shared" | "hostel" | "studio">("shared");
+  const [accommodation, setAccommodation] = useState<
+    "shared" | "hostel" | "studio"
+  >("shared");
   const [includePartTimeOffset, setIncludePartTimeOffset] = useState(true);
 
-  const selectedCountry = COUNTRIES.find((c) => c.slug === countrySlug) || COUNTRIES[0];
+  useEffect(() => {
+    fetchLiveCountries().then((c) => {
+      if (c && c.length > 0) setCountriesList(c);
+    });
+  }, []);
+
+  const selectedCountry = countriesList.find((c) => c.slug === countrySlug);
+  const exchangeRate = selectedCountry?.exchangeRateToINR || 90;
 
   // Base tuition estimates by country (annual in INR)
   const tuitionMap: Record<string, number> = {
@@ -44,8 +55,9 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
   };
 
   // Base monthly living costs in local currency * exchange rate
-  const baseMonthlyLivingINR = (selectedCountry.exchangeRateToINR * 850);
-  const accommodationMultiplier = accommodation === "studio" ? 1.4 : accommodation === "hostel" ? 0.9 : 1.0;
+  const baseMonthlyLivingINR = exchangeRate * 850;
+  const accommodationMultiplier =
+    accommodation === "studio" ? 1.4 : accommodation === "hostel" ? 0.9 : 1.0;
   const annualLivingINR = baseMonthlyLivingINR * 12 * accommodationMultiplier;
 
   // Total Annual Tuition
@@ -55,11 +67,12 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
   const annualMiscINR = 180000;
 
   // Potential Part-time Work Offsets (20 hrs/week permitted in most countries)
-  const annualPartTimeEarningsINR = includePartTimeOffset 
-    ? (selectedCountry.exchangeRateToINR * 14 * 20 * 42) // approx 14 currency units/hr, 20 hrs/wk, 42 wks
+  const annualPartTimeEarningsINR = includePartTimeOffset
+    ? exchangeRate * 14 * 20 * 42 // approx 14 currency units/hr, 20 hrs/wk, 42 wks
     : 0;
 
-  const totalGrossCostINR = (annualTuitionINR + annualLivingINR + annualMiscINR) * durationYears;
+  const totalGrossCostINR =
+    (annualTuitionINR + annualLivingINR + annualMiscINR) * durationYears;
   const totalOffsetINR = annualPartTimeEarningsINR * durationYears;
   const netEstimatedBudgetINR = Math.max(0, totalGrossCostINR - totalOffsetINR);
 
@@ -79,14 +92,18 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                 Study Abroad Cost & Living Calculator
               </h2>
               <p className="mt-2 text-sm text-slate-300">
-                Accurately estimate total tuition, accommodation, and part-time earnings converted to Indian Rupees (INR).
+                Accurately estimate total tuition, accommodation, and part-time
+                earnings converted to Indian Rupees (INR).
               </p>
 
               {/* Form Controls */}
               <div className="mt-8 space-y-5">
                 {/* Destination Dropdown */}
                 <div>
-                  <label htmlFor="calc-destination" className="block text-xs font-bold uppercase tracking-wider text-slate-300">
+                  <label
+                    htmlFor="calc-destination"
+                    className="block text-xs font-bold uppercase tracking-wider text-slate-300"
+                  >
                     Target Destination
                   </label>
                   <select
@@ -96,9 +113,10 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                     onChange={(e) => setCountrySlug(e.target.value)}
                     className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800/90 px-4 py-3 text-sm font-semibold text-white focus:border-[#EA5C2B] focus:outline-none"
                   >
-                    {COUNTRIES.map((c) => (
+                    {countriesList.map((c) => (
                       <option key={c.id} value={c.slug}>
-                        {c.flagEmoji} {c.name} ({c.currency} ≈ ₹{c.exchangeRateToINR})
+                        {c.flagEmoji} {c.name} ({c.currency} ≈ ₹
+                        {c.exchangeRateToINR})
                       </option>
                     ))}
                   </select>
@@ -141,7 +159,9 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                       <button
                         key={item.key}
                         type="button"
-                        onClick={() => setAccommodation(item.key as typeof accommodation)}
+                        onClick={() =>
+                          setAccommodation(item.key as typeof accommodation)
+                        }
                         className={`rounded-xl py-2.5 text-xs font-bold transition ${
                           accommodation === item.key
                             ? "bg-white text-[#102C57] shadow-md"
@@ -163,8 +183,12 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                     onChange={(e) => setIncludePartTimeOffset(e.target.checked)}
                     className="h-4 w-4 rounded accent-[#EA5C2B]"
                   />
-                  <label htmlFor="parttime" className="cursor-pointer text-xs font-medium text-slate-200">
-                    Factor in 20 hrs/week permitted part-time student work earnings offset
+                  <label
+                    htmlFor="parttime"
+                    className="cursor-pointer text-xs font-medium text-slate-200"
+                  >
+                    Factor in 20 hrs/week permitted part-time student work
+                    earnings offset
                   </label>
                 </div>
               </div>
@@ -181,7 +205,9 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                   <span className="text-3xl font-black text-white sm:text-4xl">
                     {formatCurrency(netEstimatedBudgetINR)}
                   </span>
-                  <span className="text-xs text-slate-400">Total for {durationYears} Yrs</span>
+                  <span className="text-xs text-slate-400">
+                    Total for {durationYears} Yrs
+                  </span>
                 </div>
 
                 {/* Detailed Breakdown */}
@@ -221,7 +247,9 @@ export function CostCalculatorWidget({ onOpenLeadModal }: CostCalculatorProps) {
                   <div className="flex items-start gap-2">
                     <HelpCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#EA5C2B]" />
                     <p>
-                      Exchange rate: 1 {selectedCountry.currency} = ₹{selectedCountry.exchangeRateToINR}. Actual costs vary by university ranking and lifestyle.
+                      Exchange rate: 1 {selectedCountry?.currency || "EUR"} = ₹
+                      {selectedCountry?.exchangeRateToINR || 90}. Actual costs
+                      vary by university ranking and lifestyle.
                     </p>
                   </div>
                 </div>

@@ -23,13 +23,9 @@ import { supabase } from "@/lib/supabase/client";
 import { EditUniversityProfileModal } from "@/components/university/EditUniversityProfileModal";
 import {
   fetchLiveUniversities,
+  fetchLiveCountries,
   fetchLiveClaims,
 } from "@/lib/supabase/dataFetchers";
-import {
-  FEATURED_UNIVERSITIES,
-  UNIVERSITIES,
-  COUNTRIES,
-} from "@/lib/data/masterData";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 
 interface ProgramItem {
@@ -119,63 +115,8 @@ function getInitialProfileForUser(userObj?: any) {
   }
 
   // If user registered with explicit organization/university name or valid domain
-  const emailDomain = email.includes("@")
-    ? email.split("@")[1].toLowerCase().trim()
-    : "";
-  const uniList =
-    typeof UNIVERSITIES !== "undefined" && Array.isArray(UNIVERSITIES)
-      ? UNIVERSITIES
-      : typeof FEATURED_UNIVERSITIES !== "undefined" &&
-          Array.isArray(FEATURED_UNIVERSITIES)
-        ? FEATURED_UNIVERSITIES
-        : [];
-
-  const matchedByDomain = emailDomain
-    ? uniList.find((u) => u?.official_email_domain === emailDomain)
-    : null;
-
-  if (matchedByDomain) {
-    return {
-      id: matchedByDomain.id,
-      name: matchedByDomain.name,
-      city: matchedByDomain.city,
-      country: userCountry || matchedByDomain.country,
-      rankingGlobal: matchedByDomain.rankingGlobal,
-      rankingNational: matchedByDomain.rankingNational || 1,
-      tuitionFeeRangeINR: matchedByDomain.tuitionFeeRangeINR,
-      ieltsMinScore: matchedByDomain.ieltsMinScore,
-      acceptanceRate: matchedByDomain.acceptanceRate,
-      postStudyWorkMonths: matchedByDomain.postStudyWorkMonths,
-    };
-  }
-
   if (derivedOrg && derivedOrg.trim().length > 0) {
     const slug = derivedOrg.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    const matchedUni = Array.isArray(uniList)
-      ? uniList.find(
-          (u) =>
-            u?.slug === slug ||
-            (u?.name &&
-              u.name.toLowerCase().includes(derivedOrg.toLowerCase())) ||
-            (u?.name &&
-              derivedOrg.toLowerCase().includes(u.name.toLowerCase())),
-        )
-      : null;
-    if (matchedUni) {
-      return {
-        id: matchedUni.id,
-        name: matchedUni.name,
-        city: matchedUni.city,
-        country: userCountry || matchedUni.country,
-        rankingGlobal: matchedUni.rankingGlobal,
-        rankingNational: matchedUni.rankingNational || 1,
-        tuitionFeeRangeINR: matchedUni.tuitionFeeRangeINR,
-        ieltsMinScore: matchedUni.ieltsMinScore,
-        acceptanceRate: matchedUni.acceptanceRate,
-        postStudyWorkMonths: matchedUni.postStudyWorkMonths,
-      };
-    }
-
     return {
       id: slug,
       name: derivedOrg,
@@ -461,11 +402,8 @@ export default function UniversityPortalPage() {
             (matchedClaim.universityName.toLowerCase().includes("holland")
               ? "netherlands"
               : "germany");
-          const countriesList =
-            typeof COUNTRIES !== "undefined" && Array.isArray(COUNTRIES)
-              ? COUNTRIES
-              : [];
-          const matchedCountryObj = countriesList.find(
+          const liveCountries = await fetchLiveCountries();
+          const matchedCountryObj = liveCountries.find(
             (c) => c?.slug === claimCountrySlug || c?.id === claimCountrySlug,
           );
           const claimCountryName =

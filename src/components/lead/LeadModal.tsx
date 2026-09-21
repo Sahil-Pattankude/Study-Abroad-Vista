@@ -1,8 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, CheckCircle, ShieldCheck, ArrowRight, Loader2, Sparkles } from "lucide-react";
-import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
+import {
+  X,
+  CheckCircle,
+  ShieldCheck,
+  ArrowRight,
+  Loader2,
+  Sparkles,
+} from "lucide-react";
+import {
+  fetchLiveCountries,
+  fetchLivePrograms,
+} from "@/lib/supabase/dataFetchers";
+import { Country, Program } from "@/types";
 
 interface LeadModalProps {
   isOpen: boolean;
@@ -15,7 +26,11 @@ function safeJsonStringify(obj: Record<string, any>): string {
     const clean: Record<string, string> = {};
     for (const k in obj) {
       const v = obj[k];
-      if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
+      if (
+        typeof v === "string" ||
+        typeof v === "number" ||
+        typeof v === "boolean"
+      ) {
         clean[k] = String(v);
       } else {
         clean[k] = "";
@@ -28,7 +43,10 @@ function safeJsonStringify(obj: Record<string, any>): string {
 }
 
 export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
-  const initialCountry = typeof defaultCountry === "string" ? defaultCountry : "germany";
+  const initialCountry =
+    typeof defaultCountry === "string" ? defaultCountry : "germany";
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
+  const [programsList, setProgramsList] = useState<Program[]>([]);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,6 +58,15 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    fetchLiveCountries().then((c) => {
+      if (c && c.length > 0) setCountriesList(c);
+    });
+    fetchLivePrograms().then((p) => {
+      if (p && p.length > 0) setProgramsList(p);
+    });
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -58,7 +85,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
     setErrorMsg("");
 
     if (!phone.match(/^[6-9]\d{9}$/)) {
-      setErrorMsg("Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.");
+      setErrorMsg(
+        "Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.",
+      );
       return;
     }
 
@@ -69,10 +98,18 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
         fullName: String(fullName || ""),
         email: String(email || ""),
         phone: String(phone || ""),
-        countryTarget: String(typeof countryTarget === "string" ? countryTarget : "germany"),
-        programTarget: String(typeof programTarget === "string" ? programTarget : "ms"),
-        budgetRangeINR: String(typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs"),
-        intakeYear: String(typeof intakeYear === "string" ? intakeYear : "2026 / 2027"),
+        countryTarget: String(
+          typeof countryTarget === "string" ? countryTarget : "germany",
+        ),
+        programTarget: String(
+          typeof programTarget === "string" ? programTarget : "ms",
+        ),
+        budgetRangeINR: String(
+          typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs",
+        ),
+        intakeYear: String(
+          typeof intakeYear === "string" ? intakeYear : "2026 / 2027",
+        ),
       };
 
       const res = await fetch("/api/leads/submit", {
@@ -94,20 +131,33 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
           fullName: String(fullName || ""),
           email: String(email || ""),
           phone: String(phone || ""),
-          countryTarget: String(typeof countryTarget === "string" ? countryTarget : "germany"),
-          programTarget: String(typeof programTarget === "string" ? programTarget : "ms"),
-          budgetRangeINR: String(typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs"),
-          intakeYear: String(typeof intakeYear === "string" ? intakeYear : "2026 / 2027"),
+          countryTarget: String(
+            typeof countryTarget === "string" ? countryTarget : "germany",
+          ),
+          programTarget: String(
+            typeof programTarget === "string" ? programTarget : "ms",
+          ),
+          budgetRangeINR: String(
+            typeof budgetRangeINR === "string" ? budgetRangeINR : "15-25Lakhs",
+          ),
+          intakeYear: String(
+            typeof intakeYear === "string" ? intakeYear : "2026 / 2027",
+          ),
           createdAt: new Date().toISOString(),
         };
-        
+
         let existing: any[] = [];
         try {
           const raw = localStorage.getItem("vista_submitted_leads");
           if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed)) {
-              existing = parsed.filter(item => item && typeof item === "object" && typeof item.fullName === "string");
+              existing = parsed.filter(
+                (item) =>
+                  item &&
+                  typeof item === "object" &&
+                  typeof item.fullName === "string",
+              );
             }
           }
         } catch {
@@ -115,7 +165,10 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
         }
 
         try {
-          localStorage.setItem("vista_submitted_leads", JSON.stringify([localLead, ...existing]));
+          localStorage.setItem(
+            "vista_submitted_leads",
+            JSON.stringify([localLead, ...existing]),
+          );
         } catch (stErr) {
           console.warn("localStorage setItem warning:", stErr);
         }
@@ -126,7 +179,11 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
 
       setSubmitted(true);
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -151,7 +208,17 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               Application Profile Received!
             </h3>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">
-              Thank you, <span className="font-semibold text-slate-900">{fullName}</span>. A certified university admissions counselor will review your profile for <span className="font-semibold text-slate-900">{(typeof countryTarget === "string" ? countryTarget : "GERMANY").toUpperCase()}</span> and connect via WhatsApp/Phone within 24 hours.
+              Thank you,{" "}
+              <span className="font-semibold text-slate-900">{fullName}</span>.
+              A certified university admissions counselor will review your
+              profile for{" "}
+              <span className="font-semibold text-slate-900">
+                {(typeof countryTarget === "string"
+                  ? countryTarget
+                  : "GERMANY"
+                ).toUpperCase()}
+              </span>{" "}
+              and connect via WhatsApp/Phone within 24 hours.
             </p>
             <button
               onClick={() => {
@@ -178,7 +245,8 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               Get Matched with Top Global Universities
             </h3>
             <p className="mt-1 text-xs text-slate-500">
-              Zero fee. Verified eligibility check across 19 destinations & 6 study streams.
+              Zero fee. Verified eligibility check across 19 destinations & 6
+              study streams.
             </p>
 
             {errorMsg && (
@@ -190,7 +258,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
             <form onSubmit={handleSubmit} className="mt-5 space-y-3.5 text-xs">
               {/* Name */}
               <div>
-                <label className="block font-bold text-slate-700">Full Name *</label>
+                <label className="block font-bold text-slate-700">
+                  Full Name *
+                </label>
                 <input
                   type="text"
                   required
@@ -204,7 +274,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               {/* Email & Phone */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="block font-bold text-slate-700">Email Address *</label>
+                  <label className="block font-bold text-slate-700">
+                    Email Address *
+                  </label>
                   <input
                     type="email"
                     required
@@ -216,7 +288,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700">Mobile Number (India) *</label>
+                  <label className="block font-bold text-slate-700">
+                    Mobile Number (India) *
+                  </label>
                   <div className="mt-1 flex rounded-xl border border-slate-200 focus-within:border-[#102C57]">
                     <span className="flex items-center rounded-l-xl bg-slate-50 px-2.5 text-slate-500 font-semibold">
                       🇮🇳 +91
@@ -237,13 +311,15 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               {/* Target Country & Program */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="block font-bold text-slate-700">Target Country</label>
+                  <label className="block font-bold text-slate-700">
+                    Target Country
+                  </label>
                   <select
                     value={countryTarget}
                     onChange={(e) => setCountryTarget(e.target.value)}
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-slate-800 focus:border-[#102C57] focus:outline-none"
                   >
-                    {COUNTRIES.map((c) => (
+                    {countriesList.map((c) => (
                       <option key={c.id} value={c.slug}>
                         {c.flagEmoji} {c.name}
                       </option>
@@ -252,13 +328,15 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700">Program / Degree</label>
+                  <label className="block font-bold text-slate-700">
+                    Program / Degree
+                  </label>
                   <select
                     value={programTarget}
                     onChange={(e) => setProgramTarget(e.target.value)}
                     className="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-slate-800 focus:border-[#102C57] focus:outline-none"
                   >
-                    {PROGRAMS.map((p) => (
+                    {programsList.map((p) => (
                       <option key={p.id} value={p.slug}>
                         {p.name}
                       </option>
@@ -270,7 +348,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
               {/* Budget & Intake */}
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="block font-bold text-slate-700">Estimated Budget</label>
+                  <label className="block font-bold text-slate-700">
+                    Estimated Budget
+                  </label>
                   <select
                     value={budgetRangeINR}
                     onChange={(e) => setBudgetRangeINR(e.target.value)}
@@ -284,7 +364,9 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700">Target Intake</label>
+                  <label className="block font-bold text-slate-700">
+                    Target Intake
+                  </label>
                   <select
                     value={intakeYear}
                     onChange={(e) => setIntakeYear(e.target.value)}
@@ -296,8 +378,6 @@ export function LeadModal({ isOpen, onClose, defaultCountry }: LeadModalProps) {
                   </select>
                 </div>
               </div>
-
-
 
               <button
                 type="submit"

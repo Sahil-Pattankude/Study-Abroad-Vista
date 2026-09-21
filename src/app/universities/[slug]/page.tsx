@@ -13,7 +13,6 @@ import {
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
-import { PROGRAMS } from "@/lib/data/masterData";
 import {
   fetchLiveUniversities,
   fetchLiveCountries,

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Compass, ShieldCheck, Award, HeartHandshake } from "lucide-react";
-import { COUNTRIES, PROGRAMS } from "@/lib/data/masterData";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 
 export function Footer() {

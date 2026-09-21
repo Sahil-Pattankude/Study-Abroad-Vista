@@ -12,12 +12,12 @@ import {
   Coins,
 } from "lucide-react";
 import {
-  COUNTRIES,
-  PROGRAMS,
+  fetchLiveCountries,
+  fetchLivePrograms,
+  fetchLiveUniversities,
+  getLiveCountryBySlug,
   COUNTRY_ALIASES,
-  getCountryBySlug,
-} from "@/lib/data/masterData";
-import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
+} from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { getCountryEditorial } from "@/lib/data/contentData";
 import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
@@ -31,7 +31,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const canonicalParams = COUNTRIES.map((c) => ({
+  const liveCountries = await fetchLiveCountries();
+  const canonicalParams = liveCountries.map((c) => ({
     slug: c.slug,
   }));
   const aliasParams = Object.keys(COUNTRY_ALIASES).map((alias) => ({
@@ -42,7 +43,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const country = getCountryBySlug(slug || "");
+  const country = await getLiveCountryBySlug(slug || "");
   if (!country) return { title: "Country Not Found" };
 
   const rawDescription = `Complete guide to studying in ${country.name} for Indian students. Compare tuition fees in INR (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), top universities, and scholarships.`;
@@ -62,7 +63,11 @@ export default async function CountryHubPage({ params }: Props) {
   if (rawSlug.startsWith("study-in-")) {
     rawSlug = rawSlug.replace("study-in-", "");
   }
-  const country = getCountryBySlug(rawSlug);
+  const [country, allLiveUnis, allPrograms] = await Promise.all([
+    getLiveCountryBySlug(rawSlug),
+    fetchLiveUniversities(),
+    fetchLivePrograms(),
+  ]);
 
   if (!country) {
     notFound();
@@ -83,7 +88,6 @@ export default async function CountryHubPage({ params }: Props) {
             : baseEditorial.faqs,
       }
     : null;
-  const allLiveUnis = await fetchLiveUniversities();
   const universitiesInCountry = allLiveUnis.filter(
     (u) => u.countrySlug === country.slug,
   );
@@ -91,8 +95,8 @@ export default async function CountryHubPage({ params }: Props) {
   const popularProgs = Array.isArray(country.popularPrograms)
     ? country.popularPrograms
     : ["ms", "mba"];
-  const availablePrograms = PROGRAMS.filter((p) =>
-    popularProgs.includes(p.slug),
+  const availablePrograms = allPrograms.filter((p) =>
+    popularProgs.includes(p.slug as any),
   );
 
   const topIntakesList = Array.isArray(country.topIntakes)

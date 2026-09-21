@@ -1,14 +1,23 @@
-import { PROGRAMS } from "@/lib/data/masterData";
+import { fetchLivePrograms } from "@/lib/supabase/dataFetchers";
+import { Program } from "@/types";
 import { GraduationCap, Award, Compass, ArrowRight } from "lucide-react";
 import { LeadTriggerButton } from "@/components/home/HomeClientContext";
 
 interface ProgramStreamGridProps {
   onOpenLeadModal?: (programSlug: string) => void;
+  programs?: Program[];
 }
 
-export function ProgramStreamGrid({ onOpenLeadModal }: ProgramStreamGridProps) {
+export async function ProgramStreamGrid({
+  onOpenLeadModal,
+  programs: propPrograms,
+}: ProgramStreamGridProps) {
+  const livePrograms = propPrograms || (await fetchLivePrograms());
   return (
-    <section id="programs-grid" className="cv-auto bg-slate-50/70 py-16 sm:py-20">
+    <section
+      id="programs-grid"
+      className="cv-auto bg-slate-50/70 py-16 sm:py-20"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-1.5 rounded-full bg-[#102C57]/10 px-3 py-1 text-xs font-bold text-[#102C57]">
@@ -18,12 +27,13 @@ export function ProgramStreamGrid({ onOpenLeadModal }: ProgramStreamGridProps) {
             8 Core Programs Tailored for Career Growth
           </h2>
           <p className="mt-2 text-sm text-slate-600">
-            From STEM master&apos;s and Executive MBA to NMC-compliant medical degrees and Germany Ausbildung.
+            From STEM master&apos;s and Executive MBA to NMC-compliant medical
+            degrees and Germany Ausbildung.
           </p>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PROGRAMS.map((program) => (
+          {livePrograms.map((program) => (
             <div
               key={program.id}
               id={`program-${program.slug}`}

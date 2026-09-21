@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 
 // Known official domain map for domain verification fallback
 export const DOMAIN_MAP: Record<string, string> = {
@@ -75,22 +74,6 @@ export async function resolveExpectedDomain(
     }
   } catch {
     // ignore db lookup failure, fall through to static sources
-  }
-
-  const matchedUni = FEATURED_UNIVERSITIES.find(
-    (u) =>
-      u.id === universityId ||
-      u.slug === universityId ||
-      (universityName &&
-        u.name.toLowerCase().includes(universityName.toLowerCase())),
-  );
-  if (matchedUni) {
-    const raw =
-      matchedUni.official_email_domain ||
-      matchedUni.official_email_address ||
-      "";
-    const domain = normalizeDomain(raw);
-    if (domain) return domain;
   }
 
   for (const [key, domain] of Object.entries(DOMAIN_MAP)) {

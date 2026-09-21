@@ -14,7 +14,6 @@ import {
   LogOut,
   Trash2,
 } from "lucide-react";
-import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -26,7 +25,7 @@ export default function StudentDashboardPage() {
 
   useEffect(() => {
     async function loadShortlists() {
-      let allUnis = FEATURED_UNIVERSITIES;
+      let allUnis: University[] = [];
       try {
         const live = await fetchLiveUniversities();
         if (live && live.length > 0) {

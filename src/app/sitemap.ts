@@ -1,16 +1,22 @@
 import { MetadataRoute } from "next";
 import {
-  COUNTRIES,
-  PROGRAMS,
-  FEATURED_UNIVERSITIES,
-} from "@/lib/data/masterData";
+  fetchLiveCountries,
+  fetchLivePrograms,
+  fetchLiveUniversities,
+} from "@/lib/supabase/dataFetchers";
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://studyabroadvista.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+
+  const [countries, programs, universities] = await Promise.all([
+    fetchLiveCountries(),
+    fetchLivePrograms(),
+    fetchLiveUniversities(),
+  ]);
 
   // Core Static Pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -100,16 +106,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 19 Destination Country Hubs
-  const countryPages: MetadataRoute.Sitemap = COUNTRIES.map((c) => ({
+  // Destination Country Hubs
+  const countryPages: MetadataRoute.Sitemap = countries.map((c) => ({
     url: `${BASE_URL}/study-in-${c.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.9,
   }));
 
-  // 8 Program Disciplines
-  const programPages: MetadataRoute.Sitemap = PROGRAMS.map((p) => ({
+  // Program Disciplines
+  const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
     url: `${BASE_URL}/programs/${p.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
@@ -124,15 +130,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // Featured Universities
-  const universityPages: MetadataRoute.Sitemap = FEATURED_UNIVERSITIES.map(
-    (u) => ({
-      url: `${BASE_URL}/universities/${u.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    }),
-  );
+  // Live Universities
+  const universityPages: MetadataRoute.Sitemap = universities.map((u) => ({
+    url: `${BASE_URL}/universities/${u.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
   return [
     ...staticPages,

@@ -1,8 +1,19 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import { ChevronRight, Globe2, ArrowRight, CheckCircle2, Award } from "lucide-react";
-import { COUNTRIES, PROGRAMS, PROGRAM_ALIASES, getProgramBySlug } from "@/lib/data/masterData";
+import {
+  ChevronRight,
+  Globe2,
+  ArrowRight,
+  CheckCircle2,
+  Award,
+} from "lucide-react";
+import {
+  fetchLivePrograms,
+  fetchLiveCountries,
+  getLiveProgramBySlug,
+  PROGRAM_ALIASES,
+} from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -12,7 +23,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const canonicalParams = PROGRAMS.map((p) => ({
+  const livePrograms = await fetchLivePrograms();
+  const canonicalParams = livePrograms.map((p) => ({
     program: p.slug,
   }));
   const aliasParams = Object.keys(PROGRAM_ALIASES).map((alias) => ({
@@ -23,7 +35,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { program } = await params;
-  const prog = getProgramBySlug(program);
+  const prog = await getLiveProgramBySlug(program);
   if (!prog) return { title: "Program Not Found" };
 
   const rawDescription = `Complete guide to studying ${prog.name} abroad for Indian students. Compare top destinations (${prog.topDestinations.join(", ")}), tuition fees in INR, eligibility cutoffs, and career ROI.`;
@@ -39,15 +51,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProgramHubPage({ params }: Props) {
   const { program } = await params;
-  const prog = getProgramBySlug(program);
+  const [prog, liveCountries] = await Promise.all([
+    getLiveProgramBySlug(program),
+    fetchLiveCountries(),
+  ]);
 
   if (!prog) {
     notFound();
   }
 
-  const topCountries = COUNTRIES.filter((c) =>
-    prog.topDestinations.map(d => d.toLowerCase()).includes(c.name.toLowerCase()) ||
-    c.popularPrograms.includes(prog.slug)
+  const topCountries = liveCountries.filter(
+    (c) =>
+      prog.topDestinations
+        .map((d) => d.toLowerCase())
+        .includes(c.name.toLowerCase()) ||
+      (c.popularPrograms || []).includes(prog.slug as any),
   );
 
   return (
@@ -58,7 +76,9 @@ export default async function ProgramHubPage({ params }: Props) {
         {/* Breadcrumbs */}
         <div className="border-b border-slate-200/80 bg-white py-2.5 px-4 sm:px-8">
           <div className="mx-auto flex max-w-7xl items-center gap-2 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57]">Home</Link>
+            <Link href="/" className="hover:text-[#102C57]">
+              Home
+            </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
             <span className="text-slate-400">Programs</span>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
@@ -84,7 +104,9 @@ export default async function ProgramHubPage({ params }: Props) {
 
         {/* Top Countries Grid */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Top Recommended Destinations for {prog.name}</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-6">
+            Top Recommended Destinations for {prog.name}
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {topCountries.slice(0, 9).map((country) => (
               <Link
@@ -101,7 +123,9 @@ export default async function ProgramHubPage({ params }: Props) {
                 <h3 className="mt-4 text-base font-bold text-slate-900 group-hover:text-[#EA5C2B] transition">
                   {country.name}
                 </h3>
-                <p className="mt-1 text-xs text-slate-500 line-clamp-2">{country.heroTagline}</p>
+                <p className="mt-1 text-xs text-slate-500 line-clamp-2">
+                  {country.heroTagline}
+                </p>
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#102C57]">
                   <span>Avg: {country.avgTuitionINR}</span>
                   <ArrowRight className="h-3.5 w-3.5 text-[#EA5C2B] group-hover:translate-x-1 transition-transform" />
