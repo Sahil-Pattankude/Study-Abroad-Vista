@@ -2,6 +2,7 @@ import { supabase } from "./client";
 import { supabaseAdmin } from "./server";
 import { COUNTRIES, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { Country, University, CourseItem } from "@/types";
+import { Country, University, CourseItem, Program } from "@/types";
 import {
   mapSupabaseCountry,
   mapSanityCountry,
@@ -26,6 +27,7 @@ async function queryWithTimeout<T>(
     const result = await Promise.race([promiseFactory(), timeoutPromise]);
     return result as T;
   } catch (err) {
+  } catch {
     return null;
   } finally {
     clearTimeout(timeoutHandle);
@@ -36,6 +38,7 @@ export async function fetchLiveCountries(): Promise<Country[]> {
   let list: Country[] = [];
 
   // 1. Fetch Supabase Countries
+  // 1. Fetch Supabase Countries directly (no static masterData fallback)
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(
@@ -52,6 +55,7 @@ export async function fetchLiveCountries(): Promise<Country[]> {
     }
   } catch (err) {
     console.warn("Supabase countries fetch fallback:", err);
+    console.warn("Supabase countries fetch error:", err);
   }
 
   if (list.length === 0) {
@@ -99,6 +103,7 @@ export async function fetchLiveUniversities(): Promise<University[]> {
   });
 
   // 2. Fetch Supabase Universities & Merge
+  // 1. Fetch Supabase Universities directly (no static masterData fallback)
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(
@@ -120,9 +125,11 @@ export async function fetchLiveUniversities(): Promise<University[]> {
     }
   } catch (err) {
     console.warn("Supabase universities fetch fallback to masterData:", err);
+    console.warn("Supabase universities fetch error:", err);
   }
 
   // 3. Merge Sanity CMS Universities
+  // 2. Merge Sanity CMS Universities
   try {
     const sanityUnis = await queryWithTimeout(
       () => getSanityUniversities(),
@@ -141,6 +148,37 @@ export async function fetchLiveUniversities(): Promise<University[]> {
   }
 
   return Array.from(uniMap.values());
+}
+
+export async function fetchLivePrograms(): Promise<Program[]> {
+  try {
+    const client = typeof window === "undefined" ? supabaseAdmin : supabase;
+    const response = await queryWithTimeout(
+      () => client.from("programs").select("*"),
+      2500,
+    );
+    if (
+      response &&
+      !(response as any).error &&
+      (response as any).data &&
+      (response as any).data.length > 0
+    ) {
+      return (response as any).data.map((p: any) => ({
+        id: p.id || p.slug,
+        name: p.name,
+        slug: p.slug,
+        level: p.level || "Postgraduate",
+        duration: p.duration || "2 Years",
+        keyFields: Array.isArray(p.key_fields) ? p.key_fields : [],
+        topDestinations: Array.isArray(p.top_destinations) ? p.top_destinations : [],
+        summary: p.summary || "",
+        roiScore: Number(p.roi_score) || 90,
+      }));
+    }
+  } catch (err) {
+    console.warn("Supabase programs fetch error:", err);
+  }
+  return [];
 }
 
 export interface ClaimItem {
@@ -209,6 +247,7 @@ export async function fetchLiveClaims(): Promise<ClaimItem[]> {
       createdAt: "Just now",
     },
   ];
+  return [];
 }
 
 export async function fetchLiveCourses(): Promise<CourseItem[]> {
@@ -354,6 +393,7 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
   });
 
   // 1. Fetch live universities from Supabase / CMS / masterData
+  // 1. Fetch live universities from Supabase
   const universities = await fetchLiveUniversities();
 
   // Flag map for quick lookup
@@ -370,10 +410,12 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
   };
 
   // 2. Build course catalog dynamically from fetched universities
+  // 2. Build course catalog dynamically from fetched Supabase universities
   universities.forEach((u) => {
     const countryFlag = flagMap[u.countrySlug?.toLowerCase() || ""] || "🌐";
 
     u.programsOffered.forEach((prog) => {
+    (u.programsOffered || []).forEach((prog) => {
       let programTitle = "";
       let level = "Postgraduate (Master's)";
       let duration = "2 Years";
@@ -446,6 +488,7 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
         ];
       } else {
         programTitle = `${prog.toUpperCase()} Program`;
+        programTitle = `${String(prog).toUpperCase()} Program`;
       }
 
       const courseId = `${u.slug}-${prog}`;
@@ -486,6 +529,7 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
   });
 
   // 3. Direct fetch from Supabase `courses` table if user has added custom course rows
+  // 3. Direct fetch from Supabase `courses` table
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
     const response = await queryWithTimeout(

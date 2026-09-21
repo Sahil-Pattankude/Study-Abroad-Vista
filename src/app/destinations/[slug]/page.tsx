@@ -18,6 +18,7 @@ import {
   COUNTRY_ALIASES,
   getCountryBySlug,
 } from "@/lib/data/masterData";
+import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { getCountryEditorial } from "@/lib/data/contentData";
 import { getPillarGuideByCountry } from "@/lib/sanity/fetchers";
@@ -84,6 +85,8 @@ export default async function CountryHubPage({ params }: Props) {
       }
     : null;
   const universitiesInCountry = FEATURED_UNIVERSITIES.filter(
+  const allLiveUnis = await fetchLiveUniversities();
+  const universitiesInCountry = allLiveUnis.filter(
     (u) => u.countrySlug === country.slug,
   );
 
