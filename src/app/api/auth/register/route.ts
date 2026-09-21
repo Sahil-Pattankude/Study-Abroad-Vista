@@ -123,6 +123,7 @@ export async function POST(request: Request) {
         country_name: finalCountryName,
         dpdp_consent: true,
         marketing_opt_in: !!marketingOptIn,
+        shortlists: Array.isArray(body.shortlists) ? body.shortlists : [],
       },
     });
 

@@ -23,6 +23,10 @@ import {
 } from "@/lib/supabase/dataFetchers";
 import { Country, University } from "@/types";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import {
+  getSavedShortlist,
+  syncShortlistWithBackend,
+} from "@/lib/cookies/shortlist";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -185,6 +189,8 @@ export default function SignupPage() {
         (c) => c.slug === selectedCountrySlug,
       );
 
+      const cookieShortlists = getSavedShortlist();
+
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -200,6 +206,7 @@ export default function SignupPage() {
           countrySlug: selectedCountrySlug,
           countryName: matchedCountryObj?.name || "Germany",
           marketingOptIn,
+          shortlists: cookieShortlists,
         }),
       });
 
@@ -209,6 +216,14 @@ export default function SignupPage() {
         setError(data.error || "Registration failed. Please try again.");
         setLoading(false);
         return;
+      }
+
+      // If registered successfully, sync backend shortlists
+      if (data.user?.id) {
+        await syncShortlistWithBackend({
+          id: data.user.id,
+          email: email.trim(),
+        });
       }
 
       // 2. Establish user session

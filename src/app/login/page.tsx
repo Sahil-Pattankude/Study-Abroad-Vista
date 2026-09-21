@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
+import { syncShortlistWithBackend } from "@/lib/cookies/shortlist";
 
 function LoginForm() {
   const router = useRouter();
@@ -164,6 +165,16 @@ function LoginForm() {
         authedUser?.user_metadata?.country_name || finalCountry,
         authedUser?.user_metadata,
       );
+
+      // Sync guest shortlists with Supabase backend on student login
+      try {
+        await syncShortlistWithBackend({
+          id: authedUser?.id,
+          email: userEmail,
+        });
+      } catch {
+        // ignore
+      }
 
       // 4. Guaranteed routing per selected role and redirect param
       if (redirectParam && redirectParam.startsWith("/")) {

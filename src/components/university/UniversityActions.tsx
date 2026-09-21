@@ -1,10 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, CheckCircle2, ArrowRight, Lock, ShieldCheck, Building2 } from "lucide-react";
+import {
+  Star,
+  CheckCircle2,
+  ArrowRight,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { ClaimProfileModal } from "@/components/university/ClaimProfileModal";
+import {
+  addToShortlist,
+  removeFromShortlist,
+  isUniversityShortlisted,
+} from "@/lib/cookies/shortlist";
 
 interface UniversityActionsProps {
   universityId?: string;
@@ -22,7 +33,7 @@ export function UniversityActions({
   claimedStatus = "unclaimed",
 }: UniversityActionsProps) {
   const { openLeadModal, openAuthModal } = useHomeModals();
-  const { isLoggedIn } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [isShortlisted, setIsShortlisted] = useState(false);
   const [showSyncPrompt, setShowSyncPrompt] = useState(false);
@@ -31,35 +42,33 @@ export function UniversityActions({
 
   useEffect(() => {
     setMounted(true);
-    try {
-      const stored = JSON.parse(localStorage.getItem("vista_saved_shortlist") || "[]");
-      if (Array.isArray(stored) && stored.includes(universitySlug)) {
-        setIsShortlisted(true);
-      }
-    } catch {
-      // ignore
-    }
+    setIsShortlisted(isUniversityShortlisted(universitySlug));
+
+    const handleUpdate = () => {
+      setIsShortlisted(isUniversityShortlisted(universitySlug));
+    };
+
+    window.addEventListener("vista_shortlist_updated", handleUpdate);
+    return () => {
+      window.removeEventListener("vista_shortlist_updated", handleUpdate);
+    };
   }, [universitySlug]);
 
   const toggleShortlist = () => {
     try {
-      const stored = JSON.parse(localStorage.getItem("vista_saved_shortlist") || "[]");
-      let updated: string[] = [];
-      if (stored.includes(universitySlug)) {
-        updated = stored.filter((s: string) => s !== universitySlug);
+      if (isUniversityShortlisted(universitySlug)) {
+        removeFromShortlist(universitySlug, user);
         setIsShortlisted(false);
         setShowSyncPrompt(false);
       } else {
-        updated = [...stored, universitySlug];
+        addToShortlist(universitySlug, user);
         setIsShortlisted(true);
-        
+
         // Show sync prompt if student is in guest mode (not logged in)
         if (!isLoggedIn) {
           setShowSyncPrompt(true);
         }
       }
-      localStorage.setItem("vista_saved_shortlist", JSON.stringify(updated));
-      window.dispatchEvent(new CustomEvent("vista_shortlist_updated"));
     } catch (e) {
       console.warn("Shortlist toggle error:", e);
     }
@@ -91,7 +100,9 @@ export function UniversityActions({
               : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
           }`}
         >
-          <Star className={`h-4 w-4 ${isShortlisted ? "fill-amber-500 text-amber-500" : "text-slate-400"}`} />
+          <Star
+            className={`h-4 w-4 ${isShortlisted ? "fill-amber-500 text-amber-500" : "text-slate-400"}`}
+          />
           <span>{isShortlisted ? "Shortlisted ✓" : "★ Shortlist"}</span>
         </button>
 
@@ -109,7 +120,8 @@ export function UniversityActions({
           <div className="flex items-center gap-2">
             <Lock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
             <span className="text-[11px] font-medium">
-              Saved to guest session! Sign in to sync across devices & track application deadlines.
+              Saved to guest session! Sign in to sync across devices & track
+              application deadlines.
             </span>
           </div>
           <button

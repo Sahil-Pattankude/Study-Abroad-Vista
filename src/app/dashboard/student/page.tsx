@@ -17,64 +17,61 @@ import {
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
+import {
+  getSavedShortlist,
+  removeFromShortlist as removeShortlistCookie,
+  fetchBackendShortlist,
+} from "@/lib/cookies/shortlist";
 
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
   const displayName = user?.name || "Student";
+  const [allUniversities, setAllUniversities] = useState<University[]>([]);
   const [shortlistedUnis, setShortlistedUnis] = useState<University[]>([]);
 
+  // 1. Fetch universities once on mount
   useEffect(() => {
-    async function loadShortlists() {
-      let allUnis: University[] = [];
-      try {
-        const live = await fetchLiveUniversities();
-        if (live && live.length > 0) {
-          allUnis = live;
-        }
-      } catch (e) {
-        console.warn("Live fetch error:", e);
+    fetchLiveUniversities().then((res) => {
+      if (res && res.length > 0) {
+        setAllUniversities(res);
       }
-
-      try {
-        const stored = JSON.parse(
-          localStorage.getItem("vista_saved_shortlist") || "[]",
-        );
-        if (Array.isArray(stored) && stored.length > 0) {
-          const matched = stored
-            .map((slug: string) => allUnis.find((u) => u.slug === slug))
-            .filter(Boolean) as University[];
-          setShortlistedUnis(matched);
-          return;
-        } else {
-          setShortlistedUnis([]);
-          return;
-        }
-      } catch (e) {
-        console.warn("Shortlist read error:", e);
-        setShortlistedUnis([]);
-      }
-    }
-
-    loadShortlists();
-
-    const handleUpdate = () => {
-      loadShortlists();
-    };
-    window.addEventListener("vista_shortlist_updated", handleUpdate);
-    return () => {
-      window.removeEventListener("vista_shortlist_updated", handleUpdate);
-    };
+    });
   }, []);
+
+  // 2. Fetch backend shortlists once when authenticated
+  useEffect(() => {
+    if (user && (user.id || user.email)) {
+      fetchBackendShortlist(user);
+    }
+  }, [user?.id, user?.email]);
+
+  // 3. Sync shortlistedUnis from in-memory allUniversities and cookies
+  useEffect(() => {
+    const updateMatched = (slugs: string[]) => {
+      if (allUniversities.length > 0) {
+        const matched = slugs
+          .map((slug) => allUniversities.find((u) => u.slug === slug))
+          .filter(Boolean) as University[];
+        setShortlistedUnis(matched);
+      }
+    };
+
+    updateMatched(getSavedShortlist());
+
+    const handleUpdate = (e: any) => {
+      const slugs = Array.isArray(e.detail) ? e.detail : getSavedShortlist();
+      updateMatched(slugs);
+    };
+
+    window.addEventListener("vista_shortlist_updated", handleUpdate);
+    return () =>
+      window.removeEventListener("vista_shortlist_updated", handleUpdate);
+  }, [allUniversities]);
 
   const removeShortlist = (slug: string) => {
     try {
-      const stored = JSON.parse(
-        localStorage.getItem("vista_saved_shortlist") || "[]",
-      );
-      const updated = stored.filter((s: string) => s !== slug);
-      localStorage.setItem("vista_saved_shortlist", JSON.stringify(updated));
+      removeShortlistCookie(slug, user);
       setShortlistedUnis((prev) => prev.filter((u) => u.slug !== slug));
-      window.dispatchEvent(new CustomEvent("vista_shortlist_updated"));
     } catch (e) {
       console.warn("Remove shortlist error:", e);
     }

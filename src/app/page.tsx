@@ -1,17 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-
-// Destinations and partner universities are read from Supabase on every
-// request. Without this the homepage is prerendered at build time and the
-// backend data would be frozen into static HTML.
-export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title:
-    "StudyAbroad Vista | Study Abroad Admissions Engine for Indian Students",
-  description:
-    "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
-};
 import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/home/Hero";
 import { CountryGrid } from "@/components/home/CountryGrid";
@@ -36,6 +24,18 @@ import {
   LeadTriggerButton,
   AICounsellorTriggerButton,
 } from "@/components/home/HomeClientContext";
+
+// Destinations and partner universities are read from Supabase on every
+// request. Without this the homepage is prerendered at build time and the
+// backend data would be frozen into static HTML.
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title:
+    "StudyAbroad Vista | Study Abroad Admissions Engine for Indian Students",
+  description:
+    "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
+};
 
 interface ArticlePreview {
   _id: string;

@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Playfair_Display } from "next/font/google";
+import { AuthProvider } from "@/lib/auth/AuthContext";
+import { HomeModalProvider } from "@/components/home/HomeClientContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,7 +27,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "StudyAbroad Vista | Authoritative International Education Discovery Portal",
+    default:
+      "StudyAbroad Vista | Authoritative International Education Discovery Portal",
     template: "%s | StudyAbroad Vista",
   },
   description:
@@ -36,9 +39,6 @@ export const metadata: Metadata = {
     apple: "/favicon.svg",
   },
 };
-
-import { AuthProvider } from "@/lib/auth/AuthContext";
-import { HomeModalProvider } from "@/components/home/HomeClientContext";
 
 export default function RootLayout({
   children,
