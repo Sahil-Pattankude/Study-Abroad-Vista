@@ -22,9 +22,7 @@ import { useAuth } from "@/lib/auth/AuthContext";
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
   const displayName = user?.name || "Student";
-  const [shortlistedUnis, setShortlistedUnis] = useState<University[]>(
-    FEATURED_UNIVERSITIES.slice(0, 4),
-  );
+  const [shortlistedUnis, setShortlistedUnis] = useState<University[]>([]);
 
   useEffect(() => {
     async function loadShortlists() {
@@ -46,16 +44,16 @@ export default function StudentDashboardPage() {
           const matched = stored
             .map((slug: string) => allUnis.find((u) => u.slug === slug))
             .filter(Boolean) as University[];
-          if (matched.length > 0) {
-            setShortlistedUnis(matched);
-            return;
-          }
+          setShortlistedUnis(matched);
+          return;
+        } else {
+          setShortlistedUnis([]);
+          return;
         }
       } catch (e) {
         console.warn("Shortlist read error:", e);
+        setShortlistedUnis([]);
       }
-
-      setShortlistedUnis(allUnis.slice(0, 4));
     }
 
     loadShortlists();
@@ -235,68 +233,93 @@ export default function StudentDashboardPage() {
             </Link>
           </div>
 
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
-                <tr>
-                  <th className="p-3">University</th>
-                  <th className="p-3">Country</th>
-                  <th className="p-3">Global Rank</th>
-                  <th className="p-3">Annual Fees (INR)</th>
-                  <th className="p-3">IELTS Requirement</th>
-                  <th className="p-3">Work Visa</th>
-                  <th className="p-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {shortlistedUnis.map((uni) => (
-                  <tr key={uni.id} className="hover:bg-slate-50/70">
-                    <td className="p-3 font-bold text-[#102C57] flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-[#EA5C2B]" />
-                      <Link
-                        href={`/universities/${uni.slug}`}
-                        className="hover:underline"
-                      >
-                        {uni.name}
-                      </Link>
-                    </td>
-                    <td className="p-3 font-medium text-slate-600">
-                      {uni.country}
-                    </td>
-                    <td className="p-3 font-semibold text-slate-700">
-                      #{uni.rankingGlobal}
-                    </td>
-                    <td className="p-3 font-bold text-slate-800">
-                      {uni.tuitionFeeRangeINR}
-                    </td>
-                    <td className="p-3 text-slate-700">
-                      {uni.ieltsMinScore} Bands
-                    </td>
-                    <td className="p-3 text-emerald-700 font-medium">
-                      {uni.postStudyWorkMonths} Months
-                    </td>
-                    <td className="p-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+          {shortlistedUnis.length === 0 ? (
+            <div className="py-12 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-[#EA5C2B]">
+                <Bookmark className="h-6 w-6" />
+              </div>
+              <h3 className="mt-3 text-sm font-bold text-[#102C57]">
+                No universities shortlisted yet
+              </h3>
+              <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
+                Explore universities across 19 countries and click the{" "}
+                <strong>★ Shortlist</strong> button on any profile to save it to
+                your dashboard.
+              </p>
+              <div className="mt-4">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#0c2242] transition"
+                >
+                  <Building2 className="h-4 w-4 text-[#EA5C2B]" />
+                  Browse Universities
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+                  <tr>
+                    <th className="p-3">University</th>
+                    <th className="p-3">Country</th>
+                    <th className="p-3">Global Rank</th>
+                    <th className="p-3">Annual Fees (INR)</th>
+                    <th className="p-3">IELTS Requirement</th>
+                    <th className="p-3">Work Visa</th>
+                    <th className="p-3 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {shortlistedUnis.map((uni) => (
+                    <tr key={uni.id} className="hover:bg-slate-50/70">
+                      <td className="p-3 font-bold text-[#102C57] flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-[#EA5C2B]" />
                         <Link
                           href={`/universities/${uni.slug}`}
-                          className="rounded-lg bg-[#102C57] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition"
+                          className="hover:underline"
                         >
-                          View
+                          {uni.name}
                         </Link>
-                        <button
-                          onClick={() => removeShortlist(uni.slug)}
-                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
-                          title="Remove from shortlist"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      </td>
+                      <td className="p-3 font-medium text-slate-600">
+                        {uni.country}
+                      </td>
+                      <td className="p-3 font-semibold text-slate-700">
+                        #{uni.rankingGlobal}
+                      </td>
+                      <td className="p-3 font-bold text-slate-800">
+                        {uni.tuitionFeeRangeINR}
+                      </td>
+                      <td className="p-3 text-slate-700">
+                        {uni.ieltsMinScore} Bands
+                      </td>
+                      <td className="p-3 text-emerald-700 font-medium">
+                        {uni.postStudyWorkMonths} Months
+                      </td>
+                      <td className="p-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/universities/${uni.slug}`}
+                            className="rounded-lg bg-[#102C57] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition"
+                          >
+                            View
+                          </Link>
+                          <button
+                            onClick={() => removeShortlist(uni.slug)}
+                            className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
+                            title="Remove from shortlist"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

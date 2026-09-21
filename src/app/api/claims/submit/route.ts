@@ -1,45 +1,14 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import { checkClaimEmailDomain } from "@/lib/claims/domainCheck";
+import { verifyOtp, otpKey, MAX_ATTEMPTS } from "@/lib/claims/otpStore";
 
-// Known official domain map for domain verification fallback
-const DOMAIN_MAP: Record<string, string> = {
-  "georgia-tech": "gatech.edu",
-  gatech: "gatech.edu",
-  "technical-university-of-munich": "tum.de",
-  tum: "tum.de",
-  "university-of-stanford": "stanford.edu",
-  "stanford-university": "stanford.edu",
-  stanford: "stanford.edu",
-  "university-of-oxford": "ox.ac.uk",
-  oxford: "ox.ac.uk",
-  "university-of-melbourne": "unimelb.edu.au",
-  unimelb: "unimelb.edu.au",
-  "university-of-toronto": "utoronto.ca",
-  utoronto: "utoronto.ca",
-  "university-of-manchester": "manchester.ac.uk",
-  manchester: "manchester.ac.uk",
-  "trinity-college-dublin": "tcd.ie",
-  tcd: "tcd.ie",
-  "tashkent-medical-academy": "tma.uz",
-  tashkent: "tma.uz",
-  "sorbonne-university": "sorbonne-universite.fr",
-  sorbonne: "sorbonne-universite.fr",
-  "hec-paris": "hec.fr",
-  "polytechnique-paris": "polytechnique.edu",
-  polytechnique: "polytechnique.edu",
-  "essec-business-school": "essec.edu",
-  essec: "essec.edu",
-  "psl-university": "psl.eu",
-  psl: "psl.eu",
-  "tu-delft": "tudelft.nl",
-  tudelft: "tudelft.nl",
-  "sapienza-university-of-rome": "uniroma1.it",
-  sapienza: "uniroma1.it",
-  "national-university-of-singapore": "nus.edu.sg",
-  nus: "nus.edu.sg",
-  "university-of-auckland": "auckland.ac.nz",
-  auckland: "auckland.ac.nz",
+const OTP_ERRORS: Record<string, string> = {
+  missing:
+    "No verification code is pending for this email. Please request a new code.",
+  expired: "That verification code has expired. Please request a new one.",
+  too_many_attempts: `Too many incorrect attempts (max ${MAX_ATTEMPTS}). Please request a new code.`,
+  mismatch: "That verification code is incorrect. Please check and try again.",
 };
 
 export async function POST(request: Request) {
@@ -56,6 +25,7 @@ export async function POST(request: Request) {
       officialEmail,
       designation,
       proofDocumentUrl,
+      otp,
     } = body;
 
     if (!officialEmail || !applicantName || !universityName) {
@@ -68,77 +38,29 @@ export async function POST(request: Request) {
       );
     }
 
-    // 0. Verify claim official email against university's official_email_domain
-    let registeredDomain = "";
-    const uniKey = (universityId || universityName || "").toLowerCase().trim();
-
-    // Query Supabase for registered official_email_domain
-    try {
-      const { data: uniData } = await supabaseAdmin
-        .from("universities")
-        .select("*")
-        .or(
-          `slug.eq.${universityId},id.eq.${universityId},name.ilike.%${universityName}%`,
-        )
-        .maybeSingle();
-
-      if (uniData) {
-        const raw =
-          uniData.official_email_domain || uniData.official_email_address || "";
-        registeredDomain = raw.includes("@")
-          ? raw.split("@")[1].toLowerCase().trim()
-          : raw.toLowerCase().trim();
-      }
-    } catch {
-      // ignore db lookup failure
-    }
-
-    // Fallback to FEATURED_UNIVERSITIES in masterData
-    if (!registeredDomain) {
-      const matchedUni = FEATURED_UNIVERSITIES.find(
-        (u) =>
-          u.id === universityId ||
-          u.slug === universityId ||
-          u.name.toLowerCase().includes(universityName.toLowerCase()),
-      );
-      if (matchedUni) {
-        const raw =
-          matchedUni.official_email_domain ||
-          matchedUni.official_email_address ||
-          "";
-        registeredDomain = raw.includes("@")
-          ? raw.split("@")[1].toLowerCase().trim()
-          : raw.toLowerCase().trim();
-      }
-    }
-
-    // Extract applicant email domain
-    const applicantDomain = (officialEmail.split("@")[1] || "")
-      .toLowerCase()
-      .trim();
-    let expectedDomain = registeredDomain;
-
-    if (!expectedDomain) {
-      // Check DOMAIN_MAP
-      for (const [key, domain] of Object.entries(DOMAIN_MAP)) {
-        if (uniKey.includes(key)) {
-          expectedDomain = domain;
-          break;
-        }
-      }
-    }
-
-    // Perform domain verification check if expectedDomain is known
-    if (
-      expectedDomain &&
-      applicantDomain &&
-      applicantDomain !== expectedDomain &&
-      !applicantDomain.endsWith("." + expectedDomain)
-    ) {
+    if (!otp) {
       return NextResponse.json(
-        {
-          error: `Verification Failed: Your email domain (@${applicantDomain}) does not match the official institutional domain (@${expectedDomain}) for ${universityName}. Please use your official university email.`,
-        },
+        { error: "A verification code is required to submit a claim." },
+        { status: 400 },
+      );
+    }
+
+    // 0. Verify claim official email against university's official domain
+    const domainError = await checkClaimEmailDomain(
+      universityId,
+      universityName,
+      officialEmail,
+    );
+    if (domainError) {
+      return NextResponse.json({ error: domainError }, { status: 400 });
+    }
+
+    // 0b. Verify the emailed code. Consumed on success, so a claim cannot
+    // be replayed with the same OTP.
+    const otpResult = verifyOtp(otpKey(officialEmail, universityId), otp);
+    if (!otpResult.ok) {
+      return NextResponse.json(
+        { error: OTP_ERRORS[otpResult.reason], otpFailed: true },
         { status: 400 },
       );
     }

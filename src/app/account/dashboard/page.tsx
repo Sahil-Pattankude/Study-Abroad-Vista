@@ -3,31 +3,87 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Compass, 
-  GraduationCap, 
-  Bookmark, 
-  Bot, 
-  Building2, 
-  User, 
-  LogOut, 
-  Calendar, 
-  CheckCircle2, 
-  Clock, 
-  ArrowRight, 
-  Sparkles, 
+import {
+  Compass,
+  GraduationCap,
+  Bookmark,
+  Bot,
+  Building2,
+  User,
+  LogOut,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  ArrowRight,
+  Sparkles,
   FileText,
   AlertCircle,
   Loader2,
-  Lock
+  Lock,
 } from "lucide-react";
 import { FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { useAuth } from "@/lib/auth/AuthContext";
+
+import { useState } from "react";
+import { University } from "@/types";
+import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 
 export default function StudentAccountDashboard() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading, logout } = useAuth();
   const displayName = user?.name || "Student";
+  const [shortlistedUnis, setShortlistedUnis] = useState<University[]>([]);
+
+  useEffect(() => {
+    async function loadShortlists() {
+      let allUnis = FEATURED_UNIVERSITIES;
+      try {
+        const live = await fetchLiveUniversities();
+        if (live && live.length > 0) {
+          allUnis = live;
+        }
+      } catch (e) {
+        console.warn("Live fetch error:", e);
+      }
+
+      try {
+        const stored = JSON.parse(
+          localStorage.getItem("vista_saved_shortlist") || "[]",
+        );
+        if (Array.isArray(stored) && stored.length > 0) {
+          const matched = stored
+            .map((slug: string) => allUnis.find((u) => u.slug === slug))
+            .filter(Boolean) as University[];
+          setShortlistedUnis(matched);
+        } else {
+          setShortlistedUnis([]);
+        }
+      } catch {
+        setShortlistedUnis([]);
+      }
+    }
+
+    loadShortlists();
+
+    const handleUpdate = () => loadShortlists();
+    window.addEventListener("vista_shortlist_updated", handleUpdate);
+    return () =>
+      window.removeEventListener("vista_shortlist_updated", handleUpdate);
+  }, []);
+
+  const removeShortlist = (slug: string) => {
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem("vista_saved_shortlist") || "[]",
+      );
+      const updated = stored.filter((s: string) => s !== slug);
+      localStorage.setItem("vista_saved_shortlist", JSON.stringify(updated));
+      setShortlistedUnis((prev) => prev.filter((u) => u.slug !== slug));
+      window.dispatchEvent(new CustomEvent("vista_shortlist_updated"));
+    } catch (e) {
+      console.warn("Remove shortlist error:", e);
+    }
+  };
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -39,7 +95,9 @@ export default function StudentAccountDashboard() {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <Loader2 className="h-8 w-8 animate-spin text-[#102C57]" />
-        <p className="mt-3 text-xs font-semibold text-slate-500">Loading student dashboard...</p>
+        <p className="mt-3 text-xs font-semibold text-slate-500">
+          Loading student dashboard...
+        </p>
       </div>
     );
   }
@@ -49,8 +107,12 @@ export default function StudentAccountDashboard() {
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-md">
           <Lock className="mx-auto h-10 w-10 text-[#102C57]" />
-          <h2 className="mt-3 text-lg font-bold text-slate-900">Sign in Required</h2>
-          <p className="mt-1 text-xs text-slate-500">Please sign in to access your student workspace.</p>
+          <h2 className="mt-3 text-lg font-bold text-slate-900">
+            Sign in Required
+          </h2>
+          <p className="mt-1 text-xs text-slate-500">
+            Please sign in to access your student workspace.
+          </p>
           <Link
             href="/login?redirect=/account/dashboard"
             className="mt-4 inline-block w-full rounded-xl bg-[#102C57] py-2.5 text-xs font-bold text-white hover:bg-[#0c2242]"
@@ -65,21 +127,62 @@ export default function StudentAccountDashboard() {
   // Template T-13: Progress indicator Level 1-4
   const profileSteps = [
     { level: "Level 1", label: "Basic Academic Profile", status: "completed" },
-    { level: "Level 2", label: "Budget & Country Preferences", status: "completed" },
+    {
+      level: "Level 2",
+      label: "Budget & Country Preferences",
+      status: "completed",
+    },
     { level: "Level 3", label: "Test Scores & Transcripts", status: "current" },
-    { level: "Level 4", label: "Direct University Applications", status: "pending" },
+    {
+      level: "Level 4",
+      label: "Direct University Applications",
+      status: "pending",
+    },
   ];
 
   const recentChats = [
-    { id: 1, title: "Germany MS in Data Science with €0 Tuition", date: "Today, 2:45 PM", messages: 8 },
-    { id: 2, title: "UK Stay-Back Visa Rules after 1-Year Master's", date: "Yesterday", messages: 14 },
-    { id: 3, title: "Blocked Account (Sperrkonto) Breakdown in INR", date: "Sep 08, 2026", messages: 5 },
+    {
+      id: 1,
+      title: "Germany MS in Data Science with €0 Tuition",
+      date: "Today, 2:45 PM",
+      messages: 8,
+    },
+    {
+      id: 2,
+      title: "UK Stay-Back Visa Rules after 1-Year Master's",
+      date: "Yesterday",
+      messages: 14,
+    },
+    {
+      id: 3,
+      title: "Blocked Account (Sperrkonto) Breakdown in INR",
+      date: "Sep 08, 2026",
+      messages: 5,
+    },
   ];
 
   const deadlines = [
-    { university: "TU Munich, Germany", program: "MS Informatics", cutoff: "May 31, 2027", daysLeft: 263, urgent: false },
-    { university: "Imperial College London, UK", program: "MSc Computing", cutoff: "Jan 15, 2027", daysLeft: 127, urgent: true },
-    { university: "University of Melbourne, Australia", program: "Master of IT", cutoff: "Nov 30, 2026", daysLeft: 81, urgent: true },
+    {
+      university: "TU Munich, Germany",
+      program: "MS Informatics",
+      cutoff: "May 31, 2027",
+      daysLeft: 263,
+      urgent: false,
+    },
+    {
+      university: "Imperial College London, UK",
+      program: "MSc Computing",
+      cutoff: "Jan 15, 2027",
+      daysLeft: 127,
+      urgent: true,
+    },
+    {
+      university: "University of Melbourne, Australia",
+      program: "Master of IT",
+      cutoff: "Nov 30, 2026",
+      daysLeft: 81,
+      urgent: true,
+    },
   ];
 
   return (
@@ -131,19 +234,25 @@ export default function StudentAccountDashboard() {
                 Welcome back, {displayName}
               </h1>
               <p className="mt-1 text-xs text-slate-300 max-w-xl">
-                Track your international education applications, shortlist rankings, and live AI counselling sessions.
+                Track your international education applications, shortlist
+                rankings, and live AI counselling sessions.
               </p>
             </div>
             <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-md border border-white/15 min-w-[280px]">
               <div className="flex items-center justify-between text-xs mb-2">
-                <span className="font-bold text-slate-200">Profile Readiness</span>
-                <span className="font-black text-[#EA5C2B]">Level 2 / 4 (65%)</span>
+                <span className="font-bold text-slate-200">
+                  Profile Readiness
+                </span>
+                <span className="font-black text-[#EA5C2B]">
+                  Level 2 / 4 (65%)
+                </span>
               </div>
               <div className="h-2 w-full rounded-full bg-white/20 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-[#D4AF37] to-[#EA5C2B] w-[65%]" />
               </div>
               <p className="mt-2 text-[11px] text-slate-300">
-                <strong>Next Step:</strong> Upload IELTS/GRE score or GPA to unlock Level 3 direct shortlisting.
+                <strong>Next Step:</strong> Upload IELTS/GRE score or GPA to
+                unlock Level 3 direct shortlisting.
               </p>
             </div>
           </div>
@@ -152,18 +261,24 @@ export default function StudentAccountDashboard() {
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 border-t border-white/10 pt-6">
             {profileSteps.map((step, idx) => (
               <div key={idx} className="flex items-start gap-2.5">
-                <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                  step.status === "completed" 
-                    ? "bg-emerald-500 text-white" 
-                    : step.status === "current" 
-                    ? "bg-[#EA5C2B] text-white animate-pulse" 
-                    : "bg-white/20 text-slate-300"
-                }`}>
+                <div
+                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                    step.status === "completed"
+                      ? "bg-emerald-500 text-white"
+                      : step.status === "current"
+                        ? "bg-[#EA5C2B] text-white animate-pulse"
+                        : "bg-white/20 text-slate-300"
+                  }`}
+                >
                   {step.status === "completed" ? "✓" : idx + 1}
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-300">{step.level}</p>
-                  <p className="text-xs font-semibold text-white">{step.label}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+                    {step.level}
+                  </p>
+                  <p className="text-xs font-semibold text-white">
+                    {step.label}
+                  </p>
                 </div>
               </div>
             ))}
@@ -182,38 +297,85 @@ export default function StudentAccountDashboard() {
                     <Bookmark className="h-5 w-5 text-[#EA5C2B]" />
                   </div>
                   <div>
-                    <h2 className="text-base font-black text-[#102C57]">Saved University Shortlist</h2>
-                    <p className="text-xs text-slate-500">4 universities saved across Germany, UK, and Australia.</p>
+                    <h2 className="text-base font-black text-[#102C57]">
+                      Saved University Shortlist
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      {shortlistedUnis.length > 0
+                        ? `${shortlistedUnis.length} universities saved across your target destinations.`
+                        : "No universities saved to your profile yet."}
+                    </p>
                   </div>
                 </div>
-                <Link href="/" className="text-xs font-bold text-[#EA5C2B] hover:underline">
+                <Link
+                  href="/"
+                  className="text-xs font-bold text-[#EA5C2B] hover:underline"
+                >
                   + Add More Colleges
                 </Link>
               </div>
 
-              <div className="mt-4 divide-y divide-slate-100 overflow-hidden">
-                {FEATURED_UNIVERSITIES.slice(0, 4).map((uni) => (
-                  <div key={uni.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 px-2 rounded-xl transition">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-[#102C57]">
-                        <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+              {shortlistedUnis.length === 0 ? (
+                <div className="py-8 text-center">
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    You haven't saved any universities yet. Browse top
+                    universities across 19 destinations and click{" "}
+                    <strong>★ Shortlist</strong> to track them here.
+                  </p>
+                  <Link
+                    href="/"
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition"
+                  >
+                    <Building2 className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    Explore Universities
+                  </Link>
+                </div>
+              ) : (
+                <div className="mt-4 divide-y divide-slate-100 overflow-hidden">
+                  {shortlistedUnis.map((uni) => (
+                    <div
+                      key={uni.id}
+                      className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 px-2 rounded-xl transition"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-[#102C57]">
+                          <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+                        </div>
+                        <div>
+                          <Link
+                            href={`/universities/${uni.slug}`}
+                            className="text-xs font-bold text-[#102C57] hover:underline"
+                          >
+                            {uni.name}
+                          </Link>
+                          <p className="text-[11px] text-slate-500">
+                            {uni.country} • Global #{uni.rankingGlobal} • Min
+                            IELTS: {uni.ieltsMinScore}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-[#102C57]">{uni.name}</h4>
-                        <p className="text-[11px] text-slate-500">
-                          {uni.country} • Global #{uni.rankingGlobal} • Min IELTS: {uni.ieltsMinScore}
-                        </p>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold text-slate-800">
+                          {uni.tuitionFeeRangeINR}
+                        </span>
+                        <Link
+                          href={`/universities/${uni.slug}`}
+                          className="rounded-xl bg-[#102C57] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#0c2242] transition"
+                        >
+                          View Details
+                        </Link>
+                        <button
+                          onClick={() => removeShortlist(uni.slug)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
+                          title="Remove from shortlist"
+                        >
+                          ✕
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-xs font-bold text-slate-800">{uni.tuitionFeeRangeINR}</span>
-                      <button className="rounded-xl bg-[#102C57] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#0c2242] transition">
-                        Apply Now
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Recent AI Conversations (Resume any) per W10 T-13 */}
@@ -224,11 +386,19 @@ export default function StudentAccountDashboard() {
                     <Bot className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
-                    <h2 className="text-base font-black text-[#102C57]">Recent AI Conversations</h2>
-                    <p className="text-xs text-slate-500">Resume any personalized consultation with your AI Counsellor.</p>
+                    <h2 className="text-base font-black text-[#102C57]">
+                      Recent AI Conversations
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Resume any personalized consultation with your AI
+                      Counsellor.
+                    </p>
                   </div>
                 </div>
-                <Link href="/" className="text-xs font-bold text-[#102C57] hover:underline flex items-center gap-1">
+                <Link
+                  href="/"
+                  className="text-xs font-bold text-[#102C57] hover:underline flex items-center gap-1"
+                >
                   <Sparkles className="h-3.5 w-3.5 text-[#EA5C2B]" />
                   Open Live AI Chat
                 </Link>
@@ -236,14 +406,26 @@ export default function StudentAccountDashboard() {
 
               <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {recentChats.map((chat) => (
-                  <div key={chat.id} className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 hover:border-slate-300 transition flex flex-col justify-between">
+                  <div
+                    key={chat.id}
+                    className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 hover:border-slate-300 transition flex flex-col justify-between"
+                  >
                     <div>
-                      <span className="text-[10px] font-bold text-slate-400">{chat.date}</span>
-                      <h4 className="mt-1 text-xs font-bold text-slate-800 line-clamp-2">{chat.title}</h4>
+                      <span className="text-[10px] font-bold text-slate-400">
+                        {chat.date}
+                      </span>
+                      <h4 className="mt-1 text-xs font-bold text-slate-800 line-clamp-2">
+                        {chat.title}
+                      </h4>
                     </div>
                     <div className="mt-3 flex items-center justify-between pt-2 border-t border-slate-200/60 text-[11px]">
-                      <span className="text-slate-500">{chat.messages} responses</span>
-                      <Link href="/" className="font-bold text-[#EA5C2B] hover:underline">
+                      <span className="text-slate-500">
+                        {chat.messages} responses
+                      </span>
+                      <Link
+                        href="/"
+                        className="font-bold text-[#EA5C2B] hover:underline"
+                      >
                         Resume →
                       </Link>
                     </div>
@@ -263,15 +445,29 @@ export default function StudentAccountDashboard() {
               </h3>
               <div className="mt-4 space-y-3">
                 <div className="rounded-2xl bg-amber-50 border border-amber-200 p-3.5 text-xs">
-                  <p className="font-bold text-amber-900">Upload B1 German Certificate</p>
-                  <p className="mt-1 text-[11px] text-amber-800">Increases tuition-free admission match by 40% for TU Berlin & RWTH Aachen.</p>
-                  <button className="mt-2 text-xs font-bold text-amber-900 underline">Upload Document →</button>
+                  <p className="font-bold text-amber-900">
+                    Upload B1 German Certificate
+                  </p>
+                  <p className="mt-1 text-[11px] text-amber-800">
+                    Increases tuition-free admission match by 40% for TU Berlin
+                    & RWTH Aachen.
+                  </p>
+                  <button className="mt-2 text-xs font-bold text-amber-900 underline">
+                    Upload Document →
+                  </button>
                 </div>
 
                 <div className="rounded-2xl bg-indigo-50 border border-indigo-200 p-3.5 text-xs">
-                  <p className="font-bold text-indigo-900">Book 1-on-1 Visa Specialist Call</p>
-                  <p className="mt-1 text-[11px] text-indigo-800">Review APS certificate requirements and blocked account deposit timings.</p>
-                  <button className="mt-2 text-xs font-bold text-indigo-900 underline">Schedule Call →</button>
+                  <p className="font-bold text-indigo-900">
+                    Book 1-on-1 Visa Specialist Call
+                  </p>
+                  <p className="mt-1 text-[11px] text-indigo-800">
+                    Review APS certificate requirements and blocked account
+                    deposit timings.
+                  </p>
+                  <button className="mt-2 text-xs font-bold text-indigo-900 underline">
+                    Schedule Call →
+                  </button>
                 </div>
               </div>
             </div>
@@ -283,18 +479,29 @@ export default function StudentAccountDashboard() {
                   <Calendar className="h-4 w-4 text-[#EA5C2B]" />
                   Deadline Tracker
                 </h3>
-                <span className="text-[10px] font-bold text-slate-400">2026-2027</span>
+                <span className="text-[10px] font-bold text-slate-400">
+                  2026-2027
+                </span>
               </div>
               <div className="space-y-3">
                 {deadlines.map((d, i) => (
-                  <div key={i} className="flex items-center justify-between text-xs pb-3 border-b border-slate-100 last:border-0 last:pb-0">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between text-xs pb-3 border-b border-slate-100 last:border-0 last:pb-0"
+                  >
                     <div>
                       <p className="font-bold text-slate-800">{d.university}</p>
-                      <p className="text-[10px] text-slate-500">{d.program} • {d.cutoff}</p>
+                      <p className="text-[10px] text-slate-500">
+                        {d.program} • {d.cutoff}
+                      </p>
                     </div>
-                    <span className={`rounded-lg px-2 py-0.5 text-[10px] font-bold ${
-                      d.urgent ? "bg-rose-100 text-rose-700" : "bg-slate-100 text-slate-700"
-                    }`}>
+                    <span
+                      className={`rounded-lg px-2 py-0.5 text-[10px] font-bold ${
+                        d.urgent
+                          ? "bg-rose-100 text-rose-700"
+                          : "bg-slate-100 text-slate-700"
+                      }`}
+                    >
                       {d.daysLeft}d left
                     </span>
                   </div>
@@ -310,15 +517,29 @@ export default function StudentAccountDashboard() {
               </h3>
               <ul className="space-y-2.5 text-xs">
                 <li>
-                  <Link href="/" className="block rounded-xl p-2 hover:bg-slate-50">
-                    <p className="font-bold text-[#102C57] hover:text-[#EA5C2B]">Germany Blocked Account: 2026 Living Cost Guide</p>
-                    <p className="text-[10px] text-slate-400">4 min read • Verified with German Embassy</p>
+                  <Link
+                    href="/"
+                    className="block rounded-xl p-2 hover:bg-slate-50"
+                  >
+                    <p className="font-bold text-[#102C57] hover:text-[#EA5C2B]">
+                      Germany Blocked Account: 2026 Living Cost Guide
+                    </p>
+                    <p className="text-[10px] text-slate-400">
+                      4 min read • Verified with German Embassy
+                    </p>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/" className="block rounded-xl p-2 hover:bg-slate-50">
-                    <p className="font-bold text-[#102C57] hover:text-[#EA5C2B]">UK Graduate Route Post-Study Visa Checklist</p>
-                    <p className="text-[10px] text-slate-400">6 min read • Updated Home Office rules</p>
+                  <Link
+                    href="/"
+                    className="block rounded-xl p-2 hover:bg-slate-50"
+                  >
+                    <p className="font-bold text-[#102C57] hover:text-[#EA5C2B]">
+                      UK Graduate Route Post-Study Visa Checklist
+                    </p>
+                    <p className="text-[10px] text-slate-400">
+                      6 min read • Updated Home Office rules
+                    </p>
                   </Link>
                 </li>
               </ul>

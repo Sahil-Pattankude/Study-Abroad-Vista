@@ -1,8 +1,13 @@
 import { MetadataRoute } from "next";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import {
+  COUNTRIES,
+  PROGRAMS,
+  FEATURED_UNIVERSITIES,
+} from "@/lib/data/masterData";
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://studyabroadvista.com";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://studyabroadvista.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -23,6 +28,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${BASE_URL}/cost-calculator`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/compare/universities`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/compare/courses`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
@@ -108,12 +125,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Featured Universities
-  const universityPages: MetadataRoute.Sitemap = FEATURED_UNIVERSITIES.map((u) => ({
-    url: `${BASE_URL}/universities/${u.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
+  const universityPages: MetadataRoute.Sitemap = FEATURED_UNIVERSITIES.map(
+    (u) => ({
+      url: `${BASE_URL}/universities/${u.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }),
+  );
 
   return [
     ...staticPages,

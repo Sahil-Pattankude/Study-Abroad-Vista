@@ -179,7 +179,10 @@ export default async function UniversityDetailPage({ params }: Props) {
                   Upcoming Intakes & Application Windows
                 </h2>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {uni.intakes.map((intake, i) => (
+                  {(Array.isArray(uni.intakes)
+                    ? uni.intakes
+                    : ["Fall (Sep)", "Spring (Jan)"]
+                  ).map((intake, i) => (
                     <span
                       key={i}
                       className="rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-900"

@@ -2,27 +2,13 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import dynamic from "next/dynamic";
 import { Bot, Lock } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 
-// Defer overlay components so they don't block initial mobile bundle execution
-const AICounsellorDrawer = dynamic(
-  () => import("@/components/ai/AICounsellorDrawer").then((m) => m.AICounsellorDrawer),
-  { ssr: false }
-);
-const LeadModal = dynamic(
-  () => import("@/components/lead/LeadModal").then((m) => m.LeadModal),
-  { ssr: false }
-);
-const SearchDialog = dynamic(
-  () => import("@/components/search/SearchDialog").then((m) => m.SearchDialog),
-  { ssr: false }
-);
-const AuthRequiredModal = dynamic(
-  () => import("@/components/auth/AuthRequiredModal").then((m) => m.AuthRequiredModal),
-  { ssr: false }
-);
+import { AICounsellorDrawer } from "@/components/ai/AICounsellorDrawer";
+import { LeadModal } from "@/components/lead/LeadModal";
+import { SearchDialog } from "@/components/search/SearchDialog";
+import { AuthRequiredModal } from "@/components/auth/AuthRequiredModal";
 
 interface HomeModalsContextType {
   openSearch: () => void;
@@ -48,7 +34,11 @@ export function useHomeModals() {
 
 export function HomeModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const isStudioOrAdmin = Boolean(pathname?.startsWith("/studio") || pathname?.startsWith("/admin") || pathname?.startsWith("/portal"));
+  const isStudioOrAdmin = Boolean(
+    pathname?.startsWith("/studio") ||
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/portal"),
+  );
   const { isLoggedIn } = useAuth();
   const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);

@@ -1,12 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { DeferredSection } from "@/components/performance/DeferredSection";
-
-const CostCalculatorWidget = dynamic(
-  () => import("@/components/home/CostCalculatorWidget").then((module) => module.CostCalculatorWidget),
-  { ssr: false },
-);
+import { CostCalculatorWidget } from "@/components/home/CostCalculatorWidget";
 
 export function DeferredCostCalculator() {
   return (

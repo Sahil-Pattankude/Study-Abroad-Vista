@@ -10,7 +10,7 @@ CREATE EXTENSION IF NOT EXISTS "pg_trgm";     -- Trigram similarity for fuzzy se
 
 -- 2. Enumerated Types
 CREATE TYPE user_role AS ENUM ('student', 'consultant_buyer', 'university_partner', 'admin');
-CREATE TYPE program_category AS ENUM ('ms', 'mba', 'mbbs', 'bachelors', 'nursing', 'ausbildung');
+CREATE TYPE program_category AS ENUM ('ms', 'mba', 'emba', 'mbbs', 'bachelors', 'nursing', 'phd', 'ausbildung');
 CREATE TYPE lead_status AS ENUM ('raw', 'verified', 'enriched', 'matched', 'delivered', 'converted', 'disputed');
 CREATE TYPE delivery_type AS ENUM ('exclusive', 'shared_3x', 'auction_bid');
 CREATE TYPE transaction_type AS ENUM ('wallet_topup', 'lead_purchase', 'lead_refund', 'platform_credit');
@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS programs (
     key_fields TEXT[],
     summary TEXT,
     roi_score INT DEFAULT 90,
+    top_destinations TEXT[],
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

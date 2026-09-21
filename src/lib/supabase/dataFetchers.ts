@@ -3,9 +3,34 @@ import { supabaseAdmin } from "./server";
 import { COUNTRIES, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
 import { Country, University, CourseItem } from "@/types";
 import {
+  mapSupabaseCountry,
+  mapSanityCountry,
+  mapSupabaseUniversity,
+  mapSanityUniversity,
+} from "@/lib/data/mappers";
+import {
   getSanityUniversities,
   getSanityCountries,
 } from "@/lib/sanity/fetchers";
+
+async function queryWithTimeout<T>(
+  promiseFactory: () => PromiseLike<T>,
+  timeoutMs = 2500,
+): Promise<T | null> {
+  let timeoutHandle: any;
+  const timeoutPromise = new Promise<null>((resolve) => {
+    timeoutHandle = setTimeout(() => resolve(null), timeoutMs);
+  });
+
+  try {
+    const result = await Promise.race([promiseFactory(), timeoutPromise]);
+    return result as T;
+  } catch (err) {
+    return null;
+  } finally {
+    clearTimeout(timeoutHandle);
+  }
+}
 
 export async function fetchLiveCountries(): Promise<Country[]> {
   let list: Country[] = [];
@@ -13,30 +38,17 @@ export async function fetchLiveCountries(): Promise<Country[]> {
   // 1. Fetch Supabase Countries
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
-    const { data, error } = await client
-      .from("countries")
-      .select("*")
-      .eq("is_active", true);
-    if (!error && data && data.length > 0) {
-      list = data.map((c: any) => ({
-        id: c.id,
-        name: c.name,
-        slug: c.slug,
-        code: c.code,
-        tier: c.tier,
-        flagEmoji: c.flag_emoji || "🌐",
-        currency: c.currency,
-        currencySymbol: c.currency_symbol,
-        exchangeRateToINR: Number(c.exchange_rate_inr) || 85.0,
-        popularPrograms: c.popular_programs || ["ms", "mba"],
-        avgTuitionINR: c.avg_tuition_inr || "₹15 - 30 Lakhs / yr",
-        avgLivingCostINR: c.avg_living_cost_inr || "₹8 - 12 Lakhs / yr",
-        postStudyWorkVisa: c.post_study_work_visa || "1 to 2 Years",
-        topIntakes: c.top_intakes || ["Fall (Sep)", "Spring (Jan)"],
-        heroTagline: c.hero_tagline || `Study in ${c.name}`,
-        overview: c.overview || `Overview for ${c.name}`,
-        safetyRating: Number(c.safety_rating) || 4.5,
-      }));
+    const response = await queryWithTimeout(
+      () => client.from("countries").select("*").eq("is_active", true),
+      2500,
+    );
+    if (
+      response &&
+      !(response as any).error &&
+      (response as any).data &&
+      (response as any).data.length > 0
+    ) {
+      list = (response as any).data.map(mapSupabaseCountry);
     }
   } catch (err) {
     console.warn("Supabase countries fetch fallback:", err);
@@ -48,33 +60,17 @@ export async function fetchLiveCountries(): Promise<Country[]> {
 
   // 2. Merge Sanity CMS Countries (Prepend / update by slug)
   try {
-    const sanityCountries = await getSanityCountries();
+    const sanityCountries = await queryWithTimeout(
+      () => getSanityCountries(),
+      2000,
+    );
     if (sanityCountries && sanityCountries.length > 0) {
       const map = new Map<string, Country>();
 
       sanityCountries.forEach((sc: any) => {
-        const slugStr =
-          typeof sc.slug === "string" ? sc.slug : sc.slug?.current;
-        if (slugStr) {
-          map.set(slugStr, {
-            id: sc._id,
-            name: sc.name,
-            slug: slugStr,
-            code: sc.code || "GLOBAL",
-            tier: sc.tier || "Tier 1",
-            flagEmoji: sc.flagEmoji || "🌐",
-            currency: sc.currency || "USD",
-            currencySymbol: sc.currencySymbol || "$",
-            exchangeRateToINR: Number(sc.exchangeRateToINR) || 85.0,
-            popularPrograms: ["ms", "mba"],
-            avgTuitionINR: sc.avgTuitionINR || "₹15 - 30 Lakhs / yr",
-            avgLivingCostINR: sc.avgLivingCostINR || "₹8 - 12 Lakhs / yr",
-            postStudyWorkVisa: sc.postStudyWorkVisa || "1 to 3 Years",
-            topIntakes: ["Fall (Sep)", "Spring (Jan)"],
-            heroTagline: sc.heroTagline || `Study in ${sc.name}`,
-            overview: sc.overview || `Overview for ${sc.name}`,
-            safetyRating: Number(sc.safetyRating) || 4.5,
-          });
+        const mapped = mapSanityCountry(sc);
+        if (mapped) {
+          map.set(mapped.slug, mapped);
         }
       });
 
@@ -105,31 +101,20 @@ export async function fetchLiveUniversities(): Promise<University[]> {
   // 2. Fetch Supabase Universities & Merge
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
-    const { data, error } = await client.from("universities").select("*");
-    if (!error && data && data.length > 0) {
-      data.forEach((u: any) => {
-        if (u.slug) {
-          uniMap.set(u.slug, {
-            id: u.id || u.slug,
-            name: u.name,
-            slug: u.slug,
-            country: u.country_id?.toUpperCase() || "Global",
-            countrySlug: u.country_id || "global",
-            city: u.city,
-            rankingGlobal: u.ranking_global || 100,
-            rankingNational: u.ranking_national || 10,
-            programsOffered: u.programs_offered || ["ms", "mba"],
-            tuitionFeeRangeINR:
-              u.tuition_fee_range_inr || "₹15 - 30 Lakhs / yr",
-            ieltsMinScore: Number(u.ielts_min_score) || 6.5,
-            greGmatRequired: u.gre_gmat_required || false,
-            intakes: u.intakes || ["Fall (Sep)", "Spring (Jan)"],
-            acceptanceRate: u.acceptance_rate || 30,
-            nmcCompliant: u.nmc_compliant || false,
-            postStudyWorkMonths: u.post_study_work_months || 24,
-            featured: u.featured || true,
-            claimed_status: u.claimed_status || "unclaimed",
-          });
+    const response = await queryWithTimeout(
+      () => client.from("universities").select("*"),
+      2500,
+    );
+    if (
+      response &&
+      !(response as any).error &&
+      (response as any).data &&
+      (response as any).data.length > 0
+    ) {
+      (response as any).data.forEach((u: any) => {
+        const mapped = mapSupabaseUniversity(u);
+        if (mapped) {
+          uniMap.set(mapped.slug, mapped);
         }
       });
     }
@@ -139,30 +124,15 @@ export async function fetchLiveUniversities(): Promise<University[]> {
 
   // 3. Merge Sanity CMS Universities
   try {
-    const sanityUnis = await getSanityUniversities();
+    const sanityUnis = await queryWithTimeout(
+      () => getSanityUniversities(),
+      2000,
+    );
     if (sanityUnis && sanityUnis.length > 0) {
       sanityUnis.forEach((su: any) => {
-        const slugStr =
-          typeof su.slug === "string" ? su.slug : su.slug?.current;
-        if (slugStr) {
-          uniMap.set(slugStr, {
-            id: su._id,
-            name: su.name,
-            slug: slugStr,
-            country: su.country ? su.country.toUpperCase() : "Global",
-            countrySlug: su.country || "global",
-            city: su.city || "Campus City",
-            rankingGlobal: su.rankingGlobal || 100,
-            rankingNational: su.rankingNational || 1,
-            programsOffered: ["ms", "mba"],
-            tuitionFeeRangeINR: su.tuitionFeeRangeINR || "₹15 - 30 Lakhs / yr",
-            ieltsMinScore: Number(su.ieltsMinScore) || 6.5,
-            greGmatRequired: su.greGmatRequired || false,
-            intakes: ["Fall (Aug/Sep)", "Spring (Jan)"],
-            acceptanceRate: su.acceptanceRate || 30,
-            postStudyWorkMonths: su.postStudyWorkMonths || 24,
-            featured: su.featured ?? true,
-          });
+        const mapped = mapSanityUniversity(su);
+        if (mapped) {
+          uniMap.set(mapped.slug, mapped);
         }
       });
     }
@@ -195,13 +165,22 @@ export async function fetchLiveClaims(): Promise<ClaimItem[]> {
         return json.claims;
       }
     } else {
-      const { data, error } = await supabaseAdmin
-        .from("university_claims")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const response = await queryWithTimeout(
+        () =>
+          supabaseAdmin
+            .from("university_claims")
+            .select("*")
+            .order("created_at", { ascending: false }),
+        2000,
+      );
 
-      if (!error && data && data.length > 0) {
-        return data.map((c: any) => ({
+      if (
+        response &&
+        !(response as any).error &&
+        (response as any).data &&
+        (response as any).data.length > 0
+      ) {
+        return (response as any).data.map((c: any) => ({
           id: c.id,
           universityId: c.university_id,
           universityName: c.university_name,
@@ -509,9 +488,17 @@ export async function fetchLiveCourses(): Promise<CourseItem[]> {
   // 3. Direct fetch from Supabase `courses` table if user has added custom course rows
   try {
     const client = typeof window === "undefined" ? supabaseAdmin : supabase;
-    const { data, error } = await client.from("courses").select("*");
-    if (!error && data && data.length > 0) {
-      data.forEach((c: any) => {
+    const response = await queryWithTimeout(
+      () => client.from("courses").select("*"),
+      2000,
+    );
+    if (
+      response &&
+      !(response as any).error &&
+      (response as any).data &&
+      (response as any).data.length > 0
+    ) {
+      (response as any).data.forEach((c: any) => {
         if (c.slug) {
           courseMap.set(c.slug, {
             id: c.id || c.slug,

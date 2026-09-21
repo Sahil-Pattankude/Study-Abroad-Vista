@@ -2,25 +2,29 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { 
-  Compass, 
-  Search, 
-  Bot, 
-  ChevronDown, 
-  Menu, 
-  X, 
-  Lock, 
-  User, 
-  LogOut, 
-  Calculator, 
+import {
+  Compass,
+  Search,
+  Bot,
+  ChevronDown,
+  Menu,
+  X,
+  Lock,
+  User,
+  LogOut,
+  Calculator,
   Briefcase,
   Building2,
   ArrowRight,
   GraduationCap,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
-import { COUNTRIES, PROGRAMS, FEATURED_UNIVERSITIES } from "@/lib/data/masterData";
+import {
+  COUNTRIES,
+  PROGRAMS,
+  FEATURED_UNIVERSITIES,
+} from "@/lib/data/masterData";
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { University } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -28,10 +32,10 @@ import { useHomeModals } from "@/components/home/HomeClientContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 
 const ANCHOR_SLUGS = ["usa", "uk", "canada", "australia", "germany", "ireland"];
-const ANCHOR_COUNTRIES = COUNTRIES.filter(c => ANCHOR_SLUGS.includes(c.slug));
-const TIER_1_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 1");
-const TIER_2_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 2");
-const TIER_3_COUNTRIES = COUNTRIES.filter(c => c.tier === "Tier 3");
+const ANCHOR_COUNTRIES = COUNTRIES.filter((c) => ANCHOR_SLUGS.includes(c.slug));
+const TIER_1_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 1");
+const TIER_2_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 2");
+const TIER_3_COUNTRIES = COUNTRIES.filter((c) => c.tier === "Tier 3");
 
 interface HeaderProps {
   onOpenSearch?: () => void;
@@ -39,7 +43,11 @@ interface HeaderProps {
   onOpenLeadModal?: () => void;
 }
 
-export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: HeaderProps) {
+export function Header({
+  onOpenSearch,
+  onOpenAICounsellor,
+  onOpenLeadModal,
+}: HeaderProps) {
   const { user, isLoggedIn, logout } = useAuth();
   const homeModals = useHomeModals();
 
@@ -54,7 +62,9 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
   const [toolsOpen, setToolsOpen] = useState(false);
   const [testPrepOpen, setTestPrepOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [universitiesList, setUniversitiesList] = useState<University[]>(FEATURED_UNIVERSITIES);
+  const [universitiesList, setUniversitiesList] = useState<University[]>(
+    FEATURED_UNIVERSITIES,
+  );
 
   useEffect(() => {
     fetchLiveUniversities().then((res) => {
@@ -85,14 +95,20 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
         {/* Desktop Global Navigation - Clean & Refined */}
         <nav className="hidden items-center gap-5 xl:gap-7 lg:flex shrink-0 whitespace-nowrap">
           {/* Destinations Mega Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setDestinationsOpen(true)}
             onMouseLeave={() => setDestinationsOpen(false)}
           >
-            <button aria-label="Open destinations menu" aria-expanded={destinationsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+            <button
+              aria-label="Open destinations menu"
+              aria-expanded={destinationsOpen}
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            >
               <span>Destinations</span>
-              <span className="text-[10px] text-slate-400 font-normal">(19)</span>
+              <span className="text-[10px] text-slate-400 font-normal">
+                (19)
+              </span>
               <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
             </button>
 
@@ -105,10 +121,17 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         Tier 1 (High Demand)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_1_COUNTRIES.map(c => (
+                        {TIER_1_COUNTRIES.map((c) => (
                           <li key={c.id}>
-                            <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
+                            <Link
+                              href={`/study-in-${c.slug}`}
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                            >
+                              <CountryFlag
+                                code={c.code}
+                                name={c.name}
+                                className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200"
+                              />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -121,10 +144,17 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         Tier 2 (Affordable / Low-Fee)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_2_COUNTRIES.map(c => (
+                        {TIER_2_COUNTRIES.map((c) => (
                           <li key={c.id}>
-                            <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
+                            <Link
+                              href={`/study-in-${c.slug}`}
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                            >
+                              <CountryFlag
+                                code={c.code}
+                                name={c.name}
+                                className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200"
+                              />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -137,10 +167,17 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         Tier 3 (Medical / Low-Cost)
                       </p>
                       <ul className="space-y-1.5 text-xs">
-                        {TIER_3_COUNTRIES.map(c => (
+                        {TIER_3_COUNTRIES.map((c) => (
                           <li key={c.id}>
-                            <Link href={`/study-in-${c.slug}`} className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]">
-                              <CountryFlag code={c.code} name={c.name} className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200" />
+                            <Link
+                              href={`/study-in-${c.slug}`}
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                            >
+                              <CountryFlag
+                                code={c.code}
+                                name={c.name}
+                                className="h-3.5 w-5 object-cover rounded-xs shadow-2xs border border-slate-200"
+                              />
                               <span className="font-medium">{c.name}</span>
                             </Link>
                           </li>
@@ -154,14 +191,20 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* Programs Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setProgramsOpen(true)}
             onMouseLeave={() => setProgramsOpen(false)}
           >
-            <button aria-label="Open programs menu" aria-expanded={programsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+            <button
+              aria-label="Open programs menu"
+              aria-expanded={programsOpen}
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            >
               <span>Programs</span>
-              <span className="text-[10px] text-slate-400 font-normal">(8)</span>
+              <span className="text-[10px] text-slate-400 font-normal">
+                (8)
+              </span>
               <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
             </button>
 
@@ -169,11 +212,19 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
               <div className="absolute left-0 top-full pt-2">
                 <div className="w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
                   <ul className="space-y-1.5">
-                    {PROGRAMS.map(p => (
+                    {PROGRAMS.map((p) => (
                       <li key={p.id}>
-                        <Link href={`/programs/${p.slug}`} className="block rounded-xl p-2 hover:bg-slate-50 transition">
-                          <p className="text-xs font-bold text-[#102C57]">{p.name}</p>
-                          <p className="text-[11px] text-slate-500">{p.duration} • Top: {p.topDestinations.slice(0, 3).join(", ")}</p>
+                        <Link
+                          href={`/programs/${p.slug}`}
+                          className="block rounded-xl p-2 hover:bg-slate-50 transition"
+                        >
+                          <p className="text-xs font-bold text-[#102C57]">
+                            {p.name}
+                          </p>
+                          <p className="text-[11px] text-slate-500">
+                            {p.duration} • Top:{" "}
+                            {p.topDestinations.slice(0, 3).join(", ")}
+                          </p>
                         </Link>
                       </li>
                     ))}
@@ -184,30 +235,49 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* 3. Universities Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setUniversitiesOpen(true)}
             onMouseLeave={() => setUniversitiesOpen(false)}
           >
-            <button aria-label="Open universities menu" aria-expanded={universitiesOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+            <button
+              aria-label="Open universities menu"
+              aria-expanded={universitiesOpen}
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            >
               <span>Universities</span>
-              <span className="text-[10px] text-slate-400 font-normal">({universitiesList.length || 18})</span>
-              <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${universitiesOpen ? 'rotate-180 text-slate-700' : ''}`} />
+              <span className="text-[10px] text-slate-400 font-normal">
+                ({universitiesList.length || 18})
+              </span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${universitiesOpen ? "rotate-180 text-slate-700" : ""}`}
+              />
             </button>
 
             {universitiesOpen && (
               <div className="absolute -left-10 top-full pt-2">
                 <div className="w-80 rounded-2xl border border-slate-100 bg-white p-4 shadow-2xl ring-1 ring-slate-900/5">
                   <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">Featured Institutions</span>
-                    <span className="text-[10px] font-medium text-slate-400">QS Verified</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
+                      Featured Institutions
+                    </span>
+                    <span className="text-[10px] font-medium text-slate-400">
+                      QS Verified
+                    </span>
                   </div>
                   <ul className="space-y-1 max-h-80 overflow-y-auto">
                     {universitiesList.map((u) => (
                       <li key={u.slug || u.id}>
-                        <Link href={`/universities/${u.slug}`} className="block rounded-xl p-2 hover:bg-slate-50 transition group/uni">
-                          <p className="text-xs font-bold text-[#102C57] group-hover/uni:text-[#EA5C2B] transition">{u.name}</p>
-                          <p className="text-[11px] text-slate-400 mt-0.5">#{u.rankingGlobal} Global • {u.country}</p>
+                        <Link
+                          href={`/universities/${u.slug}`}
+                          className="block rounded-xl p-2 hover:bg-slate-50 transition group/uni"
+                        >
+                          <p className="text-xs font-bold text-[#102C57] group-hover/uni:text-[#EA5C2B] transition">
+                            {u.name}
+                          </p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">
+                            #{u.rankingGlobal} Global • {u.country}
+                          </p>
                         </Link>
                       </li>
                     ))}
@@ -218,15 +288,23 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* 4. Test Prep Mega Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setTestPrepOpen(true)}
             onMouseLeave={() => setTestPrepOpen(false)}
           >
-            <button aria-label="Open test prep menu" aria-expanded={testPrepOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+            <button
+              aria-label="Open test prep menu"
+              aria-expanded={testPrepOpen}
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            >
               <span>Test Prep</span>
-              <span className="text-[10px] text-slate-400 font-normal">(9)</span>
-              <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${testPrepOpen ? 'rotate-180 text-slate-700' : ''}`} />
+              <span className="text-[10px] text-slate-400 font-normal">
+                (9)
+              </span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${testPrepOpen ? "rotate-180 text-slate-700" : ""}`}
+              />
             </button>
 
             {testPrepOpen && (
@@ -240,22 +318,34 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                       </p>
                       <ul className="space-y-1 text-xs">
                         <li>
-                          <Link href="/test-prep/ielts" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/ielts"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             IELTS Academic
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/toefl" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/toefl"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             TOEFL iBT
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/pte" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/pte"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             PTE Academic
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/duolingo" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/duolingo"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             Duolingo DET
                           </Link>
                         </li>
@@ -269,12 +359,18 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                       </p>
                       <ul className="space-y-1 text-xs">
                         <li>
-                          <Link href="/test-prep/gre" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/gre"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             GRE General
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/gmat" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/gmat"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             GMAT Focus
                           </Link>
                         </li>
@@ -288,17 +384,26 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                       </p>
                       <ul className="space-y-1 text-xs">
                         <li>
-                          <Link href="/test-prep/nclex" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/nclex"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             NCLEX-RN
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/plab" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/plab"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             PLAB / UKMLA
                           </Link>
                         </li>
                         <li>
-                          <Link href="/test-prep/oet" className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]">
+                          <Link
+                            href="/test-prep/oet"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                          >
                             OET Healthcare
                           </Link>
                         </li>
@@ -307,8 +412,13 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-[11px] text-slate-400">All fees in INR & 8-week roadmaps</span>
-                    <Link href="/test-prep" className="font-bold text-[#EA5C2B] hover:underline flex items-center gap-1">
+                    <span className="text-[11px] text-slate-400">
+                      All fees in INR & 8-week roadmaps
+                    </span>
+                    <Link
+                      href="/test-prep"
+                      className="font-bold text-[#EA5C2B] hover:underline flex items-center gap-1"
+                    >
                       <span>Explore Test Prep Hub →</span>
                     </Link>
                   </div>
@@ -318,94 +428,146 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* 5. Tools Dropdown */}
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setToolsOpen(true)}
             onMouseLeave={() => setToolsOpen(false)}
           >
-            <button aria-label="Open tools menu" aria-expanded={toolsOpen} className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+            <button
+              aria-label="Open tools menu"
+              aria-expanded={toolsOpen}
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            >
               <span>Tools</span>
-              <span className="text-[10px] text-slate-400 font-normal">(6)</span>
-              <ChevronDown className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? 'rotate-180 text-slate-700' : ''}`} />
+              <span className="text-[10px] text-slate-400 font-normal">
+                (6)
+              </span>
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? "rotate-180 text-slate-700" : ""}`}
+              />
             </button>
 
             {toolsOpen && (
               <div className="absolute -left-8 top-full pt-2">
                 <div className="w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
                   <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">Student Utilities</span>
-                    <span className="text-[10px] font-medium text-slate-400">6 Interactive Tools</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
+                      Student Utilities
+                    </span>
+                    <span className="text-[10px] font-medium text-slate-400">
+                      6 Interactive Tools
+                    </span>
                   </div>
                   <ul className="space-y-1">
                     <li>
-                      <Link href="/cost-calculator" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                      <Link
+                        href="/cost-calculator"
+                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B]">
                           <Calculator className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-[#EA5C2B]">Cost Calculator</p>
-                          <p className="text-[10px] text-slate-400">Living + Tuition in INR</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-[#EA5C2B]">
+                            Cost Calculator
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Living + Tuition in INR
+                          </p>
                         </div>
                       </Link>
                     </li>
                     <li>
-                      <Link href="/compare" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                      <Link
+                        href="/compare/universities"
+                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                           <Building2 className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-blue-700">University Compare</p>
-                          <p className="text-[10px] text-slate-400">Side-by-side (2-5 unis)</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-blue-700">
+                            Compare Universities
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Side-by-side (2-5 unis)
+                          </p>
                         </div>
                       </Link>
                     </li>
                     <li>
-                      <Link href="/compare" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                      <Link
+                        href="/compare/courses"
+                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
                           <GraduationCap className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-purple-700">Course & Degree Compare</p>
-                          <p className="text-[10px] text-slate-400">Fees, IELTS, Work Visa Matrix</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-purple-700">
+                            Compare Courses
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Fees, IELTS & work permits
+                          </p>
                         </div>
                       </Link>
                     </li>
                     <li>
-                      <button 
-                        onClick={() => { handleAI(); }}
+                      <button
+                        onClick={() => {
+                          handleAI();
+                        }}
                         className="flex w-full items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool text-left"
                       >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
                           <Bot className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-indigo-600">AI Counsellor</p>
-                          <p className="text-[10px] text-slate-400">24/7 Admissions Guidance</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-indigo-600">
+                            AI Counsellor
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            24/7 Admissions Guidance
+                          </p>
                         </div>
                       </button>
                     </li>
                     <li>
-                      <Link href="/cost-calculator" className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool">
+                      <Link
+                        href="/cost-calculator"
+                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
                           <ShieldCheck className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-emerald-700">EMBA & Master's ROI</p>
-                          <p className="text-[10px] text-slate-400">Salary multiplier /100 score</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-emerald-700">
+                            EMBA & Master's ROI
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Salary multiplier /100 score
+                          </p>
                         </div>
                       </Link>
                     </li>
                     <li>
                       <button
-                        onClick={() => { handleLead(); }}
+                        onClick={() => {
+                          handleLead();
+                        }}
                         className="flex w-full items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool text-left"
                       >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
                           <ArrowRight className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-amber-700">Eligibility & Shortlist Review</p>
-                          <p className="text-[10px] text-slate-400">Instant profile evaluation</p>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-amber-700">
+                            Eligibility & Shortlist Review
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Instant profile evaluation
+                          </p>
                         </div>
                       </button>
                     </li>
@@ -416,7 +578,10 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </div>
 
           {/* 6. Blog & Guides */}
-          <Link href="/blog" className="py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap">
+          <Link
+            href="/blog"
+            className="py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+          >
             Blog & Guides
           </Link>
         </nav>
@@ -424,7 +589,7 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
         {/* Right CTA Actions - Cleaned & Streamlined */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           {/* Search Icon Button */}
-          <button 
+          <button
             onClick={handleSearch}
             aria-label="Search universities, programs and destinations"
             className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition shrink-0 cursor-pointer"
@@ -441,10 +606,10 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   user?.role === "buyer"
                     ? "/portal/buyer"
                     : user?.role === "university"
-                    ? "/portal/university"
-                    : user?.role === "admin"
-                    ? "/admin"
-                    : "/dashboard/student"
+                      ? "/portal/university"
+                      : user?.role === "admin"
+                        ? "/admin"
+                        : "/dashboard/student"
                 }
                 className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/90 px-3.5 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition shrink-0 shadow-2xs"
               >
@@ -453,10 +618,10 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   {user?.role === "buyer"
                     ? "Consultant Portal"
                     : user?.role === "university"
-                    ? "University Portal"
-                    : user?.role === "admin"
-                    ? "Admin Panel"
-                    : "My Dashboard"}
+                      ? "University Portal"
+                      : user?.role === "admin"
+                        ? "Admin Panel"
+                        : "My Dashboard"}
                 </span>
                 <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-extrabold text-indigo-700 capitalize shrink-0 border border-indigo-100/60">
                   {user?.role === "buyer" ? "B2B" : user?.role}
@@ -472,23 +637,34 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
               </button>
             </div>
           ) : (
-            <div 
+            <div
               className="relative hidden sm:block"
               onMouseEnter={() => setAuthOpen(true)}
               onMouseLeave={() => setAuthOpen(false)}
             >
-              <button aria-label="Open portals and login menu" aria-expanded={authOpen} className="flex items-center gap-1 rounded-full border border-slate-200/90 bg-slate-50/80 px-3 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition">
+              <button
+                aria-label="Open portals and login menu"
+                aria-expanded={authOpen}
+                className="flex items-center gap-1 rounded-full border border-slate-200/90 bg-slate-50/80 px-3 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition"
+              >
                 <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
                 <span>Portals & Login</span>
-                <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform duration-150 ${authOpen ? 'rotate-180 text-slate-700' : ''}`} />
+                <ChevronDown
+                  className={`h-3 w-3 text-slate-400 transition-transform duration-150 ${authOpen ? "rotate-180 text-slate-700" : ""}`}
+                />
               </button>
 
               {authOpen && (
                 <div className="absolute right-0 top-full pt-2">
                   <div className="w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
                     <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">Portals & Sign In</span>
-                      <Link href="/signup" className="text-[10px] font-bold text-[#EA5C2B] hover:underline">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
+                        Portals & Sign In
+                      </span>
+                      <Link
+                        href="/signup"
+                        className="text-[10px] font-bold text-[#EA5C2B] hover:underline"
+                      >
                         Register Free →
                       </Link>
                     </div>
@@ -504,10 +680,16 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-[#EA5C2B]">Student Dashboard</span>
-                            <span className="rounded bg-orange-100 px-1 py-0.2 text-[9px] font-bold text-[#EA5C2B]">Aspirants</span>
+                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-[#EA5C2B]">
+                              Student Dashboard
+                            </span>
+                            <span className="rounded bg-orange-100 px-1 py-0.2 text-[9px] font-bold text-[#EA5C2B]">
+                              Aspirants
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-400">Shortlists, applications & AI chat history</p>
+                          <p className="text-[10px] text-slate-400">
+                            Shortlists, applications & AI chat history
+                          </p>
                         </div>
                       </Link>
 
@@ -521,10 +703,16 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-blue-700">B2B Consultant Portal</span>
-                            <span className="rounded bg-blue-100 px-1 py-0.2 text-[9px] font-bold text-blue-700">Consultants</span>
+                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-blue-700">
+                              B2B Consultant Portal
+                            </span>
+                            <span className="rounded bg-blue-100 px-1 py-0.2 text-[9px] font-bold text-blue-700">
+                              Consultants
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-400">Lead marketplace feed & wallet top-up</p>
+                          <p className="text-[10px] text-slate-400">
+                            Lead marketplace feed & wallet top-up
+                          </p>
                         </div>
                       </Link>
 
@@ -538,19 +726,31 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-emerald-700">University Portal</span>
-                            <span className="rounded bg-emerald-100 px-1 py-0.2 text-[9px] font-bold text-emerald-700">Partners</span>
+                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-emerald-700">
+                              University Portal
+                            </span>
+                            <span className="rounded bg-emerald-100 px-1 py-0.2 text-[9px] font-bold text-emerald-700">
+                              Partners
+                            </span>
                           </div>
-                          <p className="text-[10px] text-slate-400">Manage listings, programs & analytics</p>
+                          <p className="text-[10px] text-slate-400">
+                            Manage listings, programs & analytics
+                          </p>
                         </div>
                       </Link>
                     </div>
 
                     <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-xs px-2">
-                      <Link href="/login" className="font-bold text-[#102C57] hover:underline">
+                      <Link
+                        href="/login"
+                        className="font-bold text-[#102C57] hover:underline"
+                      >
                         Standard Sign In →
                       </Link>
-                      <Link href="/signup" className="font-bold text-[#EA5C2B] hover:underline">
+                      <Link
+                        href="/signup"
+                        className="font-bold text-[#EA5C2B] hover:underline"
+                      >
                         Create Account
                       </Link>
                     </div>
@@ -570,12 +770,16 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           </button>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-700 lg:hidden"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
@@ -585,7 +789,11 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
         <div className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden overflow-y-auto animate-in fade-in slide-in-from-right duration-200">
           {/* Mobile Drawer Top Header */}
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-3.5 backdrop-blur-md">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5"
+            >
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-sm">
                 <Compass className="h-5 w-5 text-[#EA5C2B]" />
               </div>
@@ -611,7 +819,10 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           <div className="flex-1 p-4 space-y-6 pb-24">
             {/* 1. AI Counsellor Banner */}
             <button
-              onClick={() => { setMobileMenuOpen(false); handleAI(); }}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleAI();
+              }}
               className="w-full text-left rounded-2xl bg-gradient-to-r from-[#102C57] to-[#1e457e] p-4 text-white shadow-md relative overflow-hidden group"
             >
               <div className="flex items-center justify-between">
@@ -621,13 +832,18 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-extrabold text-white">AI Admissions Counsellor</span>
+                      <span className="text-sm font-extrabold text-white">
+                        AI Admissions Counsellor
+                      </span>
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-300 border border-emerald-500/30">
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         24/7 Live
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 mt-0.5">Instant eligibility, fee calculation & university shortlists</p>
+                    <p className="text-[11px] text-slate-300 mt-0.5">
+                      Instant eligibility, fee calculation & university
+                      shortlists
+                    </p>
                   </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
@@ -660,8 +876,12 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   >
                     <CountryFlag code={c.code} name={c.name} size="sm" />
                     <div className="overflow-hidden">
-                      <p className="text-xs font-bold text-slate-900 truncate">{c.name}</p>
-                      <p className="text-[10px] text-slate-500 truncate">{c.avgTuitionINR}</p>
+                      <p className="text-xs font-bold text-slate-900 truncate">
+                        {c.name}
+                      </p>
+                      <p className="text-[10px] text-slate-500 truncate">
+                        {c.avgTuitionINR}
+                      </p>
                     </div>
                   </Link>
                 ))}
@@ -669,17 +889,19 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
 
               {/* Secondary Tier 2 & Tier 3 quick chips */}
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {TIER_2_COUNTRIES.slice(0, 4).concat(TIER_3_COUNTRIES.slice(0, 3)).map((c) => (
-                  <Link
-                    key={c.id}
-                    href={`/study-in-${c.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
-                  >
-                    <CountryFlag code={c.code} name={c.name} size="sm" />
-                    <span>{c.name}</span>
-                  </Link>
-                ))}
+                {TIER_2_COUNTRIES.slice(0, 4)
+                  .concat(TIER_3_COUNTRIES.slice(0, 3))
+                  .map((c) => (
+                    <Link
+                      key={c.id}
+                      href={`/study-in-${c.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
+                    >
+                      <CountryFlag code={c.code} name={c.name} size="sm" />
+                      <span>{c.name}</span>
+                    </Link>
+                  ))}
               </div>
             </div>
 
@@ -697,7 +919,9 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 hover:bg-slate-100 transition"
                   >
                     <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
-                    <span className="font-semibold text-slate-800 truncate">{p.name}</span>
+                    <span className="font-semibold text-slate-800 truncate">
+                      {p.name}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -718,13 +942,17 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     <Calculator className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">INR Tuition & Living Calculator</p>
-                    <p className="text-[10px] text-slate-500">Living costs, rent & tuition converted to INR</p>
+                    <p className="font-bold text-[#102C57]">
+                      INR Tuition & Living Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Living costs, rent & tuition converted to INR
+                    </p>
                   </div>
                 </Link>
 
                 <Link
-                  href="/compare"
+                  href="/compare/universities"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
                 >
@@ -732,8 +960,30 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     <Building2 className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">University Compare Matrix</p>
-                    <p className="text-[10px] text-slate-500">Side-by-side comparison for up to 5 universities</p>
+                    <p className="font-bold text-[#102C57]">
+                      University Compare Matrix
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Side-by-side comparison for up to 5 universities
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/compare/courses"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
+                    <GraduationCap className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Course & Degree Compare Matrix
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Fees, IELTS cutoffs & work permit rights
+                    </p>
                   </div>
                 </Link>
 
@@ -746,8 +996,12 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">Test Prep Hub (All 9 Exams)</p>
-                    <p className="text-[10px] text-slate-500">IELTS, GRE, GMAT, NCLEX, PLAB, OET & PTE</p>
+                    <p className="font-bold text-[#102C57]">
+                      Test Prep Hub (All 9 Exams)
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      IELTS, GRE, GMAT, NCLEX, PLAB, OET & PTE
+                    </p>
                   </div>
                 </Link>
               </div>
@@ -763,8 +1017,12 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                   <div className="flex items-center gap-2.5">
                     <User className="h-4 w-4 text-[#EA5C2B]" />
                     <div>
-                      <p className="text-xs font-bold text-white">{user?.name || user?.email}</p>
-                      <p className="text-[10px] text-slate-400 capitalize">Role: {user?.role}</p>
+                      <p className="text-xs font-bold text-white">
+                        {user?.name || user?.email}
+                      </p>
+                      <p className="text-[10px] text-slate-400 capitalize">
+                        Role: {user?.role}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -784,32 +1042,48 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <span className="font-bold text-[#102C57]">Student Login</span>
-                    <span className="text-[10px] text-slate-500">Dashboard & AI history</span>
+                    <span className="font-bold text-[#102C57]">
+                      Student Login
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Dashboard & AI history
+                    </span>
                   </Link>
                   <Link
                     href="/portal/buyer"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <span className="font-bold text-blue-700">B2B Consultant</span>
-                    <span className="text-[10px] text-slate-500">Lead marketplace feed</span>
+                    <span className="font-bold text-blue-700">
+                      B2B Consultant
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Lead marketplace feed
+                    </span>
                   </Link>
                   <Link
                     href="/portal/university"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    <span className="font-bold text-emerald-700">University Portal</span>
-                    <span className="text-[10px] text-slate-500">Institution profiles</span>
+                    <span className="font-bold text-emerald-700">
+                      University Portal
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Institution profiles
+                    </span>
                   </Link>
                   <Link
                     href="/signup"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex flex-col items-start gap-1 p-3 rounded-xl bg-slate-900 text-white"
                   >
-                    <span className="font-bold text-[#EA5C2B]">Create Account</span>
-                    <span className="text-[10px] text-slate-300">Free student registration</span>
+                    <span className="font-bold text-[#EA5C2B]">
+                      Create Account
+                    </span>
+                    <span className="text-[10px] text-slate-300">
+                      Free student registration
+                    </span>
                   </Link>
                 </div>
               )}
@@ -819,7 +1093,10 @@ export function Header({ onOpenSearch, onOpenAICounsellor, onOpenLeadModal }: He
           {/* Mobile Drawer Bottom Fixed CTA */}
           <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white p-4 shadow-lg">
             <button
-              onClick={() => { setMobileMenuOpen(false); handleLead(); }}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLead();
+              }}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 text-sm font-bold text-white shadow-md active:scale-98 transition"
             >
               <span>Book Free Consultation Call</span>

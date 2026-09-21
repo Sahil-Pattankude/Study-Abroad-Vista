@@ -1,7 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { ShieldCheck, Building2, Mail, User, FileText, CheckCircle2, AlertCircle, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  ShieldCheck,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  X,
+  MailCheck,
+  KeyRound,
+  ArrowLeft,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 
 interface Props {
@@ -15,21 +24,74 @@ interface Props {
   onSubmitted?: () => void;
 }
 
-export function ClaimProfileModal({ universityId, universityName, countryId, countrySlug, countryName, isOpen, onClose, onSubmitted }: Props) {
-  if (!isOpen) return null;
+type Step = "details" | "otp";
 
+export function ClaimProfileModal({
+  universityId,
+  universityName,
+  countryId,
+  countrySlug,
+  countryName,
+  isOpen,
+  onClose,
+  onSubmitted,
+}: Props) {
   const { user } = useAuth();
 
+  const [step, setStep] = useState<Step>("details");
   const [applicantName, setApplicantName] = useState(user?.name || "");
   const [officialEmail, setOfficialEmail] = useState(user?.email || "");
-  const [designation, setDesignation] = useState("Director of International Admissions");
+  const [designation, setDesignation] = useState(
+    "Director of International Admissions",
+  );
   const [proofUrl, setProofUrl] = useState("");
+
+  const [otp, setOtp] = useState("");
+  const [devOtp, setDevOtp] = useState("");
+  const [secondsLeft, setSecondsLeft] = useState(0);
+
+  const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Countdown for the code's validity window.
+  useEffect(() => {
+    if (step !== "otp" || secondsLeft <= 0) return;
+    const t = setTimeout(() => setSecondsLeft((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [step, secondsLeft]);
+
+  // Reset back to a clean form whenever the modal is closed.
+  useEffect(() => {
+    if (!isOpen) {
+      setStep("details");
+      setOtp("");
+      setDevOtp("");
+      setError("");
+      setSuccess(false);
+      setSecondsLeft(0);
+    }
+  }, [isOpen]);
+
+  // Hooks must run on every render, so the visibility check comes after them.
+  if (!isOpen) return null;
+
+  const claimPayload = {
+    universityId,
+    universityName,
+    countryId: countryId || countrySlug,
+    countrySlug: countrySlug || countryId,
+    countryName,
+    userId: user?.id,
+    applicantName: applicantName.trim(),
+    officialEmail: officialEmail.trim(),
+    designation: designation.trim(),
+    proofDocumentUrl: proofUrl.trim(),
+  };
+
+  const requestOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setError("");
 
     if (!officialEmail.includes("@")) {
@@ -37,30 +99,60 @@ export function ClaimProfileModal({ universityId, universityName, countryId, cou
       return;
     }
 
-    setLoading(true);
-
+    setSending(true);
     try {
-      const res = await fetch("/api/claims/submit", {
+      const res = await fetch("/api/claims/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           universityId,
           universityName,
-          countryId: countryId || countrySlug,
-          countrySlug: countrySlug || countryId,
-          countryName,
-          userId: user?.id,
-          applicantName: applicantName.trim(),
           officialEmail: officialEmail.trim(),
-          designation: designation.trim(),
-          proofDocumentUrl: proofUrl.trim(),
         }),
       });
+      const data = await res.json();
 
+      if (!res.ok) {
+        setError(data.error || "Failed to send verification code.");
+        return;
+      }
+
+      setDevOtp(data.devOtp || "");
+      setOtp("");
+      setSecondsLeft(data.expiresInSeconds || 0);
+      setStep("otp");
+    } catch (err: any) {
+      setError(err?.message || "Failed to send verification code.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (otp.trim().length !== 6) {
+      setError("Please enter the 6-digit verification code.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/claims/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...claimPayload, otp: otp.trim() }),
+      });
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.error || "Failed to submit claim request.");
+        // An expired or exhausted code needs a fresh one.
+        if (data.otpFailed && /expired|new code/i.test(data.error || "")) {
+          setDevOtp("");
+          setSecondsLeft(0);
+        }
         setLoading(false);
         return;
       }
@@ -79,6 +171,11 @@ export function ClaimProfileModal({ universityId, universityName, countryId, cou
     }
   };
 
+  const mmss =
+    Math.floor(secondsLeft / 60) +
+    ":" +
+    String(secondsLeft % 60).padStart(2, "0");
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs">
       <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
@@ -89,7 +186,11 @@ export function ClaimProfileModal({ universityId, universityName, countryId, cou
               <ShieldCheck className="h-5 w-5 text-[#EA5C2B]" />
             </div>
             <div>
-              <h2 className="text-base font-black text-[#102C57]">Claim Official Profile</h2>
+              <h2 className="text-base font-black text-[#102C57]">
+                {step === "details"
+                  ? "Claim Official Profile"
+                  : "Verify Your Email"}
+              </h2>
               <p className="text-[11px] text-slate-500">{universityName}</p>
             </div>
           </div>
@@ -109,98 +210,202 @@ export function ClaimProfileModal({ universityId, universityName, countryId, cou
           </div>
         )}
         {error && (
-          <div className="mt-4 flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs font-bold text-rose-800">
-            <AlertCircle className="h-4 w-4 text-rose-600" />
+          <div className="mt-4 flex items-start gap-2 rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs font-bold text-rose-800">
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Your Full Name</label>
-            <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
-              <input
-                type="text"
-                required
-                value={applicantName}
-                onChange={(e) => setApplicantName(e.target.value)}
-                placeholder="e.g. Dr. Sahil Pattankude"
-                className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
-              />
+        {/* Step 1 - applicant details */}
+        {step === "details" && (
+          <form onSubmit={requestOtp} className="mt-4 space-y-3.5 text-xs">
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Your Full Name
+              </label>
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
+                <input
+                  type="text"
+                  required
+                  value={applicantName}
+                  onChange={(e) => setApplicantName(e.target.value)}
+                  placeholder="e.g. Dr. Sahil Pattankude"
+                  className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Official Institutional Email</label>
-            <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
-              <input
-                type="email"
-                required
-                value={officialEmail}
-                onChange={(e) => setOfficialEmail(e.target.value)}
-                placeholder="admissions@university.edu"
-                className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
-              />
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Official Institutional Email
+              </label>
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
+                <input
+                  type="email"
+                  required
+                  value={officialEmail}
+                  onChange={(e) => setOfficialEmail(e.target.value)}
+                  placeholder="admissions@university.edu"
+                  className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
+                />
+              </div>
+              <p className="mt-1 text-[10px] text-slate-400">
+                Must match institutional domain (e.g. @tum.de or @stanford.edu)
+              </p>
             </div>
-            <p className="mt-1 text-[10px] text-slate-400">Must match institutional domain (e.g. @tum.de or @stanford.edu)</p>
-          </div>
 
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Official Designation</label>
-            <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
-              <input
-                type="text"
-                required
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                placeholder="e.g. Director of Admissions / Dean"
-                className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
-              />
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Official Designation
+              </label>
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
+                <input
+                  type="text"
+                  required
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+                  placeholder="e.g. Director of Admissions / Dean"
+                  className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Authorization Proof (ID / Verification Link)</label>
-            <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
-              <input
-                type="text"
-                value={proofUrl}
-                onChange={(e) => setProofUrl(e.target.value)}
-                placeholder="https://university.edu/staff/profile"
-                className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
-              />
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Authorization Proof (ID / Verification Link)
+              </label>
+              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
+                <input
+                  type="text"
+                  value={proofUrl}
+                  onChange={(e) => setProofUrl(e.target.value)}
+                  placeholder="https://university.edu/staff/profile"
+                  className="w-full rounded-xl py-2 px-3 text-slate-900 font-medium focus:outline-none"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-xl border border-slate-200 px-4 py-2 font-bold text-slate-600 hover:bg-slate-50 transition"
-            >
-              Cancel
-            </button>
+            <div className="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-xl border border-slate-200 px-4 py-2 font-bold text-slate-600 hover:bg-slate-50 transition"
+              >
+                Cancel
+              </button>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center gap-1.5 rounded-xl bg-[#102C57] px-5 py-2 font-bold text-white hover:bg-[#0c2242] transition disabled:opacity-50"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA5C2B]" />
-                  <span>Submitting...</span>
-                </>
-              ) : (
-                <>
-                  <ShieldCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                  <span>Submit Claim Request</span>
-                </>
-              )}
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                disabled={sending}
+                className="flex items-center gap-1.5 rounded-xl bg-[#102C57] px-5 py-2 font-bold text-white hover:bg-[#0c2242] transition disabled:opacity-50"
+              >
+                {sending ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA5C2B]" />
+                    <span>Sending code...</span>
+                  </>
+                ) : (
+                  <>
+                    <MailCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    <span>Send Verification Code</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Step 2 - OTP verification */}
+        {step === "otp" && (
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4 text-xs">
+            <p className="text-slate-600">
+              We sent a 6-digit verification code to{" "}
+              <span className="font-bold text-[#102C57]">{officialEmail}</span>.
+            </p>
+
+            {/* Placeholder delivery: no mail provider is wired up yet. */}
+            {devOtp && (
+              <div className="rounded-xl border border-amber-300 bg-amber-50 p-3">
+                <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-700">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  Email delivery not configured - showing code here
+                </div>
+                <div className="mt-2 text-center font-mono text-2xl font-black tracking-[0.4em] text-[#102C57]">
+                  {devOtp}
+                </div>
+                <p className="mt-1.5 text-center text-[10px] text-amber-700">
+                  This panel disappears once an email service is connected.
+                </p>
+              </div>
+            )}
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">
+                Enter Verification Code
+              </label>
+              <div className="rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57]">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  required
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) =>
+                    setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                  }
+                  placeholder="000000"
+                  className="w-full rounded-xl py-2.5 px-3 text-center font-mono text-lg font-black tracking-[0.4em] text-slate-900 focus:outline-none"
+                />
+              </div>
+              <div className="mt-1.5 flex items-center justify-between text-[10px]">
+                <span className="text-slate-400">
+                  {secondsLeft > 0 ? "Code expires in " + mmss : "Code expired"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => requestOtp()}
+                  disabled={sending}
+                  className="font-bold text-[#EA5C2B] hover:underline disabled:opacity-50"
+                >
+                  {sending ? "Sending..." : "Resend code"}
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("details");
+                  setError("");
+                }}
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 font-bold text-slate-600 hover:bg-slate-50 transition"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                Back
+              </button>
+
+              <button
+                type="submit"
+                disabled={loading || otp.length !== 6}
+                className="flex items-center gap-1.5 rounded-xl bg-[#102C57] px-5 py-2 font-bold text-white hover:bg-[#0c2242] transition disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#EA5C2B]" />
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    <span>Submit Claim Request</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );
