@@ -614,8 +614,11 @@ export default function UniversityPortalPage() {
             </Link>
 
             <button
-              onClick={() => logout()}
-              className="rounded-xl border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5 cursor-pointer"
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="rounded-xl border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 hover:text-rose-600 transition flex items-center gap-1.5 cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span>Sign Out</span>
