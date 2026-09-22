@@ -17,10 +17,78 @@ import {
   ArrowRight,
   Sparkles,
   Search,
+  Calendar,
+  Layers,
+  SlidersHorizontal,
+  FileCheck,
 } from "lucide-react";
 import { University } from "@/types";
 import { fetchLiveUniversities } from "@/lib/supabase/dataFetchers";
 import { useHomeModals } from "@/components/home/HomeClientContext";
+import { CountryFlag } from "@/components/ui/CountryFlag";
+
+// Helper function to return institutional scholarships based on country & ranking
+function getScholarshipInfo(uni: University): string {
+  if (uni.countrySlug === "germany") {
+    return "DAAD & Deutschlandstipendium (€300 - €934/mo) • 100% Tuition Free";
+  }
+  if (uni.countrySlug === "usa") {
+    return uni.rankingGlobal <= 30
+      ? "Dean's Merit Fellowship & Graduate RA/TA (Up to 100% Tuition + Stipend)"
+      : "Merit Scholarships ($5,000 - $25,000/yr) & Campus Assistantships";
+  }
+  if (uni.countrySlug === "uk") {
+    return "Chevening, Great Scholarships & Vice-Chancellor Excellence (£5,000 - £12,000)";
+  }
+  if (uni.countrySlug === "canada") {
+    return "Vanier CGS, Ontario Graduate Scholarship & Entrance Bursaries (CAD $5k - $20k)";
+  }
+  if (uni.countrySlug === "australia") {
+    return "Australia Awards & International Vice-Chancellor's Merit (20% - 50% Fee Waiver)";
+  }
+  if (uni.countrySlug === "ireland") {
+    return "Government of Ireland International Scholarship (€10k Stipend + Full Fee Waiver)";
+  }
+  if (uni.countrySlug === "france") {
+    return "Eiffel Excellence Scholarship (€1,181 - €1,800/mo) & Campus France Grants";
+  }
+  return "International Merit Grants & Institutional Need-Based Financial Aid";
+}
+
+// Helper function to return application deadlines based on country & intakes
+function getApplicationDeadline(uni: University): string {
+  if (uni.countrySlug === "usa") {
+    return "Fall: Dec 15 / Jan 15 • Spring: Oct 1";
+  }
+  if (uni.countrySlug === "germany") {
+    return "Winter (Oct): May 31 / Jul 15 • Summer: Jan 15";
+  }
+  if (uni.countrySlug === "uk") {
+    return "Fall (Sep): Jan 25 / Jun 30 • Spring: Nov 15";
+  }
+  if (uni.countrySlug === "canada") {
+    return "Fall: Jan 15 / Mar 1 • Winter: Sep 1";
+  }
+  if (uni.countrySlug === "australia") {
+    return "Semester 1 (Feb): Nov 30 • Semester 2 (Jul): Apr 30";
+  }
+  if (uni.countrySlug === "ireland") {
+    return "Autumn (Sep): May 31 • Spring: Oct 31";
+  }
+  return "Priority: Jan 15 • Regular: May 31";
+}
+
+// Program title formatter
+const PROGRAM_LABELS: Record<string, string> = {
+  ms: "Master's (MS/MSc)",
+  mba: "MBA (Management)",
+  emba: "Executive MBA",
+  mbbs: "MBBS / Medicine",
+  ausbildung: "Ausbildung (Vocational)",
+  nursing: "Nursing & Health",
+  bachelors: "Bachelor's (UG)",
+  phd: "PhD / Research",
+};
 
 export function UniversityCompareClient() {
   const homeModals = useHomeModals();
@@ -34,6 +102,7 @@ export function UniversityCompareClient() {
   ]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [highlightDifferences, setHighlightDifferences] = useState(false);
 
   useEffect(() => {
     fetchLiveUniversities().then((res) => {
@@ -49,23 +118,28 @@ export function UniversityCompareClient() {
     )
     .filter(Boolean) as University[];
 
+  const activeUnis =
+    selectedUnis.length > 0 ? selectedUnis : allUniversities.slice(0, 5);
+
   const addUniversity = (slug: string) => {
-    if (selectedSlugs.length < 5 && !selectedSlugs.includes(slug)) {
-      setSelectedSlugs([...selectedSlugs, slug]);
+    if (activeUnis.length < 5 && !activeUnis.some((u) => u.slug === slug || u.id === slug)) {
+      setSelectedSlugs([...activeUnis.map((u) => u.slug), slug]);
       setIsSelectorOpen(false);
       setSearchQuery("");
     }
   };
 
   const removeUniversity = (slug: string) => {
-    if (selectedSlugs.length > 1) {
-      setSelectedSlugs(selectedSlugs.filter((s) => s !== slug));
+    if (activeUnis.length > 1) {
+      setSelectedSlugs(
+        activeUnis.filter((u) => u.slug !== slug && u.id !== slug).map((u) => u.slug),
+      );
     }
   };
 
   const availableUnis = allUniversities.filter(
     (u) =>
-      !selectedSlugs.includes(u.slug) &&
+      !activeUnis.some((au) => au.slug === u.slug || au.id === u.id) &&
       (u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         u.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
         u.city.toLowerCase().includes(searchQuery.toLowerCase())),
@@ -79,39 +153,52 @@ export function UniversityCompareClient() {
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
             <Sparkles className="h-3.5 w-3.5" />
             <span>
-              Interactive Utility • Compare Up to 5 Universities Side-by-Side
+              Interactive Decision Utility • Compare Up to 5 Global Universities Side-by-Side
             </span>
           </div>
           <h1 className="font-serif text-3xl font-black text-[#102C57] sm:text-4xl lg:text-5xl">
             University Comparison Matrix
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Compare QS global rankings, tuition fees in INR, minimum IELTS band
-            cutoffs, GRE/GMAT waiver policies, and post-study work visa rights
-            across top international institutions.
+            Compare QS global rankings, annual tuition in INR, admission cutoffs (IELTS, GRE/GMAT, Acceptance Rates), intake windows, scholarship schemes, degree programs offered, and application deadlines side-by-side.
           </p>
         </div>
 
         {/* Top Controls Bar */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-bold text-[#102C57]">
-            <Building2 className="h-4 w-4 text-[#EA5C2B]" />
-            <span>Comparing {selectedUnis.length} of 5 Universities</span>
+          <div className="flex items-center gap-4 text-xs font-bold text-[#102C57]">
+            <div className="flex items-center gap-1.5">
+              <Building2 className="h-4 w-4 text-[#EA5C2B]" />
+              <span>Comparing {activeUnis.length} of 5 Universities</span>
+            </div>
+
+            {/* Highlight Differences Toggle */}
+            <button
+              onClick={() => setHighlightDifferences(!highlightDifferences)}
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 transition cursor-pointer ${
+                highlightDifferences
+                  ? "border-amber-300 bg-amber-50 text-amber-900 font-bold"
+                  : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5 text-amber-600" />
+              <span>{highlightDifferences ? "Differences Highlighted ✓" : "Highlight Differences"}</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
-            {selectedSlugs.length < 5 && (
+            {activeUnis.length < 5 && (
               <button
                 onClick={() => setIsSelectorOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0d2346]"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0d2346] cursor-pointer"
               >
                 <Plus className="h-4 w-4 text-[#EA5C2B]" />
-                <span>Add University ({5 - selectedSlugs.length} left)</span>
+                <span>Add University ({5 - activeUnis.length} left)</span>
               </button>
             )}
             <button
               onClick={() => homeModals.openLeadModal()}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#EA5C2B] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#ff7240]"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#EA5C2B] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#ff7240] cursor-pointer"
             >
               <span>Get Expert Shortlist Help</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -129,7 +216,7 @@ export function UniversityCompareClient() {
                 </h3>
                 <button
                   onClick={() => setIsSelectorOpen(false)}
-                  className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                  className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -156,17 +243,17 @@ export function UniversityCompareClient() {
                     <button
                       key={uni.id}
                       onClick={() => addUniversity(uni.slug)}
-                      className="flex w-full items-center justify-between rounded-xl p-2.5 text-left transition hover:bg-slate-50"
+                      className="flex w-full items-center justify-between rounded-xl p-2.5 text-left transition hover:bg-slate-50 border border-slate-100 cursor-pointer"
                     >
                       <div>
                         <p className="text-xs font-bold text-[#102C57]">
                           {uni.name}
                         </p>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-slate-500">
                           {uni.city}, {uni.country} • Rank #{uni.rankingGlobal}
                         </p>
                       </div>
-                      <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-[#EA5C2B] hover:bg-[#EA5C2B] hover:text-white transition">
+                      <span className="rounded-lg bg-orange-50 px-2.5 py-1 text-[11px] font-bold text-[#EA5C2B] hover:bg-[#EA5C2B] hover:text-white transition">
                         + Add
                       </span>
                     </button>
@@ -179,30 +266,36 @@ export function UniversityCompareClient() {
 
         {/* Comparison Table Grid */}
         <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-xl">
-          <table className="w-full min-w-[700px] border-collapse text-left text-xs">
+          <table className="w-full min-w-[800px] border-collapse text-left text-xs">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50/80">
-                <th className="w-48 p-4 font-bold uppercase tracking-wider text-slate-400">
-                  Feature / Criteria
+                <th className="w-52 p-4 font-bold uppercase tracking-wider text-slate-400">
+                  Criteria / Parameters
                 </th>
-                {selectedUnis.map((uni) => (
-                  <th key={uni.id} className="p-4 align-top">
+                {activeUnis.map((uni) => (
+                  <th key={uni.id} className="p-4 align-top w-64">
                     <div className="flex items-start justify-between gap-2">
                       <div>
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <CountryFlag code={uni.countrySlug} size="sm" />
+                          <span className="text-[10px] font-bold text-slate-500 uppercase">
+                            {uni.country}
+                          </span>
+                        </div>
                         <Link
                           href={`/universities/${uni.slug}`}
-                          className="font-extrabold text-[#102C57] hover:text-[#EA5C2B] transition text-sm"
+                          className="font-extrabold text-[#102C57] hover:text-[#EA5C2B] transition text-sm leading-snug block"
                         >
                           {uni.name}
                         </Link>
                         <p className="mt-0.5 text-[11px] text-slate-500 font-normal">
-                          {uni.city}, {uni.country}
+                          {uni.city}
                         </p>
                       </div>
-                      {selectedUnis.length > 1 && (
+                      {activeUnis.length > 1 && (
                         <button
                           onClick={() => removeUniversity(uni.slug)}
-                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition shrink-0 cursor-pointer"
                           title="Remove from comparison"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -214,22 +307,25 @@ export function UniversityCompareClient() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
-              {/* Row 1: QS Global Ranking */}
-              <tr>
+              
+              {/* 1. Global & National Ranking */}
+              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <div className="flex items-center gap-1.5">
                     <Award className="h-4 w-4 text-amber-500" />
-                    <span>QS World Rank</span>
+                    <span>Global Ranking (QS / THE)</span>
                   </div>
                 </td>
-                {selectedUnis.map((uni) => (
+                {activeUnis.map((uni) => (
                   <td
                     key={uni.id}
                     className="p-4 font-extrabold text-slate-900 text-sm"
                   >
-                    #{uni.rankingGlobal} Global
+                    <span className="rounded-lg bg-amber-50 border border-amber-200/80 px-2.5 py-1 text-amber-900 font-black">
+                      #{uni.rankingGlobal} Global
+                    </span>
                     {uni.rankingNational && (
-                      <span className="ml-2 text-[10px] font-normal text-slate-400 block sm:inline">
+                      <span className="ml-2 text-[11px] font-semibold text-slate-500 block sm:inline">
                         (#{uni.rankingNational} National)
                       </span>
                     )}
@@ -237,113 +333,172 @@ export function UniversityCompareClient() {
                 ))}
               </tr>
 
-              {/* Row 2: Tuition Fees in INR */}
-              <tr>
+              {/* 2. Tuition Fee (INR / yr) */}
+              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <div className="flex items-center gap-1.5">
                     <DollarSign className="h-4 w-4 text-emerald-600" />
-                    <span>Tuition Fee (INR)</span>
+                    <span>Tuition Fee (Annual INR)</span>
                   </div>
                 </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-bold text-emerald-700">
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 font-bold text-emerald-700 text-sm">
                     {uni.tuitionFeeRangeINR}
-                  </td>
-                ))}
-              </tr>
-
-              {/* Row 3: IELTS Cutoff */}
-              <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen className="h-4 w-4 text-blue-600" />
-                    <span>Min. IELTS Band</span>
-                  </div>
-                </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-semibold">
-                    <span className="rounded-md bg-blue-50 px-2 py-0.5 text-blue-800 font-bold">
-                      {uni.ieltsMinScore} Overall
+                    <span className="block text-[10px] font-normal text-slate-400 mt-0.5">
+                      {uni.countrySlug === "germany" ? "Public / Tuition Free" : "Standard International Rate"}
                     </span>
                   </td>
                 ))}
               </tr>
 
-              {/* Row 4: GRE / GMAT Waiver */}
-              <tr>
+              {/* 3. Admission Requirements (IELTS, GRE/GMAT, Acceptance Rate) */}
+              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <div className="flex items-center gap-1.5">
-                    <GraduationCap className="h-4 w-4 text-purple-600" />
-                    <span>GRE / GMAT Requirement</span>
+                    <BookOpen className="h-4 w-4 text-blue-600" />
+                    <span>Admission Requirements</span>
                   </div>
                 </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-medium">
-                    {uni.greGmatRequired ? (
-                      <span className="inline-flex items-center gap-1 text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded">
-                        <Check className="h-3.5 w-3.5" /> Required
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="rounded bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-800">
+                        IELTS: {uni.ieltsMinScore} Min
                       </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">
-                        <Check className="h-3.5 w-3.5 text-emerald-600" />{" "}
-                        Waived / Optional
-                      </span>
-                    )}
+                      {uni.toeflMinScore && (
+                        <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
+                          TOEFL: {uni.toeflMinScore}
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      {uni.greGmatRequired ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded">
+                          <Check className="h-3 w-3 text-amber-600" /> GRE/GMAT Required
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                          <Check className="h-3 w-3 text-emerald-600" /> GRE/GMAT Waived
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-600">
+                      Acceptance Rate: <strong>{uni.acceptanceRate}%</strong>
+                    </div>
                   </td>
                 ))}
               </tr>
 
-              {/* Row 5: Acceptance Rate */}
+              {/* 4. Programs Offered */}
               <tr>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <div className="flex items-center gap-1.5">
-                    <Globe className="h-4 w-4 text-indigo-600" />
-                    <span>Acceptance Rate</span>
+                    <Layers className="h-4 w-4 text-purple-600" />
+                    <span>Programs Offered</span>
                   </div>
                 </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-semibold text-slate-800">
-                    {uni.acceptanceRate}%
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4">
+                    <div className="flex flex-wrap gap-1">
+                      {uni.programsOffered && uni.programsOffered.length > 0 ? (
+                        uni.programsOffered.map((prog, idx) => (
+                          <span
+                            key={idx}
+                            className="rounded-md bg-purple-50 border border-purple-100 px-2 py-0.5 text-[10px] font-bold text-purple-900"
+                          >
+                            {PROGRAM_LABELS[prog] || prog.toUpperCase()}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-slate-400 text-[11px]">MS, MBA, Bachelors, PhD</span>
+                      )}
+                    </div>
                   </td>
                 ))}
               </tr>
 
-              {/* Row 6: Post-Study Work Visa */}
+              {/* 5. Intake Semesters */}
               <tr>
+                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4 text-indigo-600" />
+                    <span>Intake Semesters</span>
+                  </div>
+                </td>
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 text-slate-800 font-semibold">
+                    <div className="flex items-center gap-1.5">
+                      <span className="inline-block h-2 w-2 rounded-full bg-indigo-500"></span>
+                      <span>
+                        {uni.intakes && uni.intakes.length > 0
+                          ? uni.intakes.join(", ")
+                          : "Fall (Aug/Sep), Spring (Jan)"}
+                      </span>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+
+              {/* 6. Application Deadlines */}
+              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
+                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                  <div className="flex items-center gap-1.5">
+                    <FileCheck className="h-4 w-4 text-rose-600" />
+                    <span>Application Deadlines</span>
+                  </div>
+                </td>
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 text-slate-800 font-medium">
+                    <span className="rounded bg-rose-50 text-rose-950 font-bold px-2 py-1 text-[11px] block sm:inline-block">
+                      {getApplicationDeadline(uni)}
+                    </span>
+                  </td>
+                ))}
+              </tr>
+
+              {/* 7. Scholarships & Financial Aid */}
+              <tr>
+                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                  <div className="flex items-center gap-1.5">
+                    <Award className="h-4 w-4 text-[#EA5C2B]" />
+                    <span>Scholarships & Grants</span>
+                  </div>
+                </td>
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 text-slate-700 text-xs">
+                    <div className="rounded-xl bg-slate-50 border border-slate-100 p-2.5">
+                      <span className="font-bold text-[#102C57] block mb-1">
+                        Available Aid:
+                      </span>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">
+                        {getScholarshipInfo(uni)}
+                      </p>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+
+              {/* 8. Post-Study Work Permit (PSW) */}
+              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <div className="flex items-center gap-1.5">
                     <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
-                    <span>Post-Study Work Visa</span>
+                    <span>Post-Study Work Rights</span>
                   </div>
                 </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-bold text-[#EA5C2B]">
-                    {uni.postStudyWorkMonths} Months (
-                    {Math.round(uni.postStudyWorkMonths / 12)} Yrs)
+                {activeUnis.map((uni) => (
+                  <td key={uni.id} className="p-4 font-bold text-[#EA5C2B] text-xs">
+                    {uni.postStudyWorkMonths} Months ({Math.round(uni.postStudyWorkMonths / 12)} Years)
                   </td>
                 ))}
               </tr>
 
-              {/* Row 7: Primary Intakes */}
-              <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
-                  <span>Intake Semesters</span>
-                </td>
-                {selectedUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 text-slate-600 font-medium">
-                    {uni.intakes
-                      ? uni.intakes.join(", ")
-                      : "Fall (Sep), Spring (Jan)"}
-                  </td>
-                ))}
-              </tr>
-
-              {/* Row 8: Action CTAs */}
+              {/* 9. Action CTAs */}
               <tr className="bg-slate-50/20">
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
                   <span>Admissions Action</span>
                 </td>
-                {selectedUnis.map((uni) => (
+                {activeUnis.map((uni) => (
                   <td key={uni.id} className="p-4">
                     <div className="space-y-2">
                       <Link
@@ -354,7 +509,7 @@ export function UniversityCompareClient() {
                       </Link>
                       <button
                         onClick={() => homeModals.openLeadModal(uni.country)}
-                        className="block w-full rounded-xl bg-[#EA5C2B] text-center py-2 text-xs font-bold text-white hover:bg-[#ff7240] transition shadow-sm"
+                        className="block w-full rounded-xl bg-[#EA5C2B] text-center py-2 text-xs font-bold text-white hover:bg-[#ff7240] transition shadow-sm cursor-pointer"
                       >
                         Apply / Shortlist
                       </button>
