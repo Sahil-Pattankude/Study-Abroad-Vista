@@ -17,6 +17,7 @@ import {
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 
 interface Props {
   params: Promise<{ program: string }>;
@@ -74,8 +75,8 @@ export default async function ProgramHubPage({ params }: Props) {
 
       <main className="flex-1 pb-16">
         {/* Breadcrumbs */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5 px-4 sm:px-8">
-          <div className="mx-auto flex max-w-7xl items-center gap-2 text-xs font-semibold text-slate-500">
+        <div className="border-b border-slate-200/80 bg-white py-2.5">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
             <Link href="/" className="hover:text-[#102C57]">
               Home
             </Link>
@@ -115,7 +116,12 @@ export default async function ProgramHubPage({ params }: Props) {
                 className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-[#102C57] hover:shadow-md transition"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl">{country.flagEmoji}</span>
+                  <CountryFlag
+                    code={country.code}
+                    name={country.name}
+                    size="lg"
+                    className="h-7 w-10 object-cover rounded-xs shadow-2xs border border-slate-200"
+                  />
                   <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
                     {country.tier}
                   </span>

@@ -300,6 +300,7 @@ export interface ClaimItem {
   id: string;
   universityId: string;
   universityName: string;
+  countryName?: string;
   applicantName: string;
   officialEmail: string;
   designation: string;

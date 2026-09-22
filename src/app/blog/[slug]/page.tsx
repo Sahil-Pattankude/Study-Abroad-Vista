@@ -5,7 +5,15 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getArticleBySlug, FALLBACK_ARTICLES } from "@/lib/sanity/fetchers";
 import { fitMetaDescription } from "@/lib/seo/metaUtils";
-import { Clock, Calendar, ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import {
+  Clock,
+  Calendar,
+  ArrowLeft,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  ChevronRight,
+} from "lucide-react";
 import { PortableText } from "@portabletext/react";
 
 export async function generateStaticParams() {
@@ -18,7 +26,9 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
 
@@ -50,19 +60,27 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between">
       <Header />
 
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Breadcrumb navigation */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-          <Link href="/" className="hover:text-[#102C57]">Home</Link>
-          <span>/</span>
-          <Link href="/blog" className="hover:text-[#102C57]">Blog</Link>
-          <span>/</span>
-          <span className="text-[#EA5C2B] font-bold truncate max-w-xs">{article.tag}</span>
+      {/* Breadcrumb navigation */}
+      <div className="border-b border-slate-200/80 bg-white py-2.5">
+        <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
+          <Link href="/" className="hover:text-[#102C57]">
+            Home
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+          <Link href="/blog" className="hover:text-[#102C57]">
+            Blog
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+          <span className="text-[#EA5C2B] font-bold truncate max-w-xs">
+            {article.tag}
+          </span>
         </div>
+      </div>
 
+      <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 w-full">
         {/* Back Link */}
         <div className="mt-6">
           <Link
@@ -113,21 +131,31 @@ export default async function BlogPostPage({ params }: PageProps) {
               Official Admissions & Regulatory Context
             </h3>
             <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              This guide has been verified against official admissions portals, embassy guidelines, and university catalogs by the international education team at Dnyanal Educon Pvt. Ltd.
+              This guide has been verified against official admissions portals,
+              embassy guidelines, and university catalogs by the international
+              education team at Dnyanal Educon Pvt. Ltd.
             </p>
           </div>
 
-          {article.body && Array.isArray(article.body) && article.body.length > 0 ? (
+          {article.body &&
+          Array.isArray(article.body) &&
+          article.body.length > 0 ? (
             <div className="space-y-6 text-sm leading-relaxed text-slate-700">
               <PortableText value={article.body as any} />
             </div>
           ) : (
             <div className="space-y-6 text-sm leading-relaxed text-slate-700">
               <p>
-                When planning an international educational journey, understanding the exact eligibility criteria, living expense structures, and immigration regulations is paramount for Indian students and families.
+                When planning an international educational journey,
+                understanding the exact eligibility criteria, living expense
+                structures, and immigration regulations is paramount for Indian
+                students and families.
               </p>
               <p>
-                Tuition costs, currency fluctuations, and embassy processing timelines require advance preparation. We advise students to start the verification process at least 6 to 9 months prior to university application deadlines.
+                Tuition costs, currency fluctuations, and embassy processing
+                timelines require advance preparation. We advise students to
+                start the verification process at least 6 to 9 months prior to
+                university application deadlines.
               </p>
             </div>
           )}
@@ -139,10 +167,20 @@ export default async function BlogPostPage({ params }: PageProps) {
                 {article.author.name.charAt(0)}
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#EA5C2B]">Author & Admissions Strategist</span>
-                <h4 className="text-sm font-bold text-[#102C57]">{article.author.name}</h4>
-                <p className="text-xs text-slate-500">{article.author.role || "Admissions Strategist"}</p>
-                {article.author.bio && <p className="mt-1 text-xs text-slate-600 leading-relaxed">{article.author.bio}</p>}
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#EA5C2B]">
+                  Author & Admissions Strategist
+                </span>
+                <h4 className="text-sm font-bold text-[#102C57]">
+                  {article.author.name}
+                </h4>
+                <p className="text-xs text-slate-500">
+                  {article.author.role || "Admissions Strategist"}
+                </p>
+                {article.author.bio && (
+                  <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                    {article.author.bio}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -159,7 +197,8 @@ export default async function BlogPostPage({ params }: PageProps) {
                 Need Help Shortlisting Universities for This Program?
               </h3>
               <p className="mt-1 text-xs text-slate-300">
-                Get a personalized list of 5 accredited universities matching your academic profile and budget in ₹ Lakhs.
+                Get a personalized list of 5 accredited universities matching
+                your academic profile and budget in ₹ Lakhs.
               </p>
             </div>
             <Link

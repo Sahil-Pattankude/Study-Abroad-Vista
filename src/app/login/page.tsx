@@ -25,9 +25,9 @@ function LoginForm() {
   const redirectParam = searchParams.get("redirect") || "";
 
   const { login } = useAuth();
-  const [activeRoleTab, setActiveRoleTab] = useState<UserRole>("university");
-  const [email, setEmail] = useState("toronto@utoronto.ca");
-  const [password, setPassword] = useState("Toronto@2026");
+  const [activeRoleTab, setActiveRoleTab] = useState<UserRole>("student");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,31 +35,15 @@ function LoginForm() {
   useEffect(() => {
     if (redirectParam.includes("university")) {
       setActiveRoleTab("university");
-      setEmail("toronto@utoronto.ca");
     } else if (redirectParam.includes("buyer")) {
       setActiveRoleTab("buyer");
-      setEmail("consultant@apexoverseas.com");
     } else if (redirectParam.includes("admin")) {
       setActiveRoleTab("admin");
-      setEmail("admin@studyabroadvista.com");
     }
   }, [redirectParam]);
 
   const handleRoleTabChange = (role: UserRole) => {
     setActiveRoleTab(role);
-    if (role === "university") {
-      setEmail("toronto@utoronto.ca");
-      setPassword("Toronto@2026");
-    } else if (role === "buyer") {
-      setEmail("consultant@apexoverseas.com");
-      setPassword("Apex@2026");
-    } else if (role === "admin") {
-      setEmail("admin@studyabroadvista.com");
-      setPassword("Admin@2026");
-    } else {
-      setEmail("rahul.sharma@gmail.com");
-      setPassword("Student@2026");
-    }
   };
 
   const detectRole = (userEmail: string): UserRole => {
@@ -99,7 +83,12 @@ function LoginForm() {
     setError("");
     setLoading(true);
 
-    const userEmail = email.trim() || "toronto@utoronto.ca";
+    const userEmail = email.trim();
+    if (!userEmail) {
+      setError("Please enter your email address.");
+      setLoading(false);
+      return;
+    }
 
     try {
       // 1. Determine user role from redirect param, active role tab, or email
@@ -130,36 +119,41 @@ function LoginForm() {
           }
         }
       } catch {
-        // demo fallback
+        // auth failure handled smoothly
       }
 
-      let finalOrg = "University of Toronto";
-      let finalCountry = "Canada";
-      let finalName = "Admissions Representative";
+      // Dynamic default name from email
+      const dynamicName =
+        userEmail
+          .split("@")[0]
+          ?.replace(/[._-]/g, " ")
+          ?.replace(/\b\w/g, (c) => c.toUpperCase()) || "Student";
+
+      let finalOrg = "";
+      let finalCountry = "India";
+      let finalName = dynamicName;
 
       if (userRole === "university") {
-        finalOrg = "University of Toronto";
+        finalOrg = "University Partner";
         finalCountry = "Canada";
-        finalName = "University Partner (U of T)";
+        finalName = dynamicName || "University Representative";
       } else if (userRole === "buyer") {
-        finalOrg = "Apex Overseas Consultants";
+        finalOrg = "Overseas Consultancy";
         finalCountry = "India";
-        finalName = "Apex Lead Manager";
+        finalName = dynamicName || "Consultant Manager";
       } else if (userRole === "admin") {
         finalOrg = "StudyAbroad Vista HQ";
         finalCountry = "Global";
-        finalName = "Super Admin";
-      } else {
-        finalOrg = "";
-        finalCountry = "India";
-        finalName = "Rahul Sharma";
+        finalName = dynamicName || "Administrator";
       }
 
       // 3. Login into session
       login(
         userEmail,
         userRole,
-        authedUser?.user_metadata?.name || finalName,
+        authedUser?.user_metadata?.name ||
+          authedUser?.user_metadata?.full_name ||
+          finalName,
         authedUser?.id,
         authedUser?.user_metadata?.organization || finalOrg,
         authedUser?.user_metadata?.country_name || finalCountry,
@@ -340,12 +334,12 @@ function LoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={
                     activeRoleTab === "university"
-                      ? "toronto@utoronto.ca"
+                      ? "admissions@university.edu"
                       : activeRoleTab === "buyer"
-                        ? "consultant@apexoverseas.com"
+                        ? "consultant@agency.com"
                         : activeRoleTab === "admin"
                           ? "admin@studyabroadvista.com"
-                          : "student@example.com"
+                          : "name@example.com"
                   }
                   className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"
                 />

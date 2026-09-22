@@ -10,11 +10,16 @@ import { LeadModal } from "@/components/lead/LeadModal";
 import { SearchDialog } from "@/components/search/SearchDialog";
 import { AuthRequiredModal } from "@/components/auth/AuthRequiredModal";
 
+interface AuthModalConfig {
+  title?: string;
+  description?: string;
+}
+
 interface HomeModalsContextType {
   openSearch: () => void;
-  openAICounsellor: () => void;
+  openAICounsellor: (initialQuery?: string) => void;
   openLeadModal: (countryOrProgram?: string) => void;
-  openAuthModal: () => void;
+  openAuthModal: (config?: AuthModalConfig) => void;
 }
 
 const HomeModalsContext = createContext<HomeModalsContextType | null>(null);
@@ -24,7 +29,7 @@ export function useHomeModals() {
   if (!ctx) {
     return {
       openSearch: () => {},
-      openAICounsellor: () => {},
+      openAICounsellor: (_query?: string) => {},
       openLeadModal: () => {},
       openAuthModal: () => {},
     };
@@ -41,13 +46,25 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
   );
   const { isLoggedIn } = useAuth();
   const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
+  const [aiInitialQuery, setAiInitialQuery] = useState<string | undefined>();
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalConfig, setAuthModalConfig] = useState<
+    AuthModalConfig | undefined
+  >();
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [selectedCountryName, setSelectedCountryName] = useState("Germany");
 
-  const openAICounsellor = () => {
+  const openAICounsellor = (initialQuery?: string) => {
+    if (initialQuery) {
+      setAiInitialQuery(initialQuery);
+    }
     if (!isLoggedIn) {
+      setAuthModalConfig({
+        title: "AI Counsellor is reserved for logged-in members",
+        description:
+          "Please sign in or create a free student account to unlock 24/7 personalized AI admissions counselling, university shortlisting, and eligibility checks.",
+      });
       setAuthModalOpen(true);
     } else {
       setAiDrawerOpen(true);
@@ -64,7 +81,10 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
   };
 
   const openSearch = () => setSearchDialogOpen(true);
-  const openAuthModal = () => setAuthModalOpen(true);
+  const openAuthModal = (config?: AuthModalConfig) => {
+    setAuthModalConfig(config);
+    setAuthModalOpen(true);
+  };
 
   return (
     <HomeModalsContext.Provider
@@ -93,7 +113,7 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
       {!isStudioOrAdmin && (
         <div className="fixed bottom-6 right-6 z-40">
           <button
-            onClick={openAICounsellor}
+            onClick={() => openAICounsellor()}
             aria-label="Talk to AI counsellor"
             className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition hover:scale-105 hover:bg-[#0c2242]"
           >
@@ -119,6 +139,7 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
           onClose={() => setAiDrawerOpen(false)}
           onOpenLeadModal={() => setLeadModalOpen(true)}
           onOpenAuthModal={() => setAuthModalOpen(true)}
+          initialQuery={aiInitialQuery}
         />
       )}
 
@@ -127,6 +148,8 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
         <AuthRequiredModal
           isOpen={authModalOpen}
           onClose={() => setAuthModalOpen(false)}
+          title={authModalConfig?.title}
+          description={authModalConfig?.description}
         />
       )}
 
@@ -176,7 +199,7 @@ export function AICounsellorTriggerButton({
 }) {
   const { openAICounsellor } = useHomeModals();
   return (
-    <button onClick={openAICounsellor} className={className}>
+    <button onClick={() => openAICounsellor()} className={className}>
       {children}
     </button>
   );

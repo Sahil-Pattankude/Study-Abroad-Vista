@@ -9,8 +9,8 @@ interface CompareNavHeaderProps {
 
 export function CompareNavHeader({ activeTab }: CompareNavHeaderProps) {
   return (
-    <div className="bg-slate-900 border-b border-slate-800 py-4 px-4 sm:px-8 text-white">
-      <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="bg-slate-900 border-b border-slate-800 py-4 text-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#EA5C2B]">
             Multi-Item Comparison Engine • Template T-09

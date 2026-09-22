@@ -125,8 +125,14 @@ export function UniversityActions({
             </span>
           </div>
           <button
-            onClick={openAuthModal}
-            className="shrink-0 rounded-lg bg-[#102C57] px-2.5 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition"
+            onClick={() =>
+              openAuthModal({
+                title: "Save Shortlist to Your Profile",
+                description:
+                  "Create a free student account or sign in to permanently save your shortlisted universities, sync across all your devices, and track application deadlines.",
+              })
+            }
+            className="shrink-0 rounded-lg bg-[#102C57] px-2.5 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition cursor-pointer"
           >
             Save to Profile →
           </button>

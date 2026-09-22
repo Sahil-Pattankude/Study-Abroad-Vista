@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 import {
   Compass,
   ChevronRight,
@@ -182,8 +183,13 @@ export default async function SitemapPage() {
                         href={`/study-in-${c.slug}`}
                         className="flex items-center justify-between rounded-lg p-2 hover:bg-slate-50 text-slate-700 hover:text-[#EA5C2B] transition"
                       >
-                        <span className="font-semibold">
-                          {c.flagEmoji} Study in {c.name}
+                        <span className="font-semibold flex items-center gap-2">
+                          <CountryFlag
+                            code={c.code}
+                            name={c.name}
+                            className="h-3.5 w-5 rounded-xs border border-slate-200 shadow-2xs"
+                          />
+                          <span>Study in {c.name}</span>
                         </span>
                         <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                       </Link>
@@ -205,8 +211,13 @@ export default async function SitemapPage() {
                         href={`/study-in-${c.slug}`}
                         className="flex items-center justify-between rounded-lg p-2 hover:bg-slate-50 text-slate-700 hover:text-[#EA5C2B] transition"
                       >
-                        <span className="font-semibold">
-                          {c.flagEmoji} Study in {c.name}
+                        <span className="font-semibold flex items-center gap-2">
+                          <CountryFlag
+                            code={c.code}
+                            name={c.name}
+                            className="h-3.5 w-5 rounded-xs border border-slate-200 shadow-2xs"
+                          />
+                          <span>Study in {c.name}</span>
                         </span>
                         <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                       </Link>
@@ -228,8 +239,13 @@ export default async function SitemapPage() {
                         href={`/study-in-${c.slug}`}
                         className="flex items-center justify-between rounded-lg p-2 hover:bg-slate-50 text-slate-700 hover:text-[#EA5C2B] transition"
                       >
-                        <span className="font-semibold">
-                          {c.flagEmoji} MBBS in {c.name}
+                        <span className="font-semibold flex items-center gap-2">
+                          <CountryFlag
+                            code={c.code}
+                            name={c.name}
+                            className="h-3.5 w-5 rounded-xs border border-slate-200 shadow-2xs"
+                          />
+                          <span>MBBS in {c.name}</span>
                         </span>
                         <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
                       </Link>

@@ -25,6 +25,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CountryInquiryForm } from "@/components/country/CountryInquiryForm";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { CostCalculatorWidget } from "@/components/home/CostCalculatorWidget";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -109,8 +110,8 @@ export default async function CountryHubPage({ params }: Props) {
 
       <main className="flex-1 pb-16">
         {/* Breadcrumbs */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5 px-4 sm:px-8">
-          <div className="mx-auto flex max-w-7xl items-center gap-2 text-xs font-semibold text-slate-500">
+        <div className="border-b border-slate-200/80 bg-white py-2.5">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
             <Link href="/" className="hover:text-[#102C57]">
               Home
             </Link>
@@ -366,6 +367,14 @@ export default async function CountryHubPage({ params }: Props) {
                   </div>
                 )}
               </section>
+
+              {/* [FR-TOOLS-002] Embedded Country-Specific Cost Calculator */}
+              <div className="my-2">
+                <CostCalculatorWidget
+                  defaultCountry={country.slug}
+                  variant="embedded"
+                />
+              </div>
 
               {/* 5. Top Universities */}
               <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">

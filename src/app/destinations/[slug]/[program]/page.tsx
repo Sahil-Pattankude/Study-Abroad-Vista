@@ -77,8 +77,8 @@ export default async function CountryProgramPage({ params }: Props) {
 
       <main className="flex-1 pb-16">
         {/* Breadcrumb */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5 px-4 sm:px-8">
-          <div className="mx-auto flex max-w-7xl items-center gap-2 text-xs font-semibold text-slate-500">
+        <div className="border-b border-slate-200/80 bg-white py-2.5">
+          <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
             <Link href="/" className="hover:text-[#102C57]">
               Home
             </Link>

@@ -19,6 +19,10 @@ import {
   GraduationCap,
   ShieldCheck,
   ChevronRight,
+  TrendingUp,
+  Clock,
+  Award,
+  Banknote,
 } from "lucide-react";
 import {
   fetchLiveUniversities,
@@ -100,6 +104,32 @@ export function Header({
     };
   }, []);
 
+  // Global Keyboard shortcut (Ctrl+K, Cmd+K, or /) to trigger search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if user is already typing in an input or textarea
+      const target = e.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        handleSearch();
+      } else if (e.key === "/") {
+        e.preventDefault();
+        handleSearch();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSearch]);
+
   const anchorCountries = countriesList.filter((c) =>
     ANCHOR_SLUGS.includes(c.slug),
   );
@@ -151,7 +181,7 @@ export function Header({
                   <div className="grid grid-cols-3 gap-6">
                     <div>
                       <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
-                        Tier 1 (High Demand)
+                        Tier 1
                       </p>
                       <ul className="space-y-1.5 text-xs">
                         {tier1Countries.map((c) => (
@@ -174,7 +204,7 @@ export function Header({
 
                     <div>
                       <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
-                        Tier 2 (Affordable / Low-Fee)
+                        Tier 2
                       </p>
                       <ul className="space-y-1.5 text-xs">
                         {tier2Countries.map((c) => (
@@ -197,7 +227,7 @@ export function Header({
 
                     <div>
                       <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
-                        Tier 3 (Medical / Low-Cost)
+                        Tier 3
                       </p>
                       <ul className="space-y-1.5 text-xs">
                         {tier3Countries.map((c) => (
@@ -232,13 +262,15 @@ export function Header({
             <button
               aria-label="Open programs menu"
               aria-expanded={programsOpen}
-              className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-[#102C57] py-2 transition"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
             >
               <span>Programs</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 (8)
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
+              <ChevronDown
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${programsOpen ? "rotate-180 text-slate-700" : ""}`}
+              />
             </button>
 
             {programsOpen && (
@@ -473,7 +505,7 @@ export function Header({
             >
               <span>Tools</span>
               <span className="text-[10px] text-slate-400 font-normal">
-                (6)
+                (8)
               </span>
               <ChevronDown
                 className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? "rotate-180 text-slate-700" : ""}`}
@@ -482,30 +514,27 @@ export function Header({
 
             {toolsOpen && (
               <div className="absolute -left-8 top-full pt-2">
-                <div className="w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
-                  <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
-                      Student Utilities
-                    </span>
-                    <span className="text-[10px] font-medium text-slate-400">
-                      6 Interactive Tools
+                <div className="w-[480px] rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
+                  <div className="border-b border-slate-100 bg-slate-50/70 p-3 rounded-xl mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Discovery & Decision Engines (8 Tools)
                     </span>
                   </div>
-                  <ul className="space-y-1">
+                  <ul className="grid grid-cols-2 gap-1 p-2">
                     <li>
                       <Link
                         href="/cost-calculator"
-                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B]">
-                          <Calculator className="h-4 w-4" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B] shrink-0">
+                          <Calculator className="h-3.5 w-3.5" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-[#EA5C2B]">
                             Cost Calculator
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            Living + Tuition in INR
+                            INR Tuition & Living
                           </p>
                         </div>
                       </Link>
@@ -513,17 +542,17 @@ export function Header({
                     <li>
                       <Link
                         href="/compare/universities"
-                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
-                          <Building2 className="h-4 w-4" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-blue-700 shrink-0">
+                          <Building2 className="h-3.5 w-3.5" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-blue-700">
                             Compare Universities
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            Side-by-side (2-5 unis)
+                            Up to 5 side-by-side
                           </p>
                         </div>
                       </Link>
@@ -531,78 +560,110 @@ export function Header({
                     <li>
                       <Link
                         href="/compare/courses"
-                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
-                          <GraduationCap className="h-4 w-4" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-50 text-purple-700 shrink-0">
+                          <GraduationCap className="h-3.5 w-3.5" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-purple-700">
                             Compare Courses
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            Fees, IELTS & work permits
+                            Fees, IELTS & modules
                           </p>
                         </div>
                       </Link>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => {
-                          handleAI();
-                        }}
-                        className="flex w-full items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool text-left"
-                      >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-                          <Bot className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-indigo-600">
-                            AI Counsellor
-                          </p>
-                          <p className="text-[10px] text-slate-400">
-                            24/7 Admissions Guidance
-                          </p>
-                        </div>
-                      </button>
                     </li>
                     <li>
                       <Link
-                        href="/cost-calculator"
-                        className="flex items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                        href="/roi-calculator"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                          <ShieldCheck className="h-4 w-4" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 shrink-0">
+                          <TrendingUp className="h-3.5 w-3.5" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-emerald-700">
-                            EMBA & Master's ROI
+                            EMBA ROI Calculator
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            Salary multiplier /100 score
+                            Payback & 10Y Gain
                           </p>
                         </div>
                       </Link>
                     </li>
                     <li>
-                      <button
-                        onClick={() => {
-                          handleLead();
-                        }}
-                        className="flex w-full items-center gap-3 rounded-xl p-2 hover:bg-slate-50 transition group/tool text-left"
+                      <Link
+                        href="/deadline-tracker"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
-                          <ArrowRight className="h-4 w-4" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700 shrink-0">
+                          <Clock className="h-3.5 w-3.5" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-indigo-700">
+                            Deadline Tracker
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            90-Day Intake Alerts
+                          </p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/scholarships"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shrink-0">
+                          <Award className="h-3.5 w-3.5" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-amber-700">
-                            Eligibility & Shortlist Review
+                            Scholarship Finder
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            Instant profile evaluation
+                            DAAD, Chevening, STEM
                           </p>
                         </div>
-                      </button>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/eligibility-checker"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-50 text-teal-700 shrink-0">
+                          <ShieldCheck className="h-3.5 w-3.5" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-teal-700">
+                            Eligibility Checker
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            Safe, Target & Reach
+                          </p>
+                        </div>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/loan-calculator"
+                        className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
+                      >
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-50 text-rose-700 shrink-0">
+                          <Banknote className="h-3.5 w-3.5" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-rose-700">
+                            Loan EMI Calculator
+                          </p>
+                          <p className="text-[10px] text-slate-400">
+                            SBI, HDFC & Prodigy
+                          </p>
+                        </div>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -621,14 +682,17 @@ export function Header({
 
         {/* Right CTA Actions - Cleaned & Streamlined */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-          {/* Search Icon Button */}
+          {/* Compact Search Trigger */}
           <button
             onClick={handleSearch}
-            aria-label="Search universities, programs and destinations"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition shrink-0 cursor-pointer"
-            title="Search universities, programs and destinations"
+            aria-label="Search"
+            className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/90 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition cursor-pointer shrink-0 shadow-2xs"
+            title="Search universities, courses, programs"
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+            <span className="hidden sm:inline font-medium text-slate-600 text-xs">
+              Search
+            </span>
           </button>
 
           {/* User Auth state & 4 Portals Dropdown */}
@@ -644,21 +708,24 @@ export function Header({
                         ? "/admin"
                         : "/dashboard/student"
                 }
-                className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/90 px-3.5 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition shrink-0 shadow-2xs"
+                className="flex items-center gap-2 rounded-full border border-slate-200/90 bg-slate-50/90 px-3.5 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition shrink-0 shadow-2xs"
+                title={`Logged in as ${user?.name || user?.email}`}
               >
-                <User className="h-3.5 w-3.5 text-[#EA5C2B] shrink-0" />
-                <span className="font-bold whitespace-nowrap">
-                  {user?.role === "buyer"
-                    ? "Consultant Portal"
-                    : user?.role === "university"
-                      ? "University Portal"
-                      : user?.role === "admin"
-                        ? "Admin Panel"
-                        : "My Dashboard"}
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-100 text-[#EA5C2B] font-extrabold text-[11px] shrink-0">
+                  {user?.name ? (
+                    user.name.trim().charAt(0).toUpperCase()
+                  ) : (
+                    <User className="h-3 w-3 text-[#EA5C2B]" />
+                  )}
+                </div>
+                <span className="font-bold whitespace-nowrap max-w-[150px] truncate">
+                  {user?.name || user?.email?.split("@")[0] || "My Account"}
                 </span>
-                <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-extrabold text-indigo-700 capitalize shrink-0 border border-indigo-100/60">
-                  {user?.role === "buyer" ? "B2B" : user?.role}
-                </span>
+                {user?.role && user.role !== "student" && (
+                  <span className="rounded-md bg-indigo-50 px-1.5 py-0.5 text-[10px] font-extrabold text-indigo-700 capitalize shrink-0 border border-indigo-100/60">
+                    {user.role === "buyer" ? "B2B" : user.role}
+                  </span>
+                )}
               </Link>
               <button
                 onClick={logout}
@@ -678,12 +745,12 @@ export function Header({
               <button
                 aria-label="Open portals and login menu"
                 aria-expanded={authOpen}
-                className="flex items-center gap-1 rounded-full border border-slate-200/90 bg-slate-50/80 px-3 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition"
+                className="flex items-center gap-1.5 rounded-full bg-[#EA5C2B] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff7240] hover:shadow active:scale-98"
               >
-                <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                <User className="h-3.5 w-3.5 text-white" />
                 <span>Portals & Login</span>
                 <ChevronDown
-                  className={`h-3 w-3 text-slate-400 transition-transform duration-150 ${authOpen ? "rotate-180 text-slate-700" : ""}`}
+                  className={`h-3 w-3 text-white/80 transition-transform duration-150 ${authOpen ? "rotate-180" : ""}`}
                 />
               </button>
 
@@ -793,15 +860,6 @@ export function Header({
             </div>
           )}
 
-          {/* Primary Action Button */}
-          <button
-            onClick={() => handleLead()}
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#EA5C2B] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff7240] hover:shadow active:scale-98"
-          >
-            <span>Free Consultation</span>
-            <ArrowRight className="h-3 w-3" />
-          </button>
-
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -850,6 +908,20 @@ export function Header({
 
           {/* Mobile Drawer Main Scroll Area */}
           <div className="flex-1 p-4 space-y-6 pb-24">
+            {/* Search Trigger */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleSearch();
+              }}
+              className="w-full flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-500 shadow-2xs hover:bg-white hover:border-slate-300 transition"
+            >
+              <Search className="h-4 w-4 text-slate-400" />
+              <span className="font-medium text-slate-600">
+                Search universities, courses, programs...
+              </span>
+            </button>
+
             {/* 1. AI Counsellor Banner */}
             <button
               onClick={() => {
@@ -966,7 +1038,7 @@ export function Header({
               <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
                 Discovery Tools & Matrices
               </h3>
-              <div className="space-y-2 text-xs">
+              <div className="grid grid-cols-1 gap-2 text-xs">
                 <Link
                   href="/cost-calculator"
                   onClick={() => setMobileMenuOpen(false)}
@@ -1022,19 +1094,91 @@ export function Header({
                 </Link>
 
                 <Link
-                  href="/test-prep"
+                  href="/roi-calculator"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      EMBA ROI Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Break-even payback & 10-year cumulative gain
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/deadline-tracker"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Intake Deadline Tracker
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      90, 60, 30-day countdowns & reminders
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/scholarships"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                    <Award className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Scholarship Finder
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      DAAD, Chevening, Fulbright & STEM grants
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/eligibility-checker"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
                     <p className="font-bold text-[#102C57]">
-                      Test Prep Hub (All 9 Exams)
+                      Admission Eligibility Checker
                     </p>
                     <p className="text-[10px] text-slate-500">
-                      IELTS, GRE, GMAT, NCLEX, PLAB, OET & PTE
+                      Safe, Target & Reach acceptance probability
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/loan-calculator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+                    <Banknote className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Education Loan & EMI Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      SBI, HDFC Credila & Prodigy Finance rates
                     </p>
                   </div>
                 </Link>

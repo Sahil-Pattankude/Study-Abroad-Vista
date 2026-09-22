@@ -19,55 +19,136 @@ export function CountryFlag({
   size = "md",
   className,
 }: CountryFlagProps) {
-  let raw = (code || countryCode || "").trim().toLowerCase();
-  const rawName = (name || countryName || "").trim().toLowerCase();
+  const input =
+    `${code || ""} ${countryCode || ""} ${name || ""} ${countryName || ""}`
+      .toLowerCase()
+      .replace(/[\-_]/g, " ")
+      .trim();
 
-  if (!raw && rawName) {
-    if (rawName.includes("canada")) raw = "ca";
-    else if (rawName.includes("netherland") || rawName.includes("holland"))
-      raw = "nl";
-    else if (rawName.includes("germany")) raw = "de";
-    else if (
-      rawName.includes("united kingdom") ||
-      rawName.includes("uk") ||
-      rawName.includes("britain")
-    )
-      raw = "gb";
-    else if (
-      rawName.includes("united states") ||
-      rawName.includes("usa") ||
-      rawName.includes("america")
-    )
-      raw = "us";
-    else if (rawName.includes("australia")) raw = "au";
-    else if (rawName.includes("new zealand") || rawName.includes("nz"))
-      raw = "nz";
-    else if (rawName.includes("ireland")) raw = "ie";
-    else if (rawName.includes("france")) raw = "fr";
-    else if (rawName.includes("italy")) raw = "it";
-    else if (rawName.includes("singapore")) raw = "sg";
-    else if (rawName.includes("malaysia")) raw = "my";
-    else if (rawName.includes("uae") || rawName.includes("emirates"))
-      raw = "ae";
-    else if (rawName.includes("russia")) raw = "ru";
-    else if (rawName.includes("uzbekistan")) raw = "uz";
-    else if (rawName.includes("kazakhstan")) raw = "kz";
-    else if (rawName.includes("kyrgyzstan")) raw = "kg";
-    else if (rawName.includes("georgia")) raw = "ge";
-    else if (rawName.includes("philippines")) raw = "ph";
+  let raw = "";
+
+  if (input.includes("canada") || input === "ca" || input === "can") raw = "ca";
+  else if (
+    input.includes("netherland") ||
+    input.includes("holland") ||
+    input.includes("dutch") ||
+    input === "nl" ||
+    input === "nld"
+  )
+    raw = "nl";
+  else if (
+    input.includes("germany") ||
+    input.includes("german") ||
+    input.includes("deutschland") ||
+    input === "de" ||
+    input === "deu"
+  )
+    raw = "de";
+  else if (
+    input.includes("united kingdom") ||
+    input.includes("uk") ||
+    input.includes("britain") ||
+    input.includes("england") ||
+    input === "gb" ||
+    input === "gbr"
+  )
+    raw = "gb";
+  else if (
+    input.includes("united states") ||
+    input.includes("usa") ||
+    input.includes("america") ||
+    input === "us"
+  )
+    raw = "us";
+  else if (input.includes("australia") || input === "au" || input === "aus")
+    raw = "au";
+  else if (input.includes("new zealand") || input === "nz" || input === "nzl")
+    raw = "nz";
+  else if (
+    input.includes("ireland") ||
+    input.includes("irish") ||
+    input === "ie" ||
+    input === "irl"
+  )
+    raw = "ie";
+  else if (
+    input.includes("france") ||
+    input.includes("french") ||
+    input === "fr" ||
+    input === "fra"
+  )
+    raw = "fr";
+  else if (
+    input.includes("italy") ||
+    input.includes("italian") ||
+    input === "it" ||
+    input === "ita"
+  )
+    raw = "it";
+  else if (input.includes("singapore") || input === "sg" || input === "sgp")
+    raw = "sg";
+  else if (input.includes("malaysia") || input === "my" || input === "mys")
+    raw = "my";
+  else if (
+    input.includes("united arab emirates") ||
+    input.includes("emirates") ||
+    input.includes("uae") ||
+    input.includes("dubai") ||
+    input === "ae" ||
+    input === "are"
+  )
+    raw = "ae";
+  else if (input.includes("russia") || input === "ru" || input === "rus")
+    raw = "ru";
+  else if (
+    input.includes("uzbekistan") ||
+    input.includes("uzbek") ||
+    input === "uz" ||
+    input === "uzb"
+  )
+    raw = "uz";
+  else if (
+    input.includes("kazakhstan") ||
+    input.includes("kazakh") ||
+    input === "kz" ||
+    input === "kaz"
+  )
+    raw = "kz";
+  else if (
+    input.includes("kyrgyzstan") ||
+    input.includes("kyrgyz") ||
+    input === "kg" ||
+    input === "kgz"
+  )
+    raw = "kg";
+  else if (
+    input.includes("georgia") ||
+    input.includes("georgian") ||
+    input === "ge" ||
+    input === "geo"
+  )
+    raw = "ge";
+  else if (
+    input.includes("philippines") ||
+    input.includes("filipino") ||
+    input === "ph" ||
+    input === "phl"
+  )
+    raw = "ph";
+  else if (input.includes("india") || input === "in" || input === "ind")
+    raw = "in";
+  else {
+    const directCode = (code || countryCode || "").trim().toLowerCase();
+    raw = directCode.length === 2 ? directCode : "";
   }
 
-  if (raw === "uk") raw = "gb";
-
   const sizeClasses = {
-    sm: "h-3.5 w-5",
-    md: "h-4.5 w-6.5",
-    lg: "h-6 w-9",
+    sm: "h-[14px] w-[20px]",
+    md: "h-[18px] w-[26px]",
+    lg: "h-[24px] w-[34px]",
   }[size];
 
-  const containerClasses =
-    className ||
-    `inline-flex items-center justify-center shrink-0 overflow-hidden rounded-[3px] border border-slate-300/80 shadow-[0_1px_2px_rgba(0,0,0,0.1)] align-middle ${sizeClasses}`;
+  const containerClasses = `inline-flex items-center justify-center shrink-0 overflow-hidden rounded-[3px] border border-slate-300/80 shadow-[0_1px_2px_rgba(0,0,0,0.1)] align-middle ${sizeClasses} ${className || ""}`;
 
   // Embedded SVG Flags for 100% offline & cross-platform rendering
   const renderSVG = () => {
@@ -278,6 +359,31 @@ export function CountryFlag({
             />
           </svg>
         );
+      case "kz":
+        return (
+          <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+            <path fill="#00afca" d="M0 0h640v480H0z" />
+            <circle cx="320" cy="240" r="60" fill="#ffcc00" />
+            <path
+              fill="#00afca"
+              d="M300 240a20 20 0 1 0 40 0 20 20 0 1 0-40 0z"
+            />
+            <path fill="#ffcc00" d="m260 270 60 20 60-20-60 10z" />
+          </svg>
+        );
+      case "kg":
+        return (
+          <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+            <path fill="#e8112d" d="M0 0h640v480H0z" />
+            <circle cx="320" cy="240" r="70" fill="#ffcc00" />
+            <circle cx="320" cy="240" r="50" fill="#e8112d" />
+            <path
+              stroke="#ffcc00"
+              strokeWidth="8"
+              d="M290 210c20 20 40 40 60 60M290 270c20-20 40-40 60-60"
+            />
+          </svg>
+        );
       case "ph":
         return (
           <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
@@ -287,23 +393,37 @@ export function CountryFlag({
             <circle cx="95" cy="240" r="32" fill="#fcd116" />
           </svg>
         );
+      case "in":
+        return (
+          <svg viewBox="0 0 640 480" className="w-full h-full object-cover">
+            <path fill="#f93" d="M0 0h640v160H0z" />
+            <path fill="#fff" d="M0 160h640v160H0z" />
+            <path fill="#128807" d="M0 320h640v160H0z" />
+            <circle
+              cx="320"
+              cy="240"
+              r="40"
+              fill="none"
+              stroke="#000080"
+              strokeWidth="6"
+            />
+            <circle cx="320" cy="240" r="10" fill="#000080" />
+          </svg>
+        );
       default:
         return (
-          <img
-            src={`https://flagcdn.com/w40/${raw || "un"}.png`}
-            alt=""
-            className="w-full h-full object-cover"
-            loading="lazy"
-            onError={(e) => {
-              (e.target as HTMLElement).style.display = "none";
-            }}
-          />
+          <span className="flex h-full w-full items-center justify-center bg-slate-100 text-[10px] font-bold text-slate-600">
+            {raw ? raw.toUpperCase() : "🌐"}
+          </span>
         );
     }
   };
 
   return (
-    <span className={containerClasses} title={rawName || raw.toUpperCase()}>
+    <span
+      className={containerClasses}
+      title={name || countryName || code || countryCode || raw.toUpperCase()}
+    >
       {renderSVG()}
     </span>
   );

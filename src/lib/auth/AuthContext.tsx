@@ -123,16 +123,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             role = "buyer";
           }
 
+          const meta = session.user.user_metadata;
+          const extractedName =
+            meta?.name ||
+            meta?.full_name ||
+            (meta?.first_name
+              ? `${meta.first_name} ${meta.last_name || ""}`.trim()
+              : undefined) ||
+            session.user.email?.split("@")[0];
+
           const currentUser: AuthUser = {
             id: session.user.id,
             email: session.user.email || "",
-            name:
-              session.user.user_metadata?.name ||
-              session.user.email?.split("@")[0],
+            name: extractedName,
             role: role,
-            organization: session.user.user_metadata?.organization,
-            country: session.user.user_metadata?.country_name,
-            user_metadata: session.user.user_metadata,
+            organization: meta?.organization,
+            country: meta?.country_name,
+            user_metadata: meta,
           };
           setUser(currentUser);
           localStorage.setItem(

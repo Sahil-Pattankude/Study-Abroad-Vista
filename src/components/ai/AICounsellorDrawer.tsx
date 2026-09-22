@@ -2,7 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Bot, X, Send, Sparkles, User, RefreshCw, PhoneCall, Lock, ArrowRight } from "lucide-react";
+import {
+  Bot,
+  X,
+  Send,
+  Sparkles,
+  User,
+  RefreshCw,
+  PhoneCall,
+  Lock,
+  ArrowRight,
+} from "lucide-react";
 import { AIChatMessage } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 
@@ -11,13 +21,15 @@ interface AICounsellorDrawerProps {
   onClose: () => void;
   onOpenLeadModal?: () => void;
   onOpenAuthModal?: () => void;
+  initialQuery?: string;
 }
 
-export function AICounsellorDrawer({ 
-  isOpen, 
-  onClose, 
+export function AICounsellorDrawer({
+  isOpen,
+  onClose,
   onOpenLeadModal,
-  onOpenAuthModal 
+  onOpenAuthModal,
+  initialQuery,
 }: AICounsellorDrawerProps) {
   const { user, isLoggedIn } = useAuth();
   const [messages, setMessages] = useState<AIChatMessage[]>([
@@ -28,9 +40,15 @@ export function AICounsellorDrawer({
       timestamp: "Just now",
     },
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialQuery || "");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (initialQuery) {
+      setInput(initialQuery);
+    }
+  }, [initialQuery]);
 
   const suggestedQuestions = [
     "Which European countries have free tuition?",
@@ -82,7 +100,10 @@ export function AICounsellorDrawer({
       const modelMessage: AIChatMessage = {
         id: (Date.now() + 1).toString(),
         role: "model",
-        text: data.reply || data.fallback || "I am processing your query. Please ask again or book a consultation.",
+        text:
+          data.reply ||
+          data.fallback ||
+          "I am processing your query. Please ask again or book a consultation.",
         timestamp: "Just now",
       };
 
@@ -117,13 +138,21 @@ export function AICounsellorDrawer({
               <div className="flex items-center gap-1.5">
                 <h3 className="font-extrabold text-sm">Vista AI Counsellor</h3>
                 {isLoggedIn ? (
-                  <span className="flex h-2 w-2 rounded-full bg-emerald-400" title="Active & Authenticated" />
+                  <span
+                    className="flex h-2 w-2 rounded-full bg-emerald-400"
+                    title="Active & Authenticated"
+                  />
                 ) : (
-                  <span className="flex h-2 w-2 rounded-full bg-amber-400" title="Login Required" />
+                  <span
+                    className="flex h-2 w-2 rounded-full bg-amber-400"
+                    title="Login Required"
+                  />
                 )}
               </div>
               <p className="text-[10px] text-slate-300">
-                {isLoggedIn ? `Active Session: ${user?.name || user?.email}` : "Vista AI Engine • Member Access"}
+                {isLoggedIn
+                  ? `Active Session: ${user?.name || user?.email}`
+                  : "Vista AI Engine • Member Access"}
               </p>
             </div>
           </div>
@@ -143,9 +172,13 @@ export function AICounsellorDrawer({
                 <Lock className="h-4 w-4 text-[#EA5C2B]" />
               </div>
               <div className="flex-1">
-                <h4 className="text-xs font-bold text-amber-900">Login Required to Chat</h4>
+                <h4 className="text-xs font-bold text-amber-900">
+                  Login Required to Chat
+                </h4>
                 <p className="mt-0.5 text-[11px] leading-relaxed text-amber-800">
-                  AI Counsellor is exclusively available to logged-in students & parents. Sign in or register to unlock unlimited personalized admissions counselling.
+                  AI Counsellor is exclusively available to logged-in students &
+                  parents. Sign in or register to unlock unlimited personalized
+                  admissions counselling.
                 </p>
                 <div className="mt-2.5 flex items-center gap-2">
                   <Link
@@ -267,7 +300,9 @@ export function AICounsellorDrawer({
             <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-2 text-xs">
               <div className="flex items-center gap-2 text-slate-500 pl-1">
                 <Lock className="h-4 w-4 text-[#EA5C2B]" />
-                <span className="text-[11px]">Sign in required to ask questions</span>
+                <span className="text-[11px]">
+                  Sign in required to ask questions
+                </span>
               </div>
               <Link
                 href="/login"
