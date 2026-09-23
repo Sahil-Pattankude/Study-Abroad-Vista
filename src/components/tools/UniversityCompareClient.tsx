@@ -122,7 +122,10 @@ export function UniversityCompareClient() {
     selectedUnis.length > 0 ? selectedUnis : allUniversities.slice(0, 5);
 
   const addUniversity = (slug: string) => {
-    if (activeUnis.length < 5 && !activeUnis.some((u) => u.slug === slug || u.id === slug)) {
+    if (
+      activeUnis.length < 5 &&
+      !activeUnis.some((u) => u.slug === slug || u.id === slug)
+    ) {
       setSelectedSlugs([...activeUnis.map((u) => u.slug), slug]);
       setIsSelectorOpen(false);
       setSearchQuery("");
@@ -132,7 +135,9 @@ export function UniversityCompareClient() {
   const removeUniversity = (slug: string) => {
     if (activeUnis.length > 1) {
       setSelectedSlugs(
-        activeUnis.filter((u) => u.slug !== slug && u.id !== slug).map((u) => u.slug),
+        activeUnis
+          .filter((u) => u.slug !== slug && u.id !== slug)
+          .map((u) => u.slug),
       );
     }
   };
@@ -153,14 +158,18 @@ export function UniversityCompareClient() {
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
             <Sparkles className="h-3.5 w-3.5" />
             <span>
-              Interactive Decision Utility • Compare Up to 5 Global Universities Side-by-Side
+              Interactive Decision Utility • Compare Up to 5 Global Universities
+              Side-by-Side
             </span>
           </div>
           <h1 className="font-serif text-3xl font-black text-[#102C57] sm:text-4xl lg:text-5xl">
             University Comparison Matrix
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Compare QS global rankings, annual tuition in INR, admission cutoffs (IELTS, GRE/GMAT, Acceptance Rates), intake windows, scholarship schemes, degree programs offered, and application deadlines side-by-side.
+            Compare QS global rankings, annual tuition in INR, admission cutoffs
+            (IELTS, GRE/GMAT, Acceptance Rates), intake windows, scholarship
+            schemes, degree programs offered, and application deadlines
+            side-by-side.
           </p>
         </div>
 
@@ -182,7 +191,11 @@ export function UniversityCompareClient() {
               }`}
             >
               <SlidersHorizontal className="h-3.5 w-3.5 text-amber-600" />
-              <span>{highlightDifferences ? "Differences Highlighted ✓" : "Highlight Differences"}</span>
+              <span>
+                {highlightDifferences
+                  ? "Differences Highlighted ✓"
+                  : "Highlight Differences"}
+              </span>
             </button>
           </div>
 
@@ -307,7 +320,6 @@ export function UniversityCompareClient() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
-              
               {/* 1. Global & National Ranking */}
               <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
                 <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
@@ -342,10 +354,15 @@ export function UniversityCompareClient() {
                   </div>
                 </td>
                 {activeUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-bold text-emerald-700 text-sm">
+                  <td
+                    key={uni.id}
+                    className="p-4 font-bold text-emerald-700 text-sm"
+                  >
                     {uni.tuitionFeeRangeINR}
                     <span className="block text-[10px] font-normal text-slate-400 mt-0.5">
-                      {uni.countrySlug === "germany" ? "Public / Tuition Free" : "Standard International Rate"}
+                      {uni.countrySlug === "germany"
+                        ? "Public / Tuition Free"
+                        : "Standard International Rate"}
                     </span>
                   </td>
                 ))}
@@ -374,11 +391,13 @@ export function UniversityCompareClient() {
                     <div>
                       {uni.greGmatRequired ? (
                         <span className="inline-flex items-center gap-1 text-[11px] text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded">
-                          <Check className="h-3 w-3 text-amber-600" /> GRE/GMAT Required
+                          <Check className="h-3 w-3 text-amber-600" /> GRE/GMAT
+                          Required
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-[11px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded">
-                          <Check className="h-3 w-3 text-emerald-600" /> GRE/GMAT Waived
+                          <Check className="h-3 w-3 text-emerald-600" />{" "}
+                          GRE/GMAT Waived
                         </span>
                       )}
                     </div>
@@ -410,7 +429,9 @@ export function UniversityCompareClient() {
                           </span>
                         ))
                       ) : (
-                        <span className="text-slate-400 text-[11px]">MS, MBA, Bachelors, PhD</span>
+                        <span className="text-slate-400 text-[11px]">
+                          MS, MBA, Bachelors, PhD
+                        </span>
                       )}
                     </div>
                   </td>
@@ -487,8 +508,12 @@ export function UniversityCompareClient() {
                   </div>
                 </td>
                 {activeUnis.map((uni) => (
-                  <td key={uni.id} className="p-4 font-bold text-[#EA5C2B] text-xs">
-                    {uni.postStudyWorkMonths} Months ({Math.round(uni.postStudyWorkMonths / 12)} Years)
+                  <td
+                    key={uni.id}
+                    className="p-4 font-bold text-[#EA5C2B] text-xs"
+                  >
+                    {uni.postStudyWorkMonths} Months (
+                    {Math.round(uni.postStudyWorkMonths / 12)} Years)
                   </td>
                 ))}
               </tr>

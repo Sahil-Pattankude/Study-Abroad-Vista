@@ -82,7 +82,7 @@ export function UniversityActions({
             <CheckCircle2 className="h-4 w-4 text-emerald-600" />
             Verified Institution
           </span>
-        ) : (
+        ) : !isLoggedIn ? (
           <button
             onClick={() => setIsClaimModalOpen(true)}
             className="flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50/80 px-3.5 py-2 text-xs font-bold text-[#102C57] transition hover:bg-indigo-100 hover:border-indigo-300 cursor-pointer shadow-2xs"
@@ -90,7 +90,7 @@ export function UniversityActions({
             <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
             <span>Claim Profile</span>
           </button>
-        )}
+        ) : null}
 
         <button
           onClick={toggleShortlist}

@@ -222,7 +222,10 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <AICounsellorTriggerButton className="mt-5 flex w-full items-center justify-between rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-left text-xs text-slate-300 hover:bg-white/10 transition">
+                  <AICounsellorTriggerButton
+                    initialQuery="What are the best UK universities for MSc Data Science?"
+                    className="mt-5 flex w-full items-center justify-between rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-left text-xs text-slate-300 hover:bg-white/10 transition"
+                  >
                     <span>
                       Ask sample question: &apos;What are the best UK
                       universities for MSc Data Science?&apos;

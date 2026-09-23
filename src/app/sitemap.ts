@@ -9,6 +9,25 @@ import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://studyabroadvista.com";
 
+const PHASE_1_L3_COMBINATIONS: {
+  slug: string;
+  program: string;
+  priority: number;
+}[] = [
+  { slug: "uk", program: "masters", priority: 0.9 },
+  { slug: "uk", program: "mba", priority: 0.85 },
+  { slug: "uk", program: "executive-mba", priority: 0.8 },
+  { slug: "uk", program: "nursing", priority: 0.85 },
+  { slug: "usa", program: "masters", priority: 0.9 },
+  { slug: "usa", program: "mba", priority: 0.85 },
+  { slug: "usa", program: "executive-mba", priority: 0.8 },
+  { slug: "germany", program: "masters", priority: 0.9 },
+  { slug: "germany", program: "ausbildung", priority: 0.85 },
+  { slug: "canada", program: "masters", priority: 0.85 },
+  { slug: "russia", program: "mbbs", priority: 0.9 },
+  { slug: "georgia", program: "mbbs", priority: 0.9 },
+];
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
@@ -149,12 +168,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Destination Country Hubs
+  // Destination Country Hubs (L2)
   const countryPages: MetadataRoute.Sitemap = countries.map((c) => ({
     url: `${BASE_URL}/study-in-${c.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.9,
   }));
+
+  // Country + Program Conversion Layer Pages (L3 - Canonical 76 Combinations)
+  const l3Map = new Map<string, { url: string; priority: number }>();
+
+  // 1. Phase 1 Launch Combinations with designated SEO priority
+  for (const item of PHASE_1_L3_COMBINATIONS) {
+    const url = `${BASE_URL}/study-in-${item.slug}/${item.program}`;
+    l3Map.set(url, { url, priority: item.priority });
+  }
+
+  // 2. All active country destination popular programs
+  for (const c of countries) {
+    for (const p of c.popularPrograms || []) {
+      const progSlug =
+        p === "ms" ? "masters" : p === "emba" ? "executive-mba" : p;
+      const url = `${BASE_URL}/study-in-${c.slug}/${progSlug}`;
+      if (!l3Map.has(url)) {
+        l3Map.set(url, { url, priority: 0.8 });
+      }
+    }
+  }
+
+  const l3Pages: MetadataRoute.Sitemap = Array.from(l3Map.values()).map(
+    (entry) => ({
+      url: entry.url,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: entry.priority,
+    }),
+  );
 
   // Program Disciplines
   const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
@@ -183,6 +233,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     ...countryPages,
+    ...l3Pages,
     ...programPages,
     ...testPrepPages,
     ...universityPages,

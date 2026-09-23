@@ -244,12 +244,12 @@ function LoginForm() {
             </p>
           </div>
 
-          {/* 4 Role Selector Tabs */}
-          <div className="mt-6 grid grid-cols-2 gap-1.5 rounded-2xl bg-slate-100/90 p-1 text-xs font-bold sm:grid-cols-4">
+          {/* 3 Role Selector Tabs */}
+          <div className="mt-6 grid grid-cols-3 gap-1.5 rounded-2xl bg-slate-100/90 p-1 text-xs font-bold">
             <button
               type="button"
               onClick={() => handleRoleTabChange("student")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "student"
                   ? "bg-white text-[#102C57] shadow-xs"
                   : "text-slate-500 hover:text-slate-900"
@@ -262,7 +262,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={() => handleRoleTabChange("buyer")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "buyer"
                   ? "bg-white text-[#102C57] shadow-xs"
                   : "text-slate-500 hover:text-slate-900"
@@ -275,7 +275,7 @@ function LoginForm() {
             <button
               type="button"
               onClick={() => handleRoleTabChange("university")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
+              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "university"
                   ? "bg-white text-[#102C57] shadow-xs"
                   : "text-slate-500 hover:text-slate-900"
@@ -283,19 +283,6 @@ function LoginForm() {
             >
               <Building2 className="h-4 w-4 text-indigo-600" />
               <span>University</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleRoleTabChange("admin")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition ${
-                activeRoleTab === "admin"
-                  ? "bg-white text-[#102C57] shadow-xs"
-                  : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <ShieldCheck className="h-4 w-4 text-rose-600" />
-              <span>Admin</span>
             </button>
           </div>
 
@@ -307,9 +294,7 @@ function LoginForm() {
                 ? "🏛️ University Partner Portal (/portal/university)"
                 : activeRoleTab === "buyer"
                   ? "🏢 B2B Consultant Lead Portal (/portal/buyer)"
-                  : activeRoleTab === "admin"
-                    ? "🛡️ Master Operations Control (/admin)"
-                    : "🎓 Student Dashboard (/dashboard/student)"}
+                  : "🎓 Student Dashboard (/dashboard/student)"}
             </strong>
           </div>
 

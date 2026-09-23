@@ -59,16 +59,7 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
     if (initialQuery) {
       setAiInitialQuery(initialQuery);
     }
-    if (!isLoggedIn) {
-      setAuthModalConfig({
-        title: "AI Counsellor is reserved for logged-in members",
-        description:
-          "Please sign in or create a free student account to unlock 24/7 personalized AI admissions counselling, university shortlisting, and eligibility checks.",
-      });
-      setAuthModalOpen(true);
-    } else {
-      setAiDrawerOpen(true);
-    }
+    setAiDrawerOpen(true);
   };
 
   const openLeadModal = (countryOrProgram?: unknown) => {
@@ -192,14 +183,19 @@ export function LeadTriggerButton({
 
 export function AICounsellorTriggerButton({
   children,
+  initialQuery,
   className,
 }: {
   children: ReactNode;
+  initialQuery?: string;
   className?: string;
 }) {
   const { openAICounsellor } = useHomeModals();
   return (
-    <button onClick={() => openAICounsellor()} className={className}>
+    <button
+      onClick={() => openAICounsellor(initialQuery)}
+      className={className}
+    >
       {children}
     </button>
   );

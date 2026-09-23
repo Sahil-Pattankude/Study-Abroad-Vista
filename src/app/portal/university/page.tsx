@@ -392,29 +392,43 @@ export default function UniversityPortalPage() {
     }
   }, [user]);
 
+  const [claimLoading, setClaimLoading] = useState(true);
+  const [userClaim, setUserClaim] = useState<any>(null);
+
   // Load claim info if available
-  useEffect(() => {
-    async function loadClaim() {
-      if (!user) return;
-      try {
-        const claims = await fetchLiveClaims();
-        const matchedClaim = claims.find(
-          (c) =>
-            c.officialEmail?.toLowerCase() === user.email?.toLowerCase() ||
-            (c.userId && c.userId === user.id),
-        );
-        if (matchedClaim) {
-          setProfileData((prev) => ({
-            ...prev,
-            name: matchedClaim.universityName || prev.name,
-            country: matchedClaim.countryName || prev.country,
-          }));
-        }
-      } catch (err) {
-        console.warn("Claim lookup error:", err);
-      }
+  const refreshClaimData = async () => {
+    if (!user) {
+      setClaimLoading(false);
+      return;
     }
-    loadClaim();
+    try {
+      setClaimLoading(true);
+      const claims = await fetchLiveClaims();
+      const matchedClaim = claims.find(
+        (c) =>
+          c.officialEmail?.toLowerCase() === user.email?.toLowerCase() ||
+          (c.userId && c.userId === user.id),
+      );
+      if (matchedClaim) {
+        setUserClaim(matchedClaim);
+        setProfileData((prev) => ({
+          ...prev,
+          name: matchedClaim.universityName || prev.name,
+          country: matchedClaim.countryName || prev.country,
+        }));
+        setBillingOrg(matchedClaim.universityName || profileData.name);
+      } else {
+        setUserClaim(null);
+      }
+    } catch (err) {
+      console.warn("Claim lookup error:", err);
+    } finally {
+      setClaimLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshClaimData();
   }, [user]);
 
   // Program Management Handlers (FR-UNI-003)
@@ -555,17 +569,364 @@ export default function UniversityPortalPage() {
     document.body.removeChild(link);
   };
 
-  if (isLoading) {
+  if (isLoading || claimLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <Loader2 className="h-8 w-8 animate-spin text-[#102C57]" />
         <p className="mt-3 text-xs font-semibold text-slate-500">
-          Loading university partner workspace...
+          Checking institutional claim verification status...
         </p>
       </div>
     );
   }
 
+  // Determine claim verification status
+  const isClaimVerified =
+    userClaim?.status === "verified" ||
+    userClaim?.status === "approved" ||
+    user?.user_metadata?.claim_status === "verified" ||
+    (user?.email && user.email.toLowerCase().includes("verified"));
+
+  const isClaimPending =
+    userClaim &&
+    (userClaim.status === "pending" || !isClaimVerified) &&
+    !isClaimVerified;
+
+  const hasNoClaim = !userClaim && !isClaimVerified;
+
+  // Unauthenticated view
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+        <header className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-8 shadow-xs">
+          <div className="mx-auto flex max-w-7xl items-center justify-between">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
+                <Compass className="h-5 w-5 text-[#EA5C2B]" />
+              </div>
+              <span className="text-lg font-black tracking-tight text-[#102C57]">
+                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
+              </span>
+            </Link>
+            <Link
+              href="/login?redirect=/portal/university"
+              className="rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0d2346] transition"
+            >
+              Sign In to Portal →
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-[#102C57] mb-4">
+              <Building2 className="h-7 w-7 text-[#EA5C2B]" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900">
+              University Representative Portal
+            </h2>
+            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+              Sign in with your verified institutional account or official
+              university email to manage degree programs, review student
+              applicant leads, and analyze search impressions.
+            </p>
+            <div className="mt-6 space-y-3">
+              <Link
+                href="/login?redirect=/portal/university"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#102C57] py-3 text-xs font-bold text-white shadow-sm hover:bg-[#0c2242] transition"
+              >
+                Sign In with Official Account →
+              </Link>
+              <Link
+                href="/university-portal/claim"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 py-3 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+              >
+                <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
+                Claim Your University Listing
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // 1. Unclaimed / No Claim Submitted View
+  if (hasNoClaim) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+        <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
+                <Compass className="h-5 w-5 text-[#EA5C2B]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-black tracking-tight text-[#102C57]">
+                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
+                </span>
+                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                  University Partner Console
+                </span>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-3 text-xs">
+              <span className="font-semibold text-slate-600 hidden sm:inline-block">
+                Signed in as:{" "}
+                <strong className="text-slate-900">{user.email}</strong>
+              </span>
+              <button
+                onClick={() => {
+                  logout();
+                  router.push("/login");
+                }}
+                className="rounded-xl border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 hover:text-rose-600 transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <div className="rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50/70 via-white to-orange-50/40 p-6 sm:p-10 shadow-lg text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-100/80 border border-amber-200 px-3.5 py-1 text-xs font-bold text-amber-900 mb-4">
+                <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
+                Institutional Claim Required
+              </div>
+
+              <h1 className="font-serif text-2xl sm:text-4xl font-extrabold text-[#102C57] tracking-tight">
+                Claim Your University to Unlock Portal Data
+              </h1>
+
+              <p className="mt-3 max-w-2xl mx-auto text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Welcome, <strong>{user.name || user.email}</strong>. To
+                safeguard academic integrity and protect Indian student
+                applicant inquiries, institutional data is restricted to
+                verified university officials.
+              </p>
+
+              {/* 3 Value Cards */}
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700 font-bold mb-2.5">
+                    <FileCheck className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-xs font-bold text-[#102C57]">
+                    Program Management
+                  </h3>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    Add, edit, and update degree programs, tuition fees in INR,
+                    intakes, and IELTS/GRE cutoff criteria.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 font-bold mb-2.5">
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-xs font-bold text-[#102C57]">
+                    Student Inbound Leads
+                  </h3>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    Receive direct, high-intent prospective student inquiries
+                    filtered by academic background and intake.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B] font-bold mb-2.5">
+                    <BarChart3 className="h-4 w-4" />
+                  </div>
+                  <h3 className="text-xs font-bold text-[#102C57]">
+                    Performance Analytics
+                  </h3>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    Track profile impressions, keyword searches, CTR, and
+                    anonymized competitor benchmarks.
+                  </p>
+                </div>
+              </div>
+
+              {/* CTA Action */}
+              <div className="mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  href="/university-portal/claim"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] px-8 py-3.5 text-xs font-bold text-white shadow-md hover:bg-[#ff7240] transition"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>
+                    Claim Your University Listing (3-Step Fast Track) →
+                  </span>
+                </Link>
+                <Link
+                  href="/universities"
+                  className="text-xs font-semibold text-slate-500 hover:text-[#102C57] transition"
+                >
+                  Browse University Directory
+                </Link>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // 2. Claim Pending / Under Verification View
+  if (isClaimPending) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+        <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
+                <Compass className="h-5 w-5 text-[#EA5C2B]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-black tracking-tight text-[#102C57]">
+                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
+                </span>
+                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                  Institutional Verification
+                </span>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-3 text-xs">
+              <span className="font-semibold text-slate-600 hidden sm:inline-block">
+                Signed in as:{" "}
+                <strong className="text-slate-900">{user.email}</strong>
+              </span>
+              <button
+                onClick={() => {
+                  logout();
+                  router.push("/login");
+                }}
+                className="rounded-xl border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 hover:text-rose-600 transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="rounded-3xl border border-indigo-200 bg-white p-6 sm:p-10 shadow-xl text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 border border-indigo-200 px-3.5 py-1 text-xs font-bold text-indigo-900 mb-4">
+                <Clock className="h-4 w-4 text-indigo-600" />
+                Verification In Progress
+              </div>
+
+              <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#102C57] tracking-tight">
+                Claim Submitted for {userClaim.universityName}
+              </h1>
+
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+                Your claim submission is currently being reviewed by the
+                StudyAbroad Vista Partnerships Team. Institutional data and
+                student inquiries will unlock automatically once approved.
+              </p>
+
+              {/* Status Summary Card */}
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left text-xs space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-200/80 pb-2.5">
+                  <span className="text-slate-500 font-medium">
+                    Claim Reference ID
+                  </span>
+                  <span className="font-mono font-bold text-[#102C57]">
+                    {userClaim.id}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/80 pb-2.5">
+                  <span className="text-slate-500 font-medium">
+                    Target University
+                  </span>
+                  <span className="font-bold text-slate-900">
+                    {userClaim.universityName}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between border-b border-slate-200/80 pb-2.5">
+                  <span className="text-slate-500 font-medium">
+                    Submitted By
+                  </span>
+                  <span className="font-medium text-slate-800">
+                    {userClaim.applicantName || user.name} (
+                    {userClaim.officialEmail || user.email})
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 font-medium">
+                    Review Status
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-bold text-amber-800">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    Pending Approval (SLA: 3 Business Days)
+                  </span>
+                </div>
+              </div>
+
+              {/* Timeline Steps */}
+              <div className="mt-8 border-t border-slate-100 pt-6">
+                <h4 className="text-xs font-bold text-[#102C57] uppercase tracking-wider text-left mb-4">
+                  Verification Roadmap
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left text-xs">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
+                    <span className="font-bold text-emerald-800 flex items-center gap-1">
+                      <Check className="h-3.5 w-3.5" /> 1. Claim Submitted
+                    </span>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Representative details and OTP verified.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-indigo-200 bg-indigo-50/60 p-3">
+                    <span className="font-bold text-indigo-800 flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" /> 2. Manual Review
+                    </span>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Vista team validates institutional domain and credentials.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <span className="font-bold text-slate-600 flex items-center gap-1">
+                      3. Full Access
+                    </span>
+                    <p className="mt-1 text-[11px] text-slate-400">
+                      Live dashboard, programs CRUD & lead inbox unlocked.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <button
+                  onClick={() => refreshClaimData()}
+                  className="rounded-xl bg-[#102C57] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#0c2242] transition cursor-pointer"
+                >
+                  ↻ Refresh Verification Status
+                </button>
+                <Link
+                  href="/university-portal/claim"
+                  className="rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+                >
+                  Submit Another Claim
+                </Link>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // 3. Verified University Workspace (Full Dashboard)
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-[#EA5C2B]/15">
       {/* Top Navbar */}
@@ -604,14 +965,10 @@ export default function UniversityPortalPage() {
               </span>
             </span>
 
-            {/* Claim Profile CTA if demo */}
-            <Link
-              href="/university-portal/claim"
-              className="rounded-xl border border-indigo-200 bg-indigo-50/70 px-3 py-1.5 font-bold text-[#102C57] hover:bg-indigo-100 transition hidden sm:flex items-center gap-1"
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />
-              <span>Claim Listing</span>
-            </Link>
+            <span className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 font-bold text-emerald-800 hidden sm:flex items-center gap-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              <span>Verified Institution</span>
+            </span>
 
             <button
               onClick={() => {

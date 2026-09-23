@@ -21,19 +21,26 @@ const nextConfig: NextConfig = {
       {
         source: "/_next/static/:path*",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
       {
         source: "/images/:path*",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
         ],
       },
     ];
   },
   async redirects() {
     return [
+      // Program Aliases & Shortcuts
       {
         source: "/programs/emba-executive",
         destination: "/programs/emba",
@@ -42,6 +49,16 @@ const nextConfig: NextConfig = {
       {
         source: "/programs/executive-mba",
         destination: "/programs/emba",
+        permanent: true,
+      },
+      {
+        source: "/executive-mba",
+        destination: "/programs/emba",
+        permanent: true,
+      },
+      {
+        source: "/mba-healthcare",
+        destination: "/programs/mba",
         permanent: true,
       },
       {
@@ -84,6 +101,30 @@ const nextConfig: NextConfig = {
         destination: "/programs/phd",
         permanent: true,
       },
+
+      // Program-first to Country-first Canonical Redirects (IA v1.0 Section 5 & Sitemap v1.0 Section 16)
+      {
+        source: "/masters-abroad/:slug",
+        destination: "/study-in-:slug/masters",
+        permanent: true,
+      },
+      {
+        source: "/mba-abroad/:slug",
+        destination: "/study-in-:slug/mba",
+        permanent: true,
+      },
+      {
+        source: "/mbbs-abroad/:slug",
+        destination: "/study-in-:slug/mbbs",
+        permanent: true,
+      },
+      {
+        source: "/nursing-abroad/:slug",
+        destination: "/study-in-:slug/nursing",
+        permanent: true,
+      },
+
+      // Destination Synonyms & Typo Redirects
       {
         source: "/study-in-united-kingdom",
         destination: "/study-in-uk",
@@ -124,6 +165,43 @@ const nextConfig: NextConfig = {
         destination: "/study-in-new-zealand",
         permanent: true,
       },
+
+      // Tool Alias Redirects
+      {
+        source: "/deadlines",
+        destination: "/deadline-tracker",
+        permanent: true,
+      },
+      {
+        source: "/scholarships/finder",
+        destination: "/scholarships",
+        permanent: true,
+      },
+      {
+        source: "/eligibility-check",
+        destination: "/eligibility-checker",
+        permanent: true,
+      },
+      {
+        source: "/loan-eligibility",
+        destination: "/loan-calculator",
+        permanent: true,
+      },
+      {
+        source: "/currency-converter",
+        destination: "/cost-calculator",
+        permanent: true,
+      },
+      {
+        source: "/gpa-converter",
+        destination: "/eligibility-checker",
+        permanent: true,
+      },
+      {
+        source: "/my-shortlist",
+        destination: "/dashboard/student",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -139,6 +217,14 @@ const nextConfig: NextConfig = {
       {
         source: "/university/:slug",
         destination: "/universities/:slug",
+      },
+      {
+        source: "/guides/:slug",
+        destination: "/articles/:slug",
+      },
+      {
+        source: "/guides/:pillar/:cluster",
+        destination: "/articles/:cluster",
       },
       {
         source: "/masters-abroad",

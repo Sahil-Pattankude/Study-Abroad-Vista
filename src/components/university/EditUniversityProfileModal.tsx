@@ -1,7 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, X, Save, Loader2, Award, MapPin, Coins, CheckCircle2, ShieldCheck } from "lucide-react";
+import {
+  Building2,
+  X,
+  Save,
+  Loader2,
+  Award,
+  MapPin,
+  Coins,
+  CheckCircle2,
+  ShieldCheck,
+  Lock,
+} from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 
 interface EditUniversityProfileModalProps {
@@ -33,13 +44,25 @@ export function EditUniversityProfileModal({
   const [name, setName] = useState(initialData.name || "");
   const [city, setCity] = useState(initialData.city || "Munich");
   const [country, setCountry] = useState(initialData.country || "Germany");
-  const [rankingGlobal, setRankingGlobal] = useState(initialData.rankingGlobal || "28");
-  const [rankingNational, setRankingNational] = useState(initialData.rankingNational || "1");
-  const [tuitionFeeRangeINR, setTuitionFeeRangeINR] = useState(initialData.tuitionFeeRangeINR || "€0 (Public University)");
-  const [ieltsMinScore, setIeltsMinScore] = useState(initialData.ieltsMinScore || "6.5");
-  const [acceptanceRate, setAcceptanceRate] = useState(initialData.acceptanceRate || "8");
-  const [postStudyWorkMonths, setPostStudyWorkMonths] = useState(initialData.postStudyWorkMonths || "18");
-  
+  const [rankingGlobal, setRankingGlobal] = useState(
+    initialData.rankingGlobal || "28",
+  );
+  const [rankingNational, setRankingNational] = useState(
+    initialData.rankingNational || "1",
+  );
+  const [tuitionFeeRangeINR, setTuitionFeeRangeINR] = useState(
+    initialData.tuitionFeeRangeINR || "€0 (Public University)",
+  );
+  const [ieltsMinScore, setIeltsMinScore] = useState(
+    initialData.ieltsMinScore || "6.5",
+  );
+  const [acceptanceRate, setAcceptanceRate] = useState(
+    initialData.acceptanceRate || "8",
+  );
+  const [postStudyWorkMonths, setPostStudyWorkMonths] = useState(
+    initialData.postStudyWorkMonths || "18",
+  );
+
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -117,8 +140,12 @@ export function EditUniversityProfileModal({
               <Building2 className="h-5 w-5 text-[#EA5C2B]" />
             </div>
             <div>
-              <h2 className="text-base font-black text-[#102C57]">Edit University Profile</h2>
-              <p className="text-xs text-slate-500">Update official institutional details & criteria</p>
+              <h2 className="text-base font-black text-[#102C57]">
+                Edit University Profile
+              </h2>
+              <p className="text-xs text-slate-500">
+                Update official institutional details & criteria
+              </p>
             </div>
           </div>
           <button
@@ -140,39 +167,63 @@ export function EditUniversityProfileModal({
           {success && (
             <div className="flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-emerald-800 font-bold border border-emerald-200">
               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-              <span>University profile updated successfully! Syncing live...</span>
+              <span>
+                University profile updated successfully! Syncing live...
+              </span>
             </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">University Name</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block font-bold text-slate-700">
+                  University Name
+                </label>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md">
+                  <Lock className="h-2.5 w-2.5" /> Locked
+                </span>
+              </div>
               <input
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 font-semibold focus:border-[#102C57] focus:ring-1 focus:ring-[#102C57] outline-none"
+                disabled
+                readOnly
+                className="w-full rounded-xl border border-slate-200 bg-slate-100/80 px-3 py-2 text-xs text-slate-500 font-semibold cursor-not-allowed select-none outline-none"
                 placeholder="e.g. Technical University of Munich"
-                required
               />
+              <p className="mt-1 text-[10px] text-slate-400">
+                Institutional name is verified and cannot be edited.
+              </p>
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">City & Location</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block font-bold text-slate-700">
+                  City & Location
+                </label>
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md">
+                  <Lock className="h-2.5 w-2.5" /> Locked
+                </span>
+              </div>
               <input
                 type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-900 font-semibold focus:border-[#102C57] focus:ring-1 focus:ring-[#102C57] outline-none"
-                placeholder="e.g. Munich"
-                required
+                value={city ? `${city}${country ? `, ${country}` : ""}` : ""}
+                disabled
+                readOnly
+                className="w-full rounded-xl border border-slate-200 bg-slate-100/80 px-3 py-2 text-xs text-slate-500 font-semibold cursor-not-allowed select-none outline-none"
+                placeholder="e.g. Munich, Germany"
               />
+              <p className="mt-1 text-[10px] text-slate-400">
+                Official campus location locked by accreditation.
+              </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">QS Global Rank</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                QS Global Rank
+              </label>
               <input
                 type="number"
                 value={rankingGlobal}
@@ -183,7 +234,9 @@ export function EditUniversityProfileModal({
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">National Rank</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                National Rank
+              </label>
               <input
                 type="number"
                 value={rankingNational}
@@ -194,7 +247,9 @@ export function EditUniversityProfileModal({
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Min. IELTS Band</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                Min. IELTS Band
+              </label>
               <input
                 type="text"
                 value={ieltsMinScore}
@@ -207,7 +262,9 @@ export function EditUniversityProfileModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Tuition Fee Range</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                Tuition Fee Range
+              </label>
               <input
                 type="text"
                 value={tuitionFeeRangeINR}
@@ -218,7 +275,9 @@ export function EditUniversityProfileModal({
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Acceptance Rate %</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                Acceptance Rate %
+              </label>
               <input
                 type="text"
                 value={acceptanceRate}
@@ -229,7 +288,9 @@ export function EditUniversityProfileModal({
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">PSW Visa (Months)</label>
+              <label className="block font-bold text-slate-700 mb-1">
+                PSW Visa (Months)
+              </label>
               <input
                 type="text"
                 value={postStudyWorkMonths}

@@ -1,7 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import { ChevronRight, CheckCircle2 } from "lucide-react";
+import {
+  ChevronRight,
+  CheckCircle2,
+  Award,
+  Calendar,
+  DollarSign,
+  Briefcase,
+  GraduationCap,
+} from "lucide-react";
 import {
   fetchLiveCountries,
   fetchLivePrograms,
@@ -19,17 +27,60 @@ interface Props {
   params: Promise<{ slug: string; program: string }>;
 }
 
+const PHASE_1_L3_COMBINATIONS = [
+  { slug: "uk", program: "masters", alias: "ms", seoPriority: 0.9 },
+  { slug: "uk", program: "mba", alias: "mba", seoPriority: 0.85 },
+  { slug: "uk", program: "executive-mba", alias: "emba", seoPriority: 0.8 },
+  { slug: "uk", program: "nursing", alias: "nursing", seoPriority: 0.85 },
+  { slug: "usa", program: "masters", alias: "ms", seoPriority: 0.9 },
+  { slug: "usa", program: "mba", alias: "mba", seoPriority: 0.85 },
+  { slug: "usa", program: "executive-mba", alias: "emba", seoPriority: 0.8 },
+  { slug: "germany", program: "masters", alias: "ms", seoPriority: 0.9 },
+  {
+    slug: "germany",
+    program: "ausbildung",
+    alias: "ausbildung",
+    seoPriority: 0.85,
+  },
+  { slug: "canada", program: "masters", alias: "ms", seoPriority: 0.85 },
+  { slug: "russia", program: "mbbs", alias: "mbbs", seoPriority: 0.9 },
+  { slug: "georgia", program: "mbbs", alias: "mbbs", seoPriority: 0.9 },
+];
+
 export async function generateStaticParams() {
   const [countries, programs] = await Promise.all([
     fetchLiveCountries(),
     fetchLivePrograms(),
   ]);
+
+  const paramSet = new Set<string>();
   const params: { slug: string; program: string }[] = [];
-  for (const c of countries) {
-    for (const p of c.popularPrograms || []) {
-      params.push({ slug: c.slug, program: p });
+
+  const addParam = (slug: string, program: string) => {
+    const key = `${slug.toLowerCase()}___${program.toLowerCase()}`;
+    if (!paramSet.has(key)) {
+      paramSet.add(key);
+      params.push({ slug: slug.toLowerCase(), program: program.toLowerCase() });
+    }
+  };
+
+  // 1. Explicit Phase 1 Launch Combinations (Canonical & Aliases)
+  for (const item of PHASE_1_L3_COMBINATIONS) {
+    addParam(item.slug, item.program);
+    if (item.alias) {
+      addParam(item.slug, item.alias);
     }
   }
+
+  // 2. All 19 Destinations Popular Programs Matrix
+  for (const c of countries) {
+    for (const p of c.popularPrograms || []) {
+      addParam(c.slug, p);
+      if (p === "ms") addParam(c.slug, "masters");
+      if (p === "emba") addParam(c.slug, "executive-mba");
+    }
+  }
+
   return params;
 }
 
@@ -42,13 +93,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!country || !prog) return { title: "Program Not Found" };
 
+  const canonicalProgramSlug =
+    program.toLowerCase() === "masters"
+      ? "masters"
+      : program.toLowerCase() === "executive-mba"
+        ? "executive-mba"
+        : prog.slug;
+
   const rawDescription = `Complete admissions guide for ${prog.name} in ${country.name}. Tuition ranges (${country.avgTuitionINR}), post-study work visa (${country.postStudyWorkVisa}), eligibility, and Indian student intake deadlines.`;
 
   return {
     title: `${prog.name} in ${country.name} for Indian Students (2026-2027) | Top Universities & Fees`,
     description: fitMetaDescription(rawDescription),
     alternates: {
-      canonical: `/study-in-${country.slug}/${prog.slug}`,
+      canonical: `/study-in-${country.slug}/${canonicalProgramSlug}`,
+    },
+    openGraph: {
+      title: `${prog.name} in ${country.name} (2026-2027) — Study Abroad Vista`,
+      description: fitMetaDescription(rawDescription),
+      url: `/study-in-${country.slug}/${canonicalProgramSlug}`,
+      type: "website",
     },
   };
 }
@@ -71,12 +135,64 @@ export default async function CountryProgramPage({ params }: Props) {
       (u.programsOffered || []).includes(prog.slug as any),
   );
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: `${prog.name} in ${country.name}`,
+    description: `Study ${prog.name} in ${country.name}. Check top universities, tuition fees in INR, entrance requirements, and post-study work visa rights for Indian applicants.`,
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "StudyAbroad Vista",
+      url: "https://studyabroadvista.com",
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "Full-time",
+      courseWorkload: prog.duration,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://studyabroadvista.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: `Study in ${country.name}`,
+        item: `https://studyabroadvista.com/study-in-${country.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${prog.name} in ${country.name}`,
+        item: `https://studyabroadvista.com/study-in-${country.slug}/${prog.slug}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between">
       <Header />
 
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
       <main className="flex-1 pb-16">
-        {/* Breadcrumb */}
+        {/* Breadcrumb Navigation */}
         <div className="border-b border-slate-200/80 bg-white py-2.5">
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
             <Link href="/" className="hover:text-[#102C57]">
@@ -84,7 +200,7 @@ export default async function CountryProgramPage({ params }: Props) {
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
             <Link
-              href={`/destinations/${country.slug}`}
+              href={`/study-in-${country.slug}`}
               className="hover:text-[#102C57]"
             >
               {country.name}
@@ -94,16 +210,12 @@ export default async function CountryProgramPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Hero Section */}
+        {/* Hero Conversion Header */}
         <section className="bg-gradient-to-b from-[#102C57] to-[#091A36] text-white py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold">
-              <CountryFlag
-                countryCode={country.code}
-                countryName={country.name}
-                size="sm"
-              />
-              <span>{prog.level} Program Track</span>
+              <CountryFlag code={country.code} name={country.name} size="sm" />
+              <span>{prog.level} Track</span>
             </div>
 
             <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
@@ -167,7 +279,7 @@ export default async function CountryProgramPage({ params }: Props) {
                   Popular tracks Indian students pursue in {country.name}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {prog.keyFields.map((field, i) => (
+                  {(prog.keyFields || []).map((field: string, i: number) => (
                     <span
                       key={i}
                       className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700"

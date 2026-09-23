@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Compass,
@@ -54,6 +54,7 @@ export function Header({
   const handleAI = onOpenAICounsellor || homeModals.openAICounsellor;
   const handleLead = onOpenLeadModal || homeModals.openLeadModal;
 
+  const headerRef = useRef<HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [destinationsOpen, setDestinationsOpen] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
@@ -64,6 +65,25 @@ export function Header({
   const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [programsList, setProgramsList] = useState<Program[]>([]);
   const [universitiesList, setUniversitiesList] = useState<University[]>([]);
+
+  const closeAllDropdowns = () => {
+    setDestinationsOpen(false);
+    setProgramsOpen(false);
+    setUniversitiesOpen(false);
+    setToolsOpen(false);
+    setTestPrepOpen(false);
+    setAuthOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        closeAllDropdowns();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -138,7 +158,10 @@ export function Header({
   const tier3Countries = countriesList.filter((c) => c.tier === "Tier 3");
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all"
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 gap-4">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
@@ -164,6 +187,7 @@ export function Header({
             onMouseLeave={() => setDestinationsOpen(false)}
           >
             <button
+              onClick={() => setDestinationsOpen((prev) => !prev)}
               aria-label="Open destinations menu"
               aria-expanded={destinationsOpen}
               className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
@@ -260,6 +284,7 @@ export function Header({
             onMouseLeave={() => setProgramsOpen(false)}
           >
             <button
+              onClick={() => setProgramsOpen((prev) => !prev)}
               aria-label="Open programs menu"
               aria-expanded={programsOpen}
               className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
@@ -306,6 +331,7 @@ export function Header({
             onMouseLeave={() => setUniversitiesOpen(false)}
           >
             <button
+              onClick={() => setUniversitiesOpen((prev) => !prev)}
               aria-label="Open universities menu"
               aria-expanded={universitiesOpen}
               className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
@@ -359,6 +385,7 @@ export function Header({
             onMouseLeave={() => setTestPrepOpen(false)}
           >
             <button
+              onClick={() => setTestPrepOpen((prev) => !prev)}
               aria-label="Open test prep menu"
               aria-expanded={testPrepOpen}
               className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
@@ -499,6 +526,7 @@ export function Header({
             onMouseLeave={() => setToolsOpen(false)}
           >
             <button
+              onClick={() => setToolsOpen((prev) => !prev)}
               aria-label="Open tools menu"
               aria-expanded={toolsOpen}
               className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
@@ -743,6 +771,7 @@ export function Header({
               onMouseLeave={() => setAuthOpen(false)}
             >
               <button
+                onClick={() => setAuthOpen((prev) => !prev)}
                 aria-label="Open portals and login menu"
                 aria-expanded={authOpen}
                 className="flex items-center gap-1.5 rounded-full bg-[#EA5C2B] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff7240] hover:shadow active:scale-98"

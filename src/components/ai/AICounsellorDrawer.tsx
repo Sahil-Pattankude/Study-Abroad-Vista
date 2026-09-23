@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Bot,
   X,
@@ -12,9 +13,11 @@ import {
   PhoneCall,
   Lock,
   ArrowRight,
+  RotateCcw,
 } from "lucide-react";
 import { AIChatMessage } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { getSavedShortlist } from "@/lib/cookies/shortlist";
 
 interface AICounsellorDrawerProps {
   isOpen: boolean;
@@ -32,16 +35,25 @@ export function AICounsellorDrawer({
   initialQuery,
 }: AICounsellorDrawerProps) {
   const { user, isLoggedIn } = useAuth();
+  const pathname = usePathname();
+
   const [messages, setMessages] = useState<AIChatMessage[]>([
     {
       id: "initial",
       role: "model",
-      text: "Namaste! I am your StudyAbroad Vista AI Counsellor. Ask me anything about universities, free tuition in Germany, NMC-compliant MBBS, visa rules, or post-study work rights across 19 destinations.",
+      text: "Namaste! I am your StudyAbroad Vista AI Counsellor powered by Gemini. Ask me anything about universities, free tuition in Germany, NMC-compliant MBBS, scholarships, or post-study work visas across 19 destinations.",
       timestamp: "Just now",
     },
   ]);
   const [input, setInput] = useState(initialQuery || "");
   const [loading, setLoading] = useState(false);
+  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([
+    "Which European countries have free tuition?",
+    "Best NMC-compliant MBBS universities?",
+    "How does Germany Ausbildung dual training work?",
+    "Top MS in Computer Science under ₹25 Lakhs?",
+  ]);
+  const [showConsultationCallout, setShowConsultationCallout] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,13 +61,6 @@ export function AICounsellorDrawer({
       setInput(initialQuery);
     }
   }, [initialQuery]);
-
-  const suggestedQuestions = [
-    "Which European countries have free tuition?",
-    "Best NMC-compliant MBBS universities?",
-    "How does Germany Ausbildung dual training work?",
-    "Top MS in Computer Science under ₹25 Lakhs?",
-  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +70,19 @@ export function AICounsellorDrawer({
     if (isOpen) {
       scrollToBottom();
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, loading]);
+
+  const handleClearChat = () => {
+    setMessages([
+      {
+        id: "initial-" + Date.now(),
+        role: "model",
+        text: "Namaste! How can I assist your study abroad journey today?",
+        timestamp: "Just now",
+      },
+    ]);
+    setShowConsultationCallout(false);
+  };
 
   const handleSendMessage = async (userText: string) => {
     if (!isLoggedIn) {
@@ -85,13 +102,42 @@ export function AICounsellorDrawer({
     setInput("");
     setLoading(true);
 
+    // Extract basic page context from current URL
+    let countryContext = "";
+    let programContext = "";
+    if (pathname?.includes("/study-in-")) {
+      const parts = pathname.split("/").filter(Boolean);
+      if (parts[0])
+        countryContext = parts[0].replace("study-in-", "").toUpperCase();
+      if (parts[1]) programContext = parts[1].toUpperCase();
+    } else if (pathname?.includes("/destinations/")) {
+      const parts = pathname.split("/").filter(Boolean);
+      if (parts[1]) countryContext = parts[1].toUpperCase();
+      if (parts[2]) programContext = parts[2].toUpperCase();
+    }
+
+    const savedShortlist = getSavedShortlist();
+
     try {
       const res = await fetch("/api/ai/counselor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userText,
-          history: messages.slice(-6),
+          history: messages.slice(-6).map((m) => ({
+            role: m.role,
+            text: m.text,
+          })),
+          pageContext: {
+            url: pathname,
+            country: countryContext,
+            program: programContext,
+          },
+          userProfile: {
+            name: user?.name,
+            email: user?.email,
+          },
+          shortlist: savedShortlist,
         }),
       });
 
@@ -103,18 +149,30 @@ export function AICounsellorDrawer({
         text:
           data.reply ||
           data.fallback ||
-          "I am processing your query. Please ask again or book a consultation.",
+          "I am analyzing your query. Please feel free to ask additional questions or book a 1-on-1 advisor session.",
         timestamp: "Just now",
       };
 
       setMessages((prev) => [...prev, modelMessage]);
+
+      if (
+        data.suggestedNext &&
+        Array.isArray(data.suggestedNext) &&
+        data.suggestedNext.length > 0
+      ) {
+        setSuggestedQuestions(data.suggestedNext);
+      }
+
+      if (data.leadCapturePrompt) {
+        setShowConsultationCallout(true);
+      }
     } catch {
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           role: "model",
-          text: "I experienced a connection glitch. Please check your internet or connect with our human counsellor.",
+          text: "I experienced a temporary connection glitch. Please check your internet connection or connect with our human study abroad counsellor.",
           timestamp: "Just now",
         },
       ]);
@@ -152,16 +210,27 @@ export function AICounsellorDrawer({
               <p className="text-[10px] text-slate-300">
                 {isLoggedIn
                   ? `Active Session: ${user?.name || user?.email}`
-                  : "Vista AI Engine • Member Access"}
+                  : "Gemini 3.8-Flash • Member Access"}
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
-          >
-            <X className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {messages.length > 1 && (
+              <button
+                onClick={handleClearChat}
+                title="Reset conversation"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         {/* If user is NOT logged in: Show prominent Lock banner at the top of chat */}
@@ -177,8 +246,8 @@ export function AICounsellorDrawer({
                 </h4>
                 <p className="mt-0.5 text-[11px] leading-relaxed text-amber-800">
                   AI Counsellor is exclusively available to logged-in students &
-                  parents. Sign in or register to unlock unlimited personalized
-                  admissions counselling.
+                  parents. Sign in or register to unlock personalized admissions
+                  and visa guidance.
                 </p>
                 <div className="mt-2.5 flex items-center gap-2">
                   <Link
@@ -214,15 +283,17 @@ export function AICounsellorDrawer({
                 </div>
               )}
               <div
-                className={`max-w-[82%] rounded-2xl p-3.5 leading-relaxed ${
+                className={`max-w-[85%] rounded-2xl p-3.5 leading-relaxed ${
                   m.role === "user"
                     ? "bg-[#102C57] text-white"
                     : "border border-slate-200 bg-slate-50 text-slate-800"
                 }`}
               >
-                <p className="whitespace-pre-line">{m.text}</p>
+                <div className="whitespace-pre-line text-xs leading-relaxed space-y-1">
+                  {m.text}
+                </div>
                 <span
-                  className={`mt-1 block text-[9px] ${
+                  className={`mt-1.5 block text-[9px] ${
                     m.role === "user" ? "text-slate-300" : "text-slate-500"
                   }`}
                 >
@@ -240,7 +311,37 @@ export function AICounsellorDrawer({
           {loading && (
             <div className="flex items-center gap-2 text-slate-500 text-xs pl-2">
               <RefreshCw className="h-3.5 w-3.5 animate-spin text-[#EA5C2B]" />
-              <span>Analyzing university database...</span>
+              <span>Analyzing global university database & visa rules...</span>
+            </div>
+          )}
+
+          {/* Consultation Lead Callout */}
+          {showConsultationCallout && (
+            <div className="rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3.5 text-slate-800 shadow-xs">
+              <div className="flex items-start gap-2.5">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#EA5C2B] text-white shadow-xs">
+                  <PhoneCall className="h-4 w-4" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-xs text-slate-900">
+                    Ready to start your application?
+                  </h4>
+                  <p className="text-[11px] text-slate-600 mt-0.5">
+                    Connect with an authorized StudyAbroad Vista counsellor for
+                    1-on-1 profile evaluation and document checklist.
+                  </p>
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onOpenLeadModal?.();
+                    }}
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-[#EA5C2B] px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+                  >
+                    Book Free 1-on-1 Session
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -263,7 +364,7 @@ export function AICounsellorDrawer({
                     handleSendMessage(q);
                   }
                 }}
-                className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-medium text-slate-700 hover:border-[#102C57] hover:text-[#102C57]"
+                className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-medium text-slate-700 hover:border-[#102C57] hover:text-[#102C57] transition"
               >
                 {q}
               </button>
@@ -285,7 +386,7 @@ export function AICounsellorDrawer({
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about universities, fees, scholarships..."
+                placeholder="Ask about universities, fees in ₹ Lakhs, visas..."
                 className="flex-1 rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:border-[#102C57] focus:outline-none"
               />
               <button
