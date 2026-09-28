@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   Compass,
@@ -56,7 +55,6 @@ export function Header({
   const handleLead = onOpenLeadModal || homeModals.openLeadModal;
 
   const headerRef = useRef<HTMLElement>(null);
-  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [destinationsOpen, setDestinationsOpen] = useState(false);
   const [programsOpen, setProgramsOpen] = useState(false);
@@ -67,22 +65,6 @@ export function Header({
   const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [programsList, setProgramsList] = useState<Program[]>([]);
   const [universitiesList, setUniversitiesList] = useState<University[]>([]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
 
   const closeAllDropdowns = () => {
     setDestinationsOpen(false);
@@ -907,13 +889,11 @@ export function Header({
             </div>
           )}
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Toggle */}
           <button
-            type="button"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition active:scale-95 lg:hidden cursor-pointer"
-            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-700 lg:hidden"
+            aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -924,514 +904,414 @@ export function Header({
         </div>
       </div>
 
-      {/* Mobile Drawer Rendered directly into document.body to avoid parent backdrop-filter / stacking context trapping */}
-      {mounted &&
-        mobileMenuOpen &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[100] flex flex-col bg-white overflow-hidden lg:hidden animate-in fade-in slide-in-from-right duration-200"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile Navigation Menu"
-          >
-            {/* Mobile Drawer Top Header */}
-            <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur-md">
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5"
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-sm">
-                  <Compass className="h-5 w-5 text-[#EA5C2B]" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
-                    StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                  </span>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                    Global Admissions Engine
-                  </span>
-                </div>
-              </Link>
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 active:scale-95 transition cursor-pointer"
-                aria-label="Close Mobile Navigation Drawer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* Mobile Drawer Main Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-28">
-              {/* Search Trigger */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleSearch();
-                }}
-                className="w-full flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-500 shadow-2xs hover:bg-white hover:border-slate-300 transition cursor-pointer"
-              >
-                <Search className="h-4 w-4 text-slate-400 shrink-0" />
-                <span className="font-medium text-slate-600">
-                  Search universities, courses, programs...
+      {/* Mobile Drawer (W10 Template Standard: Slide-over Drawer with Flag Badges & Ecosystem Portals) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden overflow-y-auto animate-in fade-in slide-in-from-right duration-200">
+          {/* Mobile Drawer Top Header */}
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-3.5 backdrop-blur-md">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-sm">
+                <Compass className="h-5 w-5 text-[#EA5C2B]" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
+                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
                 </span>
-              </button>
+                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                  Global Admissions Engine
+                </span>
+              </div>
+            </Link>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+              aria-label="Close Mobile Navigation Drawer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
 
-              {/* 1. AI Counsellor Banner */}
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleAI();
-                }}
-                className="w-full text-left rounded-2xl bg-gradient-to-r from-[#102C57] to-[#1e457e] p-4 text-white shadow-md relative overflow-hidden group cursor-pointer"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#EA5C2B] backdrop-blur-sm border border-white/10 shrink-0">
-                      <Bot className="h-5 w-5" />
+          {/* Mobile Drawer Main Scroll Area */}
+          <div className="flex-1 p-4 space-y-6 pb-24">
+            {/* Search Trigger */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleSearch();
+              }}
+              className="w-full flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-500 shadow-2xs hover:bg-white hover:border-slate-300 transition"
+            >
+              <Search className="h-4 w-4 text-slate-400" />
+              <span className="font-medium text-slate-600">
+                Search universities, courses, programs...
+              </span>
+            </button>
+
+            {/* 1. AI Counsellor Banner */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleAI();
+              }}
+              className="w-full text-left rounded-2xl bg-gradient-to-r from-[#102C57] to-[#1e457e] p-4 text-white shadow-md relative overflow-hidden group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#EA5C2B] backdrop-blur-sm border border-white/10">
+                    <Bot className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-extrabold text-white">
+                        AI Admissions Counsellor
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-300 border border-emerald-500/30">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        24/7 Live
+                      </span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-extrabold text-white">
-                          AI Admissions Counsellor
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-300 border border-emerald-500/30">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          24/7 Live
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-300 mt-0.5">
-                        Instant eligibility, fee calculation & university shortlists
+                    <p className="text-[11px] text-slate-300 mt-0.5">
+                      Instant eligibility, fee calculation & university
+                      shortlists
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+
+            {/* 2. Anchor Destinations & 19 Countries */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                  Primary Destinations (19 Countries)
+                </h3>
+                <Link
+                  href="/#destinations-grid"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
+                >
+                  View All →
+                </Link>
+              </div>
+
+              {/* Anchor Six Grid Cards */}
+              <div className="grid grid-cols-2 gap-2">
+                {anchorCountries.map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/study-in-${c.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/70 p-2.5 hover:bg-white hover:border-slate-300 transition"
+                  >
+                    <CountryFlag code={c.code} name={c.name} size="sm" />
+                    <div className="overflow-hidden">
+                      <p className="text-xs font-bold text-slate-900 truncate">
+                        {c.name}
+                      </p>
+                      <p className="text-[10px] text-slate-500 truncate">
+                        {c.avgTuitionINR}
                       </p>
                     </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-1 transition-transform shrink-0" />
-                </div>
-              </button>
-
-              {/* 2. Anchor Destinations & 19 Countries */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                    Primary Destinations (19 Countries)
-                  </h3>
-                  <Link
-                    href="/#destinations-grid"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
-                  >
-                    View All →
                   </Link>
-                </div>
+                ))}
+              </div>
 
-                {/* Anchor Six Grid Cards */}
-                <div className="grid grid-cols-2 gap-2">
-                  {anchorCountries.map((c) => (
+              {/* Secondary Tier 2 & Tier 3 quick chips */}
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {tier2Countries
+                  .slice(0, 4)
+                  .concat(tier3Countries.slice(0, 3))
+                  .map((c) => (
                     <Link
                       key={c.id}
                       href={`/study-in-${c.slug}`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/70 p-2.5 hover:bg-white hover:border-slate-300 transition"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
                     >
                       <CountryFlag code={c.code} name={c.name} size="sm" />
-                      <div className="overflow-hidden">
-                        <p className="text-xs font-bold text-slate-900 truncate">
-                          {c.name}
-                        </p>
-                        <p className="text-[10px] text-slate-500 truncate">
-                          {c.avgTuitionINR}
-                        </p>
-                      </div>
+                      <span>{c.name}</span>
                     </Link>
                   ))}
-                </div>
-
-                {/* Secondary Tier 2 & Tier 3 quick chips */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {tier2Countries
-                    .slice(0, 4)
-                    .concat(tier3Countries.slice(0, 3))
-                    .map((c) => (
-                      <Link
-                        key={c.id}
-                        href={`/study-in-${c.slug}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-slate-300"
-                      >
-                        <CountryFlag code={c.code} name={c.name} size="sm" />
-                        <span>{c.name}</span>
-                      </Link>
-                    ))}
-                </div>
               </div>
+            </div>
 
-              {/* 3. Study Programs & Disciplines */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                  Study Streams (8 Disciplines)
-                </h3>
+            {/* 3. Study Programs & Disciplines */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Study Streams (8 Disciplines)
+              </h3>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {programsList.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/programs/${p.slug}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 hover:bg-slate-100 transition"
+                  >
+                    <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
+                    <span className="font-semibold text-slate-800 truncate">
+                      {p.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* 4. Interactive Student Tools */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Discovery Tools & Matrices
+              </h3>
+              <div className="grid grid-cols-1 gap-2 text-xs">
+                <Link
+                  href="/cost-calculator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B]">
+                    <Calculator className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      INR Tuition & Living Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Living costs, rent & tuition converted to INR
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/compare/universities"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      University Compare Matrix
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Side-by-side comparison for up to 5 universities
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/compare/courses"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
+                    <GraduationCap className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Course & Degree Compare Matrix
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Fees, IELTS cutoffs & work permit rights
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/roi-calculator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      EMBA ROI Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Break-even payback & 10-year cumulative gain
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/deadline-tracker"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Intake Deadline Tracker
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      90, 60, 30-day countdowns & reminders
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/scholarships"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                    <Award className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Scholarship Finder
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      DAAD, Chevening, Fulbright & STEM grants
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/eligibility-checker"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Admission Eligibility Checker
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      Safe, Target & Reach acceptance probability
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/loan-calculator"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+                    <Banknote className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#102C57]">
+                      Education Loan & EMI Calculator
+                    </p>
+                    <p className="text-[10px] text-slate-500">
+                      SBI, HDFC Credila & Prodigy Finance rates
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* 5. 4 Ecosystem Portals & User Auth */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                Portals & User Access
+              </h3>
+              {isLoggedIn ? (
+                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900 text-white">
+                  <div className="flex items-center gap-2.5">
+                    <User className="h-4 w-4 text-[#EA5C2B]" />
+                    <div>
+                      <p className="text-xs font-bold text-white">
+                        {user?.name || user?.email}
+                      </p>
+                      <p className="text-[10px] text-slate-400 capitalize">
+                        Role: {user?.role}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-xs font-bold text-rose-400 hover:underline"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  {programsList.map((p) => (
-                    <Link
-                      key={p.id}
-                      href={`/programs/${p.slug}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 hover:bg-slate-100 transition"
-                    >
-                      <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
-                      <span className="font-semibold text-slate-800 truncate">
-                        {p.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. University Catalog */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                    Universities Catalog
-                  </h3>
                   <Link
-                    href="/universities"
+                    href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
                   >
-                    Directory ({universitiesList.length || 18}) →
+                    <span className="font-bold text-[#102C57]">
+                      Student Login
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Dashboard & AI history
+                    </span>
+                  </Link>
+                  <Link
+                    href="/portal/buyer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
+                  >
+                    <span className="font-bold text-blue-700">
+                      B2B Consultant
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Lead marketplace feed
+                    </span>
+                  </Link>
+                  <Link
+                    href="/portal/university"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
+                  >
+                    <span className="font-bold text-emerald-700">
+                      University Portal
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Institution profiles
+                    </span>
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl bg-slate-900 text-white"
+                  >
+                    <span className="font-bold text-[#EA5C2B]">
+                      Create Account
+                    </span>
+                    <span className="text-[10px] text-slate-300">
+                      Free student registration
+                    </span>
                   </Link>
                 </div>
-                <div className="grid grid-cols-1 gap-1.5">
-                  {universitiesList.slice(0, 4).map((u) => (
-                    <Link
-                      key={u.slug || u.id}
-                      href={`/universities/${u.slug}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/70 p-2.5 hover:bg-white hover:border-slate-200 transition"
-                    >
-                      <div>
-                        <p className="text-xs font-bold text-[#102C57]">{u.name}</p>
-                        <p className="text-[10px] text-slate-400">
-                          #{u.rankingGlobal} Global • {u.country}
-                        </p>
-                      </div>
-                      <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* 5. Test Prep Hub */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                    Test Prep Hub
-                  </h3>
-                  <Link
-                    href="/test-prep"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
-                  >
-                    All Exams →
-                  </Link>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {[
-                    { label: "IELTS Academic", href: "/test-prep/ielts" },
-                    { label: "TOEFL iBT", href: "/test-prep/toefl" },
-                    { label: "PTE Academic", href: "/test-prep/pte" },
-                    { label: "Duolingo (DET)", href: "/test-prep/duolingo" },
-                    { label: "GRE General", href: "/test-prep/gre" },
-                    { label: "GMAT Focus", href: "/test-prep/gmat" },
-                    { label: "Digital SAT", href: "/test-prep/sat" },
-                  ].map((test) => (
-                    <Link
-                      key={test.href}
-                      href={test.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-white transition"
-                    >
-                      {test.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* 6. Interactive Student Tools */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                  Discovery Tools & Matrices
-                </h3>
-                <div className="grid grid-cols-1 gap-2 text-xs">
-                  <Link
-                    href="/cost-calculator"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B] shrink-0">
-                      <Calculator className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        INR Tuition & Living Calculator
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        Living costs, rent & tuition converted to INR
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/compare/universities"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700 shrink-0">
-                      <Building2 className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        University Compare Matrix
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        Side-by-side comparison for up to 5 universities
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/compare/courses"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700 shrink-0">
-                      <GraduationCap className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        Course & Degree Compare Matrix
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        Fees, IELTS cutoffs & work permit rights
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/roi-calculator"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 shrink-0">
-                      <TrendingUp className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        EMBA ROI Calculator
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        Break-even payback & 10-year cumulative gain
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/deadline-tracker"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700 shrink-0">
-                      <Clock className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        Intake Deadline Tracker
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        90, 60, 30-day countdowns & reminders
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/scholarships"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shrink-0">
-                      <Award className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        Scholarship Finder
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        DAAD, Chevening, Fulbright & STEM grants
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/eligibility-checker"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700 shrink-0">
-                      <ShieldCheck className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        Admission Eligibility Checker
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        Safe, Target & Reach acceptance probability
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/loan-calculator"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700 shrink-0">
-                      <Banknote className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-[#102C57]">
-                        Education Loan & EMI Calculator
-                      </p>
-                      <p className="text-[10px] text-slate-500">
-                        SBI, HDFC Credila & Prodigy Finance rates
-                      </p>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-
-              {/* 7. Ecosystem Portals & User Auth */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-100">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
-                  Portals & User Access
-                </h3>
-                {isLoggedIn ? (
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900 text-white">
-                    <div className="flex items-center gap-2.5">
-                      <User className="h-4 w-4 text-[#EA5C2B]" />
-                      <div>
-                        <p className="text-xs font-bold text-white">
-                          {user?.name || user?.email}
-                        </p>
-                        <p className="text-[10px] text-slate-400 capitalize">
-                          Role: {user?.role}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        logout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="text-xs font-bold text-rose-400 hover:underline cursor-pointer"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <Link
-                      href="/login"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white transition"
-                    >
-                      <span className="font-bold text-[#102C57]">
-                        Student Login
-                      </span>
-                      <span className="text-[10px] text-slate-500">
-                        Dashboard & AI history
-                      </span>
-                    </Link>
-                    <Link
-                      href="/portal/buyer"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white transition"
-                    >
-                      <span className="font-bold text-blue-700">
-                        B2B Consultant
-                      </span>
-                      <span className="text-[10px] text-slate-500">
-                        Lead marketplace feed
-                      </span>
-                    </Link>
-                    <Link
-                      href="/portal/university"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white transition"
-                    >
-                      <span className="font-bold text-emerald-700">
-                        University Portal
-                      </span>
-                      <span className="text-[10px] text-slate-500">
-                        Institution profiles
-                      </span>
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex flex-col items-start gap-1 p-3 rounded-xl bg-slate-900 text-white transition"
-                    >
-                      <span className="font-bold text-[#EA5C2B]">
-                        Create Account
-                      </span>
-                      <span className="text-[10px] text-slate-300">
-                        Free student registration
-                      </span>
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* 8. Blog & Resource Articles */}
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                <Link
-                  href="/blog"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs font-bold text-[#102C57] hover:text-[#EA5C2B] transition"
-                >
-                  📰 Study Abroad Blog & Guides
-                </Link>
-                <Link
-                  href="/articles"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-xs font-bold text-slate-500 hover:text-[#102C57] transition"
-                >
-                  Articles Hub →
-                </Link>
-              </div>
+              )}
             </div>
+          </div>
 
-            {/* Mobile Drawer Bottom Fixed CTA */}
-            <div className="shrink-0 border-t border-slate-200 bg-white p-4 shadow-lg">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleLead();
-                }}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 text-sm font-bold text-white shadow-md active:scale-98 transition cursor-pointer"
-              >
-                <span>Book Free Consultation Call</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>,
-          document.body,
-        )}
+          {/* Mobile Drawer Bottom Fixed CTA */}
+          <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white p-4 shadow-lg">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLead();
+              }}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 text-sm font-bold text-white shadow-md active:scale-98 transition"
+            >
+              <span>Book Free Consultation Call</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
