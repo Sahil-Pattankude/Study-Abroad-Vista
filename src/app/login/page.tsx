@@ -90,81 +90,85 @@ function LoginForm() {
       return;
     }
 
+    if (!password) {
+      setError("Please enter your password.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      // 1. Determine user role from redirect param, active role tab, or email
-      let userRole = activeRoleTab;
-      if (redirectParam.includes("university")) {
-        userRole = "university";
-      } else if (redirectParam.includes("buyer")) {
-        userRole = "buyer";
-      } else if (redirectParam.includes("admin")) {
-        userRole = "admin";
-      } else {
-        const detected = detectRole(userEmail);
-        if (detected !== "student") {
-          userRole = detected;
+      // 1. Authenticate with Supabase Auth
+      const { data, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: userEmail,
+          password: password,
+        });
+
+      if (signInError || !data?.user) {
+        const errMsg = signInError?.message || "Invalid login credentials";
+        if (
+          errMsg.toLowerCase().includes("invalid login credentials") ||
+          errMsg.toLowerCase().includes("invalid_grant") ||
+          errMsg.toLowerCase().includes("invalid credentials")
+        ) {
+          setError(
+            "Invalid email or password. Please check your credentials and try again.",
+          );
+        } else if (errMsg.toLowerCase().includes("email not confirmed")) {
+          setError("Please confirm your email address before signing in.");
+        } else {
+          setError(errMsg);
+        }
+        setLoading(false);
+        return;
+      }
+
+      const authedUser = data.user;
+      const meta = authedUser.user_metadata || {};
+
+      // 2. Determine user role from user_metadata or detection
+      let userRole: UserRole = (meta.role as UserRole) || activeRoleTab;
+      if (!meta.role) {
+        if (redirectParam.includes("university")) {
+          userRole = "university";
+        } else if (redirectParam.includes("buyer")) {
+          userRole = "buyer";
+        } else if (redirectParam.includes("admin")) {
+          userRole = "admin";
+        } else {
+          userRole = detectRole(userEmail);
         }
       }
 
-      // 2. Attempt Supabase Auth
-      let authedUser: any = null;
-      try {
-        if (password) {
-          const { data } = await supabase.auth.signInWithPassword({
-            email: userEmail,
-            password: password,
-          });
-          if (data?.user) {
-            authedUser = data.user;
-          }
-        }
-      } catch {
-        // auth failure handled smoothly
-      }
-
-      // Dynamic default name from email
+      // Dynamic default name
       const dynamicName =
+        meta.name ||
+        meta.full_name ||
+        (meta.first_name
+          ? `${meta.first_name} ${meta.last_name || ""}`.trim()
+          : undefined) ||
         userEmail
           .split("@")[0]
           ?.replace(/[._-]/g, " ")
-          ?.replace(/\b\w/g, (c) => c.toUpperCase()) || "Student";
-
-      let finalOrg = "";
-      let finalCountry = "India";
-      let finalName = dynamicName;
-
-      if (userRole === "university") {
-        finalOrg = "University Partner";
-        finalCountry = "Canada";
-        finalName = dynamicName || "University Representative";
-      } else if (userRole === "buyer") {
-        finalOrg = "Overseas Consultancy";
-        finalCountry = "India";
-        finalName = dynamicName || "Consultant Manager";
-      } else if (userRole === "admin") {
-        finalOrg = "StudyAbroad Vista HQ";
-        finalCountry = "Global";
-        finalName = dynamicName || "Administrator";
-      }
+          ?.replace(/\b\w/g, (c) => c.toUpperCase()) ||
+        "Member";
 
       // 3. Login into session
       login(
-        userEmail,
+        authedUser.email || userEmail,
         userRole,
-        authedUser?.user_metadata?.name ||
-          authedUser?.user_metadata?.full_name ||
-          finalName,
-        authedUser?.id,
-        authedUser?.user_metadata?.organization || finalOrg,
-        authedUser?.user_metadata?.country_name || finalCountry,
-        authedUser?.user_metadata,
+        dynamicName,
+        authedUser.id,
+        meta.organization,
+        meta.country_name,
+        meta,
       );
 
       // Sync guest shortlists with Supabase backend on student login
       try {
         await syncShortlistWithBackend({
-          id: authedUser?.id,
-          email: userEmail,
+          id: authedUser.id,
+          email: authedUser.email || userEmail,
         });
       } catch {
         // ignore
@@ -183,16 +187,11 @@ function LoginForm() {
         window.location.href = "/dashboard/student";
       }
     } catch (err: any) {
-      console.warn("Sign-in fallback triggered:", err);
-      login(
-        "toronto@utoronto.ca",
-        "university",
-        "University Partner (U of T)",
-        undefined,
-        "University of Toronto",
-        "Canada",
+      console.error("Sign-in error:", err);
+      setError(
+        err?.message ||
+          "An unexpected error occurred during sign in. Please try again.",
       );
-      window.location.href = "/portal/university";
     } finally {
       setLoading(false);
     }

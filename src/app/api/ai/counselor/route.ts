@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeminiModel } from "@/lib/gemini/client";
+import { searchSimilarDocuments } from "@/lib/supabase/vectorSearch";
 import {
   buildSystemPrompt,
   getSmartFollowUpQuestions,
@@ -14,7 +15,7 @@ interface IncomingHistoryItem {
 
 /**
  * Sanitizes and formats chat history to comply strictly with Google Generative AI requirements:
- * 1. Must start with role: 'user' (removes any leading 'model' messages, like the initial greeting).
+ * 1. Must start with role: 'user' (removes any leading 'model' messages).
  * 2. Roles must strictly alternate: 'user' -> 'model' -> 'user' -> 'model'...
  * 3. Drops empty turns or invalid roles.
  */
@@ -88,6 +89,7 @@ export async function POST(req: NextRequest) {
       pageContext = {} as AIPageContext,
       userProfile = {} as AIUserProfile,
       shortlist = [],
+      stream = false,
     } = body;
 
     if (!message || typeof message !== "string" || !message.trim()) {
@@ -102,7 +104,7 @@ export async function POST(req: NextRequest) {
     // Build intelligent follow-up suggestions for the client
     const suggestedNext = getSmartFollowUpQuestions(message, pageContext);
 
-    // Detect consultation / high-intent triggers
+    // Detect consultation / high-intent triggers (FR-AI-005 Level 3 trigger)
     const lower = message.toLowerCase();
     const isConsultationIntent =
       lower.includes("apply") ||
@@ -114,8 +116,10 @@ export async function POST(req: NextRequest) {
       lower.includes("call me") ||
       lower.includes("phone") ||
       lower.includes("whatsapp") ||
+      lower.includes("consultant") ||
       lower.includes("scholarship apply") ||
-      lower.includes("shortlist my profile");
+      lower.includes("shortlist my profile") ||
+      lower.includes("book session");
 
     // If no API key configured, provide domain-aware fallback response
     if (!apiKey) {
@@ -124,30 +128,49 @@ export async function POST(req: NextRequest) {
 
       if (lower.includes("germany") || lower.includes("free")) {
         reply =
-          "Germany offers **€0 tuition fees** at almost all 300+ public universities for Bachelor's and Master's degrees! You only need a blocked account of approx. **€11,904/year (~₹10.5 Lakhs)** for living expenses, and you get an **18-month post-study work visa**.";
+          'Germany offers **€0 tuition fees** at almost all 300+ public universities for Bachelor\'s and Master\'s degrees! You only need a blocked account of approx. **€11,904/year (~₹10.5 Lakhs)** for living expenses, and you get an **18-month post-study work visa**.\n\n[[ACTION:CALCULATE_COST:{"country":"Germany"}]]';
       } else if (
         lower.includes("mbbs") ||
         lower.includes("doctor") ||
         lower.includes("medicine")
       ) {
         reply =
-          "For Indian medical aspirants, we recommend **NMC & WHO compliant** universities in Russia, Uzbekistan, Kazakhstan, Georgia, and the Philippines. Total 6-year packages range from **₹18 to ₹35 Lakhs** (including hostel and food) with 100% English medium curriculum.";
+          'For Indian medical aspirants, we recommend **NMC & WHO compliant** universities in Russia, Uzbekistan, Kazakhstan, Georgia, and the Philippines. Total 6-year packages range from **₹18 to ₹35 Lakhs** (including hostel and food) with 100% English medium curriculum.\n\n[[ACTION:SEARCH_UNIVERSITIES:{"query":"MBBS"}]]';
       } else if (lower.includes("ausbildung")) {
         reply =
-          "Germany's **Ausbildung** is a government-recognized 3-year dual vocational training program. There are **zero tuition fees**, and you receive a **monthly stipend of €1,000–€1,400 (~₹90k–₹1.25L)** while training in Healthcare, IT, or Engineering. German B1/B2 level is required.";
+          'Germany\'s **Ausbildung** is a government-recognized 3-year dual vocational training program. There are **zero tuition fees**, and you receive a **monthly stipend of €1,000–€1,400 (~₹90k–₹1.25L)** while training in Healthcare, IT, or Engineering. German B1/B2 level is required.\n\n[[ACTION:CALCULATE_COST:{"country":"Germany"}]]';
       } else if (
         lower.includes("usa") ||
         lower.includes("us") ||
         lower.includes("stem")
       ) {
         reply =
-          "The USA is the world leader in STEM master's and MBA programs. STEM-designated degree graduates are eligible for up to **3 years of OPT** (Optional Practical Training) work authorization.";
+          'The USA is the world leader in STEM master\'s and MBA programs. STEM-designated degree graduates are eligible for up to **3 years of OPT** (Optional Practical Training) work authorization.\n\n[[ACTION:SEARCH_UNIVERSITIES:{"country":"USA","query":"STEM Masters"}]]';
       } else if (lower.includes("uk") || lower.includes("england")) {
         reply =
-          "The UK offers **1-year master's degrees** which significantly reduce living costs, followed by a **2-year post-study Graduate Route work visa**.";
+          'The UK offers **1-year master\'s degrees** which significantly reduce living costs, followed by a **2-year post-study Graduate Route work visa**.\n\n[[ACTION:SEARCH_UNIVERSITIES:{"country":"UK","query":"Masters"}]]';
       } else {
         reply =
-          "I can help guide you across our global destinations (USA, UK, Germany, Canada, Australia, Ireland, etc.) and programs (Master's, MBA, MBBS, Ausbildung, Bachelor's). What degree level, budget, or destination do you have in mind?";
+          'I can help guide you across our global destinations (USA, UK, Germany, Canada, Australia, Ireland, etc.) and programs (Master\'s, MBA, MBBS, Ausbildung, Bachelor\'s). What degree level, budget, or destination do you have in mind?\n\n[[ACTION:BOOK_CALL:{"reason":"General Profile Evaluation"}]]';
+      }
+
+      if (stream) {
+        const encoder = new TextEncoder();
+        const readable = new ReadableStream({
+          start(controller) {
+            controller.enqueue(encoder.encode(reply));
+            controller.close();
+          },
+        });
+        return new Response(readable, {
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "X-Suggested-Next": encodeURIComponent(
+              JSON.stringify(suggestedNext),
+            ),
+            "X-Lead-Capture": isConsultationIntent ? "true" : "false",
+          },
+        });
       }
 
       return NextResponse.json({
@@ -159,23 +182,75 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Prepare system instructions with dynamic context
-    const systemPrompt = buildSystemPrompt(
+    // 1. Prepare base system instructions with dynamic session context & guardrails
+    const baseSystemPrompt = buildSystemPrompt(
       pageContext,
       userProfile,
       shortlist?.length,
     );
 
+    // 2. Perform vector search in Supabase ai_counsellor_kb to retrieve verified facts (RAG)
+    let ragContextSection = "";
+    try {
+      const matchedDocs = await searchSimilarDocuments(message, 0.45, 4);
+      if (matchedDocs && matchedDocs.length > 0) {
+        ragContextSection = `\n\n### RETRIEVED VERIFIED FACTS (from Supabase Knowledge Base):\n${matchedDocs
+          .map(
+            (d, idx) =>
+              `${idx + 1}. **${d.title}**\n${d.content}${d.comment ? `\n*Note: ${d.comment}*` : ""}`,
+          )
+          .join(
+            "\n\n",
+          )}\n\nUse the above verified facts where applicable to accurately answer the student's question.`;
+      }
+    } catch (ragErr) {
+      console.warn(
+        "RAG Vector Search error (continuing with base knowledge):",
+        ragErr,
+      );
+    }
+
+    const fullSystemPrompt = `${baseSystemPrompt}${ragContextSection}`;
     const modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-    const model = getGeminiModel(modelName, systemPrompt);
+    const model = getGeminiModel(modelName, fullSystemPrompt);
 
-    // Format and sanitize previous conversation turns strictly for Gemini
+    // 3. Format and sanitize previous conversation turns strictly for Gemini
     const formattedHistory = sanitizeGeminiHistory(history);
-
     const chat = model.startChat({
       history: formattedHistory,
     });
 
+    // 4. [FR-AI-007] Streaming response for sub-2-second first token latency
+    if (stream) {
+      const streamResult = await chat.sendMessageStream(message);
+      const encoder = new TextEncoder();
+
+      const customReadable = new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of streamResult.stream) {
+              const chunkText = chunk.text();
+              controller.enqueue(encoder.encode(chunkText));
+            }
+            controller.close();
+          } catch (streamErr) {
+            console.error("Streaming error in Gemini stream:", streamErr);
+            controller.error(streamErr);
+          }
+        },
+      });
+
+      return new Response(customReadable, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "X-Suggested-Next": encodeURIComponent(JSON.stringify(suggestedNext)),
+          "X-Lead-Capture": isConsultationIntent ? "true" : "false",
+        },
+      });
+    }
+
+    // Non-streaming standard JSON response
     const result = await chat.sendMessage(message);
     const response = await result.response;
     const replyText = response.text();
@@ -219,5 +294,15 @@ export async function GET() {
     configured: Boolean(process.env.GEMINI_API_KEY),
     destinationsSupported: 19,
     programsSupported: 6,
+    features: [
+      "FR-AI-001 Floating Trigger",
+      "FR-AI-002 Context Aware Greeting",
+      "FR-AI-003 Full Page Counsellor",
+      "FR-AI-004 DB Persistence",
+      "FR-AI-005 Progressive Lead Capture",
+      "FR-AI-006 Function Calling & Site Actions",
+      "FR-AI-007 Streaming Response (<2s first token)",
+      "FR-AI-008 Ethical Guardrails & Compliance",
+    ],
   });
 }

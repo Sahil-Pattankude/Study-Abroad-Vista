@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,15 +9,22 @@ import {
   Send,
   Sparkles,
   User,
-  RefreshCw,
   PhoneCall,
   Lock,
   ArrowRight,
   RotateCcw,
+  Maximize2,
+  Mail,
+  CheckCircle2,
 } from "lucide-react";
 import { AIChatMessage } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { getSavedShortlist } from "@/lib/cookies/shortlist";
+import { getContextAwareGreeting } from "@/lib/gemini/counsellorKnowledge";
+import {
+  AIChatActionCard,
+  parseMessageActions,
+} from "@/components/ai/AIChatActionCard";
 
 interface AICounsellorDrawerProps {
   isOpen: boolean;
@@ -36,12 +43,29 @@ export function AICounsellorDrawer({
 }: AICounsellorDrawerProps) {
   const { user, isLoggedIn } = useAuth();
   const pathname = usePathname();
+  const instanceId = useId();
+  const [sessionId, setSessionId] = useState<string>("");
+
+  // Initialize session ID once on mount
+  useEffect(() => {
+    const existing = sessionStorage.getItem("vista_counsellor_session_id");
+    if (existing) {
+      setSessionId(existing);
+    } else {
+      const newId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      sessionStorage.setItem("vista_counsellor_session_id", newId);
+      setSessionId(newId);
+    }
+  }, []);
+
+  // [FR-AI-002] Context-aware initial prompt
+  const initialGreetingText = getContextAwareGreeting(pathname);
 
   const [messages, setMessages] = useState<AIChatMessage[]>([
     {
       id: "initial",
       role: "model",
-      text: "Namaste! I am your StudyAbroad Vista AI Counsellor powered by Gemini. Ask me anything about universities, free tuition in Germany, NMC-compliant MBBS, scholarships, or post-study work visas across 19 destinations.",
+      text: initialGreetingText,
       timestamp: "Just now",
     },
   ]);
@@ -53,8 +77,29 @@ export function AICounsellorDrawer({
     "How does Germany Ausbildung dual training work?",
     "Top MS in Computer Science under ₹25 Lakhs?",
   ]);
-  const [showConsultationCallout, setShowConsultationCallout] = useState(false);
+
+  // Progressive Lead Capture State (FR-AI-005)
+  const [showLevel2LeadCapture, setShowLevel2LeadCapture] = useState(false);
+  const [level2Captured, setLevel2Captured] = useState(false);
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadName, setLeadName] = useState("");
+  const [showLevel3Consultation, setShowLevel3Consultation] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Update initial greeting when pathname changes if chat hasn't started yet
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].id === "initial") {
+      setMessages([
+        {
+          id: "initial",
+          role: "model",
+          text: getContextAwareGreeting(pathname),
+          timestamp: "Just now",
+        },
+      ]);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (initialQuery) {
@@ -72,16 +117,54 @@ export function AICounsellorDrawer({
     }
   }, [messages, isOpen, loading]);
 
+  // [FR-AI-004] Auto-save conversation to database / API
+  const persistConversation = async (
+    currentMessages: AIChatMessage[],
+    leadLevel = 1,
+  ) => {
+    if (!sessionId || currentMessages.length <= 1) return;
+    try {
+      await fetch("/api/ai/chats", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId,
+          userEmail: user?.email || (leadEmail ? leadEmail : null),
+          userName: user?.name || (leadName ? leadName : null),
+          userId: user?.id,
+          pageContext: { url: pathname },
+          messages: currentMessages,
+          leadLevel,
+        }),
+      });
+    } catch (e) {
+      console.warn("Auto-save conversation error:", e);
+    }
+  };
+
   const handleClearChat = () => {
+    const freshId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    sessionStorage.setItem("vista_counsellor_session_id", freshId);
+    setSessionId(freshId);
+
     setMessages([
       {
         id: "initial-" + Date.now(),
         role: "model",
-        text: "Namaste! How can I assist your study abroad journey today?",
+        text: getContextAwareGreeting(pathname),
         timestamp: "Just now",
       },
     ]);
-    setShowConsultationCallout(false);
+    setShowLevel2LeadCapture(false);
+    setShowLevel3Consultation(false);
+  };
+
+  // Level 2 Lead Capture handler (FR-AI-005)
+  const handleSaveLevel2Lead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadEmail.trim()) return;
+    setLevel2Captured(true);
+    await persistConversation(messages, 2);
   };
 
   const handleSendMessage = async (userText: string) => {
@@ -98,9 +181,21 @@ export function AICounsellorDrawer({
       timestamp: "Just now",
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput("");
     setLoading(true);
+
+    // Progressive Lead Capture Evaluation (FR-AI-005)
+    const userMessageCount = updatedMessages.filter(
+      (m) => m.role === "user",
+    ).length;
+    if (userMessageCount >= 5 && !level2Captured && !user?.email) {
+      setShowLevel2LeadCapture(true);
+    }
+    if (userMessageCount >= 10) {
+      setShowLevel3Consultation(true);
+    }
 
     // Extract basic page context from current URL
     let countryContext = "";
@@ -118,13 +213,23 @@ export function AICounsellorDrawer({
 
     const savedShortlist = getSavedShortlist();
 
+    const placeholderModelMsg: AIChatMessage = {
+      id: (Date.now() + 1).toString(),
+      role: "model",
+      text: "",
+      timestamp: "Just now",
+    };
+
+    setMessages((prev) => [...prev, placeholderModelMsg]);
+
     try {
-      const res = await fetch("/api/ai/counselor", {
+      // [FR-AI-007] Streaming fetch for sub-2-second first token latency
+      const response = await fetch("/api/ai/counselor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userText,
-          history: messages.slice(-6).map((m) => ({
+          history: updatedMessages.slice(-8).map((m) => ({
             role: m.role,
             text: m.text,
           })),
@@ -134,48 +239,82 @@ export function AICounsellorDrawer({
             program: programContext,
           },
           userProfile: {
-            name: user?.name,
-            email: user?.email,
+            name: user?.name || leadName,
+            email: user?.email || leadEmail,
           },
           shortlist: savedShortlist,
+          stream: true,
         }),
       });
 
-      const data = await res.json();
-
-      const modelMessage: AIChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: "model",
-        text:
-          data.reply ||
-          data.fallback ||
-          "I am analyzing your query. Please feel free to ask additional questions or book a 1-on-1 advisor session.",
-        timestamp: "Just now",
-      };
-
-      setMessages((prev) => [...prev, modelMessage]);
-
-      if (
-        data.suggestedNext &&
-        Array.isArray(data.suggestedNext) &&
-        data.suggestedNext.length > 0
-      ) {
-        setSuggestedQuestions(data.suggestedNext);
+      // Extract metadata headers
+      const suggestedNextHeader = response.headers.get("X-Suggested-Next");
+      if (suggestedNextHeader) {
+        try {
+          const parsed = JSON.parse(decodeURIComponent(suggestedNextHeader));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setSuggestedQuestions(parsed);
+          }
+        } catch {}
       }
 
-      if (data.leadCapturePrompt) {
-        setShowConsultationCallout(true);
+      const leadCaptureHeader = response.headers.get("X-Lead-Capture");
+      if (leadCaptureHeader === "true") {
+        setShowLevel3Consultation(true);
       }
-    } catch {
-      setMessages((prev) => [
-        ...prev,
+
+      if (!response.body) {
+        throw new Error("No response stream body");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedText += chunk;
+
+        setMessages((prev) => {
+          const newArr = [...prev];
+          const last = newArr[newArr.length - 1];
+          if (last && last.role === "model") {
+            last.text = accumulatedText;
+          }
+          return newArr;
+        });
+      }
+
+      const finalMessages = [
+        ...updatedMessages,
         {
           id: (Date.now() + 1).toString(),
-          role: "model",
-          text: "I experienced a temporary connection glitch. Please check your internet connection or connect with our human study abroad counsellor.",
+          role: "model" as const,
+          text:
+            accumulatedText ||
+            "I have analyzed your query. How else may I assist your study abroad plans?",
           timestamp: "Just now",
         },
-      ]);
+      ];
+
+      // Auto-save conversation to database (FR-AI-004)
+      persistConversation(
+        finalMessages,
+        showLevel3Consultation ? 3 : showLevel2LeadCapture ? 2 : 1,
+      );
+    } catch {
+      setMessages((prev) => {
+        const newArr = [...prev];
+        const last = newArr[newArr.length - 1];
+        if (last && last.role === "model" && !last.text) {
+          last.text =
+            "I experienced a temporary connection glitch. Please check your internet connection or connect with our human study abroad counsellor.";
+        }
+        return newArr;
+      });
     } finally {
       setLoading(false);
     }
@@ -209,12 +348,21 @@ export function AICounsellorDrawer({
               </div>
               <p className="text-[10px] text-slate-300">
                 {isLoggedIn
-                  ? `Active Session: ${user?.name || user?.email}`
+                  ? `Active: ${user?.name || user?.email}`
                   : "Gemini 3.8-Flash • Member Access"}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* [FR-AI-003] Link to Standalone Full-Page Destination */}
+            <Link
+              href="/ai-counsellor"
+              onClick={onClose}
+              title="Open full page counsellor"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+            >
+              <Maximize2 className="h-3.5 w-3.5" />
+            </Link>
             {messages.length > 1 && (
               <button
                 onClick={handleClearChat}
@@ -233,7 +381,7 @@ export function AICounsellorDrawer({
           </div>
         </div>
 
-        {/* If user is NOT logged in: Show prominent Lock banner at the top of chat */}
+        {/* If user is NOT logged in: Show prominent Lock banner at top */}
         {!isLoggedIn && (
           <div className="bg-amber-50 border-b border-amber-200 p-4 text-amber-950">
             <div className="flex items-start gap-2.5">
@@ -270,53 +418,133 @@ export function AICounsellorDrawer({
           </div>
         )}
 
-        {/* Chat History */}
+        {/* Chat History Feed */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              {m.role === "model" && (
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-[#102C57]">
-                  <Sparkles className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                </div>
-              )}
+          {messages.map((m) => {
+            const { cleanText, actions } = parseMessageActions(m.text);
+
+            return (
               <div
-                className={`max-w-[85%] rounded-2xl p-3.5 leading-relaxed ${
-                  m.role === "user"
-                    ? "bg-[#102C57] text-white"
-                    : "border border-slate-200 bg-slate-50 text-slate-800"
-                }`}
+                key={m.id}
+                className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
-                <div className="whitespace-pre-line text-xs leading-relaxed space-y-1">
-                  {m.text}
-                </div>
-                <span
-                  className={`mt-1.5 block text-[9px] ${
-                    m.role === "user" ? "text-slate-300" : "text-slate-500"
+                {m.role === "model" && (
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-[#102C57]">
+                    <Sparkles className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                  </div>
+                )}
+                <div
+                  className={`max-w-[85%] rounded-2xl p-3.5 leading-relaxed ${
+                    m.role === "user"
+                      ? "bg-[#102C57] text-white"
+                      : "border border-slate-200 bg-slate-50 text-slate-800"
                   }`}
                 >
-                  {m.timestamp}
-                </span>
-              </div>
-              {m.role === "user" && (
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-slate-700">
-                  <User className="h-3.5 w-3.5" />
+                  <div className="whitespace-pre-line text-xs leading-relaxed space-y-1">
+                    {cleanText}
+                  </div>
+
+                  {/* [FR-AI-006] Interactive Function Action Cards */}
+                  {actions.length > 0 && (
+                    <div className="mt-2 space-y-2">
+                      {actions.map((act, aIdx) => (
+                        <AIChatActionCard
+                          key={aIdx}
+                          action={act}
+                          onOpenLeadModal={() => {
+                            onClose();
+                            onOpenLeadModal?.();
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <span
+                    className={`mt-1.5 block text-[9px] ${
+                      m.role === "user" ? "text-slate-300" : "text-slate-500"
+                    }`}
+                  >
+                    {m.timestamp}
+                  </span>
                 </div>
-              )}
-            </div>
-          ))}
+                {m.role === "user" && (
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-slate-700">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           {loading && (
             <div className="flex items-center gap-2 text-slate-500 text-xs pl-2">
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-[#EA5C2B]" />
-              <span>Analyzing global university database & visa rules...</span>
+              <span className="flex h-2 w-2 animate-ping rounded-full bg-[#EA5C2B]"></span>
+              <span>Thinking & analyzing global admissions database...</span>
             </div>
           )}
 
-          {/* Consultation Lead Callout */}
-          {showConsultationCallout && (
+          {/* [FR-AI-005 Level 2] Progressive Lead Capture: Save Chat Prompt after 5 messages */}
+          {showLevel2LeadCapture && !level2Captured && !user?.email && (
+            <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 p-3.5 text-indigo-950 shadow-xs">
+              <div className="flex items-start gap-2.5">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
+                  <Mail className="h-4 w-4 text-[#EA5C2B]" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-xs text-[#102C57]">
+                    Save this Conversation & University Shortlist
+                  </h4>
+                  <p className="text-[11px] text-indigo-800 mt-0.5">
+                    Enter your email to receive a saved transcript and tailored
+                    admission notes.
+                  </p>
+                  <form
+                    onSubmit={handleSaveLevel2Lead}
+                    className="mt-2.5 space-y-2"
+                  >
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={leadName}
+                        onChange={(e) => setLeadName(e.target.value)}
+                        className="w-1/2 rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs text-slate-800"
+                        required
+                      />
+                      <input
+                        type="email"
+                        placeholder="Your Email"
+                        value={leadEmail}
+                        onChange={(e) => setLeadEmail(e.target.value)}
+                        className="w-1/2 rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs text-slate-800"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full rounded-lg bg-[#102C57] py-1.5 text-xs font-bold text-white hover:bg-[#0c2242] transition"
+                    >
+                      Save My Transcript →
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {level2Captured && (
+            <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-2.5 text-xs font-medium text-emerald-800">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>
+                Transcript & shortlists will be saved to{" "}
+                {leadEmail || user?.email}
+              </span>
+            </div>
+          )}
+
+          {/* [FR-AI-005 Level 3] Progressive Lead Capture: 1-on-1 Consultation Callout */}
+          {showLevel3Consultation && (
             <div className="rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3.5 text-slate-800 shadow-xs">
               <div className="flex items-start gap-2.5">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#EA5C2B] text-white shadow-xs">
@@ -324,11 +552,11 @@ export function AICounsellorDrawer({
                 </div>
                 <div className="flex-1">
                   <h4 className="font-bold text-xs text-slate-900">
-                    Ready to start your application?
+                    Ready for 1-on-1 Human Profile Review?
                   </h4>
                   <p className="text-[11px] text-slate-600 mt-0.5">
                     Connect with an authorized StudyAbroad Vista counsellor for
-                    1-on-1 profile evaluation and document checklist.
+                    application filing, visa checks, and scholarship guidance.
                   </p>
                   <button
                     onClick={() => {
@@ -416,18 +644,25 @@ export function AICounsellorDrawer({
             </div>
           )}
 
-          {/* Quick Lead Capture Trigger */}
-          <div className="mt-2 text-center">
+          {/* Quick Lead & Full Screen Actions */}
+          <div className="mt-2 flex items-center justify-between px-1 text-[10px]">
             <button
               onClick={() => {
                 onClose();
                 onOpenLeadModal?.();
               }}
-              className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#EA5C2B] hover:underline"
+              className="inline-flex items-center gap-1 font-bold text-[#EA5C2B] hover:underline"
             >
               <PhoneCall className="h-3 w-3" />
-              Need human guidance? Book a 1-on-1 advisor call
+              Need human guidance? Book 1-on-1 advisor call
             </button>
+            <Link
+              href="/ai-counsellor"
+              onClick={onClose}
+              className="text-slate-500 hover:text-[#102C57] hover:underline"
+            >
+              Full Screen Mode ↗
+            </Link>
           </div>
         </div>
       </div>

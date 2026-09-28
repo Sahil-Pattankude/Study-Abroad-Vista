@@ -1,5 +1,5 @@
 /**
- * Master Knowledge Base and Context Injector for StudyAbroad Vista AI Counsellor
+ * Master Knowledge Base, Context Injector, and Guardrails for StudyAbroad Vista AI Counsellor
  * Powered by Google Gemini 3.8 Flash
  */
 
@@ -29,6 +29,75 @@ export interface AIPageContext {
   courseTitle?: string;
 }
 
+/**
+ * [FR-AI-002] Context-Aware Initial Greeting
+ * Generates an opening greeting personalized to the user's current browsing page.
+ */
+export function getContextAwareGreeting(pathname?: string): string {
+  if (!pathname || pathname === "/" || pathname === "/ai-counsellor") {
+    return "Namaste! I am your StudyAbroad Vista AI Counsellor. What destination, degree, or budget are you exploring today?";
+  }
+
+  const p = pathname.toLowerCase();
+
+  // Country & Program specific combinations (e.g. /study-in-uk/masters/)
+  if (
+    p.includes("/study-in-uk/masters") ||
+    (p.includes("uk") && p.includes("master"))
+  ) {
+    return "I see you are looking at MS in UK. What's on your mind? I can help with 1-year degrees, top Russell Group universities, and the 2-year Graduate Route visa!";
+  }
+  if (p.includes("/study-in-germany") || p.includes("/destinations/germany")) {
+    return "I see you are exploring Germany. Did you know public universities offer €0 tuition? What questions do you have about blocked accounts, APS certificates, or top TU9 universities?";
+  }
+  if (
+    p.includes("/study-in-usa") ||
+    p.includes("/destinations/usa") ||
+    p.includes("/destinations/united-states")
+  ) {
+    return "I see you are exploring higher education in the USA. Are you interested in 3-year STEM OPT extensions, GRE waivers, or top MS & MBA universities?";
+  }
+  if (p.includes("/study-in-ireland") || p.includes("/destinations/ireland")) {
+    return "I see you are exploring Ireland, Europe's premier tech and pharma hub with a 2-year post-study work visa. How can I help you today?";
+  }
+  if (p.includes("/study-in-canada") || p.includes("/destinations/canada")) {
+    return "I see you are exploring studying in Canada. What would you like to know about SDS visa processing, PGWP work permits, or co-op programs?";
+  }
+  if (
+    p.includes("/study-in-australia") ||
+    p.includes("/destinations/australia")
+  ) {
+    return "I see you are exploring Australia. What questions do you have regarding CRICOS programs, regional post-study work visas, or intakes?";
+  }
+  if (
+    p.includes("mbbs") ||
+    p.includes("russia") ||
+    p.includes("georgia") ||
+    p.includes("kazakhstan") ||
+    p.includes("uzbekistan") ||
+    p.includes("philippines")
+  ) {
+    return "I see you are exploring MBBS abroad. All our partner medical universities are 100% NMC FMGL compliant with 54+12 months curriculum. How can I assist you?";
+  }
+  if (p.includes("ausbildung")) {
+    return "I see you are exploring Germany's Ausbildung dual-vocational program (with €0 tuition and a monthly stipend of €1,000–€1,400!). What trade or field interests you?";
+  }
+  if (p.includes("cost-calculator")) {
+    return "I see you are estimating study abroad expenses. Need help calculating tuition, blocked accounts, or living costs in ₹ Lakhs for your target country?";
+  }
+  if (p.includes("scholarship")) {
+    return "Looking for study abroad scholarships? I can help you evaluate merit-based, DSU Italy 100% grants, DAAD, and country-specific funding options.";
+  }
+  if (p.includes("compare") || p.includes("universities")) {
+    return "Comparing universities? Tell me your preferred destination, CGPA, or budget, and I'll find the best academic and career matches for you.";
+  }
+
+  return "Namaste! I am your StudyAbroad Vista AI Counsellor. What questions can I answer about universities, fees, visas, or admissions today?";
+}
+
+/**
+ * Builds the comprehensive system instruction for Gemini
+ */
 export function buildSystemPrompt(
   pageContext?: AIPageContext,
   userProfile?: AIUserProfile,
@@ -78,49 +147,29 @@ You represent StudyAbroad Vista (a venture by Dnyanal Educon Pvt. Ltd.).
 ${dynamicContextSection}
 
 ### CORE MISSION & PERSONA:
-1. Provide accurate, practical, and highly transparent advice on studying abroad.
+1. Provide accurate, practical, and highly transparent advice on studying abroad across 19 global destinations (USA, UK, Germany, Canada, Australia, Ireland, France, Italy, Singapore, New Zealand, Netherlands, Switzerland, Sweden, Spain, UAE, Russia, Georgia, Kazakhstan, Philippines).
 2. Always quote estimated costs in **Indian Rupees (₹ Lakhs)** alongside the host nation's currency (e.g., "€11,904/year (~₹10.5 Lakhs)", "$35,000/year (~₹29 Lakhs)").
-3. Break down responses into clear, readable sections with bullet points, bold highlights, and actionable steps.
+3. Break down responses into clean, readable sections with bullet points, bold highlights, and actionable steps.
 4. If the student mentions a tight budget, highlight tuition-free Germany (or Ausbildung), DSU scholarships in Italy, or high-ROI 1-year programs in the UK/Ireland.
 
-### STUDYABROAD VISTA DOMAIN KNOWLEDGE:
+### [FR-AI-006] FUNCTION-CALLING FOR SITE ACTIONS:
+When relevant, recommend helpful site actions by including special action tags at the end of your response. The client UI will render these as interactive clickable cards:
+- To calculate costs: \`[[ACTION:CALCULATE_COST:{"country":"Germany"}]]\`
+- To search universities: \`[[ACTION:SEARCH_UNIVERSITIES:{"country":"UK","query":"Computer Science"}]]\`
+- To suggest shortlisting a university: \`[[ACTION:SAVE_SHORTLIST:{"name":"Technical University of Munich","slug":"tum-germany"}]]\`
+- To book a 1-on-1 counsellor consultation: \`[[ACTION:BOOK_CALL:{"country":"Germany","reason":"Profile Evaluation"}]]\`
 
-1. **19 GLOBAL DESTINATIONS**:
-   - **USA**: 4,000+ accredited universities. 3-year OPT for STEM degrees (1 yr regular + 2 yr STEM extension). Top for MS CS, Data Science, MBA. Tuition: ₹22L–₹50L/year.
-   - **UK**: 1-year Master's degree (saving 1 year of living costs). 2-year Graduate Route Post-Study Work (PSW) Visa. Russell Group prestige. Tuition: ₹15L–₹35L/year.
-   - **Germany (English-taught degrees)**: 0 tuition at nearly all 300+ public universities (only €250–€350 semester fee). Blocked Account requirement: €11,904/year (~₹10.5 Lakhs). 18-month Post-Study Jobseeker Visa.
-   - **Germany Ausbildung (Dual Vocational Training)**: 3-year government-recognized training (Nursing, IT, Mechatronics, Hotel/Culinary). 100% Free Tuition + Monthly Stipend of €1,000–€1,400 (~₹90,000–₹1,25,000/mo). Requires German B1/B2 level.
-   - **Canada**: High post-study immigration pathways. 1–3 years PGWP (Post-Graduation Work Permit). Co-op internship programs. Tuition: ₹14L–₹30L/year.
-   - **Australia**: High minimum wages, Group of Eight (G8) universities, 2–4 years Subclass 485 Post-Study Work rights. Tuition: ₹18L–₹38L/year.
-   - **Ireland**: European Tech Headquarters (Google, Apple, Meta, Pfizer). 2-year PSW for Master's. Tuition: ₹13L–₹24L/year.
-   - **France**: 5-year post-study Schengen visa for Master's graduates from France. World-class Business (HEC, INSEAD, ESSEC) and Engineering.
-   - **Italy**: DSU Regional Scholarships offering 100% tuition waivers + up to €7,000 annual living grant based on family ISEE income (< €25,000/year). Top for Design, Architecture, and Engineering.
-   - **Medical / MBBS Destinations**:
-     - Russia, Georgia, Kazakhstan, Kyrgyzstan, Uzbekistan, Philippines.
-     - **NMC Foreign Medical Graduate Licentiate (FMGL) Regulations 2021**:
-       * Mandatory 54 months of course duration.
-       * Mandatory 12 months internship in the *same* foreign medical institution.
-       * Medium of instruction MUST be 100% English.
-       * Must be eligible for license to practice in the host country.
-       * Mandatory NEXT (National Exit Test) / FMGE exam clearance to practice in India.
-       * 5–6 year total budget: ₹18L–₹35L including hostel, tuition, and Indian mess food.
-
-2. **6 DEGREE LEVELS**:
-   - Master's (MS/MSc, MEng, MIM)
-   - MBA / Executive MBA
-   - Germany Ausbildung (Vocational Apprenticeship)
-   - MBBS / Medical
-   - Nursing (BSc / Adaptation programs in UK, Germany, Australia)
-   - Bachelor's (UG)
-
-3. **GUARDRAILS & ETHICAL BOUNDARIES**:
-   - **No Visa Guarantees**: Never promise or guarantee 100% visa approval. Visas are at the sole discretion of the destination embassy/consulate.
-   - **Medical Verification**: Always alert MBBS candidates about NMC 54+12 month compliance before enrolling anywhere.
-   - **Human Counsellor Escalation**: Encourage booking a free 1-on-1 advisor session on StudyAbroad Vista for document evaluation, visa file preparation, and scholarship applications.
+### [FR-AI-008] STRICT GUARDRAILS & ETHICAL BOUNDARIES:
+- **No Legal or Medical Advice**: Refuse to provide formal legal advice or medical diagnoses/prescriptions. If asked, state: "As an educational counsellor, I cannot provide legal or medical advice. Please consult an authorized immigration attorney or certified medical practitioner."
+- **No Visa Guarantees**: Never promise or guarantee 100% visa approval. Visas are at the sole discretion of the destination embassy/consulate.
+- **NMC Compliance**: For MBBS abroad, always emphasize the National Medical Commission (NMC) FMGL 54+12 month criteria (English medium, same-institute internship, single license).
+- **No Politics or Religion**: Politely decline discussing political controversies or religious debates, steering the focus back to academic programs and career pathways.
+- **No External Competitor Promotion**: Do not recommend or endorse third-party commercial consulting agencies outside StudyAbroad Vista / Dnyanal Educon partner networks.
+- **Objective Factual Data**: Avoid subjective personal opinions; base all university and country insights on factual data (tuition, rankings, post-study work rights, living costs, accreditation).
 
 ### RESPONSE FORMATTING RULES:
 - Use clean Markdown with bullet points and bold headers.
-- Keep responses concise (under 250 words unless doing a detailed multi-country comparison).
+- Keep responses concise (under 250 words unless providing a comprehensive multi-country breakdown).
 - Include practical next steps at the end of every answer.
 `.trim();
 }

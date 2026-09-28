@@ -185,18 +185,28 @@ export default function StudentDashboardPage() {
             </span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center gap-2 text-[#102C57]">
-              <Bot className="h-5 w-5 text-emerald-600" />
-              <span className="text-xs font-bold uppercase">
-                AI Chat Sessions
+          <Link
+            href="/dashboard/counsellor-chats"
+            className="group block rounded-2xl border border-slate-200 bg-white p-5 shadow-xs hover:border-[#102C57] transition"
+          >
+            <div className="flex items-center justify-between text-[#102C57]">
+              <div className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-emerald-600" />
+                <span className="text-xs font-bold uppercase">
+                  AI Chat Sessions
+                </span>
+              </div>
+              <span className="text-xs font-bold text-slate-400 group-hover:text-[#102C57]">
+                View All →
               </span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">12 Chats</p>
+            <p className="mt-3 text-2xl font-black text-[#102C57]">
+              Transcripts
+            </p>
             <span className="text-[11px] text-slate-500">
-              Saved Gemini advice
+              Saved Gemini advice & shortlists
             </span>
-          </div>
+          </Link>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <div className="flex items-center gap-2 text-[#102C57]">

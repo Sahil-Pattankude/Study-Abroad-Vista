@@ -20,6 +20,7 @@ interface HomeModalsContextType {
   openAICounsellor: (initialQuery?: string) => void;
   openLeadModal: (countryOrProgram?: string) => void;
   openAuthModal: (config?: AuthModalConfig) => void;
+  setDoNotDisturb: (dnd: boolean) => void;
 }
 
 const HomeModalsContext = createContext<HomeModalsContextType | null>(null);
@@ -32,6 +33,7 @@ export function useHomeModals() {
       openAICounsellor: (_query?: string) => {},
       openLeadModal: () => {},
       openAuthModal: () => {},
+      setDoNotDisturb: (_dnd: boolean) => {},
     };
   }
   return ctx;
@@ -54,6 +56,7 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [selectedCountryName, setSelectedCountryName] = useState("Germany");
+  const [doNotDisturb, setDoNotDisturb] = useState(false);
 
   const openAICounsellor = (initialQuery?: string) => {
     if (initialQuery) {
@@ -77,6 +80,10 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
     setAuthModalOpen(true);
   };
 
+  // [FR-AI-001] Do-not-disturb active during open modals / form submission
+  const isDNDActive =
+    doNotDisturb || leadModalOpen || authModalOpen || searchDialogOpen;
+
   return (
     <HomeModalsContext.Provider
       value={{
@@ -84,6 +91,7 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
         openAICounsellor,
         openLeadModal,
         openAuthModal,
+        setDoNotDisturb,
       }}
     >
       {children}
@@ -100,18 +108,18 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      {/* Floating AI Counsellor Button - Hidden on /studio, /admin, /portal */}
-      {!isStudioOrAdmin && (
-        <div className="fixed bottom-6 right-6 z-40">
+      {/* [FR-AI-001] Floating AI Counsellor Button: Bottom-Right 20px (bottom-5 right-5), visible during scroll, respects DND */}
+      {!isStudioOrAdmin && !isDNDActive && (
+        <div className="fixed bottom-[20px] right-[20px] z-40">
           <button
             onClick={() => openAICounsellor()}
             aria-label="Talk to AI counsellor"
-            className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition hover:scale-105 hover:bg-[#0c2242]"
+            className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:bg-[#0c2242] active:scale-95"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white">
               <Bot className="h-5 w-5 text-[#EA5C2B]" />
             </div>
-            <span className="pr-2 text-xs font-bold hidden sm:inline flex items-center gap-1.5">
+            <span className="pr-2 text-xs font-bold hidden sm:inline-flex items-center gap-1.5">
               Talk to AI Counsellor
               {!isLoggedIn && <Lock className="h-3 w-3 text-amber-300" />}
             </span>
@@ -128,8 +136,8 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
         <AICounsellorDrawer
           isOpen={aiDrawerOpen}
           onClose={() => setAiDrawerOpen(false)}
-          onOpenLeadModal={() => setLeadModalOpen(true)}
-          onOpenAuthModal={() => setAuthModalOpen(true)}
+          onOpenLeadModal={() => openLeadModal(selectedCountryName)}
+          onOpenAuthModal={() => openAuthModal()}
           initialQuery={aiInitialQuery}
         />
       )}

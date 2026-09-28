@@ -37,44 +37,52 @@ export interface SanityPillarGuide {
 export const FALLBACK_ARTICLES: SanityArticle[] = [
   {
     _id: "fb-1",
-    title: "Germany Ausbildung 2027: Complete Dual Vocational Guide for Indian Students",
+    title:
+      "Germany Ausbildung 2027: Complete Dual Vocational Guide for Indian Students",
     slug: "germany-ausbildung-2027-guide",
     tag: "Germany • Vocational",
     readTime: "6 min read",
-    excerpt: "How to secure €1,100/month monthly stipend with 0 tuition in German hospitals and tech firms.",
+    excerpt:
+      "How to secure €1,100/month monthly stipend with 0 tuition in German hospitals and tech firms.",
     date: "Sep 2026",
     country: "germany",
     programCategory: "ausbildung",
   },
   {
     _id: "fb-2",
-    title: "NMC Foreign Medical Graduate Regulations: Essential Checklist for MBBS Abroad",
+    title:
+      "NMC Foreign Medical Graduate Regulations: Essential Checklist for MBBS Abroad",
     slug: "nmc-fmgl-regulations-mbbs-abroad-checklist",
     tag: "Medical • NMC Guidelines",
     readTime: "8 min read",
-    excerpt: "54-month course duration, 12-month internship, and CRMI clinical guidelines you must know before applying.",
+    excerpt:
+      "54-month course duration, 12-month internship, and CRMI clinical guidelines you must know before applying.",
     date: "Sep 2026",
     country: "uzbekistan",
     programCategory: "mbbs",
   },
   {
     _id: "fb-3",
-    title: "UK Graduate Route vs Canada PGWP: Work Visa Rights Comparison in 2026-2027",
+    title:
+      "UK Graduate Route vs Canada PGWP: Work Visa Rights Comparison in 2026-2027",
     slug: "uk-graduate-route-vs-canada-pgwp-comparison",
     tag: "Visa • Immigration",
     readTime: "5 min read",
-    excerpt: "An in-depth breakdown of current visa tenure, PR eligibility, and post-study employment trends.",
+    excerpt:
+      "An in-depth breakdown of current visa tenure, PR eligibility, and post-study employment trends.",
     date: "Aug 2026",
     country: "uk",
     programCategory: "ms",
   },
   {
     _id: "fb-4",
-    title: "How to Build a High-Probability SOP for Top US & German Universities",
+    title:
+      "How to Build a High-Probability SOP for Top US & German Universities",
     slug: "how-to-write-winning-sop-us-germany",
     tag: "Admissions • Prep",
     readTime: "7 min read",
-    excerpt: "The 5 critical elements admissions committees evaluate in Indian engineering and MBA applicants.",
+    excerpt:
+      "The 5 critical elements admissions committees evaluate in Indian engineering and MBA applicants.",
     date: "Aug 2026",
     country: "usa",
     programCategory: "ms",
@@ -146,14 +154,38 @@ const ALL_ARTICLES_QUERY = `*[_type == "article" && !(_id in path("drafts.**"))]
   }
 }`;
 
+function formatArticleDate(rawDate?: string): string {
+  if (!rawDate) return "Recently Updated";
+  if (rawDate.length <= 10 && !rawDate.includes("-")) return rawDate;
+  try {
+    const d = new Date(rawDate);
+    if (isNaN(d.getTime())) return rawDate;
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return rawDate;
+  }
+}
+
 export async function getAllArticles(): Promise<SanityArticle[]> {
   try {
-    const data = await client.fetch(ALL_ARTICLES_QUERY, {}, {
-      next: { revalidate: 60 },
-    });
+    const data = await client.fetch(
+      ALL_ARTICLES_QUERY,
+      {},
+      {
+        next: { revalidate: 60 },
+      },
+    );
     if (Array.isArray(data) && data.length > 0) {
+      const formatted = data.map((a: SanityArticle) => ({
+        ...a,
+        date: formatArticleDate(a.date),
+      }));
       const map = new Map<string, SanityArticle>();
-      data.forEach((a: SanityArticle) => map.set(a.slug, a));
+      formatted.forEach((a: SanityArticle) => map.set(a.slug, a));
       FALLBACK_ARTICLES.forEach((fa) => {
         if (!map.has(fa.slug)) map.set(fa.slug, fa);
       });
@@ -161,34 +193,56 @@ export async function getAllArticles(): Promise<SanityArticle[]> {
     }
     return FALLBACK_ARTICLES;
   } catch (error) {
-    console.warn("Sanity getAllArticles fetch failed, serving fallbacks:", error);
+    console.warn(
+      "Sanity getAllArticles fetch failed, serving fallbacks:",
+      error,
+    );
     return FALLBACK_ARTICLES;
   }
 }
 
 export async function getLatestArticles(): Promise<SanityArticle[]> {
   try {
-    const data = await client.fetch(LATEST_ARTICLES_QUERY, {}, {
-      // Revalidate ISR every 60 seconds
-      next: { revalidate: 60 },
-    });
+    const data = await client.fetch(
+      LATEST_ARTICLES_QUERY,
+      {},
+      {
+        // Revalidate ISR every 60 seconds
+        next: { revalidate: 60 },
+      },
+    );
     if (Array.isArray(data) && data.length > 0) {
-      return data;
+      return data.map((a: SanityArticle) => ({
+        ...a,
+        date: formatArticleDate(a.date),
+      }));
     }
     return FALLBACK_ARTICLES;
   } catch (error) {
-    console.warn("Sanity article fetch failed, serving curated fallbacks:", error);
+    console.warn(
+      "Sanity article fetch failed, serving curated fallbacks:",
+      error,
+    );
     return FALLBACK_ARTICLES;
   }
 }
 
-export async function getArticleBySlug(slug: string): Promise<SanityArticle | null> {
+export async function getArticleBySlug(
+  slug: string,
+): Promise<SanityArticle | null> {
   try {
-    const data = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug }, {
-      next: { revalidate: 60 },
-    });
+    const data = await client.fetch(
+      ARTICLE_BY_SLUG_QUERY,
+      { slug },
+      {
+        next: { revalidate: 60 },
+      },
+    );
     if (data) {
-      return data;
+      return {
+        ...data,
+        date: formatArticleDate(data.date),
+      };
     }
   } catch (error) {
     console.warn(`Sanity fetch for slug '${slug}' failed:`, error);
@@ -199,7 +253,9 @@ export async function getArticleBySlug(slug: string): Promise<SanityArticle | nu
   return fallback || null;
 }
 
-export async function getPillarGuideByCountry(countrySlug: string): Promise<SanityPillarGuide | null> {
+export async function getPillarGuideByCountry(
+  countrySlug: string,
+): Promise<SanityPillarGuide | null> {
   return null;
 }
 
@@ -210,5 +266,3 @@ export async function getSanityUniversities() {
 export async function getSanityCountries() {
   return [];
 }
-
-

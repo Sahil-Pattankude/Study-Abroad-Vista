@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   LayoutDashboard,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { Country, University, Program } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -33,9 +34,16 @@ import { AdminUniversitiesTab } from "@/components/admin/AdminUniversitiesTab";
 import { AdminCountriesTab } from "@/components/admin/AdminCountriesTab";
 import { AdminProgramsTab } from "@/components/admin/AdminProgramsTab";
 import { AdminLeadsTab } from "@/components/admin/AdminLeadsTab";
+import { AdminAICounsellorKBTab } from "@/components/admin/AdminAICounsellorKBTab";
 
 type AdminTab =
-  "overview" | "claims" | "universities" | "countries" | "programs" | "leads";
+  | "overview"
+  | "claims"
+  | "universities"
+  | "countries"
+  | "programs"
+  | "leads"
+  | "kb";
 
 function AdminPortalContent() {
   const router = useRouter();
@@ -66,6 +74,7 @@ function AdminPortalContent() {
         "countries",
         "programs",
         "leads",
+        "kb",
       ].includes(tabParam)
     ) {
       setActiveTab(tabParam);
@@ -314,6 +323,13 @@ function AdminPortalContent() {
       badge: "3.4k",
       badgeColor: "bg-emerald-100 text-emerald-800",
     },
+    {
+      id: "kb" as AdminTab,
+      label: "AI Counsellor KB",
+      icon: Sparkles,
+      badge: "Vector RAG",
+      badgeColor: "bg-indigo-600 text-white",
+    },
   ];
 
   // 4. Authorized Super Administrator -> Render Operations Control Center with Component Tabs
@@ -459,6 +475,8 @@ function AdminPortalContent() {
           )}
 
           {activeTab === "leads" && <AdminLeadsTab />}
+
+          {activeTab === "kb" && <AdminAICounsellorKBTab />}
         </div>
       </div>
 
