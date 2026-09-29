@@ -2,7 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Compass, Mail, ArrowRight, ShieldCheck, CheckCircle2, ArrowLeft, Loader2, AlertCircle, KeyRound, ExternalLink } from "lucide-react";
+import {
+  Compass,
+  Mail,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  ArrowLeft,
+  Loader2,
+  AlertCircle,
+  KeyRound,
+  ExternalLink,
+} from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -35,14 +47,20 @@ export default function ForgotPasswordPage() {
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        setError(data.error || "No account found with this email. Please check spelling or create an account.");
+        setError(
+          data.error ||
+            "No account found with this email. Please check spelling or create an account.",
+        );
         setLoading(false);
         return;
       }
 
       setActionLink(data.actionLink || "");
       setEmailOtp(data.emailOtp || "");
-      setDirectResetUrl(data.directResetUrl || `/reset-password?email=${encodeURIComponent(email.trim())}`);
+      setDirectResetUrl(
+        data.directResetUrl ||
+          `/reset-password?email=${encodeURIComponent(email.trim())}`,
+      );
       setSubmitted(true);
       setLoading(false);
       setResendCooldown(60);
@@ -57,25 +75,24 @@ export default function ForgotPasswordPage() {
         });
       }, 1000);
     } catch (err: any) {
-      setError(err?.message || "Failed to generate password reset request. Please try again.");
+      setError(
+        err?.message ||
+          "Failed to generate password reset request. Please try again.",
+      );
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 sm:px-8">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3.5 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 transition hover:opacity-95">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white shadow-xs">
-              <Compass className="h-4 w-4 text-[#EA5C2B]" />
-            </div>
-            <span className="text-lg font-black tracking-tight text-[#102C57]">
-              StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-            </span>
-          </Link>
-          <Link href="/login" className="text-xs font-semibold text-slate-500 hover:text-[#102C57] flex items-center gap-1">
+          <BrandLogo variant="wordmark" theme="light" size="md" />
+          <Link
+            href="/login"
+            className="text-xs font-semibold text-slate-500 hover:text-[#1D5A6C] flex items-center gap-1 transition"
+          >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to Sign In</span>
           </Link>
@@ -96,7 +113,8 @@ export default function ForgotPasswordPage() {
                   Forgot Password?
                 </h1>
                 <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                  Enter your registered account email and we&apos;ll send you instructions to reset your password.
+                  Enter your registered account email and we&apos;ll send you
+                  instructions to reset your password.
                 </p>
               </div>
 
@@ -120,7 +138,7 @@ export default function ForgotPasswordPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. admin@studyabroadvista.com or student@example.com"
+                      placeholder="e.g. admin@abroadroute.com or student@example.com"
                       className="w-full rounded-lg py-2.5 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
                     />
                   </div>
@@ -181,8 +199,12 @@ export default function ForgotPasswordPage() {
 
               {emailOtp && (
                 <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-600">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Verification OTP Code</span>
-                  <span className="font-mono font-bold text-slate-800 text-sm tracking-widest">{emailOtp}</span>
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                    Verification OTP Code
+                  </span>
+                  <span className="font-mono font-bold text-slate-800 text-sm tracking-widest">
+                    {emailOtp}
+                  </span>
                 </div>
               )}
 
@@ -192,7 +214,9 @@ export default function ForgotPasswordPage() {
                   disabled={loading || resendCooldown > 0}
                   className="w-full rounded-xl border border-slate-200 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition cursor-pointer"
                 >
-                  {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend Link"}
+                  {resendCooldown > 0
+                    ? `Resend in ${resendCooldown}s`
+                    : "Resend Link"}
                 </button>
 
                 <Link
@@ -209,7 +233,10 @@ export default function ForgotPasswordPage() {
           {!submitted && (
             <div className="mt-6 text-center text-xs text-slate-500 border-t border-slate-100 pt-4">
               <span>Remembered your password? </span>
-              <Link href="/login" className="font-bold text-[#EA5C2B] hover:underline">
+              <Link
+                href="/login"
+                className="font-bold text-[#EA5C2B] hover:underline"
+              >
                 Sign in →
               </Link>
             </div>
@@ -220,7 +247,9 @@ export default function ForgotPasswordPage() {
       {/* Footer */}
       <footer className="border-t border-slate-200/80 bg-white py-3 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
         <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-        <span>Secured via Supabase Auth & DPDP Act 2023 End-to-End Encryption</span>
+        <span>
+          Secured via Supabase Auth & DPDP Act 2023 End-to-End Encryption
+        </span>
       </footer>
     </div>
   );

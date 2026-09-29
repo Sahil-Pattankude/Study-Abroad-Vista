@@ -33,13 +33,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
 
-  if (!article) return { title: "Article Not Found | StudyAbroad Vista" };
+  if (!article) return { title: "Article Not Found | Abroadroute" };
 
-  const rawDescription = `${article.excerpt || article.title} StudyAbroad Vista guide for Indian students planning international education in 2026-2027.`;
+  const rawDescription = `${article.excerpt || article.title} Abroadroute guide for Indian students planning international education in 2026-2027.`;
   const formattedDesc = fitMetaDescription(rawDescription);
 
   return {
-    title: `${article.title} | StudyAbroad Vista Guides`,
+    title: `${article.title} | Abroadroute Guides`,
     description: formattedDesc,
     openGraph: {
       title: article.title,

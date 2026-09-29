@@ -31,10 +31,10 @@ export const metadata: Metadata = {
   description:
     "Compare exam fees in INR, scoring scales, cutoffs for top global universities, and get free 8-week study blueprints for IELTS, GRE, GMAT, NCLEX, and PLAB.",
   openGraph: {
-    title: "International Test Prep & Licensing Hub | StudyAbroad Vista",
+    title: "International Test Prep & Licensing Hub | Abroadroute",
     description:
       "Compare exam fees in INR, scoring scales, cutoffs for top global universities, and get free 8-week study blueprints for IELTS, GRE, GMAT, NCLEX, and PLAB.",
-    url: "https://studyabroadvista.com/test-prep",
+    url: "https://abroadroute.com/test-prep",
     type: "website",
   },
 };

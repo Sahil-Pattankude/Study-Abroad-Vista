@@ -1,11 +1,15 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Reset Account Password | StudyAbroad Vista",
+  title: "Reset Account Password | Abroadroute",
   description:
-    "Reset your StudyAbroad Vista account password. Secure recovery link sent instantly to registered Indian student, consultant, or university partner email.",
+    "Reset your Abroadroute account password. Secure recovery link sent instantly to registered Indian student, consultant, or university partner email.",
 };
 
-export default function ForgotPasswordLayout({ children }: { children: React.ReactNode }) {
+export default function ForgotPasswordLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <>{children}</>;
 }

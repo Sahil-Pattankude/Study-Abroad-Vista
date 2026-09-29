@@ -23,6 +23,7 @@ import {
 } from "@/lib/supabase/dataFetchers";
 import { Country, University } from "@/types";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 import {
   getSavedShortlist,
   syncShortlistWithBackend,
@@ -278,31 +279,21 @@ export default function SignupPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 sm:px-8">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3.5 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 transition hover:opacity-95"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white shadow-xs">
-              <Compass className="h-4 w-4 text-[#EA5C2B]" />
-            </div>
-            <span className="text-lg font-black tracking-tight text-[#102C57]">
-              StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-            </span>
-          </Link>
+          <BrandLogo variant="wordmark" theme="light" size="md" />
           <div className="flex items-center gap-2 text-xs">
             <span className="text-slate-500 hidden sm:inline">
               Already have an account?
             </span>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-bold text-[#102C57] transition hover:bg-slate-50 hover:border-slate-300"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#1D5A6C]/20 bg-white px-3.5 py-1.5 font-bold text-[#1D5A6C] transition hover:bg-[#1D5A6C]/5"
             >
               Sign in
-              <ArrowRight className="h-3 w-3 text-[#EA5C2B]" />
+              <ArrowRight className="h-3 w-3 text-[#D89A3E]" />
             </Link>
           </div>
         </div>
@@ -667,8 +658,7 @@ export default function SignupPage() {
 
       {/* Page Footer */}
       <footer className="border-t border-slate-200/80 bg-white py-3 text-center text-[11px] text-slate-400">
-        © 2026 StudyAbroad Vista • Protected by 256-bit Encryption & Supabase
-        Auth
+        © 2026 Abroadroute • Protected by 256-bit Encryption & Supabase Auth
       </footer>
     </div>
   );

@@ -42,6 +42,7 @@ import {
 import { useAuth } from "@/lib/auth/AuthContext";
 import { formatCurrency } from "@/lib/utils";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 interface LeadItem {
   id: string;
@@ -563,22 +564,10 @@ export default function BuyerPortalPage() {
       <header className="border-b border-slate-200/90 bg-white sticky top-0 z-30 px-4 sm:px-8 py-3.5 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-2.5 hover:opacity-95 transition"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <div>
-                <span className="text-lg font-black tracking-tight text-[#102C57]">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                </span>
-                <span className="ml-2 rounded-md bg-indigo-50 border border-indigo-100 px-2 py-0.5 text-[10px] font-extrabold text-[#102C57]">
-                  B2B Consultant Portal
-                </span>
-              </div>
-            </Link>
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+              B2B Partner Portal
+            </span>
           </div>
 
           {/* User Profile & Wallet Quick Badge */}
@@ -1230,7 +1219,7 @@ export default function BuyerPortalPage() {
                   <ShieldCheck className="h-5 w-5 text-[#102C57] shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-sm text-[#102C57]">
-                      StudyAbroad Vista 100% Quality & Dispute SLA
+                      Abroadroute 100% Quality & Dispute SLA
                     </strong>
                     <p className="mt-1 text-slate-600">
                       File a dispute within 72 hours of lead receipt if a phone
@@ -1881,7 +1870,7 @@ export default function BuyerPortalPage() {
             <div className="flex items-start justify-between border-b border-slate-200 pb-4">
               <div>
                 <span className="text-base font-black text-[#102C57]">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
+                  Abroad<span className="text-[#D89A3E]">route</span>
                 </span>
                 <span className="block text-[10px] text-slate-500 mt-0.5">
                   Dnyanal Educon Private Limited • GSTIN: 27AABCD1234F1Z5
@@ -2001,8 +1990,8 @@ export default function BuyerPortalPage() {
       <footer className="border-t border-slate-200/80 bg-white py-6 text-center text-xs text-slate-500">
         <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>
-            © {new Date().getFullYear()} StudyAbroad Vista B2B Ecosystem. DPDP
-            Act & GST Compliant.
+            © {new Date().getFullYear()} Abroadroute B2B Ecosystem. DPDP Act &
+            GST Compliant.
           </span>
           <div className="flex items-center gap-4">
             <Link href="/terms-of-service" className="hover:underline">

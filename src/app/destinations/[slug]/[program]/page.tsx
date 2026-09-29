@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `/study-in-${country.slug}/${canonicalProgramSlug}`,
     },
     openGraph: {
-      title: `${prog.name} in ${country.name} (2026-2027) — Study Abroad Vista`,
+      title: `${prog.name} in ${country.name} (2026-2027) — Abroadroute`,
       description: fitMetaDescription(rawDescription),
       url: `/study-in-${country.slug}/${canonicalProgramSlug}`,
       type: "website",
@@ -142,8 +142,8 @@ export default async function CountryProgramPage({ params }: Props) {
     description: `Study ${prog.name} in ${country.name}. Check top universities, tuition fees in INR, entrance requirements, and post-study work visa rights for Indian applicants.`,
     provider: {
       "@type": "EducationalOrganization",
-      name: "StudyAbroad Vista",
-      url: "https://studyabroadvista.com",
+      name: "Abroadroute",
+      url: "https://abroadroute.com",
     },
     hasCourseInstance: {
       "@type": "CourseInstance",
@@ -160,19 +160,19 @@ export default async function CountryProgramPage({ params }: Props) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://studyabroadvista.com",
+        item: "https://abroadroute.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: `Study in ${country.name}`,
-        item: `https://studyabroadvista.com/study-in-${country.slug}`,
+        item: `https://abroadroute.com/study-in-${country.slug}`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: `${prog.name} in ${country.name}`,
-        item: `https://studyabroadvista.com/study-in-${country.slug}/${prog.slug}`,
+        item: `https://abroadroute.com/study-in-${country.slug}/${prog.slug}`,
       },
     ],
   };

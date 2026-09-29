@@ -6,8 +6,7 @@ import {
 } from "@/lib/supabase/dataFetchers";
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://studyabroadvista.com";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://abroadroute.com";
 
 const PHASE_1_L3_COMBINATIONS: {
   slug: string;

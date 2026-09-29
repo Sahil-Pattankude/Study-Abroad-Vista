@@ -18,6 +18,7 @@ import {
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
 import { syncShortlistWithBackend } from "@/lib/cookies/shortlist";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 function LoginForm() {
   const router = useRouter();
@@ -73,7 +74,11 @@ function LoginForm() {
       lower.includes("auckland.ac.nz")
     )
       return "university";
-    if (lower.includes("admin@studyabroadvista") || lower.includes("admin"))
+    if (
+      lower.includes("admin@abroadroute") ||
+      lower.includes("admin@studyabroadvista") ||
+      lower.includes("admin")
+    )
       return "admin";
     return activeRoleTab;
   };
@@ -203,24 +208,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 sm:px-8">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3.5 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <BrandLogo variant="wordmark" theme="light" size="md" />
           <Link
             href="/"
-            className="flex items-center gap-2.5 transition hover:opacity-95"
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white shadow-xs">
-              <Compass className="h-4 w-4 text-[#EA5C2B]" />
-            </div>
-            <span className="text-lg font-black tracking-tight text-[#102C57]">
-              StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-            </span>
-          </Link>
-          <Link
-            href="/"
-            className="text-xs font-semibold text-slate-500 hover:text-[#102C57]"
+            className="text-xs font-semibold text-slate-500 hover:text-[#1D5A6C] transition"
           >
             ← Back to Home
           </Link>
@@ -322,7 +317,7 @@ function LoginForm() {
                       : activeRoleTab === "buyer"
                         ? "consultant@agency.com"
                         : activeRoleTab === "admin"
-                          ? "admin@studyabroadvista.com"
+                          ? "admin@abroadroute.com"
                           : "name@example.com"
                   }
                   className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"

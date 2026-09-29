@@ -7,12 +7,12 @@ import { CourseCompareClient } from "@/components/tools/CourseCompareClient";
 
 export const metadata: Metadata = {
   title:
-    "Compare Courses & Degrees Side-by-Side (Syllabus, Fees, IELTS & ROI) | StudyAbroad Vista",
+    "Compare Courses & Degrees Side-by-Side (Syllabus, Fees, IELTS & ROI) | Abroadroute",
   description: fitMetaDescription(
     "Compare international degree programs and courses side-by-side. Evaluate syllabus modules, tuition fees in INR, IELTS cutoff scores, post-study work permit durations, and ROI ratings.",
   ),
   alternates: {
-    canonical: "https://studyabroadvista.com/compare/courses",
+    canonical: "https://abroadroute.com/compare/courses",
   },
 };
 

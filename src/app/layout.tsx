@@ -1,25 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Playfair_Display } from "next/font/google";
+import {
+  Fraunces,
+  Instrument_Serif,
+  Inter,
+  JetBrains_Mono,
+} from "next/font/google";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import { HomeModalProvider } from "@/components/home/HomeClientContext";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
   preload: true,
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
   preload: true,
 });
 
 export const viewport: Viewport = {
-  themeColor: "#102C57",
+  themeColor: "#1D5A6C",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -28,15 +48,15 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: {
     default:
-      "StudyAbroad Vista | Authoritative International Education Discovery Portal",
-    template: "%s | StudyAbroad Vista",
+      "Abroadroute | Authoritative International Education Discovery Portal",
+    template: "%s | Abroadroute",
   },
   description:
     "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/brand/logo-symbol-light.png",
+    shortcut: "/brand/logo-symbol-light.png",
+    apple: "/brand/logo-symbol-light.png",
   },
 };
 
@@ -48,9 +68,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${playfair.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${instrumentSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans bg-[#FDFCF7] text-[#103B47]">
         <AuthProvider>
           <HomeModalProvider>{children}</HomeModalProvider>
         </AuthProvider>

@@ -5,7 +5,7 @@ import { DeadlineTrackerClient } from "@/components/tools/DeadlineTrackerClient"
 
 export const metadata: Metadata = {
   title:
-    "Study Abroad Application Deadline Tracker (2027 Intakes) | StudyAbroad Vista",
+    "Study Abroad Application Deadline Tracker (2027 Intakes) | Abroadroute",
   description:
     "Track university application deadlines across UK, USA, Germany, Canada, and Australia. Set automated WhatsApp and Email reminders at 90, 60, 30, 15, 7, and 1 days before cutoff.",
   alternates: {

@@ -27,6 +27,7 @@ import {
   fetchLivePrograms,
   fetchLiveClaims,
 } from "@/lib/supabase/dataFetchers";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 import { EditUniversityModal } from "@/components/admin/EditUniversityModal";
 import { AdminOverviewTab } from "@/components/admin/AdminOverviewTab";
 import { AdminClaimsTab } from "@/components/admin/AdminClaimsTab";
@@ -181,15 +182,15 @@ function AdminPortalContent() {
             Authentication Required
           </h1>
           <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-            The StudyAbroad Vista Operations & Lead Distribution Engine is
-            restricted to authorized platform administrators only.
+            The Abroadroute Operations & Lead Distribution Engine is restricted
+            to authorized platform administrators only.
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
             <button
               onClick={() => {
                 login(
-                  "admin@studyabroadvista.com",
+                  "admin@abroadroute.com",
                   "admin",
                   "Super Admin (Operations Lead)",
                 );
@@ -249,7 +250,7 @@ function AdminPortalContent() {
             <button
               onClick={() => {
                 login(
-                  "admin@studyabroadvista.com",
+                  "admin@abroadroute.com",
                   "admin",
                   "Super Admin (Operations Lead)",
                 );
@@ -339,14 +340,7 @@ function AdminPortalContent() {
       <nav className="border-b border-slate-800 bg-slate-900 px-4 py-3.5 sm:px-6 lg:px-8 text-white sticky top-0 z-30 shadow-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-[#102C57]">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-extrabold text-white">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
+            <BrandLogo variant="wordmark" theme="dark" size="md" />
             <span className="hidden sm:inline-block rounded-md bg-red-900/60 px-2.5 py-1 text-[11px] font-bold text-red-300 border border-red-700/50">
               Admin Operations Center
             </span>

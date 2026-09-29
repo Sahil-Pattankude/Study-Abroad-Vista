@@ -16,67 +16,68 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Cancellation & Refund Policy | StudyAbroad Vista",
+  title: "Cancellation & Refund Policy | Abroadroute",
   description:
-    "Official cancellation and refund policy for StudyAbroad Vista. Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
+    "Official cancellation and refund policy for Abroadroute (a brand by Dnyanal Educon Pvt. Ltd.). Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
   openGraph: {
-    title: "Cancellation & Refund Policy | StudyAbroad Vista",
+    title: "Cancellation & Refund Policy | Abroadroute",
     description:
-      "Official cancellation and refund policy for StudyAbroad Vista. Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
-    url: "https://studyabroadvista.com/refund-policy",
+      "Official cancellation and refund policy for Abroadroute. Review transparent guidelines for B2B lead wallet recharges, disputes, and student services.",
+    url: "https://abroadroute.com/refund-policy",
     type: "website",
   },
 };
 
 export default function RefundPolicyPage() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
       <Header />
 
       <main className="flex-1 pb-20 pt-6 sm:pt-10">
         {/* Breadcrumb */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-6">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57] transition">
+            <Link href="/" className="hover:text-[#1D5A6C] transition">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-[#102C57] font-bold">Refund Policy</span>
+            <span className="text-[#1D5A6C] font-bold">Refund Policy</span>
           </div>
         </div>
 
         {/* Content Container */}
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 sm:p-12 shadow-xs space-y-8 text-slate-700 text-sm leading-relaxed">
+          <div className="rounded-3xl border border-[#D9CFB8]/60 bg-white p-8 sm:p-12 shadow-xs space-y-8 text-[#1A1A1A] text-sm leading-relaxed">
             {/* Header Title */}
-            <div className="border-b border-slate-100 pb-6">
-              <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 border border-orange-200/60 px-3 py-1 text-xs font-bold text-[#EA5C2B] uppercase tracking-wider mb-3">
+            <div className="border-b border-[#D9CFB8]/40 pb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-200/60 px-3 py-1 text-xs font-bold text-[#D89A3E] uppercase tracking-wider mb-3">
                 <RefreshCw className="h-3.5 w-3.5" />
                 <span>Transparent Financial Governance</span>
               </div>
-              <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#102C57]">
+              <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#1D5A6C]">
                 Cancellation & Refund Policy
               </h1>
-              <p className="mt-2 text-xs text-slate-400">
-                Effective Date: September 2026 | Last Updated: September 11,
-                2026 | Dnyanal Educon Pvt. Ltd.
+              <p className="mt-2 text-xs text-slate-500">
+                Effective Date: September 2026 | Last Updated: September 2026 |
+                Abroadroute · Dnyanal Educon Pvt. Ltd.
               </p>
             </div>
 
             {/* Section 1 */}
             <section className="space-y-3">
-              <h2 className="font-serif text-lg font-bold text-[#102C57] flex items-center gap-2">
-                <Scale className="h-5 w-5 text-[#EA5C2B]" />
+              <h2 className="font-display text-lg font-bold text-[#1D5A6C] flex items-center gap-2">
+                <Scale className="h-5 w-5 text-[#D89A3E]" />
                 <span>1. Overview & Operating Entity</span>
               </h2>
               <p>
-                StudyAbroad Vista (hereinafter referred to as{" "}
+                Abroadroute (hereinafter referred to as{" "}
                 <strong>&quot;Platform&quot;</strong>,{" "}
                 <strong>&quot;We&quot;</strong>, <strong>&quot;Us&quot;</strong>
                 , or <strong>&quot;Our&quot;</strong>) is an authoritative
-                international education discovery and admissions technology
-                platform operated by <strong>Dnyanal Educon Pvt. Ltd.</strong>,
-                incorporated under the laws of India.
+                international education discovery and admissions platform
+                operated by <strong>Dnyanal Educon Pvt. Ltd.</strong> (Founder
+                Director: Nikhita Pradeep Deshmukh), incorporated under the laws
+                of India.
               </p>
               <p>
                 This Policy governs all financial transactions, lead disputes,
@@ -112,7 +113,7 @@ export default function RefundPolicyPage() {
                   (IDP IELTS, ETS TOEFL/GRE, GMAC GMAT, Pearson VUE NCLEX/PTE)
                   are strictly governed by the refund policies of those
                   individual institutions and examination authorities.
-                  StudyAbroad Vista does not collect or hold foreign university
+                  Abroadroute does not collect or hold foreign university
                   tuition deposits.
                 </p>
               </div>
@@ -232,7 +233,7 @@ export default function RefundPolicyPage() {
               </p>
               <p className="text-xs text-slate-600">
                 Refunds issued to bank accounts will reflect with the original
-                descriptor <em>&quot;RAZORPAY*STUDYABROAD&quot;</em> or{" "}
+                descriptor <em>&quot;RAZORPAY*ABROADROUTE&quot;</em> or{" "}
                 <em>&quot;DNYANAL EDUCON&quot;</em> depending on your issuing
                 bank&apos;s settlement schedule.
               </p>
@@ -240,8 +241,8 @@ export default function RefundPolicyPage() {
 
             {/* Section 6 */}
             <section className="space-y-4 border-t border-slate-100 pt-6">
-              <h2 className="font-serif text-lg font-bold text-[#102C57] flex items-center gap-2">
-                <Mail className="h-5 w-5 text-[#EA5C2B]" />
+              <h2 className="font-display text-lg font-bold text-[#1D5A6C] flex items-center gap-2">
+                <Mail className="h-5 w-5 text-[#D89A3E]" />
                 <span>6. Grievance Officer & Dispute Resolution Desk</span>
               </h2>
               <p>
@@ -253,6 +254,10 @@ export default function RefundPolicyPage() {
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 space-y-2 text-xs">
                 <p>
                   <strong>Entity Name:</strong> Dnyanal Educon Pvt. Ltd.
+                  (Abroadroute)
+                </p>
+                <p>
+                  <strong>Founder Director:</strong> Nikhita Pradeep Deshmukh
                 </p>
                 <p>
                   <strong>Department:</strong> Financial Compliance & Dispute
@@ -261,10 +266,10 @@ export default function RefundPolicyPage() {
                 <p>
                   <strong>Grievance Email:</strong>{" "}
                   <a
-                    href="mailto:billing@studyabroadvista.com"
-                    className="text-[#EA5C2B] font-bold hover:underline"
+                    href="mailto:billing@abroadroute.com"
+                    className="text-[#1D5A6C] font-bold hover:underline"
                   >
-                    billing@studyabroadvista.com
+                    billing@abroadroute.com
                   </a>
                 </p>
                 <p>

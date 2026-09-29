@@ -32,7 +32,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title:
-    "StudyAbroad Vista | Study Abroad Admissions Engine for Indian Students",
+    "Abroadroute | Authoritative International Education Discovery Portal",
   description:
     "Compare 19 global destinations and 8 career disciplines for Indian students. Discover tuition in INR, post-study visas, and verified university rankings.",
 };
@@ -124,60 +124,59 @@ export default function Home() {
         <DeferredCostCalculator />
 
         {/* AI Counsellor Showcase (Per Document W10 & W11 DOCX Specifications) */}
-        <section className="cv-auto relative overflow-hidden bg-gradient-to-r from-[#102C57] via-[#1a3d73] to-[#091A36] py-20 text-white">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
+        <section className="cv-auto relative overflow-hidden bg-gradient-to-br from-[#103B47] via-[#103B47] to-[#0D2F39] border-y border-[#1D5A6C]/30 py-20 text-white">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#D89A3E_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
               <div className="lg:col-span-6">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/15 px-3.5 py-1 text-xs font-bold text-[#FDF6E2]">
-                  <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
-                  24/7 AI Smart Counsellor
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#7C6BAE]/40 bg-[#7C6BAE]/15 px-3.5 py-1 text-[11px] font-sans font-medium uppercase tracking-[0.28em] text-[#EBC783]">
+                  <span className="text-[#D89A3E] font-bold">✦</span>
+                  Route AI Counsellor
                 </div>
-                <h2 className="mt-4 font-serif text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
                   Ask anything. Get instant, personalized answers.
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                  Chat with our AI counsellor about universities, programs,
-                  costs, visas — anything on your mind.
+                <p className="mt-3 text-sm leading-relaxed text-slate-300 font-sans">
+                  24/7 admissions guidance, context-aware, zero sales bias. Trained on verified university data, official visa rules, and current fee structures.
                 </p>
 
-                <div className="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-slate-200">
+                <div className="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-slate-200 font-sans">
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-[#17B978]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#A8CDBD]" />
                     Real-time INR conversion
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-[#17B978]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#A8CDBD]" />
                     Post-study work rights
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-[#17B978]" />
+                    <CheckCircle2 className="h-4 w-4 text-[#A8CDBD]" />
                     Zero sales bias
                   </div>
                 </div>
 
                 <div className="mt-8 flex flex-wrap items-center gap-4">
-                  <AICounsellorTriggerButton className="inline-flex items-center gap-2 rounded-xl bg-[#EA5C2B] px-6 py-3.5 text-xs font-bold text-white shadow-xl transition hover:bg-[#ff7240] hover:scale-102">
-                    <Bot className="h-4 w-4" />
-                    Start Free AI Chat →
+                  <AICounsellorTriggerButton className="inline-flex items-center gap-2 rounded-full bg-[#D89A3E] px-6 py-3.5 text-xs font-bold text-[#103B47] shadow-xl transition hover:bg-[#EBC783] hover:scale-102">
+                    <span className="text-base font-bold">✦</span>
+                    Start Free Route AI Chat →
                   </AICounsellorTriggerButton>
-                  <span className="text-[11px] text-slate-400">
-                    Member access • 24/7 AI Counsellor ready
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    Member access • 24/7 Route AI ready
                   </span>
                 </div>
               </div>
 
               {/* Chat Interface Mockup */}
               <div className="lg:col-span-6">
-                <div className="rounded-3xl border border-white/20 bg-[#132c52] sm:bg-white/10 p-5 shadow-2xl sm:backdrop-blur-xl sm:p-7">
+                <div className="rounded-3xl border border-white/20 bg-[#0D2F39] sm:bg-[#0D2F39]/90 border border-white/15 p-5 shadow-2xl sm:p-7">
                   <div className="flex items-center justify-between border-b border-white/10 pb-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EA5C2B] text-white">
-                        <Bot className="h-5 w-5" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7C6BAE]/30 border border-[#7C6BAE]/40 text-[#D89A3E] font-bold text-base shadow-inner">
+                        ✦
                       </div>
                       <div>
                         <p className="text-xs font-bold text-white">
-                          Vista AI Admissions Assistant
+                          ✦ Route AI Admissions Assistant
                         </p>
                         <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>{" "}
@@ -185,23 +184,23 @@ export default function Home() {
                         </span>
                       </div>
                     </div>
-                    <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-slate-300 flex items-center gap-1">
-                      Vista AI Engine
+                    <span className="rounded-full bg-[#7C6BAE]/20 border border-[#7C6BAE]/30 px-2.5 py-1 text-[10px] font-semibold text-[#EBC783] flex items-center gap-1">
+                      ✦ Route AI Engine
                     </span>
                   </div>
 
                   <div className="mt-5 space-y-3.5 text-xs">
                     {/* User Question */}
                     <div className="flex justify-end">
-                      <div className="max-w-[85%] rounded-2xl rounded-tr-none bg-[#EA5C2B] px-4 py-2.5 text-white shadow-sm font-medium">
+                      <div className="max-w-[85%] rounded-2xl rounded-tr-none bg-[#1D5A6C] px-4 py-2.5 text-white shadow-sm font-medium">
                         What are the best UK universities for MSc Data Science?
                       </div>
                     </div>
 
                     {/* AI Answer */}
                     <div className="flex justify-start">
-                      <div className="max-w-[90%] rounded-2xl rounded-tl-none border border-white/15 bg-[#1e3c6a] sm:bg-white/15 px-4 py-3 text-slate-100 sm:backdrop-blur-md">
-                        <p className="font-semibold text-[#D4AF37]">
+                      <div className="max-w-[90%] rounded-2xl rounded-tl-none border border-white/15 bg-[#103B47]/90 px-4 py-3 text-slate-100">
+                        <p className="font-semibold text-[#D89A3E]">
                           Top UK Universities for MSc Data Science (2026-2027):
                         </p>
                         <ul className="mt-2 space-y-1 text-[11px] text-slate-300">
@@ -230,7 +229,7 @@ export default function Home() {
                       Ask sample question: &apos;What are the best UK
                       universities for MSc Data Science?&apos;
                     </span>
-                    <Sparkles className="h-4 w-4 text-[#D4AF37]" />
+                    <Sparkles className="h-4 w-4 text-[#D89A3E]" />
                   </AICounsellorTriggerButton>
                 </div>
               </div>
@@ -243,10 +242,10 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-[#102C57]/10 px-3 py-1 text-xs font-bold text-[#102C57]">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-[#103B47]/10 px-3 py-1 text-xs font-bold text-[#103B47]">
                   Student Utilities
                 </div>
-                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#102C57] sm:text-4xl">
+                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#103B47] sm:text-4xl">
                   Tools Built for Decisions
                 </h2>
                 <p className="mt-2 text-sm text-slate-600">
@@ -257,14 +256,14 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   href="/compare"
-                  className="rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition shadow-xs flex items-center gap-1"
+                  className="rounded-xl bg-[#103B47] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition shadow-xs flex items-center gap-1"
                 >
                   <span>Compare Universities Matrix</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                  <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
                 </Link>
                 <Link
                   href="/cost-calculator"
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#102C57] hover:bg-slate-100 transition shadow-xs"
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#103B47] hover:bg-slate-100 transition shadow-xs"
                 >
                   Cost Calculator →
                 </Link>
@@ -275,10 +274,10 @@ export default function Home() {
               {/* Tool 1 */}
               <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg transition group">
                 <div>
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50 text-[#EA5C2B]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50 text-[#D89A3E]">
                     <Banknote className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     Cost Calculator
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -289,7 +288,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/cost-calculator"
-                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition"
+                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition"
                 >
                   Open Cost Calculator →
                 </Link>
@@ -301,7 +300,7 @@ export default function Home() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                     <Scale className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     Compare Universities
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -312,7 +311,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/compare"
-                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left"
+                  className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition text-left"
                 >
                   Open University Comparator →
                 </Link>
@@ -324,7 +323,7 @@ export default function Home() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
                     <TrendingUp className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     EMBA / Masters ROI Calculator
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -333,7 +332,7 @@ export default function Home() {
                     Tier 1 countries.
                   </p>
                 </div>
-                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left">
+                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition text-left">
                   Model 5-Year ROI →
                 </LeadTriggerButton>
               </div>
@@ -344,7 +343,7 @@ export default function Home() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
                     <Award className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     Eligibility Checker
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -353,7 +352,7 @@ export default function Home() {
                     university brackets.
                   </p>
                 </div>
-                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left">
+                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition text-left">
                   Check Admission Readiness →
                 </LeadTriggerButton>
               </div>
@@ -364,7 +363,7 @@ export default function Home() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
                     <ShieldCheck className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     Loan Pre-Approval
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -373,7 +372,7 @@ export default function Home() {
                     Indian banking partners.
                   </p>
                 </div>
-                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left">
+                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition text-left">
                   Explore Education Loans →
                 </LeadTriggerButton>
               </div>
@@ -384,7 +383,7 @@ export default function Home() {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
                     <Calendar className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-base font-black text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                  <h3 className="mt-4 text-base font-black text-[#103B47] group-hover:text-[#D89A3E] transition">
                     Deadline Tracker
                   </h3>
                   <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -393,7 +392,7 @@ export default function Home() {
                     destinations.
                   </p>
                 </div>
-                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] group-hover:translate-x-0.5 transition text-left">
+                <LeadTriggerButton className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] group-hover:translate-x-0.5 transition text-left">
                   Track Application Deadlines →
                 </LeadTriggerButton>
               </div>
@@ -406,10 +405,10 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-[#102C57]/10 px-3 py-1 text-xs font-bold text-[#102C57]">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-[#103B47]/10 px-3 py-1 text-xs font-bold text-[#103B47]">
                   Admissions Intelligence
                 </div>
-                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#102C57] sm:text-4xl">
+                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#103B47] sm:text-4xl">
                   Latest Study Abroad Guides & Visa Updates
                 </h2>
                 <p className="mt-2 text-sm text-slate-600">
@@ -419,7 +418,7 @@ export default function Home() {
               </div>
               <Link
                 href="/articles"
-                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-[#102C57] hover:bg-slate-50 transition"
+                className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-[#103B47] hover:bg-slate-50 transition"
               >
                 View All Guides & Articles →
               </Link>
@@ -433,13 +432,13 @@ export default function Home() {
                 >
                   <div>
                     <div className="flex items-center justify-between text-[11px] text-slate-500">
-                      <span className="font-bold text-[#EA5C2B]">
+                      <span className="font-bold text-[#D89A3E]">
                         {article.tag}
                       </span>
                       <span>{article.readTime}</span>
                     </div>
                     <Link href={`/articles/${article.slug}`}>
-                      <h3 className="mt-3 text-sm font-bold leading-snug text-[#102C57] hover:text-[#EA5C2B] cursor-pointer">
+                      <h3 className="mt-3 text-sm font-bold leading-snug text-[#103B47] hover:text-[#D89A3E] cursor-pointer">
                         {article.title}
                       </h3>
                     </Link>
@@ -452,7 +451,7 @@ export default function Home() {
                     <span>{article.date}</span>
                     <Link
                       href={`/articles/${article.slug}`}
-                      className="font-bold text-[#102C57] hover:text-[#EA5C2B] flex items-center gap-1"
+                      className="font-bold text-[#103B47] hover:text-[#D89A3E] flex items-center gap-1"
                     >
                       Read Guide <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -466,13 +465,13 @@ export default function Home() {
         {/* Why Indian Families Choose Us */}
         <section className="cv-auto bg-slate-50 py-16 text-center border-t border-slate-200">
           <div className="mx-auto max-w-4xl px-4">
-            <h2 className="font-serif text-2xl font-black text-[#102C57] sm:text-3xl">
-              Why Indian Students & Families Choose StudyAbroad Vista
+            <h2 className="font-serif text-2xl font-black text-[#103B47] sm:text-3xl">
+              Why Indian Students & Families Choose Abroadroute
             </h2>
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3 text-left">
               <div className="rounded-2xl bg-white p-5 shadow-xs border border-slate-200">
                 <CheckCircle2 className="h-6 w-6 text-emerald-600 mb-2" />
-                <h3 className="font-bold text-xs text-[#102C57]">
+                <h3 className="font-bold text-xs text-[#103B47]">
                   Zero Hidden Charges
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-500">
@@ -482,8 +481,8 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl bg-white p-5 shadow-xs border border-slate-200">
-                <ShieldCheck className="h-6 w-6 text-[#102C57] mb-2" />
-                <h3 className="font-bold text-xs text-[#102C57]">
+                <ShieldCheck className="h-6 w-6 text-[#103B47] mb-2" />
+                <h3 className="font-bold text-xs text-[#103B47]">
                   NMC & Accreditation Safe
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-500">
@@ -493,8 +492,8 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl bg-white p-5 shadow-xs border border-slate-200">
-                <Sparkles className="h-6 w-6 text-[#EA5C2B] mb-2" />
-                <h3 className="font-bold text-xs text-[#102C57]">
+                <Sparkles className="h-6 w-6 text-[#D89A3E] mb-2" />
+                <h3 className="font-bold text-xs text-[#103B47]">
                   24/7 AI Smart Advisor
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-500">
@@ -509,9 +508,9 @@ export default function Home() {
         {/* Student Story Testimonial (Per HTML Template: Dark Navy with Gold eyebrow) */}
         <section className="cv-auto bg-white py-16">
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-3xl bg-gradient-to-r from-[#102C57] via-[#123b5d] to-[#091A36] p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
-              <div className="pointer-events-none absolute right-0 top-0 -mt-10 -mr-10 h-60 w-60 rounded-full bg-[#EA5C2B]/10 blur-2xl" />
-              <span className="text-xs font-extrabold uppercase tracking-widest text-[#D4AF37]">
+            <div className="rounded-3xl bg-[#103B47] border border-[#1D5A6C]/40 p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+              <div className="pointer-events-none absolute right-0 top-0 -mt-10 -mr-10 h-60 w-60 rounded-full bg-[#D89A3E]/10 blur-2xl" />
+              <span className="text-xs font-extrabold uppercase tracking-widest text-[#D89A3E]">
                 Student Story · Authenticated Guidance
               </span>
               <p className="mt-4 font-serif text-xl sm:text-2xl leading-relaxed text-slate-100">
@@ -520,7 +519,7 @@ export default function Home() {
                 to speaking with a counsellor.”
               </p>
               <div className="mt-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EA5C2B] text-xs font-bold text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#D89A3E] text-xs font-bold text-[#103B47]">
                   RV
                 </div>
                 <div>

@@ -33,6 +33,7 @@ import { University, Country, Program } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 const ANCHOR_SLUGS = ["usa", "uk", "canada", "australia", "germany", "ireland"];
 
@@ -160,23 +161,16 @@ export function Header({
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-40 w-full border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all"
+      className="sticky top-0 z-40 w-full border-b border-[#D9CFB8]/60 bg-[#FDFCF7]/95 backdrop-blur-md transition-all"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 gap-4">
+      <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#0d2346] text-white shadow-sm group-hover:shadow transition shrink-0">
-            <Compass className="h-5 w-5 text-[#EA5C2B]" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-lg font-black tracking-tight text-[#102C57] leading-none whitespace-nowrap">
-              StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-            </span>
-            <span className="hidden text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:block mt-0.5 whitespace-nowrap">
-              Authoritative Portal
-            </span>
-          </div>
-        </Link>
+        <BrandLogo
+          variant="wordmark"
+          theme="light"
+          size="md"
+          showTagline={false}
+        />
 
         {/* Desktop Global Navigation - Clean & Refined */}
         <nav className="hidden items-center gap-5 xl:gap-7 lg:flex shrink-0 whitespace-nowrap">
@@ -190,21 +184,21 @@ export function Header({
               onClick={() => setDestinationsOpen((prev) => !prev)}
               aria-label="Open destinations menu"
               aria-expanded={destinationsOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
             >
               <span>Destinations</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 (19)
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 transition duration-150" />
+              <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#1D5A6C] transition duration-150" />
             </button>
 
             {destinationsOpen && (
               <div className="absolute -left-20 top-full pt-2">
-                <div className="w-[620px] rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+                <div className="w-[620px] rounded-2xl border border-[#D9CFB8]/60 bg-white p-6 shadow-2xl">
                   <div className="grid grid-cols-3 gap-6">
                     <div>
-                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
+                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#103B47]">
                         Tier 1
                       </p>
                       <ul className="space-y-1.5 text-xs">
@@ -212,7 +206,7 @@ export function Header({
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
-                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#D89A3E]"
                             >
                               <CountryFlag
                                 code={c.code}
@@ -227,7 +221,7 @@ export function Header({
                     </div>
 
                     <div>
-                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
+                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#103B47]">
                         Tier 2
                       </p>
                       <ul className="space-y-1.5 text-xs">
@@ -235,7 +229,7 @@ export function Header({
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
-                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#D89A3E]"
                             >
                               <CountryFlag
                                 code={c.code}
@@ -250,7 +244,7 @@ export function Header({
                     </div>
 
                     <div>
-                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#102C57]">
+                      <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[#103B47]">
                         Tier 3
                       </p>
                       <ul className="space-y-1.5 text-xs">
@@ -258,7 +252,7 @@ export function Header({
                           <li key={c.id}>
                             <Link
                               href={`/study-in-${c.slug}`}
-                              className="flex items-center gap-2 text-slate-600 hover:text-[#EA5C2B]"
+                              className="flex items-center gap-2 text-slate-600 hover:text-[#D89A3E]"
                             >
                               <CountryFlag
                                 code={c.code}
@@ -287,20 +281,20 @@ export function Header({
               onClick={() => setProgramsOpen((prev) => !prev)}
               aria-label="Open programs menu"
               aria-expanded={programsOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
             >
               <span>Programs</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 (8)
               </span>
               <ChevronDown
-                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${programsOpen ? "rotate-180 text-slate-700" : ""}`}
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${programsOpen ? "rotate-180 text-[#1D5A6C]" : ""}`}
               />
             </button>
 
             {programsOpen && (
               <div className="absolute left-0 top-full pt-2">
-                <div className="w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
+                <div className="w-72 rounded-2xl border border-[#D9CFB8]/60 bg-white p-4 shadow-2xl">
                   <ul className="space-y-1.5">
                     {programsList.map((p) => (
                       <li key={p.id}>
@@ -308,7 +302,7 @@ export function Header({
                           href={`/programs/${p.slug}`}
                           className="block rounded-xl p-2 hover:bg-slate-50 transition"
                         >
-                          <p className="text-xs font-bold text-[#102C57]">
+                          <p className="text-xs font-bold text-[#103B47] hover:text-[#D89A3E]">
                             {p.name}
                           </p>
                           <p className="text-[11px] text-slate-500">
@@ -334,22 +328,22 @@ export function Header({
               onClick={() => setUniversitiesOpen((prev) => !prev)}
               aria-label="Open universities menu"
               aria-expanded={universitiesOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
             >
               <span>Universities</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 ({universitiesList.length || 18})
               </span>
               <ChevronDown
-                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${universitiesOpen ? "rotate-180 text-slate-700" : ""}`}
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${universitiesOpen ? "rotate-180 text-[#1D5A6C]" : ""}`}
               />
             </button>
 
             {universitiesOpen && (
               <div className="absolute -left-10 top-full pt-2">
-                <div className="w-80 rounded-2xl border border-slate-100 bg-white p-4 shadow-2xl ring-1 ring-slate-900/5">
+                <div className="w-80 rounded-2xl border border-[#D9CFB8]/60 bg-white p-4 shadow-2xl ring-1 ring-slate-900/5">
                   <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#103B47]">
                       Featured Institutions
                     </span>
                     <span className="text-[10px] font-medium text-slate-400">
@@ -363,7 +357,7 @@ export function Header({
                           href={`/universities/${u.slug}`}
                           className="block rounded-xl p-2 hover:bg-slate-50 transition group/uni"
                         >
-                          <p className="text-xs font-bold text-[#102C57] group-hover/uni:text-[#EA5C2B] transition">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/uni:text-[#D89A3E] transition">
                             {u.name}
                           </p>
                           <p className="text-[11px] text-slate-400 mt-0.5">
@@ -388,31 +382,31 @@ export function Header({
               onClick={() => setTestPrepOpen((prev) => !prev)}
               aria-label="Open test prep menu"
               aria-expanded={testPrepOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
             >
               <span>Test Prep</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 (9)
               </span>
               <ChevronDown
-                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${testPrepOpen ? "rotate-180 text-slate-700" : ""}`}
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${testPrepOpen ? "rotate-180 text-[#1D5A6C]" : ""}`}
               />
             </button>
 
             {testPrepOpen && (
               <div className="absolute -left-20 top-full pt-2">
-                <div className="w-[520px] rounded-2xl border border-slate-100 bg-white p-5 shadow-2xl ring-1 ring-slate-900/5">
+                <div className="w-[520px] rounded-2xl border border-[#D9CFB8]/60 bg-white p-5 shadow-2xl ring-1 ring-slate-900/5">
                   <div className="grid grid-cols-3 gap-4">
                     {/* English */}
                     <div>
-                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-blue-700">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#1D5A6C]">
                         English (4)
                       </p>
                       <ul className="space-y-1 text-xs">
                         <li>
                           <Link
                             href="/test-prep/ielts"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             IELTS Academic
                           </Link>
@@ -420,7 +414,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/toefl"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             TOEFL iBT
                           </Link>
@@ -428,7 +422,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/pte"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             PTE Academic
                           </Link>
@@ -436,7 +430,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/duolingo"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             Duolingo DET
                           </Link>
@@ -446,14 +440,14 @@ export function Header({
 
                     {/* Graduate */}
                     <div>
-                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#D89A3E]">
                         Graduate & MBA (2)
                       </p>
                       <ul className="space-y-1 text-xs">
                         <li>
                           <Link
                             href="/test-prep/gre"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             GRE General
                           </Link>
@@ -461,7 +455,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/gmat"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             GMAT Focus
                           </Link>
@@ -478,7 +472,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/nclex"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             NCLEX-RN
                           </Link>
@@ -486,7 +480,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/plab"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             PLAB / UKMLA
                           </Link>
@@ -494,7 +488,7 @@ export function Header({
                         <li>
                           <Link
                             href="/test-prep/oet"
-                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#EA5C2B]"
+                            className="block rounded-lg p-1.5 hover:bg-slate-50 font-medium text-slate-700 hover:text-[#D89A3E]"
                           >
                             OET Healthcare
                           </Link>
@@ -509,7 +503,7 @@ export function Header({
                     </span>
                     <Link
                       href="/test-prep"
-                      className="font-bold text-[#EA5C2B] hover:underline flex items-center gap-1"
+                      className="font-bold text-[#D89A3E] hover:underline flex items-center gap-1"
                     >
                       <span>Explore Test Prep Hub →</span>
                     </Link>
@@ -529,22 +523,22 @@ export function Header({
               onClick={() => setToolsOpen((prev) => !prev)}
               aria-label="Open tools menu"
               aria-expanded={toolsOpen}
-              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+              className="group flex items-center gap-1 py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
             >
               <span>Tools</span>
               <span className="text-[10px] text-slate-400 font-normal">
                 (8)
               </span>
               <ChevronDown
-                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? "rotate-180 text-slate-700" : ""}`}
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-150 ${toolsOpen ? "rotate-180 text-[#1D5A6C]" : ""}`}
               />
             </button>
 
             {toolsOpen && (
               <div className="absolute -left-8 top-full pt-2">
-                <div className="w-[480px] rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
-                  <div className="border-b border-slate-100 bg-slate-50/70 p-3 rounded-xl mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="w-[480px] rounded-2xl border border-[#D9CFB8]/60 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
+                  <div className="border-b border-slate-100 bg-[#FDFCF7] p-3 rounded-xl mb-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#103B47]">
                       Discovery & Decision Engines (8 Tools)
                     </span>
                   </div>
@@ -554,11 +548,11 @@ export function Header({
                         href="/cost-calculator"
                         className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B] shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-[#D89A3E] shrink-0">
                           <Calculator className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-[#EA5C2B]">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-[#D89A3E]">
                             Cost Calculator
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -572,11 +566,11 @@ export function Header({
                         href="/compare/universities"
                         className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-blue-700 shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-50 text-[#1D5A6C] shrink-0">
                           <Building2 className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-blue-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-[#1D5A6C]">
                             Compare Universities
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -590,11 +584,11 @@ export function Header({
                         href="/compare/courses"
                         className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-50 text-purple-700 shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-50 text-[#7C6BAE] shrink-0">
                           <GraduationCap className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-purple-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-[#7C6BAE]">
                             Compare Courses
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -612,7 +606,7 @@ export function Header({
                           <TrendingUp className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-emerald-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-emerald-700">
                             EMBA ROI Calculator
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -630,7 +624,7 @@ export function Header({
                           <Clock className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-indigo-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-indigo-700">
                             Deadline Tracker
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -644,11 +638,11 @@ export function Header({
                         href="/scholarships"
                         className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-[#D89A3E] shrink-0">
                           <Award className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-amber-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-[#D89A3E]">
                             Scholarship Finder
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -662,11 +656,11 @@ export function Header({
                         href="/eligibility-checker"
                         className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/tool"
                       >
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-50 text-teal-700 shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-50 text-[#1D5A6C] shrink-0">
                           <ShieldCheck className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-teal-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-[#1D5A6C]">
                             Eligibility Checker
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -684,7 +678,7 @@ export function Header({
                           <Banknote className="h-3.5 w-3.5" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-[#102C57] group-hover/tool:text-rose-700">
+                          <p className="text-xs font-bold text-[#103B47] group-hover/tool:text-rose-700">
                             Loan EMI Calculator
                           </p>
                           <p className="text-[10px] text-slate-400">
@@ -702,7 +696,7 @@ export function Header({
           {/* 6. Blog & Guides */}
           <Link
             href="/blog"
-            className="py-1.5 text-[13px] font-semibold text-slate-600 hover:text-[#102C57] transition whitespace-nowrap"
+            className="py-1.5 text-[13px] font-semibold text-[#103B47] hover:text-[#1D5A6C] transition whitespace-nowrap"
           >
             Blog & Guides
           </Link>
@@ -714,11 +708,11 @@ export function Header({
           <button
             onClick={handleSearch}
             aria-label="Search"
-            className="flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50/90 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 transition cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1.5 rounded-full border border-[#D9CFB8] bg-[#FDFCF7] px-3.5 py-1.5 text-xs text-slate-600 hover:border-[#1D5A6C] hover:text-[#103B47] transition cursor-pointer shrink-0 shadow-2xs"
             title="Search universities, courses, programs"
           >
-            <Search className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-            <span className="hidden sm:inline font-medium text-slate-600 text-xs">
+            <Search className="h-3.5 w-3.5 text-[#1D5A6C] shrink-0" />
+            <span className="hidden sm:inline font-medium text-slate-700 text-xs">
               Search
             </span>
           </button>
@@ -736,14 +730,14 @@ export function Header({
                         ? "/admin"
                         : "/dashboard/student"
                 }
-                className="flex items-center gap-2 rounded-full border border-slate-200/90 bg-slate-50/90 px-3.5 py-1.5 text-xs font-bold text-[#102C57] hover:bg-slate-100 hover:border-slate-300 transition shrink-0 shadow-2xs"
+                className="flex items-center gap-2 rounded-full border border-[#D9CFB8] bg-white px-3.5 py-1.5 text-xs font-bold text-[#103B47] hover:bg-slate-50 transition shrink-0 shadow-2xs"
                 title={`Logged in as ${user?.name || user?.email}`}
               >
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-100 text-[#EA5C2B] font-extrabold text-[11px] shrink-0">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#1D5A6C]/10 text-[#1D5A6C] font-extrabold text-[11px] shrink-0">
                   {user?.name ? (
                     user.name.trim().charAt(0).toUpperCase()
                   ) : (
-                    <User className="h-3 w-3 text-[#EA5C2B]" />
+                    <User className="h-3 w-3 text-[#1D5A6C]" />
                   )}
                 </div>
                 <span className="font-bold whitespace-nowrap max-w-[150px] truncate">
@@ -774,7 +768,7 @@ export function Header({
                 onClick={() => setAuthOpen((prev) => !prev)}
                 aria-label="Open portals and login menu"
                 aria-expanded={authOpen}
-                className="flex items-center gap-1.5 rounded-full bg-[#EA5C2B] px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#ff7240] hover:shadow active:scale-98"
+                className="flex items-center gap-1.5 rounded-full bg-[#1D5A6C] px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-[#103B47] active:scale-98"
               >
                 <User className="h-3.5 w-3.5 text-white" />
                 <span>Portals & Login</span>
@@ -785,14 +779,14 @@ export function Header({
 
               {authOpen && (
                 <div className="absolute right-0 top-full pt-2">
-                  <div className="w-80 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
+                  <div className="w-80 rounded-2xl border border-[#D9CFB8]/60 bg-white p-3 shadow-2xl ring-1 ring-slate-900/5">
                     <div className="mb-2 px-2 pb-2 border-b border-slate-100 flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#102C57]">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#103B47]">
                         Portals & Sign In
                       </span>
                       <Link
                         href="/signup"
-                        className="text-[10px] font-bold text-[#EA5C2B] hover:underline"
+                        className="text-[10px] font-bold text-[#D89A3E] hover:underline"
                       >
                         Register Free →
                       </Link>
@@ -804,15 +798,15 @@ export function Header({
                         href="/login"
                         className="flex items-start gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/item"
                       >
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B] mt-0.5">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-[#D89A3E] mt-0.5">
                           <User className="h-4 w-4" />
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-[#EA5C2B]">
+                            <span className="text-xs font-bold text-[#103B47] group-hover/item:text-[#D89A3E]">
                               Student Dashboard
                             </span>
-                            <span className="rounded bg-orange-100 px-1 py-0.2 text-[9px] font-bold text-[#EA5C2B]">
+                            <span className="rounded bg-amber-100 px-1 py-0.2 text-[9px] font-bold text-[#103B47]">
                               Aspirants
                             </span>
                           </div>
@@ -827,15 +821,15 @@ export function Header({
                         href="/portal/buyer"
                         className="flex items-start gap-2.5 rounded-xl p-2 hover:bg-slate-50 transition group/item"
                       >
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700 mt-0.5">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#1D5A6C] mt-0.5">
                           <Briefcase className="h-4 w-4" />
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-blue-700">
+                            <span className="text-xs font-bold text-[#103B47] group-hover/item:text-[#1D5A6C]">
                               B2B Consultant Portal
                             </span>
-                            <span className="rounded bg-blue-100 px-1 py-0.2 text-[9px] font-bold text-blue-700">
+                            <span className="rounded bg-teal-100 px-1 py-0.2 text-[9px] font-bold text-[#103B47]">
                               Consultants
                             </span>
                           </div>
@@ -855,7 +849,7 @@ export function Header({
                         </div>
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#102C57] group-hover/item:text-emerald-700">
+                            <span className="text-xs font-bold text-[#103B47] group-hover/item:text-emerald-700">
                               University Portal
                             </span>
                             <span className="rounded bg-emerald-100 px-1 py-0.2 text-[9px] font-bold text-emerald-700">
@@ -872,13 +866,13 @@ export function Header({
                     <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-xs px-2">
                       <Link
                         href="/login"
-                        className="font-bold text-[#102C57] hover:underline"
+                        className="font-bold text-[#103B47] hover:underline"
                       >
                         Standard Sign In →
                       </Link>
                       <Link
                         href="/signup"
-                        className="font-bold text-[#EA5C2B] hover:underline"
+                        className="font-bold text-[#D89A3E] hover:underline"
                       >
                         Create Account
                       </Link>
@@ -908,27 +902,18 @@ export function Header({
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden overflow-y-auto animate-in fade-in slide-in-from-right duration-200">
           {/* Mobile Drawer Top Header */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-3.5 backdrop-blur-md">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2.5"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-sm">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                  Global Admissions Engine
-                </span>
-              </div>
-            </Link>
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#D9CFB8]/60 bg-[#FDFCF7]/95 px-4 py-3 backdrop-blur-md">
+            <div onClick={() => setMobileMenuOpen(false)}>
+              <BrandLogo
+                variant="wordmark"
+                theme="light"
+                size="sm"
+                showTagline={false}
+              />
+            </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#D9CFB8] bg-white text-[#103B47] hover:bg-[#F4EFE6]"
               aria-label="Close Mobile Navigation Drawer"
             >
               <X className="h-5 w-5" />
@@ -936,17 +921,17 @@ export function Header({
           </div>
 
           {/* Mobile Drawer Main Scroll Area */}
-          <div className="flex-1 p-4 space-y-6 pb-24">
+          <div className="flex-1 p-4 space-y-6 pb-24 bg-[#FDFCF7]">
             {/* Search Trigger */}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 handleSearch();
               }}
-              className="w-full flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-500 shadow-2xs hover:bg-white hover:border-slate-300 transition"
+              className="w-full flex items-center gap-2.5 rounded-xl border border-[#D9CFB8] bg-white px-3.5 py-2.5 text-xs text-[#5C6E67] shadow-2xs hover:border-[#1D5A6C] transition"
             >
-              <Search className="h-4 w-4 text-slate-400" />
-              <span className="font-medium text-slate-600">
+              <Search className="h-4 w-4 text-[#8C9B90]" />
+              <span className="font-medium text-[#103B47]">
                 Search universities, courses, programs...
               </span>
             </button>
@@ -957,43 +942,43 @@ export function Header({
                 setMobileMenuOpen(false);
                 handleAI();
               }}
-              className="w-full text-left rounded-2xl bg-gradient-to-r from-[#102C57] to-[#1e457e] p-4 text-white shadow-md relative overflow-hidden group"
+              className="w-full text-left rounded-2xl bg-gradient-to-r from-[#103B47] to-[#1D5A6C] p-4 text-white shadow-md relative overflow-hidden group border border-[#103B47]"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#EA5C2B] backdrop-blur-sm border border-white/10">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#D89A3E] backdrop-blur-sm border border-white/10">
                     <Bot className="h-5 w-5" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-extrabold text-white">
+                      <span className="text-sm font-bold text-white font-serif">
                         AI Admissions Counsellor
                       </span>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[9px] font-extrabold text-emerald-300 border border-emerald-500/30">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#D89A3E]/20 px-2 py-0.5 text-[9px] font-bold text-[#E5B56E] border border-[#D89A3E]/30">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#D89A3E] animate-pulse" />
                         24/7 Live
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 mt-0.5">
+                    <p className="text-[11px] text-[#A8CDBD] mt-0.5">
                       Instant eligibility, fee calculation & university
                       shortlists
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="h-5 w-5 text-white/70 group-hover:translate-x-1 transition-transform" />
               </div>
             </button>
 
             {/* 2. Anchor Destinations & 19 Countries */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#103B47]">
                   Primary Destinations (19 Countries)
                 </h3>
                 <Link
                   href="/#destinations-grid"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-[11px] font-bold text-[#EA5C2B] hover:underline"
+                  className="text-[11px] font-bold text-[#1D5A6C] hover:underline"
                 >
                   View All →
                 </Link>
@@ -1006,14 +991,14 @@ export function Header({
                     key={c.id}
                     href={`/study-in-${c.slug}`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-slate-50/70 p-2.5 hover:bg-white hover:border-slate-300 transition"
+                    className="flex items-center gap-2.5 rounded-xl border border-[#D9CFB8]/70 bg-white p-2.5 hover:border-[#1D5A6C] transition shadow-2xs"
                   >
                     <CountryFlag code={c.code} name={c.name} size="sm" />
                     <div className="overflow-hidden">
-                      <p className="text-xs font-bold text-slate-900 truncate">
+                      <p className="text-xs font-bold text-[#103B47] truncate">
                         {c.name}
                       </p>
-                      <p className="text-[10px] text-slate-500 truncate">
+                      <p className="text-[10px] text-[#5C6E67] truncate">
                         {c.avgTuitionINR}
                       </p>
                     </div>
@@ -1031,7 +1016,7 @@ export function Header({
                       key={c.id}
                       href={`/study-in-${c.slug}`}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#D9CFB8] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#103B47] hover:border-[#1D5A6C]"
                     >
                       <CountryFlag code={c.code} name={c.name} size="sm" />
                       <span>{c.name}</span>
@@ -1041,8 +1026,8 @@ export function Header({
             </div>
 
             {/* 3. Study Programs & Disciplines */}
-            <div className="space-y-2.5 pt-2 border-t border-slate-100">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+            <div className="space-y-2.5 pt-2 border-t border-[#D9CFB8]/60">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#103B47]">
                 Study Streams (8 Disciplines)
               </h3>
               <div className="grid grid-cols-2 gap-2 text-xs">
@@ -1051,10 +1036,10 @@ export function Header({
                     key={p.id}
                     href={`/programs/${p.slug}`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 hover:bg-slate-100 transition"
+                    className="flex items-center gap-2 rounded-xl border border-[#D9CFB8]/50 bg-white p-2.5 hover:border-[#1D5A6C] hover:bg-[#F4EFE6]/50 transition"
                   >
-                    <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
-                    <span className="font-semibold text-slate-800 truncate">
+                    <GraduationCap className="h-4 w-4 text-[#1D5A6C] shrink-0" />
+                    <span className="font-semibold text-[#103B47] truncate">
                       {p.name}
                     </span>
                   </Link>
@@ -1063,24 +1048,24 @@ export function Header({
             </div>
 
             {/* 4. Interactive Student Tools */}
-            <div className="space-y-2.5 pt-2 border-t border-slate-100">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+            <div className="space-y-2.5 pt-2 border-t border-[#D9CFB8]/60">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#103B47]">
                 Discovery Tools & Matrices
               </h3>
               <div className="grid grid-cols-1 gap-2 text-xs">
                 <Link
                   href="/cost-calculator"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-[#EA5C2B]">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D89A3E]/15 text-[#D89A3E]">
                     <Calculator className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       INR Tuition & Living Calculator
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       Living costs, rent & tuition converted to INR
                     </p>
                   </div>
@@ -1089,16 +1074,16 @@ export function Header({
                 <Link
                   href="/compare/universities"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1D5A6C]/15 text-[#1D5A6C]">
                     <Building2 className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       University Compare Matrix
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       Side-by-side comparison for up to 5 universities
                     </p>
                   </div>
@@ -1107,16 +1092,16 @@ export function Header({
                 <Link
                   href="/compare/courses"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C6BAE]/15 text-[#7C6BAE]">
                     <GraduationCap className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       Course & Degree Compare Matrix
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       Fees, IELTS cutoffs & work permit rights
                     </p>
                   </div>
@@ -1125,16 +1110,16 @@ export function Header({
                 <Link
                   href="/roi-calculator"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
                     <TrendingUp className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       EMBA ROI Calculator
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       Break-even payback & 10-year cumulative gain
                     </p>
                   </div>
@@ -1143,16 +1128,16 @@ export function Header({
                 <Link
                   href="/deadline-tracker"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
                     <Clock className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       Intake Deadline Tracker
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       90, 60, 30-day countdowns & reminders
                     </p>
                   </div>
@@ -1161,16 +1146,16 @@ export function Header({
                 <Link
                   href="/scholarships"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D89A3E]/15 text-[#D89A3E]">
                     <Award className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       Scholarship Finder
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       DAAD, Chevening, Fulbright & STEM grants
                     </p>
                   </div>
@@ -1179,16 +1164,16 @@ export function Header({
                 <Link
                   href="/eligibility-checker"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1D5A6C]/15 text-[#1D5A6C]">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       Admission Eligibility Checker
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       Safe, Target & Reach acceptance probability
                     </p>
                   </div>
@@ -1197,16 +1182,16 @@ export function Header({
                 <Link
                   href="/loan-calculator"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200/80 bg-white p-3 shadow-2xs hover:bg-slate-50 transition"
+                  className="flex items-center gap-3 rounded-xl border border-[#D9CFB8]/70 bg-white p-3 shadow-2xs hover:border-[#1D5A6C] transition"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#B8593E]/15 text-[#B8593E]">
                     <Banknote className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#102C57]">
+                    <p className="font-bold text-[#103B47]">
                       Education Loan & EMI Calculator
                     </p>
-                    <p className="text-[10px] text-slate-500">
+                    <p className="text-[10px] text-[#5C6E67]">
                       SBI, HDFC Credila & Prodigy Finance rates
                     </p>
                   </div>
@@ -1215,19 +1200,19 @@ export function Header({
             </div>
 
             {/* 5. 4 Ecosystem Portals & User Auth */}
-            <div className="space-y-2.5 pt-2 border-t border-slate-100">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57]">
+            <div className="space-y-2.5 pt-2 border-t border-[#D9CFB8]/60">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#103B47]">
                 Portals & User Access
               </h3>
               {isLoggedIn ? (
-                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900 text-white">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#103B47] text-white">
                   <div className="flex items-center gap-2.5">
-                    <User className="h-4 w-4 text-[#EA5C2B]" />
+                    <User className="h-4 w-4 text-[#D89A3E]" />
                     <div>
                       <p className="text-xs font-bold text-white">
                         {user?.name || user?.email}
                       </p>
-                      <p className="text-[10px] text-slate-400 capitalize">
+                      <p className="text-[10px] text-[#A8CDBD] capitalize">
                         Role: {user?.role}
                       </p>
                     </div>
@@ -1237,7 +1222,7 @@ export function Header({
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-xs font-bold text-rose-400 hover:underline"
+                    className="text-xs font-bold text-rose-300 hover:underline"
                   >
                     Sign Out
                   </button>
@@ -1247,48 +1232,48 @@ export function Header({
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-[#D9CFB8] bg-white hover:border-[#1D5A6C]"
                   >
-                    <span className="font-bold text-[#102C57]">
+                    <span className="font-bold text-[#103B47]">
                       Student Login
                     </span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-[#5C6E67]">
                       Dashboard & AI history
                     </span>
                   </Link>
                   <Link
                     href="/portal/buyer"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-[#D9CFB8] bg-white hover:border-[#1D5A6C]"
                   >
-                    <span className="font-bold text-blue-700">
+                    <span className="font-bold text-[#1D5A6C]">
                       B2B Consultant
                     </span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-[#5C6E67]">
                       Lead marketplace feed
                     </span>
                   </Link>
                   <Link
                     href="/portal/university"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl border border-[#D9CFB8] bg-white hover:border-[#1D5A6C]"
                   >
-                    <span className="font-bold text-emerald-700">
+                    <span className="font-bold text-[#103B47]">
                       University Portal
                     </span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-[#5C6E67]">
                       Institution profiles
                     </span>
                   </Link>
                   <Link
                     href="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-start gap-1 p-3 rounded-xl bg-slate-900 text-white"
+                    className="flex flex-col items-start gap-1 p-3 rounded-xl bg-[#103B47] text-white hover:bg-[#1D5A6C]"
                   >
-                    <span className="font-bold text-[#EA5C2B]">
+                    <span className="font-bold text-[#D89A3E]">
                       Create Account
                     </span>
-                    <span className="text-[10px] text-slate-300">
+                    <span className="text-[10px] text-[#A8CDBD]">
                       Free student registration
                     </span>
                   </Link>
@@ -1298,13 +1283,13 @@ export function Header({
           </div>
 
           {/* Mobile Drawer Bottom Fixed CTA */}
-          <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-slate-200 bg-white p-4 shadow-lg">
+          <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-[#D9CFB8]/80 bg-white p-4 shadow-lg">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 handleLead();
               }}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 text-sm font-bold text-white shadow-md active:scale-98 transition"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#1D5A6C] py-3 text-sm font-bold text-white shadow-md active:scale-98 hover:bg-[#103B47] transition"
             >
               <span>Book Free Consultation Call</span>
               <ArrowRight className="h-4 w-4" />

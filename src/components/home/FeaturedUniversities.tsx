@@ -43,59 +43,63 @@ async function UniversityCards() {
           (uni.rankingGlobal <= 25
             ? "Platinum Partner"
             : uni.rankingGlobal <= 100
-            ? "Gold Partner"
-            : "Silver Partner");
+              ? "Gold Partner"
+              : "Silver Partner");
         const badgeClass =
           badgeText === "Platinum Partner"
-            ? "bg-[#D4AF37]/15 text-[#997915] border border-[#D4AF37]/40"
+            ? "tier-badge platinum"
             : badgeText === "Gold Partner"
-            ? "bg-amber-100 text-amber-800 border border-amber-300"
-            : "bg-slate-100 text-slate-700 border border-slate-200";
+              ? "tier-badge gold"
+              : "tier-badge silver";
 
         return (
           <div
             key={`${uni.id}-${idx}`}
-            className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 transition hover:bg-white hover:shadow-lg"
+            className="rounded-2xl border border-[#D9CFB8]/60 bg-white p-6 transition hover:border-[#1D5A6C]/40 hover:shadow-lg"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#102C57] shadow-xs border border-slate-100">
-                  <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FDFCF7] text-[#1D5A6C] shadow-xs border border-[#D9CFB8]/40">
+                  <Building2 className="h-5 w-5 text-[#D89A3E]" />
                 </div>
-                <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${badgeClass}`}>
-                  {badgeText}
-                </span>
+                <span className={badgeClass}>{badgeText}</span>
               </div>
-              <span className="rounded-full bg-slate-200/70 px-2 py-0.5 text-[10px] font-bold text-slate-700">
+              <span className="font-mono rounded-full bg-[#D9CFB8]/30 px-2 py-0.5 text-[10px] font-bold text-[#103B47]">
                 Global #{uni.rankingGlobal}
               </span>
             </div>
 
-            <h3 className="mt-4 text-base font-extrabold text-[#102C57]">
+            <h3 className="mt-4 font-display text-base font-bold text-[#1D5A6C]">
               {uni.name}
             </h3>
             <p className="text-xs text-slate-500">
               {uni.city}, {uni.country}
             </p>
 
-            <div className="mt-4 space-y-1.5 border-t border-slate-200/60 pt-3 text-xs">
+            <div className="mt-4 space-y-1.5 border-t border-[#D9CFB8]/40 pt-3 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-500">Tuition:</span>
-                <span className="font-bold text-[#102C57]">{uni.tuitionFeeRangeINR}</span>
+                <span className="font-mono font-bold text-[#1D5A6C]">
+                  {uni.tuitionFeeRangeINR}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">IELTS Min:</span>
-                <span className="font-semibold text-slate-700">{uni.ieltsMinScore} Bands</span>
+                <span className="font-mono font-semibold text-slate-700">
+                  {uni.ieltsMinScore} Bands
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Work Visa:</span>
-                <span className="font-semibold text-emerald-700">{uni.postStudyWorkMonths} Months</span>
+                <span className="font-mono font-semibold text-emerald-700">
+                  {uni.postStudyWorkMonths} Months
+                </span>
               </div>
             </div>
 
             <LeadTriggerButton
               country={uni.country}
-              className="mt-5 w-full rounded-xl bg-white py-2 text-center text-xs font-bold text-[#102C57] border border-slate-200 hover:bg-[#102C57] hover:text-white transition"
+              className="mt-5 w-full rounded-full bg-[#1D5A6C]/5 py-2 text-center text-xs font-bold text-[#1D5A6C] border border-[#1D5A6C]/20 hover:bg-[#1D5A6C] hover:text-white transition"
             >
               Check Admission Cutoffs
             </LeadTriggerButton>
@@ -108,23 +112,23 @@ async function UniversityCards() {
 
 export function FeaturedUniversities() {
   return (
-    <section className="cv-auto border-t border-slate-100 bg-white py-16 sm:py-20">
+    <section className="cv-auto border-t border-[#D9CFB8]/40 bg-[#FDFCF7] py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#EA5C2B]">
-              Global Accreditation & Tier Badges
+            <span className="text-xs font-bold uppercase tracking-wider text-[#D89A3E]">
+              ✦ Global Accreditation & Tier Partners
             </span>
-            <h2 className="mt-1 font-serif text-3xl font-extrabold text-[#102C57] sm:text-4xl">
-              Featured Tier Partner Universities
+            <h2 className="mt-1 font-display text-3xl font-bold text-[#103B47] sm:text-4xl">
+              Featured Partner Universities
             </h2>
-            <p className="mt-1 text-xs text-slate-500">
-              Platinum, Gold, and Silver partner institutions with direct admissions, high post-study work visa allowances, and verified English curriculum.
+            <p className="mt-1 text-xs text-slate-600">
+              Platinum, Gold, and Silver partner institutions with verified
+              curriculum, transparent tuition in ₹ Lakhs, and high post-study
+              work visa allowances.
             </p>
           </div>
-          <LeadTriggerButton
-            className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-[#102C57] hover:bg-slate-50"
-          >
+          <LeadTriggerButton className="rounded-full border border-[#1D5A6C]/30 px-5 py-2 text-xs font-bold text-[#1D5A6C] hover:bg-[#1D5A6C] hover:text-white transition">
             Request Custom University Shortlist
           </LeadTriggerButton>
         </div>

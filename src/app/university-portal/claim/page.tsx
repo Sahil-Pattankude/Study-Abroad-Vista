@@ -31,6 +31,7 @@ import {
 import { University, Country } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 type ClaimStep =
   "select_university" | "representative_info" | "verify_otp" | "confirmed";
@@ -255,28 +256,21 @@ export default function UniversityClaimPage() {
     String(secondsLeft % 60).padStart(2, "0");
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col selection:bg-[#D89A3E]/20">
       {/* Top Header */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#0d2346] text-white shadow-xs">
-              <Compass className="h-5 w-5 text-[#EA5C2B]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
-                Institutional Verification
-              </span>
-            </div>
-          </Link>
+          <div className="flex items-center gap-3">
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+              Institutional Verification
+            </span>
+          </div>
 
           <div className="flex items-center gap-3 text-xs">
             <Link
               href="/portal/university"
-              className="font-bold text-[#102C57] hover:text-[#EA5C2B] transition hidden sm:inline-block"
+              className="font-bold text-[#1D5A6C] hover:text-[#103B47] transition hidden sm:inline-block"
             >
               University Portal Console →
             </Link>
@@ -658,7 +652,7 @@ export default function UniversityClaimPage() {
                     I declare and confirm that I am an authorized representative
                     of <strong>{activeUniName}</strong> empowered to manage
                     course listings, student admissions inquiries, and
-                    partnership terms on StudyAbroad Vista.
+                    partnership terms on Abroadroute.
                   </span>
                 </label>
               </div>

@@ -18,6 +18,7 @@ import { Country } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import { useHomeModals } from "@/components/home/HomeClientContext";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { PeacockEye } from "@/components/ui/BrandSignatures";
 
 interface CostCalculatorProps {
   defaultCountry?: string;
@@ -63,180 +64,96 @@ export function CostCalculatorWidget({
     });
   }, [defaultCountry]);
 
+  // Selected country object
   const selectedCountry = countriesList.find((c) => c.slug === countrySlug);
   const exchangeRate = selectedCountry?.exchangeRateToINR || 90;
-  const currencySymbol = selectedCountry?.currency || "EUR";
+  const currencySymbol = selectedCountry?.currencySymbol || "€";
 
-  // Base tuition estimates by country (annual in INR) per program level
-  const baseTuitionMap: Record<string, Record<ProgramLevel, number>> = {
-    usa: {
-      masters: 2800000,
-      bachelors: 3200000,
-      emba: 4500000,
-      mbbs: 3500000,
-      ausbildung: 1500000,
-      nursing: 2200000,
-    },
-    uk: {
-      masters: 2200000,
-      bachelors: 2000000,
-      emba: 3800000,
-      mbbs: 3800000,
-      ausbildung: 1200000,
-      nursing: 1800000,
-    },
-    canada: {
-      masters: 1800000,
-      bachelors: 2100000,
-      emba: 3200000,
-      mbbs: 2800000,
-      ausbildung: 1100000,
-      nursing: 1600000,
-    },
-    australia: {
-      masters: 2400000,
-      bachelors: 2500000,
-      emba: 3600000,
-      mbbs: 3900000,
-      ausbildung: 1400000,
-      nursing: 2000000,
-    },
-    ireland: {
-      masters: 1600000,
-      bachelors: 1700000,
-      emba: 2800000,
-      mbbs: 3400000,
-      ausbildung: 900000,
-      nursing: 1500000,
-    },
-    "new-zealand": {
-      masters: 1700000,
-      bachelors: 1800000,
-      emba: 2900000,
-      mbbs: 3200000,
-      ausbildung: 1000000,
-      nursing: 1600000,
-    },
-    germany: {
-      masters: 50000,
-      bachelors: 50000,
-      emba: 1800000,
-      mbbs: 50000,
-      ausbildung: 0,
-      nursing: 0,
-    },
-    france: {
-      masters: 1200000,
-      bachelors: 1100000,
-      emba: 3500000,
-      mbbs: 800000,
-      ausbildung: 600000,
-      nursing: 900000,
-    },
-    italy: {
-      masters: 250000,
-      bachelors: 250000,
-      emba: 2000000,
-      mbbs: 250000,
-      ausbildung: 400000,
-      nursing: 250000,
-    },
-    netherlands: {
-      masters: 1500000,
-      bachelors: 1400000,
-      emba: 2800000,
-      mbbs: 1800000,
-      ausbildung: 800000,
-      nursing: 1300000,
-    },
-    russia: {
-      masters: 350000,
-      bachelors: 320000,
-      emba: 900000,
-      mbbs: 380000,
-      ausbildung: 250000,
-      nursing: 300000,
-    },
-    uzbekistan: {
-      masters: 280000,
-      bachelors: 250000,
-      emba: 700000,
-      mbbs: 350000,
-      ausbildung: 200000,
-      nursing: 250000,
-    },
-    kazakhstan: {
-      masters: 300000,
-      bachelors: 280000,
-      emba: 750000,
-      mbbs: 360000,
-      ausbildung: 220000,
-      nursing: 280000,
-    },
-    kyrgyzstan: {
-      masters: 250000,
-      bachelors: 220000,
-      emba: 600000,
-      mbbs: 300000,
-      ausbildung: 180000,
-      nursing: 220000,
-    },
-    georgia: {
-      masters: 450000,
-      bachelors: 400000,
-      emba: 1100000,
-      mbbs: 500000,
-      ausbildung: 300000,
-      nursing: 400000,
-    },
-    philippines: {
-      masters: 380000,
-      bachelors: 350000,
-      emba: 900000,
-      mbbs: 450000,
-      ausbildung: 250000,
-      nursing: 350000,
-    },
-    uae: {
-      masters: 1500000,
-      bachelors: 1600000,
-      emba: 2500000,
-      mbbs: 2200000,
-      ausbildung: 900000,
-      nursing: 1400000,
-    },
-    singapore: {
-      masters: 2200000,
-      bachelors: 2400000,
-      emba: 3800000,
-      mbbs: 3000000,
-      ausbildung: 1200000,
-      nursing: 1900000,
-    },
-    malaysia: {
-      masters: 600000,
-      bachelors: 550000,
-      emba: 1400000,
-      mbbs: 1200000,
-      ausbildung: 450000,
-      nursing: 550000,
-    },
+  // Base tuition estimates by country and program level
+  const getBaseTuitionINR = (): number => {
+    if (countrySlug === "germany") {
+      if (programLevel === "ausbildung") return 0;
+      if (programLevel === "masters") return 150000;
+      if (programLevel === "bachelors") return 100000;
+      if (programLevel === "emba") return 1200000;
+      return 300000;
+    }
+    if (countrySlug === "usa") {
+      if (programLevel === "masters") return 2400000;
+      if (programLevel === "bachelors") return 2800000;
+      if (programLevel === "emba") return 4500000;
+      if (programLevel === "mbbs") return 3500000;
+      return 1800000;
+    }
+    if (countrySlug === "uk") {
+      if (programLevel === "masters") return 1800000;
+      if (programLevel === "bachelors") return 1900000;
+      if (programLevel === "emba") return 3200000;
+      if (programLevel === "mbbs") return 2800000;
+      return 1400000;
+    }
+    if (countrySlug === "canada") {
+      if (programLevel === "masters") return 1500000;
+      if (programLevel === "bachelors") return 1700000;
+      if (programLevel === "emba") return 2600000;
+      return 1300000;
+    }
+    if (countrySlug === "australia") {
+      if (programLevel === "masters") return 1900000;
+      if (programLevel === "bachelors") return 2000000;
+      if (programLevel === "emba") return 3400000;
+      return 1500000;
+    }
+    if (countrySlug === "ireland") {
+      if (programLevel === "masters") return 1400000;
+      if (programLevel === "bachelors") return 1500000;
+      if (programLevel === "emba") return 2200000;
+      return 1200000;
+    }
+    // MBBS countries
+    if (
+      ["russia", "georgia", "kazakhstan", "uzbekistan", "philippines"].includes(
+        countrySlug,
+      )
+    ) {
+      return 350000;
+    }
+    return 800000;
   };
 
-  // 1. Annual Tuition
-  const countryTuitions =
-    baseTuitionMap[countrySlug] || baseTuitionMap["germany"];
-  const annualTuitionINR = countryTuitions[programLevel] ?? 1500000;
+  // Base monthly living costs in local currency
+  const getBaseMonthlyLivingLocal = (): number => {
+    let base = 900;
+    if (countrySlug === "germany") base = 934;
+    else if (countrySlug === "usa") base = 1400;
+    else if (countrySlug === "uk") base = 1200;
+    else if (countrySlug === "canada") base = 1300;
+    else if (countrySlug === "australia") base = 1600;
+    else if (countrySlug === "ireland") base = 1100;
+    else if (
+      ["russia", "georgia", "kazakhstan", "uzbekistan", "philippines"].includes(
+        countrySlug,
+      )
+    )
+      base = 350;
 
-  // 2. Monthly Living Costs
-  const cityMultiplier =
-    cityTier === "tier1" ? 1.25 : cityTier === "tier2" ? 1.0 : 0.8;
-  const accomMultiplier =
-    accommodation === "studio" ? 1.35 : accommodation === "hostel" ? 0.9 : 1.0;
-  const baseMonthlyLocal = 850;
-  const monthlyLivingINR =
-    baseMonthlyLocal * exchangeRate * cityMultiplier * accomMultiplier;
-  const annualLivingINR = monthlyLivingINR * 12;
+    // City tier multiplier
+    if (cityTier === "tier1") base *= 1.25;
+    else if (cityTier === "tier3") base *= 0.85;
+
+    // Housing multiplier
+    if (accommodation === "hostel") base *= 0.85;
+    else if (accommodation === "studio") base *= 1.35;
+
+    return Math.round(base);
+  };
+
+  // 1. Annual Tuition in INR
+  const annualTuitionINR = getBaseTuitionINR();
+
+  // 2. Annual Living Costs in INR
+  const monthlyLivingLocal = getBaseMonthlyLivingLocal();
+  const annualLivingINR = monthlyLivingLocal * 12 * exchangeRate;
 
   // 3. One-Time Setup Costs
   const oneTimeSetupCostINR =
@@ -249,7 +166,7 @@ export function CostCalculatorWidget({
     ? exchangeRate * hourlyWageLocal * 20 * 42
     : 0;
 
-  // 5. Total 2-Year Calculation
+  // 5. Total Horizon Calculation
   const totalTuitionINR = annualTuitionINR * durationYears;
   const totalLivingINR = annualLivingINR * durationYears;
   const totalOneTimeINR = oneTimeSetupCostINR;
@@ -279,33 +196,37 @@ export function CostCalculatorWidget({
       id="cost-calculator"
       className={`mx-auto ${
         variant === "embedded" ? "max-w-full" : "max-w-5xl"
-      } rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-10 shadow-sm transition-all`}
+      } rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 lg:p-10 shadow-xs transition-all`}
     >
       {/* 1. Header Bar with Currency Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D9CFB8]/60 pb-6">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-3.5 py-1 text-xs font-bold text-[#EA5C2B]">
-            <Calculator className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#F5EFE0] border border-[#D9CFB8] px-3.5 py-1 text-xs font-semibold text-[#1D5A6C]">
+            <PeacockEye size={12} />
             <span>Interactive Cost & Living Estimator</span>
           </div>
-          <h3 className="mt-2.5 font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#102C57]">
+          <h3 className="mt-2.5 font-display text-2xl sm:text-3xl font-normal tracking-tight text-[#103B47]">
             Study & Living Cost Breakdown
           </h3>
-          <p className="mt-1 text-xs sm:text-sm text-slate-500">
+          <p className="mt-1 text-xs sm:text-sm text-[#6B6B6B] leading-relaxed">
             Customize your degree, city tier, and housing to calculate total
-            tuition, living costs, and part-time earnings in real time.
+            tuition, living costs, and part-time earnings in real time in{" "}
+            <span className="font-mono text-[#103B47] font-medium">
+              ₹ Lakhs
+            </span>
+            .
           </p>
         </div>
 
         {/* Currency Switcher */}
-        <div className="flex items-center gap-1 self-start sm:self-center rounded-2xl bg-slate-100 p-1 text-xs font-bold shrink-0">
+        <div className="flex items-center gap-1 self-start sm:self-center rounded-lg bg-[#F5EFE0] border border-[#D9CFB8] p-1 text-xs font-semibold shrink-0">
           <button
             type="button"
             onClick={() => setCurrencyMode("inr")}
-            className={`rounded-xl px-3.5 py-2 transition cursor-pointer ${
+            className={`rounded-md px-3.5 py-1.5 transition cursor-pointer font-mono ${
               currencyMode === "inr"
-                ? "bg-[#102C57] text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                : "text-[#6B6B6B] hover:text-[#103B47]"
             }`}
           >
             INR (₹) Only
@@ -313,10 +234,10 @@ export function CostCalculatorWidget({
           <button
             type="button"
             onClick={() => setCurrencyMode("dual")}
-            className={`rounded-xl px-3.5 py-2 transition cursor-pointer ${
+            className={`rounded-md px-3.5 py-1.5 transition cursor-pointer font-mono ${
               currencyMode === "dual"
-                ? "bg-[#102C57] text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900"
+                ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                : "text-[#6B6B6B] hover:text-[#103B47]"
             }`}
           >
             Dual (₹ + {currencySymbol})
@@ -330,7 +251,7 @@ export function CostCalculatorWidget({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Target Country */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#103B47] mb-2 font-mono">
               1. Destination Country
             </label>
             <div className="relative flex items-center">
@@ -342,7 +263,7 @@ export function CostCalculatorWidget({
                 aria-label="Target study destination"
                 value={countrySlug}
                 onChange={(e) => setCountrySlug(e.target.value)}
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50/70 pl-11 pr-8 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none cursor-pointer transition"
+                className="w-full rounded-lg border border-[#D9CFB8] bg-[#FDFCF7] pl-11 pr-8 py-2.5 text-xs sm:text-sm font-semibold text-[#1A1A1A] focus:border-[#1D5A6C] focus:bg-white focus:outline-none cursor-pointer transition"
               >
                 {countriesList.map((c) => (
                   <option
@@ -350,7 +271,7 @@ export function CostCalculatorWidget({
                     value={c.slug}
                     className="text-slate-900 bg-white"
                   >
-                    {c.name} ({c.currency} ≈ ₹{c.exchangeRateToINR}) • {c.tier}
+                    {c.name} ({c.currency} ≈ ₹{c.exchangeRateToINR}) · {c.tier}
                   </option>
                 ))}
               </select>
@@ -359,14 +280,14 @@ export function CostCalculatorWidget({
 
           {/* Degree Level */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#103B47] mb-2 font-mono">
               2. Program Level & Stream
             </label>
             <select
               aria-label="Degree Level"
               value={programLevel}
               onChange={(e) => setProgramLevel(e.target.value as ProgramLevel)}
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-xs sm:text-sm font-semibold text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none cursor-pointer transition"
+              className="w-full rounded-lg border border-[#D9CFB8] bg-[#FDFCF7] px-4 py-2.5 text-xs sm:text-sm font-semibold text-[#1A1A1A] focus:border-[#1D5A6C] focus:bg-white focus:outline-none cursor-pointer transition"
             >
               <option value="masters">Master&apos;s (MS, MSc, MA, MEng)</option>
               <option value="bachelors">Bachelor&apos;s (BS, BA, BEng)</option>
@@ -384,22 +305,22 @@ export function CostCalculatorWidget({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {/* Duration */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#103B47] mb-2 font-mono">
               3. Course Duration
             </label>
-            <div className="grid grid-cols-4 gap-1.5 rounded-2xl bg-slate-100 p-1 text-xs font-bold">
+            <div className="grid grid-cols-4 gap-1.5 rounded-lg bg-[#F5EFE0] p-1 text-xs font-semibold border border-[#D9CFB8]">
               {[1, 2, 3, 4].map((yrs) => (
                 <button
                   key={yrs}
                   type="button"
                   onClick={() => setDurationYears(yrs)}
-                  className={`rounded-xl py-2 transition cursor-pointer text-center ${
+                  className={`rounded-md py-1.5 transition cursor-pointer text-center font-mono ${
                     durationYears === yrs
-                      ? "bg-[#102C57] text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                      : "text-[#6B6B6B] hover:text-[#103B47]"
                   }`}
                 >
-                  {yrs} {yrs === 1 ? "Year" : "Years"}
+                  {yrs} {yrs === 1 ? "Yr" : "Yrs"}
                 </button>
               ))}
             </div>
@@ -407,23 +328,23 @@ export function CostCalculatorWidget({
 
           {/* City Tier */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-              4. Destination City Tier
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#103B47] mb-2 font-mono">
+              4. City Tier
             </label>
-            <div className="grid grid-cols-3 gap-1 rounded-2xl bg-slate-100 p-1 text-xs font-bold">
+            <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#F5EFE0] p-1 text-xs font-semibold border border-[#D9CFB8]">
               {[
-                { key: "tier1", label: "Tier 1 (Metro)" },
-                { key: "tier2", label: "Tier 2 (City)" },
-                { key: "tier3", label: "Tier 3 (Town)" },
+                { key: "tier1", label: "T1 (Metro)" },
+                { key: "tier2", label: "T2 (City)" },
+                { key: "tier3", label: "T3 (Town)" },
               ].map((t) => (
                 <button
                   key={t.key}
                   type="button"
                   onClick={() => setCityTier(t.key as CityTier)}
-                  className={`rounded-xl py-2 transition cursor-pointer text-center text-[11px] sm:text-xs truncate px-1 ${
+                  className={`rounded-md py-1.5 transition cursor-pointer text-center text-[11px] font-mono truncate px-1 ${
                     cityTier === t.key
-                      ? "bg-[#102C57] text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                      : "text-[#6B6B6B] hover:text-[#103B47]"
                   }`}
                 >
                   {t.label}
@@ -434,13 +355,13 @@ export function CostCalculatorWidget({
 
           {/* Accommodation */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#103B47] mb-2 font-mono">
               5. Housing Preference
             </label>
-            <div className="grid grid-cols-3 gap-1 rounded-2xl bg-slate-100 p-1 text-xs font-bold">
+            <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#F5EFE0] p-1 text-xs font-semibold border border-[#D9CFB8]">
               {[
-                { key: "shared", label: "Shared Flat" },
-                { key: "hostel", label: "Univ Dorm" },
+                { key: "shared", label: "Shared" },
+                { key: "hostel", label: "Dorm" },
                 { key: "studio", label: "Studio" },
               ].map((item) => (
                 <button
@@ -449,10 +370,10 @@ export function CostCalculatorWidget({
                   onClick={() =>
                     setAccommodation(item.key as typeof accommodation)
                   }
-                  className={`rounded-xl py-2 transition cursor-pointer text-center text-[11px] sm:text-xs truncate px-1 ${
+                  className={`rounded-md py-1.5 transition cursor-pointer text-center text-[11px] font-mono truncate px-1 ${
                     accommodation === item.key
-                      ? "bg-[#102C57] text-white shadow-xs"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                      : "text-[#6B6B6B] hover:text-[#103B47]"
                   }`}
                 >
                   {item.label}
@@ -463,44 +384,44 @@ export function CostCalculatorWidget({
         </div>
 
         {/* Row C: Part-Time Offset Toggle */}
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-emerald-200/80 bg-emerald-50/60 p-4">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-[#A8CDBD] bg-[#A8CDBD]/10 p-4">
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
               id="parttime-calc"
               checked={includePartTimeOffset}
               onChange={(e) => setIncludePartTimeOffset(e.target.checked)}
-              className="h-5 w-5 rounded accent-emerald-600 cursor-pointer shrink-0"
+              className="h-4 w-4 rounded accent-[#1D5A6C] cursor-pointer shrink-0"
             />
             <label
               htmlFor="parttime-calc"
-              className="cursor-pointer text-xs sm:text-sm font-medium text-slate-800"
+              className="cursor-pointer text-xs sm:text-sm font-medium text-[#103B47]"
             >
               Offset <strong>20 hrs/week legal part-time work earnings</strong>{" "}
               during semester terms (~{currencySymbol} {hourlyWageLocal}/hr
               minimum wage).
             </label>
           </div>
-          <span className="hidden sm:inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 shrink-0">
+          <span className="hidden sm:inline-flex items-center rounded-md bg-[#A8CDBD]/20 border border-[#A8CDBD] px-3 py-1 text-xs font-mono font-semibold text-[#103B47] shrink-0">
             Save up to {formatCurrency(totalOffsetINR)}
           </span>
         </div>
       </div>
 
       {/* 3. Step 2: Full-Width Visual Financial Output Dashboard */}
-      <div className="mt-8 rounded-2xl border border-slate-800 bg-gradient-to-br from-[#102C57] via-[#0c2345] to-[#08182f] text-white p-6 sm:p-8 shadow-xl">
+      <div className="mt-8 rounded-2xl border border-[#1D5A6C] bg-[#103B47] text-[#FDFCF7] p-6 sm:p-8 shadow-md relative overflow-hidden">
         {/* Top Summary Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1D5A6C]/50 pb-6">
           <div>
-            <span className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#A8CDBD]">
               Total Estimated Net Budget ({durationYears}-Year Horizon)
             </span>
             <div className="mt-2 flex items-baseline flex-wrap gap-3">
-              <div className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              <div className="text-3xl sm:text-5xl font-mono font-bold text-[#EBC783] tracking-tight">
                 {formatCurrency(netEstimatedBudgetINR)}
               </div>
               {currencyMode === "dual" && (
-                <div className="rounded-xl bg-white/15 px-3 py-1 text-sm font-bold text-orange-300 border border-white/10">
+                <div className="rounded-md bg-white/10 px-3 py-1 text-sm font-mono font-semibold text-[#EBC783] border border-[#1D5A6C]">
                   ≈ {formatForeign(netEstimatedBudgetINR)} ({currencySymbol})
                 </div>
               )}
@@ -508,11 +429,11 @@ export function CostCalculatorWidget({
           </div>
 
           <div className="sm:text-right">
-            <span className="inline-block rounded-full bg-emerald-500/20 px-3.5 py-1 text-xs font-extrabold text-emerald-300 border border-emerald-500/30">
-              {selectedCountry?.name || "Target Country"} • {durationYears} Year
+            <span className="inline-block rounded-md bg-[#1D5A6C]/60 border border-[#A8CDBD]/40 px-3.5 py-1 text-xs font-mono font-semibold text-[#A8CDBD]">
+              {selectedCountry?.name || "Target Country"} · {durationYears} Year
               Total
             </span>
-            <p className="mt-1.5 text-xs text-slate-300">
+            <p className="mt-1.5 text-xs text-[#F5EFE0]/80">
               Includes Tuition + Living + Setup Costs
             </p>
           </div>
@@ -520,26 +441,26 @@ export function CostCalculatorWidget({
 
         {/* Visual Progress Distribution Bar */}
         <div className="mt-6 space-y-2">
-          <div className="flex justify-between text-xs font-semibold text-slate-300">
+          <div className="flex justify-between text-xs font-mono text-[#A8CDBD]">
             <span>Financial Distribution:</span>
             <span>
-              Tuition {tuitionPct}% • Living {livingPct}% • Setup {setupPct}%
+              Tuition {tuitionPct}% · Living {livingPct}% · Setup {setupPct}%
             </span>
           </div>
-          <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-slate-800">
+          <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-[#0B2830]">
             <div
               style={{ width: `${tuitionPct}%` }}
-              className="bg-[#EA5C2B]"
+              className="bg-[#D89A3E]"
               title="Tuition"
             />
             <div
               style={{ width: `${livingPct}%` }}
-              className="bg-blue-400"
+              className="bg-[#A8CDBD]"
               title="Living"
             />
             <div
               style={{ width: `${setupPct}%` }}
-              className="bg-purple-400"
+              className="bg-[#7C6BAE]"
               title="Setup"
             />
           </div>
@@ -548,73 +469,73 @@ export function CostCalculatorWidget({
         {/* 4 Itemized Cards */}
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           {/* Card 1: Tuition */}
-          <div className="rounded-xl bg-white/5 p-3.5 border border-white/10">
-            <div className="flex items-center gap-2 text-slate-300 mb-1.5 font-medium">
-              <GraduationCap className="h-4 w-4 text-[#EA5C2B]" />
+          <div className="rounded-xl bg-white/5 p-3.5 border border-[#1D5A6C]">
+            <div className="flex items-center gap-2 text-[#A8CDBD] mb-1.5 font-medium">
+              <GraduationCap className="h-4 w-4 text-[#D89A3E]" />
               <span>Total Tuition</span>
             </div>
-            <div className="text-base sm:text-lg font-bold text-white">
+            <div className="text-base sm:text-lg font-mono font-bold text-white">
               {formatCurrency(totalTuitionINR)}
             </div>
             {currencyMode === "dual" && (
-              <span className="text-[11px] text-slate-400 font-normal">
+              <span className="text-[11px] font-mono text-[#A8CDBD]">
                 {formatForeign(totalTuitionINR)}
               </span>
             )}
           </div>
 
           {/* Card 2: Living */}
-          <div className="rounded-xl bg-white/5 p-3.5 border border-white/10">
-            <div className="flex items-center gap-2 text-slate-300 mb-1.5 font-medium">
-              <Building className="h-4 w-4 text-blue-400" />
+          <div className="rounded-xl bg-white/5 p-3.5 border border-[#1D5A6C]">
+            <div className="flex items-center gap-2 text-[#A8CDBD] mb-1.5 font-medium">
+              <Building className="h-4 w-4 text-[#A8CDBD]" />
               <span>Living & Rent</span>
             </div>
-            <div className="text-base sm:text-lg font-bold text-white">
+            <div className="text-base sm:text-lg font-mono font-bold text-white">
               {formatCurrency(totalLivingINR)}
             </div>
             {currencyMode === "dual" && (
-              <span className="text-[11px] text-slate-400 font-normal">
+              <span className="text-[11px] font-mono text-[#A8CDBD]">
                 {formatForeign(totalLivingINR)}
               </span>
             )}
           </div>
 
           {/* Card 3: One-Time */}
-          <div className="rounded-xl bg-white/5 p-3.5 border border-white/10">
-            <div className="flex items-center gap-2 text-slate-300 mb-1.5 font-medium">
-              <Plane className="h-4 w-4 text-purple-400" />
+          <div className="rounded-xl bg-white/5 p-3.5 border border-[#1D5A6C]">
+            <div className="flex items-center gap-2 text-[#A8CDBD] mb-1.5 font-medium">
+              <Plane className="h-4 w-4 text-[#7C6BAE]" />
               <span>Setup & Visa</span>
             </div>
-            <div className="text-base sm:text-lg font-bold text-white">
+            <div className="text-base sm:text-lg font-mono font-bold text-white">
               {formatCurrency(totalOneTimeINR)}
             </div>
-            <span className="text-[11px] text-slate-400 font-normal">
+            <span className="text-[11px] text-[#A8CDBD]">
               Flights & deposits
             </span>
           </div>
 
           {/* Card 4: Part-Time Offset */}
-          <div className="rounded-xl bg-emerald-500/10 p-3.5 border border-emerald-500/20">
-            <div className="flex items-center gap-2 text-emerald-300 mb-1.5 font-medium">
+          <div className="rounded-xl bg-[#A8CDBD]/15 p-3.5 border border-[#A8CDBD]/30">
+            <div className="flex items-center gap-2 text-[#A8CDBD] mb-1.5 font-medium">
               <Coins className="h-4 w-4" />
               <span>Part-time Savings</span>
             </div>
-            <div className="text-base sm:text-lg font-bold text-emerald-300">
+            <div className="text-base sm:text-lg font-mono font-bold text-[#EBC783]">
               {includePartTimeOffset
                 ? `- ${formatCurrency(totalOffsetINR)}`
                 : "₹0 (Disabled)"}
             </div>
-            <span className="text-[11px] text-emerald-400 font-normal">
+            <span className="text-[11px] font-mono text-[#A8CDBD]">
               20 hrs/week offset
             </span>
           </div>
         </div>
 
         {/* Footer Actions & Exchange Rate */}
-        <div className="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-[11px] text-slate-300">
-            <Info className="h-3.5 w-3.5 text-[#EA5C2B] shrink-0" />
-            <span>
+        <div className="mt-6 pt-5 border-t border-[#1D5A6C]/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-[11px] text-[#A8CDBD]">
+            <Info className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
+            <span className="font-mono">
               Real-time exchange rate: 1 {currencySymbol} ≈ ₹{exchangeRate}.
               Includes health insurance & blocked account guidelines.
             </span>
@@ -626,7 +547,7 @@ export function CostCalculatorWidget({
                 `${selectedCountry?.name || countrySlug} - ${programLevel.toUpperCase()} Budget (${formatCurrency(netEstimatedBudgetINR)})`,
               )
             }
-            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3.5 px-6 text-xs sm:text-sm font-bold text-white shadow-lg transition hover:bg-[#d94f20] active:scale-98 cursor-pointer shrink-0"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-md bg-[#D89A3E] py-3 px-6 text-xs sm:text-sm font-semibold text-[#103B47] shadow-sm transition hover:bg-[#c4872d] cursor-pointer shrink-0"
           >
             <Banknote className="h-4 w-4" />
             <span>

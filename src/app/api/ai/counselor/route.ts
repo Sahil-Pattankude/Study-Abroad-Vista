@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
     // If no API key configured, provide domain-aware fallback response
     if (!apiKey) {
       let reply =
-        "Namaste! I am your StudyAbroad Vista AI Counsellor. I'm currently running in preview mode.";
+        "Namaste! I am your Abroadroute AI Counsellor. I'm currently running in preview mode.";
 
       if (lower.includes("germany") || lower.includes("free")) {
         reply =
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         success: true,
         reply,
-        model: "studyabroad-rule-engine-preview",
+        model: "abroadroute-rule-engine-preview",
         suggestedNext,
         leadCapturePrompt: isConsultationIntent,
       });
@@ -289,7 +289,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     status: "healthy",
-    service: "StudyAbroad Vista AI Counsellor API",
+    service: "Abroadroute AI Counsellor API",
     model: process.env.GEMINI_MODEL || "gemini-3.8-flash",
     configured: Boolean(process.env.GEMINI_API_KEY),
     destinationsSupported: 19,

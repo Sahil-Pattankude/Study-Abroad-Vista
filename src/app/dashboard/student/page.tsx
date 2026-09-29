@@ -22,6 +22,7 @@ import {
   removeFromShortlist as removeShortlistCookie,
   fetchBackendShortlist,
 } from "@/lib/cookies/shortlist";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
@@ -78,27 +79,20 @@ export default function StudentDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FDFCF7]">
       {/* Top Navbar */}
-      <nav className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-6 lg:px-8">
+      <nav className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md px-4 py-3.5 sm:px-6 lg:px-8 sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-extrabold text-[#102C57]">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
-            <span className="rounded-md bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
               Student Dashboard
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
             <span className="font-semibold text-slate-700 flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <User className="h-3.5 w-3.5 text-[#D89A3E]" />
               Welcome, {displayName}
             </span>
             <Link
@@ -106,7 +100,7 @@ export default function StudentDashboardPage() {
               onClick={logout}
               className="rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1 transition"
             >
-              <LogOut className="h-3 w-3" />
+              <LogOut className="h-3 w-3 text-slate-500" />
               Log Out
             </Link>
           </div>
@@ -204,7 +198,7 @@ export default function StudentDashboardPage() {
               Transcripts
             </p>
             <span className="text-[11px] text-slate-500">
-              Saved Gemini advice & shortlists
+              Saved Route AI advice & shortlists
             </span>
           </Link>
 

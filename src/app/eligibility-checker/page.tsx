@@ -5,7 +5,7 @@ import { EligibilityCheckerClient } from "@/components/tools/EligibilityCheckerC
 
 export const metadata: Metadata = {
   title:
-    "Study Abroad Admission Eligibility & Probability Checker | StudyAbroad Vista",
+    "Study Abroad Admission Eligibility & Probability Checker | Abroadroute",
   description:
     "Evaluate your GPA, IELTS, and GRE test scores to discover Safe, Target, and Reach universities with color-coded admission probabilities across 19 countries.",
   alternates: {

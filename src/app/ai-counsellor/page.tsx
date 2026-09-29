@@ -28,6 +28,7 @@ import { AIChatMessage } from "@/types";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { getSavedShortlist } from "@/lib/cookies/shortlist";
 import { getContextAwareGreeting } from "@/lib/gemini/counsellorKnowledge";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 import {
   AIChatActionCard,
   parseMessageActions,
@@ -282,23 +283,17 @@ export default function AICounsellorFullPage() {
   return (
     <div className="flex h-screen flex-col bg-slate-100">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
+      <header className="border-b border-[#D9CFB8]/60 bg-white px-4 py-3 sm:px-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-black text-[#102C57]">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
+            <BrandLogo variant="wordmark" theme="light" size="md" />
             <div className="hidden items-center gap-2 border-l border-slate-200 pl-3 sm:flex">
-              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-bold text-indigo-800">
-                <Bot className="h-3.5 w-3.5 text-[#EA5C2B]" /> AI Counsellor
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#7C6BAE]/10 px-2.5 py-0.5 text-xs font-bold text-[#7C6BAE]">
+                <Bot className="h-3.5 w-3.5 text-[#D89A3E]" /> Route AI
+                Counsellor
               </span>
-              <span className="text-xs text-slate-500">
-                Gemini 3.8-Flash • 19 Destinations
+              <span className="text-xs text-slate-500 font-medium">
+                Context-Aware • 19 Destinations
               </span>
             </div>
           </div>
@@ -310,12 +305,12 @@ export default function AICounsellorFullPage() {
                   href="/dashboard/counsellor-chats"
                   className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 transition"
                 >
-                  <MessageSquare className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                  <MessageSquare className="h-3.5 w-3.5 text-[#D89A3E]" />
                   Saved Chats
                 </Link>
                 <Link
                   href="/dashboard/student"
-                  className="inline-flex items-center gap-1 rounded-lg bg-[#102C57] px-3 py-1.5 font-bold text-white hover:bg-[#0c2242] transition"
+                  className="inline-flex items-center gap-1 rounded-lg bg-[#1D5A6C] px-3 py-1.5 font-bold text-white hover:bg-[#103B47] transition"
                 >
                   <User className="h-3.5 w-3.5" />
                   Dashboard
@@ -331,7 +326,7 @@ export default function AICounsellorFullPage() {
                 </Link>
                 <Link
                   href="/signup"
-                  className="rounded-lg bg-[#EA5C2B] px-3.5 py-1.5 font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+                  className="rounded-lg bg-[#D89A3E] px-3.5 py-1.5 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
                 >
                   Create Account
                 </Link>
@@ -554,15 +549,14 @@ export default function AICounsellorFullPage() {
             ) : (
               <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs">
                 <div className="flex items-center gap-2 text-slate-600">
-                  <Lock className="h-4 w-4 text-[#EA5C2B]" />
+                  <Lock className="h-4 w-4 text-[#D89A3E]" />
                   <span>
-                    Free account required to chat with Gemini 3.8-Flash AI
-                    Counsellor
+                    Free account required to chat with Route AI Counsellor
                   </span>
                 </div>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1 rounded-lg bg-[#EA5C2B] px-4 py-2 font-bold text-white shadow-xs hover:bg-[#d44d1f]"
+                  className="inline-flex items-center gap-1 rounded-lg bg-[#D89A3E] px-4 py-2 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
                 >
                   Sign In to Chat
                   <ArrowRight className="h-3.5 w-3.5" />

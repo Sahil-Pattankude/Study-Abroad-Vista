@@ -26,14 +26,14 @@ import {
 import { TEST_PREP_EXAMS } from "@/lib/data/testPrepData";
 
 export const metadata: Metadata = {
-  title: "HTML Sitemap & Complete URL Directory | StudyAbroad Vista",
+  title: "HTML Sitemap & Complete URL Directory | Abroadroute",
   description:
     "Comprehensive navigational sitemap and directory of all 19 country guides, 8 academic programs, 9 test prep blueprints, verified universities, and tools.",
   openGraph: {
-    title: "Complete Website Sitemap | StudyAbroad Vista",
+    title: "Complete Website Sitemap | Abroadroute",
     description:
       "Comprehensive navigational sitemap and directory of all 19 country guides, 8 academic programs, 9 test prep blueprints, verified universities, and tools.",
-    url: "https://studyabroadvista.com/sitemap",
+    url: "https://abroadroute.com/sitemap",
     type: "website",
   },
 };
@@ -50,30 +50,30 @@ export default async function SitemapPage() {
   const tier3Countries = countries.filter((c) => c.tier === "Tier 3");
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
       <Header />
 
       <main className="flex-1 pb-20 pt-6 sm:pt-10">
         {/* Breadcrumbs */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-6">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57] transition">
+            <Link href="/" className="hover:text-[#1D5A6C] transition">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-[#102C57] font-bold">HTML Sitemap</span>
+            <span className="text-[#1D5A6C] font-bold">HTML Sitemap</span>
           </div>
         </div>
 
         {/* Hero Header */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-gradient-to-r from-[#102C57] to-[#091A36] p-8 sm:p-12 text-white shadow-md">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#EA5C2B]">
+          <div className="rounded-3xl bg-gradient-to-r from-[#103B47] to-[#1D5A6C] p-8 sm:p-12 text-white shadow-md">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#D89A3E]">
               <Compass className="h-3.5 w-3.5" />
               <span>Complete Portal Directory</span>
             </div>
-            <h1 className="mt-4 font-serif text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-              StudyAbroad Vista Sitemap
+            <h1 className="mt-4 font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
+              Abroadroute Sitemap
             </h1>
             <p className="mt-3 text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
               Explore the complete structured index of all 19 global destination

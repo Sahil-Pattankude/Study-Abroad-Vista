@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 
   if (!exam) {
-    return { title: "Exam Not Found | StudyAbroad Vista" };
+    return { title: "Exam Not Found | Abroadroute" };
   }
 
   const rawDescription = `Complete guide to ${exam.name} (${exam.fullName}). Official fee ${exam.feeINR}, test format, score cutoffs for top universities, and free 8-week study blueprints.`;
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${exam.name} Exam Guide: Fees in INR, Cutoffs & 8-Week Roadmap`,
       description: formattedDesc,
-      url: `https://studyabroadvista.com/test-prep/${exam.slug}`,
+      url: `https://abroadroute.com/test-prep/${exam.slug}`,
       type: "article",
     },
     alternates: {
@@ -105,8 +105,8 @@ export default async function TestPrepDetailPage({ params }: Props) {
     description: exam.overview,
     provider: {
       "@type": "Organization",
-      name: "StudyAbroad Vista / Dnyanal Educon",
-      sameAs: "https://studyabroadvista.com",
+      name: "Abroadroute / Dnyanal Educon Pvt. Ltd.",
+      sameAs: "https://abroadroute.com",
     },
   };
 

@@ -47,6 +47,7 @@ import {
   fetchLiveClaims,
 } from "@/lib/supabase/dataFetchers";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 interface ProgramItem {
   id: number | string;
@@ -597,20 +598,13 @@ export default function UniversityPortalPage() {
   // Unauthenticated view
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
-        <header className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-8 shadow-xs">
+      <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
+        <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md px-4 py-3.5 sm:px-8 shadow-xs">
           <div className="mx-auto flex max-w-7xl items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-black tracking-tight text-[#102C57]">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
+            <BrandLogo variant="wordmark" theme="light" size="md" />
             <Link
               href="/login?redirect=/portal/university"
-              className="rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0d2346] transition"
+              className="rounded-xl bg-[#1D5A6C] px-4 py-2 text-xs font-bold text-white hover:bg-[#103B47] transition"
             >
               Sign In to Portal →
             </Link>
@@ -654,22 +648,15 @@ export default function UniversityPortalPage() {
   // 1. Unclaimed / No Claim Submitted View
   if (hasNoClaim) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
-        <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+      <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
+        <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-[#102C57]">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                  University Partner Console
-                </span>
-              </div>
-            </Link>
+            <div className="flex items-center gap-3">
+              <BrandLogo variant="wordmark" theme="light" size="md" />
+              <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+                Institutional Verification
+              </span>
+            </div>
 
             <div className="flex items-center gap-3 text-xs">
               <span className="font-semibold text-slate-600 hidden sm:inline-block">
@@ -780,21 +767,14 @@ export default function UniversityPortalPage() {
   if (isClaimPending) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#EA5C2B]/15">
-        <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-xs">
+        <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white shadow-xs">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-[#102C57]">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                  Institutional Verification
-                </span>
-              </div>
-            </Link>
+            <div className="flex items-center gap-3">
+              <BrandLogo variant="wordmark" theme="light" size="md" />
+              <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+                Institutional Verification
+              </span>
+            </div>
 
             <div className="flex items-center gap-3 text-xs">
               <span className="font-semibold text-slate-600 hidden sm:inline-block">
@@ -829,8 +809,8 @@ export default function UniversityPortalPage() {
 
               <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
                 Your claim submission is currently being reviewed by the
-                StudyAbroad Vista Partnerships Team. Institutional data and
-                student inquiries will unlock automatically once approved.
+                Abroadroute Partnerships Team. Institutional data and student
+                inquiries will unlock automatically once approved.
               </p>
 
               {/* Status Summary Card */}
@@ -928,27 +908,14 @@ export default function UniversityPortalPage() {
 
   // 3. Verified University Workspace (Full Dashboard)
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col selection:bg-[#D89A3E]/20">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200 bg-white sticky top-0 z-30 shadow-2xs">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#102C57] to-[#0d2346] text-white shadow-xs">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tight text-[#102C57] leading-none">
-                  StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
-                  University Partner Console
-                </span>
-              </div>
-            </Link>
-
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-100/80 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
-              <Building2 className="h-3 w-3 text-[#EA5C2B]" />
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-2.5 py-1 text-[11px] font-bold text-[#1D5A6C]">
+              <Building2 className="h-3 w-3 text-[#D89A3E]" />
               B2B Institutional Portal
             </span>
           </div>
@@ -1224,7 +1191,7 @@ export default function UniversityPortalPage() {
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
                     Search terms used by Indian aspirants discovering {orgName}{" "}
-                    across StudyAbroad Vista.
+                    across Abroadroute.
                   </p>
                 </div>
                 <span className="text-xs font-bold text-slate-400">
@@ -1432,8 +1399,7 @@ export default function UniversityPortalPage() {
                 </h2>
                 <p className="text-xs text-slate-500 mt-1">
                   Add, update, or remove degree programs published on
-                  StudyAbroad Vista. Updates reflect immediately on your live
-                  profile.
+                  Abroadroute. Updates reflect immediately on your live profile.
                 </p>
               </div>
 

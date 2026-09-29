@@ -1,11 +1,11 @@
 // ============================================================
-// StudyAbroad Vista - SEO & AEO Meta Description Engine
+// Abroadroute - SEO & AEO Meta Description Engine
 // Guarantees all page meta descriptions are strictly between 150 - 160 characters.
 // ============================================================
 
 export function fitMetaDescription(
   text: string,
-  fallbackSuffix: string = " Explore 2026 intake deadlines, fees, and eligibility on StudyAbroad Vista."
+  fallbackSuffix: string = " Explore 2026 intake deadlines, fees, and eligibility on Abroadroute.",
 ): string {
   const cleaned = text.replace(/\s+/g, " ").trim();
 

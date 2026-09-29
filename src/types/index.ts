@@ -1,5 +1,5 @@
 // ============================================================
-// StudyAbroad Vista - Core Domain Types
+// Abroadroute - Core Domain Types
 // ============================================================
 
 export type TierCategory = "Tier 1" | "Tier 2" | "Tier 3";

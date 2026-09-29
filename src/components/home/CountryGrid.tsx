@@ -8,7 +8,14 @@ import { SectionError } from "@/components/ui/SectionError";
 import { SectionEmpty } from "@/components/ui/SectionEmpty";
 import { fetchCountriesFromBackend } from "@/lib/data/liveContent";
 
-const ANCHOR_SIX_SLUGS = ["usa", "uk", "canada", "australia", "germany", "ireland"];
+const ANCHOR_SIX_SLUGS = [
+  "usa",
+  "uk",
+  "canada",
+  "australia",
+  "germany",
+  "ireland",
+];
 
 /**
  * Async cards. Suspended by the shell below, so the section heading
@@ -52,15 +59,19 @@ async function CountryCards() {
             data-country-tier={country.tier}
             data-is-anchor={isAnchor ? "true" : "false"}
             style={isAnchor ? undefined : { display: "none" }}
-            className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
+            className="group relative flex flex-col justify-between rounded-2xl border border-[#D9CFB8]/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#1D5A6C]/40 hover:shadow-xl"
           >
             <div>
               {/* Header with Flag and Tier */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <CountryFlag countryCode={country.code} countryName={country.name} size="lg" />
+                  <CountryFlag
+                    countryCode={country.code}
+                    countryName={country.name}
+                    size="lg"
+                  />
                   <div>
-                    <h3 className="text-lg font-black text-[#102C57] transition group-hover:text-[#EA5C2B]">
+                    <h3 className="text-lg font-bold text-[#1D5A6C] font-display transition group-hover:text-[#D89A3E]">
                       {country.name}
                     </h3>
                     <span className="text-[11px] font-semibold text-slate-500">
@@ -68,7 +79,7 @@ async function CountryCards() {
                     </span>
                   </div>
                 </div>
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-700">
+                <span className="rounded-full bg-[#1D5A6C]/10 px-2.5 py-1 text-[10px] font-bold text-[#1D5A6C]">
                   {country.safetyRating} ★ Safety
                 </span>
               </div>
@@ -78,44 +89,51 @@ async function CountryCards() {
               </p>
 
               {/* Key Metrics */}
-              <div className="mt-5 space-y-2 border-t border-slate-100 pt-4 text-xs">
+              <div className="mt-5 space-y-2 border-t border-[#D9CFB8]/40 pt-4 text-xs">
                 <div className="flex items-center justify-between text-slate-700">
                   <span className="flex items-center gap-1.5 text-slate-500">
-                    <Banknote className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    <Banknote className="h-3.5 w-3.5 text-[#D89A3E]" />
                     Avg. Tuition:
                   </span>
-                  <span className="font-bold text-[#102C57]">{country.avgTuitionINR}</span>
+                  <span className="font-mono font-bold text-[#1D5A6C]">
+                    {country.avgTuitionINR}
+                  </span>
                 </div>
 
                 <div className="flex items-center justify-between text-slate-700">
                   <span className="flex items-center gap-1.5 text-slate-500">
-                    <Clock className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    <Clock className="h-3.5 w-3.5 text-[#D89A3E]" />
                     Work Visa (PSW):
                   </span>
-                  <span className="font-semibold text-emerald-700">{country.postStudyWorkVisa}</span>
+                  <span className="font-semibold text-emerald-700">
+                    {country.postStudyWorkVisa}
+                  </span>
                 </div>
 
                 <div className="flex items-center justify-between text-slate-700">
                   <span className="flex items-center gap-1.5 text-slate-500">
-                    <ShieldCheck className="h-3.5 w-3.5 text-[#EA5C2B]" />
+                    <ShieldCheck className="h-3.5 w-3.5 text-[#D89A3E]" />
                     Top Intakes:
                   </span>
-                  <span className="text-slate-700">{country.topIntakes.join(", ")}</span>
+                  <span className="text-slate-700">
+                    {country.topIntakes.join(", ")}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Action Button */}
-            <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
-              <span className="text-[11px] font-medium text-slate-400">
-                {country.currency} ({country.currencySymbol}) ≈ ₹{country.exchangeRateToINR}
+            <div className="mt-6 flex items-center justify-between border-t border-[#D9CFB8]/40 pt-4">
+              <span className="text-[11px] font-mono text-slate-500">
+                {country.currency} ({country.currencySymbol}) ≈ ₹
+                {country.exchangeRateToINR}
               </span>
               <LeadTriggerButton
                 country={country.name}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#102C57] transition hover:text-[#EA5C2B]"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1D5A6C] transition hover:text-[#D89A3E]"
               >
                 Apply / Inquire
-                <ArrowRight className="h-3.5 w-3.5" />
+                <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
               </LeadTriggerButton>
             </div>
           </div>
@@ -127,18 +145,19 @@ async function CountryCards() {
 
 export function CountryGrid() {
   return (
-    <section className="cv-auto py-16 sm:py-24 bg-white">
+    <section className="cv-auto py-16 sm:py-24 bg-[#FDFCF7]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#EA5C2B]/10 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
-              Primary Destinations
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-xs font-bold text-[#1D5A6C]">
+              ✦ Global Destinations
             </div>
-            <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#102C57] sm:text-4xl">
-              Anchor Destinations & 19 Launch Countries
+            <h2 className="mt-2.5 font-display text-3xl font-bold tracking-tight text-[#103B47] sm:text-4xl">
+              Anchor Destinations & 19 Global Countries
             </h2>
             <p className="mt-2 text-sm text-slate-600 max-w-2xl">
-              Explore the Anchor Six premier study hubs alongside high-ROI European and accredited medical destinations.
+              Explore the Anchor Six premier study destinations alongside
+              high-ROI European and accredited medical countries.
             </p>
           </div>
 

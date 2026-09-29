@@ -3,7 +3,19 @@
 import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Compass, Lock, ArrowRight, ShieldCheck, CheckCircle2, Loader2, AlertCircle, Eye, EyeOff, Mail } from "lucide-react";
+import {
+  Compass,
+  Lock,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Loader2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Mail,
+} from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -57,7 +69,9 @@ function ResetPasswordForm() {
       const data = await res.json();
 
       if (!res.ok || data.error) {
-        setError(data.error || "Failed to update password. Please check your email.");
+        setError(
+          data.error || "Failed to update password. Please check your email.",
+        );
         setLoading(false);
         return;
       }
@@ -131,7 +145,11 @@ function ResetPasswordForm() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="pr-3 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -182,7 +200,8 @@ function ResetPasswordForm() {
             Password Updated!
           </h2>
           <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-            Your password has been successfully reset. You can now log in to your account with your new password.
+            Your password has been successfully reset. You can now log in to
+            your account with your new password.
           </p>
 
           <div className="mt-6">
@@ -201,19 +220,15 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between selection:bg-[#EA5C2B]/15">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between selection:bg-[#D89A3E]/20">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 sm:px-8">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3.5 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 transition hover:opacity-95">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white shadow-xs">
-              <Compass className="h-4 w-4 text-[#EA5C2B]" />
-            </div>
-            <span className="text-lg font-black tracking-tight text-[#102C57]">
-              StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-            </span>
-          </Link>
-          <Link href="/login" className="text-xs font-semibold text-slate-500 hover:text-[#102C57]">
+          <BrandLogo variant="wordmark" theme="light" size="md" />
+          <Link
+            href="/login"
+            className="text-xs font-semibold text-slate-500 hover:text-[#1D5A6C] transition"
+          >
             ← Back to Sign In
           </Link>
         </div>
@@ -221,11 +236,13 @@ export default function ResetPasswordPage() {
 
       {/* Main Card wrapped in Suspense for useSearchParams */}
       <main className="flex-1 flex items-center justify-center py-10 px-4 sm:px-6">
-        <Suspense fallback={
-          <div className="flex items-center justify-center p-8">
-            <Loader2 className="h-6 w-6 animate-spin text-[#102C57]" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center p-8">
+              <Loader2 className="h-6 w-6 animate-spin text-[#102C57]" />
+            </div>
+          }
+        >
           <ResetPasswordForm />
         </Suspense>
       </main>
@@ -233,7 +250,9 @@ export default function ResetPasswordPage() {
       {/* Footer */}
       <footer className="border-t border-slate-200/80 bg-white py-3 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
         <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-        <span>Secured via Supabase Auth & DPDP Act 2023 End-to-End Encryption</span>
+        <span>
+          Secured via Supabase Auth & DPDP Act 2023 End-to-End Encryption
+        </span>
       </footer>
     </div>
   );

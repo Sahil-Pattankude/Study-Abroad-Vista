@@ -5,9 +5,9 @@ import { getAllArticles } from "@/lib/sanity/fetchers";
 import { Clock, Calendar, ArrowRight, BookOpen, Compass, ShieldCheck } from "lucide-react";
 
 export const metadata = {
-  title: "Study Abroad Blog & Admissions News | StudyAbroad Vista",
+  title: "Study Abroad Blog & Admissions News | Abroadroute",
   description:
-    "Official StudyAbroad Vista blog: authentic visa rule updates, country comparisons, scholarship alerts, and student success stories for international degrees.",
+    "Official Abroadroute blog: authentic visa rule updates, country comparisons, scholarship alerts, and student success stories for international degrees.",
 };
 
 export default async function BlogDirectoryPage() {
@@ -24,7 +24,7 @@ export default async function BlogDirectoryPage() {
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold text-slate-200">
                 <BookOpen className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                Official StudyAbroad Vista Blog
+                Official Abroadroute Blog
               </div>
               <h1 className="mt-4 font-serif text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                 Admissions News, Insights & <span className="text-[#EA5C2B]">Visa Updates</span>

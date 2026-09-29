@@ -3,22 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #102C57;
+  /* Section 15 · Drop-in CSS Tokens */
+  /* Primary */
+  --route-peacock: #1D5A6C;
+  --route-peacock-deep: #103B47;
+  --route-peacock-light: #7BAAB8;
+  
+  /* Accent · Saffron Gold */
+  --route-gold: #D89A3E;
+  --route-gold-soft: #EBC783;
+  --route-gold-deep: #A67E2F;
+  
+  /* Secondary */
+  --route-amethyst: #7C6BAE;
+  --route-amethyst-soft: #A798CD;
+  --route-sage: #A8CDBD;
+  --route-copper: #B8593E;
+  
+  /* Canvas & Neutrals */
+  --route-canvas: #FDFCF7;
+  --route-ivory: #F5EFE0;
+  --route-sand: #F2ECD9;
+  --route-parchment: #D9CFB8;
+  --route-ink: #1A1A1A;
+  --route-ink-soft: #3A3A3A;
+  --route-muted: #6B6B6B;
+
+  /* Type stacks */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", Menlo, monospace;
+
+  --background: #FDFCF7;
+  --foreground: #1A1A1A;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--route-ink);
+  background: var(--route-canvas);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-}
-
-/* Keep the existing palette while bringing small text and CTA contrast to WCAG AA. */
-.text-slate-400 {
-  color: #475569;
 }
 
 /* Modern Web Guidance: Defer rendering off-screen sections to free mobile main thread */
@@ -37,3 +64,162 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Section 10 · University Partner & Country Strategic Tier Badges */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2.5px 8px;
+  border-radius: 9999px;
+}
+
+.tier-badge.platinum {
+  background-color: rgba(124, 107, 174, 0.15);
+  color: #7C6BAE;
+  border: 1px solid rgba(124, 107, 174, 0.35);
+}
+
+.tier-badge.gold {
+  background-color: rgba(216, 154, 62, 0.15);
+  color: #B87B28;
+  border: 1px solid rgba(216, 154, 62, 0.35);
+}
+
+.tier-badge.silver {
+  background-color: rgba(29, 90, 108, 0.1);
+  color: #1D5A6C;
+  border: 1px solid rgba(29, 90, 108, 0.3);
+}
+
+.country-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+
+.country-tier-badge.tier-1 {
+  background-color: rgba(29, 90, 108, 0.12);
+  color: #1D5A6C;
+  border: 1px solid rgba(29, 90, 108, 0.3);
+}
+
+.country-tier-badge.tier-2 {
+  background-color: rgba(124, 107, 174, 0.15);
+  color: #7C6BAE;
+  border: 1px solid rgba(124, 107, 174, 0.35);
+}
+
+.country-tier-badge.tier-3 {
+  background-color: rgba(184, 89, 62, 0.15);
+  color: #B8593E;
+  border: 1px solid rgba(184, 89, 62, 0.35);
+}
+
+/* Section 12 · Component Kit Design System */
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  background-color: #1D5A6C;
+  color: #FDFCF7;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.15s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #103B47;
+}
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  background-color: #D89A3E;
+  color: #103B47;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(216, 154, 62, 0.25);
+  transition: all 0.15s ease-in-out;
+}
+.btn-accent:hover {
+  background-color: #EBC783;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid #D9CFB8;
+  background-color: transparent;
+  color: #103B47;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+}
+.btn-ghost:hover {
+  background-color: #F5EFE0;
+}
+
+.btn-copper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  background-color: #B8593E;
+  color: #FDFCF7;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.15s ease-in-out;
+}
+.btn-copper:hover {
+  background-color: #D98A73;
+}
+
+/* University Card Pattern */
+.card-university {
+  background-color: #F5EFE0;
+  border: 1px solid #D9CFB8;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: #103B47;
+  transition: all 0.2s ease-in-out;
+}
+.card-university:hover {
+  border-color: #1D5A6C;
+  box-shadow: 0 10px 25px -5px rgba(16, 59, 71, 0.08);
+}
+
+/* Numerical & Data Typography */
+.data-num {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+

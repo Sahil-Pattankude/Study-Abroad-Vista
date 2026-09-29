@@ -109,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ) {
             role = "university";
           } else if (
-            emailLower.includes("admin@studyabroadvista") ||
+            emailLower.includes("admin@abroadroute") || emailLower.includes("admin@studyabroadvista") ||
             emailLower.includes("admin")
           ) {
             role = "admin";

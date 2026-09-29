@@ -101,31 +101,31 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
         <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white p-3 shadow-lg sm:hidden">
           <button
             onClick={() => openLeadModal()}
-            className="w-full rounded-xl bg-[#EA5C2B] py-3 text-center text-xs font-bold text-white shadow-lg transition active:scale-98"
+            className="w-full rounded-xl bg-[#D89A3E] py-3 text-center text-xs font-bold text-[#103B47] shadow-lg transition hover:bg-[#EBC783] active:scale-98"
           >
             Get Free Counselling →
           </button>
         </div>
       )}
 
-      {/* [FR-AI-001] Floating AI Counsellor Button: Bottom-Right 20px (bottom-5 right-5), visible during scroll, respects DND */}
+      {/* [FR-AI-001] Floating Route AI Counsellor Button: Bottom-Right 20px (bottom-5 right-5) */}
       {!isStudioOrAdmin && !isDNDActive && (
         <div className="fixed bottom-[20px] right-[20px] z-40">
           <button
             onClick={() => openAICounsellor()}
-            aria-label="Talk to AI counsellor"
-            className="group flex items-center gap-2 rounded-full bg-[#102C57] p-3 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:bg-[#0c2242] active:scale-95"
+            aria-label="Talk to Route AI counsellor"
+            className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#103B47] to-[#1D5A6C] border border-[#7C6BAE]/40 p-2.5 sm:px-4 sm:py-2.5 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:border-[#D89A3E] active:scale-95"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white">
-              <Bot className="h-5 w-5 text-[#EA5C2B]" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7C6BAE]/25 text-[#D89A3E] font-bold text-sm shadow-inner">
+              ✦
             </div>
-            <span className="pr-2 text-xs font-bold hidden sm:inline-flex items-center gap-1.5">
-              Talk to AI Counsellor
-              {!isLoggedIn && <Lock className="h-3 w-3 text-amber-300" />}
+            <span className="pr-1 text-[11px] font-sans font-medium uppercase tracking-[0.2em] hidden sm:inline-flex items-center gap-1.5 text-[#FDFCF7]">
+              Route AI Counsellor
+              {!isLoggedIn && <Lock className="h-3 w-3 text-[#D89A3E]" />}
             </span>
             <span className="relative flex h-2.5 w-2.5 sm:hidden">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D89A3E] opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#D89A3E]"></span>
             </span>
           </button>
         </div>

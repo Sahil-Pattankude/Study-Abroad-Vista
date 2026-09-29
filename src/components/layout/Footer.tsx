@@ -1,77 +1,90 @@
 import Link from "next/link";
 import { Compass, ShieldCheck, Award, HeartHandshake } from "lucide-react";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 export function Footer() {
   return (
-    <footer className="cv-auto border-t border-slate-200 bg-slate-900 text-slate-300">
-      {/* Top Value Banner */}
-      <div className="border-b border-slate-800 bg-slate-950 py-8">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
+    <footer className="cv-auto border-t border-[#1D5A6C]/40 bg-[#103B47] text-[#FDFCF7]/80">
+      {/* Section 14 · Trust and Compliance Strip */}
+      <div className="border-b border-[#1D5A6C]/30 bg-[#0D2F39] py-6">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 sm:grid-cols-4 sm:px-6 lg:px-8">
+          {/* N · NMC Recognised */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-[#EA5C2B]">
-              <ShieldCheck className="h-5 w-5" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1D5A6C]/30 border border-[#1D5A6C]/50 font-display font-bold text-sm text-[#A8CDBD]">
+              N
             </div>
             <div>
-              <p className="text-xs font-bold text-white">
-                100% Verified Universities
+              <p className="text-xs font-bold text-white leading-tight">
+                NMC Recognised
               </p>
-              <p className="text-[11px] text-slate-400">
-                NMC, WHO & accreditation verified catalogs.
+              <p className="text-[10px] text-slate-300 mt-0.5">
+                Every MBBS university verified against official NMC gazette.
               </p>
             </div>
           </div>
 
+          {/* W · WHO Verified */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-emerald-400">
-              <Award className="h-5 w-5" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1D5A6C]/30 border border-[#1D5A6C]/50 font-display font-bold text-sm text-[#A8CDBD]">
+              W
             </div>
             <div>
-              <p className="text-xs font-bold text-white">
-                Transparent ROI & Fee Data
+              <p className="text-xs font-bold text-white leading-tight">
+                WHO Verified
               </p>
-              <p className="text-[11px] text-slate-400">
-                Actual living costs converted to INR.
+              <p className="text-[10px] text-slate-300 mt-0.5">
+                Cross-checked against WHO World Directory of Medical Schools.
               </p>
             </div>
           </div>
 
+          {/* D · DPDP Act 2023 */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-indigo-400">
-              <HeartHandshake className="h-5 w-5" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1D5A6C]/30 border border-[#1D5A6C]/50 font-display font-bold text-sm text-[#A8CDBD]">
+              D
             </div>
             <div>
-              <p className="text-xs font-bold text-white">
-                DPDP Act 2023 Compliant
+              <p className="text-xs font-bold text-white leading-tight">
+                DPDP Act 2023
               </p>
-              <p className="text-[11px] text-slate-400">
-                Zero spam. Encrypted Indian student data privacy.
+              <p className="text-[10px] text-slate-300 mt-0.5">
+                Lawful data handling with zero spam and encryption guarantee.
+              </p>
+            </div>
+          </div>
+
+          {/* I · ISO Certified */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1D5A6C]/30 border border-[#1D5A6C]/50 font-display font-bold text-sm text-[#A8CDBD]">
+              I
+            </div>
+            <div>
+              <p className="text-xs font-bold text-white leading-tight">
+                ISO Certified
+              </p>
+              <p className="text-[10px] text-slate-300 mt-0.5">
+                Audited data security and student service operations standards.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Taxonomy Directory — Brand Header + 6 Columns per Document W1 & W10 */}
+      {/* Main Taxonomy Directory — Brand Header + 6 Columns */}
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         {/* Brand Header & Mandate */}
         <div className="mb-12 flex flex-col items-start justify-between gap-6 border-b border-slate-800/80 pb-10 md:flex-row md:items-center">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#102C57] to-[#091A36] text-white shadow-md border border-slate-700/50 group-hover:scale-105 transition-transform duration-200">
-              <Compass className="h-6 w-6 text-[#EA5C2B]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight text-white leading-none">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">
-                Authoritative Discovery & Admissions Engine
-              </span>
-            </div>
-          </Link>
+          <BrandLogo
+            variant="wordmark"
+            theme="dark"
+            size="md"
+            showTagline={false}
+          />
 
           <p className="max-w-md text-xs leading-relaxed text-slate-400">
-            A venture by <strong>Dnyanal Educon Pvt. Ltd.</strong> Empowering
+            A brand by <strong>Dnyanal Educon Pvt. Ltd.</strong> · Founder
+            Director: <strong>Nikhita Pradeep Deshmukh</strong>. Empowering
             Indian students with zero-bias admissions intelligence across 19
             global destinations and 8 career disciplines.
           </p>
@@ -389,7 +402,7 @@ export function Footer() {
                   href="/about"
                   className="text-slate-400 hover:text-white transition"
                 >
-                  About StudyAbroadVista
+                  About Abroadroute
                 </Link>
               </li>
               <li>
@@ -497,12 +510,13 @@ export function Footer() {
         <div className="mt-14 flex flex-col items-center justify-between border-t border-slate-800 pt-8 text-xs text-slate-500 sm:flex-row">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p className="font-semibold text-slate-400">
-              © 2026 StudyAbroad Vista. An authoritative brand by Dnyanal Educon
-              Pvt. Ltd.
+              © 2026 Abroadroute · Study Abroad Simplified. A brand by Dnyanal
+              Educon Pvt. Ltd.
             </p>
             <p className="text-[11px] text-slate-500">
-              Pune & Mumbai, India • Grievance Officer: dpo@studyabroadvista.com
-              • ISO & DPDP 2023 Verified.
+              Founder Director: Nikhita Pradeep Deshmukh · Pune & Mumbai, India
+              · Contact: contact@abroadroute.com · Grievance Officer:
+              dpo@abroadroute.com · DPDP 2023 Compliant.
             </p>
           </div>
           <div className="mt-4 flex gap-6 sm:mt-0">

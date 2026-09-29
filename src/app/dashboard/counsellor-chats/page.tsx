@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { AIChatMessage } from "@/types";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 interface SavedConversation {
   id: string;
@@ -99,34 +100,27 @@ export default function CounsellorChatsDashboardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col">
       {/* Top Navbar */}
-      <nav className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-6 lg:px-8">
+      <nav className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md px-4 py-3.5 sm:px-6 lg:px-8 sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-extrabold text-[#102C57]">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
-            <span className="rounded-md bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
-              Counsellor Chats
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="rounded-full bg-[#7C6BAE]/10 px-3 py-1 text-[11px] font-bold text-[#7C6BAE]">
+              ✦ Route AI Chats
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
             <Link
               href="/dashboard/student"
-              className="font-bold text-slate-700 hover:text-[#102C57] transition"
+              className="font-bold text-slate-700 hover:text-[#1D5A6C] transition"
             >
               ← Student Dashboard
             </Link>
             <Link
               href="/ai-counsellor"
-              className="rounded-lg bg-[#EA5C2B] px-3.5 py-1.5 font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+              className="rounded-lg bg-[#D89A3E] px-3.5 py-1.5 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
             >
               Start New Chat +
             </Link>
@@ -153,7 +147,7 @@ export default function CounsellorChatsDashboardPage() {
             </h1>
             <p className="text-xs text-slate-600 mt-0.5">
               Review and continue your personalized study abroad guidance
-              sessions powered by Gemini.
+              sessions powered by Route AI.
             </p>
           </div>
 

@@ -4,9 +4,9 @@ import { Footer } from '@/components/layout/Footer';
 import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "DPDP Act 2023 Consent & Student Privacy Notice | StudyAbroad Vista",
+  title: "DPDP Act 2023 Consent & Student Privacy Notice | Abroadroute",
   description:
-    "Digital Personal Data Protection (DPDP) Act 2023 consent notice for StudyAbroad Vista. Review data handling, privacy rights, and Indian student consent rules.",
+    "Digital Personal Data Protection (DPDP) Act 2023 consent notice for Abroadroute. Review data handling, privacy rights, and Indian student consent rules.",
 };
 
 export default function DPDPPage() {
@@ -27,7 +27,7 @@ export default function DPDPPage() {
             </div>
 
             <p>
-              StudyAbroad Vista strictly complies with India Digital Personal Data Protection Act, 2023. As a Data Fiduciary, Dnyanal Educon Pvt. Ltd. ensures that student data is processed lawfully, transparently, and only for explicit educational guidance purposes.
+              Abroadroute strictly complies with India Digital Personal Data Protection Act, 2023. As a Data Fiduciary, Dnyanal Educon Pvt. Ltd. ensures that student data is processed lawfully, transparently, and only for explicit educational guidance purposes.
             </p>
           </div>
         </div>

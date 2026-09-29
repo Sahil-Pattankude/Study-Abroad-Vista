@@ -31,6 +31,7 @@ import {
   removeFromShortlist as removeShortlistCookie,
   fetchBackendShortlist,
 } from "@/lib/cookies/shortlist";
+import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 export default function StudentAccountDashboard() {
   const router = useRouter();
@@ -192,35 +193,28 @@ export default function StudentAccountDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col">
       {/* Top Navbar */}
-      <header className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-6 lg:px-8 sticky top-0 z-30">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md px-4 py-3.5 sm:px-6 lg:px-8 sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#102C57] text-white">
-                <Compass className="h-5 w-5 text-[#EA5C2B]" />
-              </div>
-              <span className="text-lg font-extrabold text-[#102C57]">
-                StudyAbroad<span className="text-[#EA5C2B]">Vista</span>
-              </span>
-            </Link>
-            <span className="rounded-md bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-indigo-800">
-              Student Dashboard (T-13)
+            <BrandLogo variant="wordmark" theme="light" size="md" />
+            <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+              Student Workspace
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
             <span className="font-semibold text-slate-700 flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <User className="h-3.5 w-3.5 text-[#D89A3E]" />
               {displayName}
             </span>
             <Link
               href="/login"
               onClick={logout}
-              className="rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1"
+              className="rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1 transition"
             >
-              <LogOut className="h-3 w-3" />
+              <LogOut className="h-3 w-3 text-slate-500" />
               Log Out
             </Link>
           </div>
@@ -230,13 +224,13 @@ export default function StudentAccountDashboard() {
       {/* Main Content per Template T-13 */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 flex-1 space-y-8">
         {/* Welcome Message + Profile Completeness Progress (Level 1-4) */}
-        <div className="rounded-3xl bg-gradient-to-r from-[#102C57] via-[#0d2346] to-[#163a70] p-6 sm:p-8 text-white shadow-xl">
+        <div className="rounded-3xl bg-gradient-to-r from-[#103B47] via-[#154654] to-[#1D5A6C] p-6 sm:p-8 text-white shadow-xl">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
-              <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-[#EA5C2B]">
-                Student Workspace · DPDP Compliant
+              <span className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-[#EBC783] border border-white/15">
+                ✦ Student Workspace · DPDP Compliant
               </span>
-              <h1 className="mt-2 text-2xl font-black font-serif sm:text-3xl text-white">
+              <h1 className="mt-2 text-2xl font-black font-display sm:text-3xl text-white">
                 Welcome back, {displayName}
               </h1>
               <p className="mt-1 text-xs text-slate-300 max-w-xl">

@@ -1,11 +1,15 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Authorized Sign In | StudyAbroad Vista",
+  title: "Authorized Sign In | Abroadroute",
   description:
-    "Secure sign-in for StudyAbroad Vista portals. Access student shortlists, B2B lead marketplace, university listings dashboard, and AI counsellor history.",
+    "Secure sign-in for Abroadroute portals. Access student shortlists, B2B lead marketplace, university listings dashboard, and ✦ Route AI counsellor history.",
 };
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+export default function LoginLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <>{children}</>;
 }

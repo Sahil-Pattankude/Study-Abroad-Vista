@@ -4,9 +4,9 @@ import { Footer } from '@/components/layout/Footer';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "Contact Admissions Desk | StudyAbroad Vista",
+  title: "Contact Admissions Desk | Abroadroute",
   description:
-    "Contact StudyAbroad Vista admissions desk. Connect with international education strategists for university shortlists, intake guidance, and visa support.",
+    "Contact Abroadroute admissions desk. Connect with international education strategists for university shortlists, intake guidance, and visa support.",
 };
 
 export default function ContactPage() {
@@ -31,8 +31,8 @@ export default function ContactPage() {
               </div>
               <h3 className='mt-4 font-bold text-[#102C57]'>Email Support</h3>
               <p className='mt-1 text-xs text-slate-500'>Inquiries & Grievances</p>
-              <a href='mailto:admissions@studyabroadvista.com' className='mt-3 block text-xs font-bold text-[#EA5C2B] hover:underline'>
-                admissions@studyabroadvista.com
+              <a href='mailto:admissions@abroadroute.com' className='mt-3 block text-xs font-bold text-[#EA5C2B] hover:underline'>
+                admissions@abroadroute.com
               </a>
             </div>
 

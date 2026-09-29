@@ -5,7 +5,7 @@ import { LoanCalculatorClient } from "@/components/tools/LoanCalculatorClient";
 
 export const metadata: Metadata = {
   title:
-    "Study Abroad Education Loan & EMI Calculator (SBI, HDFC, Prodigy) | StudyAbroad Vista",
+    "Study Abroad Education Loan & EMI Calculator (SBI, HDFC, Prodigy) | Abroadroute",
   description:
     "Calculate monthly EMI repayments, compare collateral vs non-collateral interest rates (8.15% - 11.25%), and check instant pre-approval eligibility across top partner banks.",
   alternates: {
