@@ -28,7 +28,7 @@ export default function AboutPage() {
           <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-96 w-[700px] rounded-full bg-[#D89A3E]/15 blur-3xl" />
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8 relative z-10">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#D89A3E]/40 bg-[#D89A3E]/15 px-4 py-1.5 text-xs font-bold text-[#EBC783]">
-              <span>01 · Brand Essence</span>
+              <span>Brand Essence</span>
             </div>
             <h1 className="mt-6 font-display text-4xl font-semibold sm:text-5xl lg:text-6xl text-[#FDFCF7] leading-[1.15]">
               The clearest route for <br />
@@ -142,7 +142,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div className="text-center max-w-2xl mx-auto">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#D89A3E]/40 bg-[#D89A3E]/10 px-3.5 py-1 text-xs font-bold text-[#103B47]">
-                  <span>02 · Audiences</span>
+                  <span>Audiences</span>
                 </div>
                 <h2 className="mt-3 font-display text-3xl font-bold text-[#103B47]">
                   Four Audiences, One Honest Voice
@@ -277,7 +277,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div className="text-center max-w-2xl mx-auto">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#D89A3E]/40 bg-[#D89A3E]/10 px-3.5 py-1 text-xs font-bold text-[#103B47]">
-                  <span>03 · Personality</span>
+                  <span>Personality</span>
                 </div>
                 <h2 className="mt-3 font-display text-3xl font-bold text-[#103B47]">
                   Six Traits That Shape Everything
@@ -393,7 +393,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div className="text-center max-w-2xl mx-auto">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#D89A3E]/40 bg-[#D89A3E]/10 px-3.5 py-1 text-xs font-bold text-[#103B47]">
-                  <span>13 · Message Pillars</span>
+                  <span>Message Pillars</span>
                 </div>
                 <h2 className="mt-3 font-display text-3xl font-bold text-[#103B47]">
                   Four Things Abroadroute Always Says

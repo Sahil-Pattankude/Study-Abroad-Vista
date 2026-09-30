@@ -56,25 +56,26 @@ export function AIChatActionCard({
   if (action.type === "CALCULATE_COST") {
     const country = action.payload.country || "Germany";
     return (
-      <div className="mt-2.5 flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/90 p-3 text-emerald-950 shadow-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
-            <Calculator className="h-4 w-4" />
+      <div className="mt-2.5 flex items-center justify-between rounded-2xl border border-[#D9CFB8]/80 bg-[#F5EFE0] p-3.5 text-[#103B47] shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1D5A6C] text-white shrink-0 shadow-xs">
+            <Calculator className="h-4 w-4 text-[#D89A3E]" />
           </div>
           <div>
-            <h5 className="text-xs font-bold text-emerald-900">
+            <h5 className="text-xs font-serif font-bold text-[#103B47]">
               Estimate Living & Tuition Costs
             </h5>
-            <p className="text-[10px] text-emerald-700">
+            <p className="text-[10px] text-[#103B47]/70 font-medium">
               Calculate Blocked Account & INR expenses for {country}
             </p>
           </div>
         </div>
         <Link
           href={`/cost-calculator?country=${encodeURIComponent(country.toLowerCase())}`}
-          className="inline-flex items-center gap-1 rounded-lg bg-emerald-700 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-xs hover:bg-emerald-800 transition"
+          className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-[#103B47] px-3.5 py-2 text-[11px] font-bold text-white shadow-xs hover:bg-[#1D5A6C] transition"
         >
-          Calculate <ArrowRight className="h-3 w-3" />
+          <span>Calculate</span>{" "}
+          <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
         </Link>
       </div>
     );
@@ -89,25 +90,26 @@ export function AIChatActionCard({
       : `/universities?search=${encodeURIComponent(query)}`;
 
     return (
-      <div className="mt-2.5 flex items-center justify-between rounded-xl border border-indigo-200 bg-indigo-50/90 p-3 text-indigo-950 shadow-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102C57] text-white">
-            <Search className="h-4 w-4" />
+      <div className="mt-2.5 flex items-center justify-between rounded-2xl border border-[#D9CFB8]/80 bg-[#F5EFE0] p-3.5 text-[#103B47] shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#103B47] text-white shrink-0 shadow-xs">
+            <Search className="h-4 w-4 text-[#D89A3E]" />
           </div>
           <div>
-            <h5 className="text-xs font-bold text-[#102C57]">
+            <h5 className="text-xs font-serif font-bold text-[#103B47]">
               Explore Matching Programs
             </h5>
-            <p className="text-[10px] text-indigo-700">
+            <p className="text-[10px] text-[#103B47]/70 font-medium">
               Browse verified institutions for {query}
             </p>
           </div>
         </div>
         <Link
           href={targetUrl}
-          className="inline-flex items-center gap-1 rounded-lg bg-[#102C57] px-2.5 py-1.5 text-[11px] font-bold text-white shadow-xs hover:bg-[#0c2242] transition"
+          className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-[#103B47] px-3.5 py-2 text-[11px] font-bold text-white shadow-xs hover:bg-[#1D5A6C] transition"
         >
-          View Listings <ExternalLink className="h-3 w-3" />
+          <span>View Listings</span>{" "}
+          <ExternalLink className="h-3.5 w-3.5 text-[#D89A3E]" />
         </Link>
       </div>
     );
@@ -123,22 +125,24 @@ export function AIChatActionCard({
     };
 
     return (
-      <div className="mt-2.5 flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50/90 p-3 text-amber-950 shadow-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EA5C2B] text-white">
-            <BookmarkPlus className="h-4 w-4" />
+      <div className="mt-2.5 flex items-center justify-between rounded-2xl border border-[#D9CFB8]/80 bg-[#F5EFE0] p-3.5 text-[#103B47] shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1D5A6C] text-white shrink-0 shadow-xs">
+            <BookmarkPlus className="h-4 w-4 text-[#D89A3E]" />
           </div>
           <div>
-            <h5 className="text-xs font-bold text-amber-950">
+            <h5 className="text-xs font-serif font-bold text-[#103B47]">
               Add to Watchlist
             </h5>
-            <p className="text-[10px] text-amber-800">{name}</p>
+            <p className="text-[10px] text-[#103B47]/70 font-medium truncate max-w-[160px] sm:max-w-xs">
+              {name}
+            </p>
           </div>
         </div>
         <button
           onClick={handleSave}
           disabled={shortlistSaved}
-          className="inline-flex items-center gap-1 rounded-lg bg-[#EA5C2B] px-2.5 py-1.5 text-[11px] font-bold text-white shadow-xs hover:bg-[#d44d1f] disabled:bg-emerald-600 transition"
+          className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-[#D89A3E] px-3.5 py-2 text-[11px] font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] disabled:bg-emerald-700 disabled:text-white transition cursor-pointer"
         >
           {shortlistSaved ? "Saved ✓" : "Save to Shortlist"}
         </button>
@@ -149,25 +153,25 @@ export function AIChatActionCard({
   if (action.type === "BOOK_CALL") {
     const country = action.payload.country || "Global";
     return (
-      <div className="mt-2.5 flex items-center justify-between rounded-xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-3 text-slate-800 shadow-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#EA5C2B] text-white shadow-xs">
+      <div className="mt-2.5 flex items-center justify-between rounded-2xl border border-[#D9CFB8] bg-[#F5EFE0] p-3.5 text-[#103B47] shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#103B47] text-[#D89A3E] shrink-0 shadow-xs">
             <PhoneCall className="h-4 w-4" />
           </div>
           <div>
-            <h5 className="text-xs font-bold text-slate-900">
+            <h5 className="text-xs font-serif font-bold text-[#103B47]">
               Book 1-on-1 Profile Evaluation
             </h5>
-            <p className="text-[10px] text-slate-600">
+            <p className="text-[10px] text-[#103B47]/70 font-medium">
               Connect with an authorized counsellor for {country}
             </p>
           </div>
         </div>
         <button
           onClick={() => onOpenLeadModal?.(country)}
-          className="inline-flex items-center gap-1 rounded-lg bg-[#EA5C2B] px-2.5 py-1.5 text-[11px] font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+          className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-[#D89A3E] px-3.5 py-2 text-[11px] font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition cursor-pointer"
         >
-          Book Call <ArrowRight className="h-3 w-3" />
+          <span>Book Call</span> <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>
     );

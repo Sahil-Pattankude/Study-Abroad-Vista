@@ -281,18 +281,18 @@ export default function AICounsellorFullPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-slate-100">
+    <div className="flex h-screen flex-col bg-[#FDFCF7]">
       {/* Top Navbar */}
-      <header className="border-b border-[#D9CFB8]/60 bg-white px-4 py-3 sm:px-6">
+      <header className="border-b border-[#D9CFB8]/60 bg-white/95 backdrop-blur-md px-4 py-3.5 sm:px-6 sticky top-0 z-30 shadow-xs">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
             <BrandLogo variant="wordmark" theme="light" size="md" />
-            <div className="hidden items-center gap-2 border-l border-slate-200 pl-3 sm:flex">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#7C6BAE]/10 px-2.5 py-0.5 text-xs font-bold text-[#7C6BAE]">
+            <div className="hidden items-center gap-2 border-l border-[#D9CFB8]/60 pl-3 sm:flex">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-3 py-1 text-xs font-bold text-[#1D5A6C]">
                 <Bot className="h-3.5 w-3.5 text-[#D89A3E]" /> Route AI
                 Counsellor
               </span>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-xs text-[#103B47]/70 font-medium">
                 Context-Aware • 19 Destinations
               </span>
             </div>
@@ -303,30 +303,30 @@ export default function AICounsellorFullPage() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/dashboard/counsellor-chats"
-                  className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 transition"
+                  className="min-h-[44px] hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-[#D9CFB8] bg-white px-3.5 py-2 font-bold text-[#103B47] hover:bg-[#F5EFE0] transition shadow-xs"
                 >
                   <MessageSquare className="h-3.5 w-3.5 text-[#D89A3E]" />
-                  Saved Chats
+                  <span>Saved Chats</span>
                 </Link>
                 <Link
                   href="/dashboard/student"
-                  className="inline-flex items-center gap-1 rounded-lg bg-[#1D5A6C] px-3 py-1.5 font-bold text-white hover:bg-[#103B47] transition"
+                  className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl bg-[#103B47] px-4 py-2 font-bold text-white hover:bg-[#1D5A6C] transition shadow-xs"
                 >
-                  <User className="h-3.5 w-3.5" />
-                  Dashboard
+                  <User className="h-3.5 w-3.5 text-[#D89A3E]" />
+                  <span>Dashboard</span>
                 </Link>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 transition"
+                  className="min-h-[44px] flex items-center rounded-xl border border-[#D9CFB8] bg-white px-4 py-2 font-bold text-[#103B47] hover:bg-[#F5EFE0] transition shadow-xs"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/signup"
-                  className="rounded-lg bg-[#D89A3E] px-3.5 py-1.5 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
+                  className="min-h-[44px] flex items-center rounded-xl bg-[#D89A3E] px-4 py-2 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
                 >
                   Create Account
                 </Link>
@@ -339,18 +339,18 @@ export default function AICounsellorFullPage() {
       {/* Main 2-Column Full Screen Workspace */}
       <div className="mx-auto flex w-full max-w-7xl flex-1 overflow-hidden p-2 sm:p-4 gap-4">
         {/* Main Chat Stream (Left / Center) */}
-        <div className="flex flex-1 flex-col rounded-2xl sm:rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div className="flex flex-1 flex-col rounded-2xl sm:rounded-3xl border border-[#D9CFB8]/60 bg-white shadow-sm overflow-hidden">
           {/* Subheader */}
-          <div className="flex items-center justify-between border-b border-slate-100 bg-[#102C57] px-4 py-3 text-white">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white">
-                <Bot className="h-4 w-4 text-[#EA5C2B]" />
+          <div className="flex items-center justify-between border-b border-[#1D5A6C]/50 bg-[#103B47] px-4 py-3 sm:px-5 sm:py-3.5 text-white">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1D5A6C] text-[#D89A3E] shadow-xs">
+                <Bot className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="text-xs font-extrabold sm:text-sm">
+                <h2 className="font-serif text-xs font-bold sm:text-sm">
                   Personalized Admissions & Visa Assistant
                 </h2>
-                <p className="text-[10px] text-slate-300">
+                <p className="text-[10px] text-[#A8CDBD] font-mono">
                   Live vector RAG knowledge from Supabase & verified regulations
                 </p>
               </div>
@@ -358,16 +358,16 @@ export default function AICounsellorFullPage() {
             {messages.length > 1 && (
               <button
                 onClick={handleClearChat}
-                className="flex items-center gap-1 rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-white hover:bg-white/20 transition"
+                className="flex items-center gap-1.5 rounded-xl bg-white/10 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition cursor-pointer"
               >
-                <RotateCcw className="h-3 w-3" />
-                Reset
+                <RotateCcw className="h-3 w-3 text-[#D89A3E]" />
+                <span>Reset</span>
               </button>
             )}
           </div>
 
           {/* Chat Messages Feed */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 text-xs sm:text-sm">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 text-xs sm:text-sm bg-[#FDFCF7]">
             {messages.map((m) => {
               const { cleanText, actions } = parseMessageActions(m.text);
 
@@ -377,19 +377,19 @@ export default function AICounsellorFullPage() {
                   className={`flex gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {m.role === "model" && (
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-[#102C57] shadow-xs">
-                      <Sparkles className="h-4 w-4 text-[#EA5C2B]" />
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#F5EFE0] text-[#103B47] border border-[#D9CFB8]/60 shadow-xs">
+                      <Sparkles className="h-4 w-4 text-[#D89A3E]" />
                     </div>
                   )}
 
                   <div
                     className={`max-w-[85%] rounded-2xl p-4 leading-relaxed ${
                       m.role === "user"
-                        ? "bg-[#102C57] text-white"
-                        : "border border-slate-200 bg-slate-50/80 text-slate-800"
+                        ? "bg-[#103B47] text-white shadow-xs"
+                        : "border border-[#D9CFB8]/60 bg-white text-[#103B47] shadow-xs"
                     }`}
                   >
-                    <div className="whitespace-pre-line text-xs sm:text-sm leading-relaxed space-y-2">
+                    <div className="whitespace-pre-line text-xs sm:text-sm leading-relaxed space-y-2 font-medium">
                       {cleanText}
                     </div>
 
@@ -410,8 +410,10 @@ export default function AICounsellorFullPage() {
                     )}
 
                     <span
-                      className={`mt-2 block text-[10px] ${
-                        m.role === "user" ? "text-slate-300" : "text-slate-500"
+                      className={`mt-2 block text-[10px] font-mono ${
+                        m.role === "user"
+                          ? "text-white/70"
+                          : "text-[#103B47]/60"
                       }`}
                     >
                       {m.timestamp}
@@ -419,7 +421,7 @@ export default function AICounsellorFullPage() {
                   </div>
 
                   {m.role === "user" && (
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-200 text-slate-700 shadow-xs">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#1D5A6C]/20 text-[#103B47] border border-[#1D5A6C]/30 shadow-xs">
                       <User className="h-4 w-4" />
                     </div>
                   )}
@@ -428,37 +430,37 @@ export default function AICounsellorFullPage() {
             })}
 
             {loading && (
-              <div className="flex items-center gap-2 text-slate-500 text-xs pl-2">
-                <span className="flex h-2.5 w-2.5 animate-ping rounded-full bg-[#EA5C2B]"></span>
+              <div className="flex items-center gap-2 text-[#103B47]/70 text-xs pl-2 font-medium">
+                <span className="flex h-2.5 w-2.5 animate-ping rounded-full bg-[#D89A3E]"></span>
                 <span>Thinking & querying verified university catalog...</span>
               </div>
             )}
 
             {/* Level 2 Lead Capture (FR-AI-005) */}
             {showLevel2LeadCapture && !level2Captured && !user?.email && (
-              <div className="rounded-2xl border border-indigo-200 bg-indigo-50/90 p-4 text-indigo-950 shadow-xs">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#102C57] text-white">
-                    <Mail className="h-4 w-4 text-[#EA5C2B]" />
+              <div className="rounded-2xl border border-[#D9CFB8] bg-[#F5EFE0] p-4 sm:p-5 text-[#103B47] shadow-xs">
+                <div className="flex items-start gap-3.5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#103B47] text-white">
+                    <Mail className="h-5 w-5 text-[#D89A3E]" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-[#102C57]">
+                    <h4 className="font-serif font-bold text-xs sm:text-sm text-[#103B47]">
                       Save this Consultation & University Shortlist
                     </h4>
-                    <p className="text-xs text-indigo-800 mt-0.5">
+                    <p className="text-xs text-[#103B47]/80 mt-0.5 leading-relaxed">
                       Enter your details to receive this entire transcript,
                       admission checklist, and scholarship links in your inbox.
                     </p>
                     <form
                       onSubmit={handleSaveLevel2Lead}
-                      className="mt-3 flex flex-col sm:flex-row gap-2"
+                      className="mt-3.5 flex flex-col sm:flex-row gap-2.5"
                     >
                       <input
                         type="text"
                         placeholder="Your Full Name"
                         value={leadName}
                         onChange={(e) => setLeadName(e.target.value)}
-                        className="rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs text-slate-800"
+                        className="min-h-[44px] rounded-xl border border-[#D9CFB8]/60 bg-white px-3.5 py-2 text-xs text-[#103B47] focus:border-[#103B47] focus:outline-none"
                         required
                       />
                       <input
@@ -466,12 +468,12 @@ export default function AICounsellorFullPage() {
                         placeholder="Your Email Address"
                         value={leadEmail}
                         onChange={(e) => setLeadEmail(e.target.value)}
-                        className="flex-1 rounded-lg border border-indigo-200 bg-white px-3 py-2 text-xs text-slate-800"
+                        className="min-h-[44px] flex-1 rounded-xl border border-[#D9CFB8]/60 bg-white px-3.5 py-2 text-xs text-[#103B47] focus:border-[#103B47] focus:outline-none"
                         required
                       />
                       <button
                         type="submit"
-                        className="rounded-lg bg-[#102C57] px-4 py-2 text-xs font-bold text-white hover:bg-[#0c2242] transition"
+                        className="min-h-[44px] rounded-xl bg-[#103B47] px-5 py-2 text-xs font-bold text-white hover:bg-[#1D5A6C] transition shadow-xs cursor-pointer"
                       >
                         Save Transcript →
                       </button>
@@ -482,7 +484,7 @@ export default function AICounsellorFullPage() {
             )}
 
             {level2Captured && (
-              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-medium text-emerald-800">
+              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-300 p-3.5 text-xs font-semibold text-emerald-900">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>
                   Transcript and tailored recommendations will be emailed to{" "}
@@ -493,24 +495,24 @@ export default function AICounsellorFullPage() {
 
             {/* Level 3 Lead Capture (FR-AI-005) */}
             {showLevel3Consultation && (
-              <div className="rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-4 text-slate-800 shadow-xs">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EA5C2B] text-white">
-                    <PhoneCall className="h-4 w-4" />
+              <div className="rounded-2xl border border-[#D89A3E] bg-[#F5EFE0] p-4 sm:p-5 text-[#103B47] shadow-xs">
+                <div className="flex items-start gap-3.5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#103B47] text-[#D89A3E]">
+                    <PhoneCall className="h-5 w-5" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-slate-900">
+                    <h4 className="font-serif font-bold text-xs sm:text-sm text-[#103B47]">
                       Need 1-on-1 Profile Review & Visa Filing Support?
                     </h4>
-                    <p className="text-xs text-slate-600 mt-0.5">
+                    <p className="text-xs text-[#103B47]/80 mt-0.5 leading-relaxed">
                       Schedule a dedicated video/phone consultation with an
                       authorized senior counsellor.
                     </p>
                     <button
                       onClick={() => setLeadModalOpen(true)}
-                      className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-[#EA5C2B] px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+                      className="min-h-[44px] mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#D89A3E] px-4 py-2 text-xs font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition cursor-pointer"
                     >
-                      Book 1-on-1 Counsellor Session
+                      <span>Book 1-on-1 Counsellor Session</span>
                       <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -522,43 +524,43 @@ export default function AICounsellorFullPage() {
           </div>
 
           {/* Input Bar */}
-          <div className="border-t border-slate-200 p-3 sm:p-4 bg-white">
+          <div className="border-t border-[#D9CFB8]/60 p-3 sm:p-4 bg-white">
             {isLoggedIn ? (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage(input);
                 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2.5"
               >
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about universities, scholarships, tuition fees in ₹ Lakhs, visa rules..."
-                  className="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:border-[#102C57] focus:outline-none"
+                  className="min-h-[44px] flex-1 rounded-xl border border-[#D9CFB8]/60 px-4 py-2.5 text-xs sm:text-sm text-[#103B47] placeholder-[#103B47]/40 focus:border-[#103B47] focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={loading || !input.trim()}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#102C57] text-white transition hover:bg-[#0c2242] disabled:opacity-50"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-[#103B47] text-white transition hover:bg-[#1D5A6C] disabled:opacity-50 cursor-pointer shadow-xs"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-4 w-4 text-[#D89A3E]" />
                 </button>
               </form>
             ) : (
-              <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs">
-                <div className="flex items-center gap-2 text-slate-600">
-                  <Lock className="h-4 w-4 text-[#D89A3E]" />
-                  <span>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-[#D9CFB8] bg-[#F5EFE0] p-3.5 text-xs">
+                <div className="flex items-center gap-2.5 text-[#103B47]">
+                  <Lock className="h-4 w-4 text-[#D89A3E] shrink-0" />
+                  <span className="font-medium">
                     Free account required to chat with Route AI Counsellor
                   </span>
                 </div>
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-1 rounded-lg bg-[#D89A3E] px-4 py-2 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
+                  className="min-h-[44px] inline-flex items-center justify-center gap-1 rounded-xl bg-[#D89A3E] px-4 py-2 font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
                 >
-                  Sign In to Chat
+                  <span>Sign In to Chat</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -569,68 +571,68 @@ export default function AICounsellorFullPage() {
         {/* Sidebar with Categorized Questions & Tools (Right Column) */}
         <div className="hidden w-80 lg:flex flex-col gap-4 overflow-y-auto">
           {/* Quick Action Tools */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57] flex items-center gap-1.5 mb-3">
-              <Sparkles className="h-3.5 w-3.5 text-[#EA5C2B]" /> Quick Tools
+          <div className="rounded-3xl border border-[#D9CFB8]/60 bg-white p-5 shadow-xs">
+            <h3 className="font-serif text-xs font-bold uppercase tracking-wider text-[#103B47] flex items-center gap-1.5 mb-3.5">
+              <Sparkles className="h-3.5 w-3.5 text-[#D89A3E]" /> Quick Tools
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Link
                 href="/cost-calculator"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-2.5 hover:border-emerald-200 hover:bg-emerald-50/50 transition group"
+                className="min-h-[44px] flex items-center justify-between rounded-xl border border-[#D9CFB8]/40 bg-[#FDFCF7] p-2.5 hover:border-[#1D5A6C]/40 hover:bg-[#F5EFE0] transition group"
               >
-                <div className="flex items-center gap-2">
-                  <Calculator className="h-4 w-4 text-emerald-600" />
-                  <span className="text-xs font-semibold text-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <Calculator className="h-4 w-4 text-[#1D5A6C]" />
+                  <span className="text-xs font-semibold text-[#103B47]">
                     Cost Calculator
                   </span>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-emerald-700 transition" />
+                <ArrowRight className="h-3.5 w-3.5 text-[#103B47]/40 group-hover:text-[#103B47] transition" />
               </Link>
               <Link
                 href="/universities"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-2.5 hover:border-indigo-200 hover:bg-indigo-50/50 transition group"
+                className="min-h-[44px] flex items-center justify-between rounded-xl border border-[#D9CFB8]/40 bg-[#FDFCF7] p-2.5 hover:border-[#1D5A6C]/40 hover:bg-[#F5EFE0] transition group"
               >
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-[#102C57]" />
-                  <span className="text-xs font-semibold text-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <Building2 className="h-4 w-4 text-[#103B47]" />
+                  <span className="text-xs font-semibold text-[#103B47]">
                     University Finder
                   </span>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#102C57] transition" />
+                <ArrowRight className="h-3.5 w-3.5 text-[#103B47]/40 group-hover:text-[#103B47] transition" />
               </Link>
               <Link
                 href="/compare/universities"
-                className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-2.5 hover:border-amber-200 hover:bg-amber-50/50 transition group"
+                className="min-h-[44px] flex items-center justify-between rounded-xl border border-[#D9CFB8]/40 bg-[#FDFCF7] p-2.5 hover:border-[#1D5A6C]/40 hover:bg-[#F5EFE0] transition group"
               >
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="h-4 w-4 text-[#EA5C2B]" />
-                  <span className="text-xs font-semibold text-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <GraduationCap className="h-4 w-4 text-[#D89A3E]" />
+                  <span className="text-xs font-semibold text-[#103B47]">
                     Compare Programs
                   </span>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#EA5C2B] transition" />
+                <ArrowRight className="h-3.5 w-3.5 text-[#103B47]/40 group-hover:text-[#D89A3E] transition" />
               </Link>
             </div>
           </div>
 
           {/* Categorized Suggested Questions */}
-          <div className="flex-1 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs space-y-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#102C57] flex items-center gap-1.5">
-              <HelpCircle className="h-3.5 w-3.5 text-[#EA5C2B]" /> Suggested
+          <div className="flex-1 rounded-3xl border border-[#D9CFB8]/60 bg-white p-5 shadow-xs space-y-4">
+            <h3 className="font-serif text-xs font-bold uppercase tracking-wider text-[#103B47] flex items-center gap-1.5">
+              <HelpCircle className="h-3.5 w-3.5 text-[#D89A3E]" /> Suggested
               Questions
             </h3>
 
             {CATEGORIZED_QUESTIONS.map((cat, idx) => (
-              <div key={idx} className="space-y-1.5">
-                <h4 className="text-[11px] font-bold text-slate-700">
+              <div key={idx} className="space-y-2">
+                <h4 className="text-[11px] font-bold text-[#103B47]/80 uppercase tracking-wider">
                   {cat.category}
                 </h4>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {cat.questions.map((q, qIdx) => (
                     <button
                       key={qIdx}
                       onClick={() => handleSendMessage(q)}
-                      className="w-full text-left rounded-lg border border-slate-100 bg-slate-50/70 p-2 text-[11px] text-slate-700 hover:border-[#102C57] hover:bg-indigo-50/40 hover:text-[#102C57] transition leading-snug"
+                      className="w-full text-left rounded-xl border border-[#D9CFB8]/40 bg-[#FDFCF7] p-2.5 text-[11px] text-[#103B47] hover:border-[#103B47] hover:bg-[#F5EFE0] transition leading-snug cursor-pointer font-medium"
                     >
                       {q}
                     </button>
@@ -641,18 +643,18 @@ export default function AICounsellorFullPage() {
           </div>
 
           {/* Human Advisor Booking Card */}
-          <div className="rounded-2xl border border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50 p-4 text-slate-800 shadow-xs">
-            <div className="flex items-center gap-2 text-[#EA5C2B] font-bold text-xs">
-              <ShieldCheck className="h-4 w-4" />
+          <div className="rounded-3xl border border-[#D9CFB8] bg-[#F5EFE0] p-5 text-[#103B47] shadow-xs">
+            <div className="flex items-center gap-2 text-[#103B47] font-serif font-bold text-xs">
+              <ShieldCheck className="h-4 w-4 text-[#D89A3E]" />
               Verified Counsellors
             </div>
-            <p className="text-[11px] text-slate-600 mt-1">
+            <p className="text-[11px] text-[#103B47]/80 mt-1.5 leading-relaxed">
               Prefer speaking with a human study abroad mentor? Book a 100% free
               consultation session.
             </p>
             <button
               onClick={() => setLeadModalOpen(true)}
-              className="mt-3 w-full rounded-xl bg-[#EA5C2B] py-2 text-center text-xs font-bold text-white shadow-xs hover:bg-[#d44d1f] transition"
+              className="min-h-[44px] mt-3.5 w-full rounded-xl bg-[#103B47] py-2.5 text-center text-xs font-bold text-white shadow-xs hover:bg-[#1D5A6C] transition cursor-pointer"
             >
               Book 1-on-1 Consultation
             </button>

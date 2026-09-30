@@ -85,23 +85,23 @@ export default function StudentDashboardPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
             <BrandLogo variant="wordmark" theme="light" size="md" />
-            <span className="rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
+            <span className="rounded-full bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-3 py-1 text-[11px] font-bold text-[#1D5A6C]">
               Student Dashboard
             </span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
-            <span className="font-semibold text-slate-700 flex items-center gap-1.5">
+            <span className="font-semibold text-[#103B47] flex items-center gap-1.5">
               <User className="h-3.5 w-3.5 text-[#D89A3E]" />
               Welcome, {displayName}
             </span>
             <Link
               href="/login"
               onClick={logout}
-              className="rounded-lg border border-slate-200 px-3 py-1.5 font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-1 transition"
+              className="min-h-[44px] rounded-xl border border-[#D9CFB8] bg-white px-3.5 py-2 font-bold text-[#103B47] hover:bg-[#F5EFE0] flex items-center gap-1.5 transition shadow-xs"
             >
-              <LogOut className="h-3 w-3 text-slate-500" />
-              Log Out
+              <LogOut className="h-3.5 w-3.5 text-[#103B47]/70" />
+              <span>Log Out</span>
             </Link>
           </div>
         </div>
@@ -110,9 +110,9 @@ export default function StudentDashboardPage() {
       {/* Main Dashboard Content */}
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {user?.role === "university" && (
-          <div className="mb-5 flex items-center justify-between rounded-2xl border border-indigo-200 bg-indigo-50 p-4 text-xs font-bold text-[#102C57] shadow-xs">
-            <div className="flex items-center gap-2.5">
-              <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-[#D9CFB8] bg-[#F5EFE0] p-4 sm:p-5 text-xs font-bold text-[#103B47] shadow-xs">
+            <div className="flex items-center gap-3">
+              <Building2 className="h-5 w-5 text-[#D89A3E] shrink-0" />
               <span>
                 You are signed in with university partner credentials (
                 {user.email}).
@@ -120,7 +120,7 @@ export default function StudentDashboardPage() {
             </div>
             <Link
               href="/portal/university"
-              className="rounded-xl bg-[#102C57] px-3.5 py-2 text-white hover:bg-[#0c2242] transition"
+              className="min-h-[44px] rounded-xl bg-[#103B47] px-4 py-2.5 text-white hover:bg-[#1D5A6C] transition flex items-center shadow-xs"
             >
               Switch to University Portal →
             </Link>
@@ -128,16 +128,16 @@ export default function StudentDashboardPage() {
         )}
 
         {/* Personalized Welcome Banner */}
-        <div className="mb-6 rounded-3xl bg-gradient-to-r from-[#102C57] via-[#0e274d] to-[#153b75] p-6 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-8 rounded-3xl bg-gradient-to-r from-[#103B47] via-[#154654] to-[#1D5A6C] p-6 sm:p-8 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-5 border border-[#103B47]">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-[#EA5C2B]">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold text-[#D89A3E] border border-[#D89A3E]/30">
               <GraduationCap className="h-3.5 w-3.5" /> Aspirant Workspace ·
               Profile Verified
             </div>
-            <h1 className="mt-2 text-2xl font-black font-serif text-white sm:text-3xl">
+            <h1 className="mt-2.5 text-2xl font-black font-serif text-white sm:text-3xl">
               Welcome back, {displayName}!
             </h1>
-            <p className="mt-1 text-xs text-slate-300">
+            <p className="mt-1 text-xs text-white/80 font-medium">
               {user?.email ? `Registered email: ${user.email} • ` : ""}Target
               Intake: Fall 2027 • DPDP Act 2023 Compliant Workspace
             </p>
@@ -145,172 +145,181 @@ export default function StudentDashboardPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="rounded-xl bg-[#EA5C2B] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#ff7240] transition"
+              className="min-h-[44px] flex items-center rounded-xl bg-[#D89A3E] px-5 py-2.5 text-xs font-bold text-[#103B47] shadow-xs hover:bg-[#EBC783] transition"
             >
               Explore 19 Destinations →
             </Link>
           </div>
         </div>
+
         {/* Profile Card & Stats */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center gap-2 text-[#102C57]">
-              <Bookmark className="h-5 w-5 text-[#EA5C2B]" />
-              <span className="text-xs font-bold uppercase">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-2xl border border-[#D9CFB8]/60 bg-white p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center gap-2 text-[#103B47]">
+              <Bookmark className="h-5 w-5 text-[#D89A3E]" />
+              <span className="text-xs font-serif font-bold uppercase tracking-wider text-[#103B47]/80">
                 Saved Shortlists
               </span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">
+            <p className="mt-3 text-3xl font-mono font-bold text-[#103B47]">
               {shortlistedUnis.length}
             </p>
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-[#103B47]/70 mt-1 block">
               Universities in watchlist
             </span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center gap-2 text-[#102C57]">
-              <FileText className="h-5 w-5 text-indigo-600" />
-              <span className="text-xs font-bold uppercase">Evaluations</span>
+          <div className="rounded-2xl border border-[#D9CFB8]/60 bg-white p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center gap-2 text-[#103B47]">
+              <FileText className="h-5 w-5 text-[#1D5A6C]" />
+              <span className="text-xs font-serif font-bold uppercase tracking-wider text-[#103B47]/80">
+                Evaluations
+              </span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">2 Active</p>
-            <span className="text-[11px] text-slate-500">
+            <p className="mt-3 text-3xl font-mono font-bold text-[#103B47]">
+              2 Active
+            </p>
+            <span className="text-[11px] text-[#103B47]/70 mt-1 block">
               Germany MS & Ireland
             </span>
           </div>
 
           <Link
             href="/dashboard/counsellor-chats"
-            className="group block rounded-2xl border border-slate-200 bg-white p-5 shadow-xs hover:border-[#102C57] transition"
+            className="group block rounded-2xl border border-[#D9CFB8]/60 bg-white p-5 sm:p-6 shadow-xs hover:border-[#103B47] transition"
           >
-            <div className="flex items-center justify-between text-[#102C57]">
+            <div className="flex items-center justify-between text-[#103B47]">
               <div className="flex items-center gap-2">
-                <Bot className="h-5 w-5 text-emerald-600" />
-                <span className="text-xs font-bold uppercase">
+                <Bot className="h-5 w-5 text-[#1D5A6C]" />
+                <span className="text-xs font-serif font-bold uppercase tracking-wider text-[#103B47]/80">
                   AI Chat Sessions
                 </span>
               </div>
-              <span className="text-xs font-bold text-slate-400 group-hover:text-[#102C57]">
+              <span className="text-xs font-bold text-[#1D5A6C] group-hover:translate-x-0.5 transition">
                 View All →
               </span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">
+            <p className="mt-3 text-3xl font-serif font-bold text-[#103B47]">
               Transcripts
             </p>
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-[#103B47]/70 mt-1 block">
               Saved Route AI advice & shortlists
             </span>
           </Link>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-            <div className="flex items-center gap-2 text-[#102C57]">
-              <GraduationCap className="h-5 w-5 text-purple-600" />
-              <span className="text-xs font-bold uppercase">Consultation</span>
+          <div className="rounded-2xl border border-[#D9CFB8]/60 bg-white p-5 sm:p-6 shadow-xs">
+            <div className="flex items-center gap-2 text-[#103B47]">
+              <GraduationCap className="h-5 w-5 text-[#D89A3E]" />
+              <span className="text-xs font-serif font-bold uppercase tracking-wider text-[#103B47]/80">
+                Consultation
+              </span>
             </div>
-            <p className="mt-3 text-2xl font-black text-[#102C57]">Confirmed</p>
-            <span className="text-[11px] text-emerald-600 font-semibold">
-              1-on-1 Call Tomorrow
+            <p className="mt-3 text-3xl font-serif font-bold text-[#103B47]">
+              Confirmed
+            </p>
+            <span className="text-[11px] text-emerald-700 font-semibold mt-1 block">
+              1-on-1 Call Scheduled
             </span>
           </div>
         </div>
 
         {/* Shortlist Table */}
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="mt-8 rounded-3xl border border-[#D9CFB8]/60 bg-white p-6 sm:p-8 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9CFB8]/40 pb-5">
             <div>
-              <h2 className="text-base font-black text-[#102C57]">
+              <h2 className="font-serif text-lg sm:text-xl font-bold text-[#103B47]">
                 My Saved University Shortlist
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#103B47]/70 mt-0.5">
                 Compare rankings, fees, and minimum IELTS cutoffs.
               </p>
             </div>
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#EA5C2B] hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D89A3E] hover:underline"
             >
-              Explore more universities
+              Explore more universities →
             </Link>
           </div>
 
           {shortlistedUnis.length === 0 ? (
             <div className="py-12 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-[#EA5C2B]">
-                <Bookmark className="h-6 w-6" />
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5EFE0] text-[#D89A3E] border border-[#D9CFB8]/60">
+                <Bookmark className="h-7 w-7" />
               </div>
-              <h3 className="mt-3 text-sm font-bold text-[#102C57]">
+              <h3 className="mt-4 font-serif text-base font-bold text-[#103B47]">
                 No universities shortlisted yet
               </h3>
-              <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
+              <p className="mt-1 text-xs text-[#103B47]/70 max-w-sm mx-auto leading-relaxed">
                 Explore universities across 19 countries and click the{" "}
-                <strong>★ Shortlist</strong> button on any profile to save it to
-                your dashboard.
+                <strong className="text-[#103B47]">★ Shortlist</strong> button
+                on any profile to save it to your dashboard.
               </p>
-              <div className="mt-4">
+              <div className="mt-5">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#0c2242] transition"
+                  className="min-h-[44px] inline-flex items-center gap-2 rounded-xl bg-[#103B47] px-5 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#1D5A6C] transition"
                 >
-                  <Building2 className="h-4 w-4 text-[#EA5C2B]" />
-                  Browse Universities
+                  <Building2 className="h-4 w-4 text-[#D89A3E]" />
+                  <span>Browse Universities</span>
                 </Link>
               </div>
             </div>
           ) : (
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-slate-200 bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
+                <thead className="border-b border-[#D9CFB8]/60 bg-[#F5EFE0] text-[10px] uppercase font-serif font-bold tracking-wider text-[#103B47]">
                   <tr>
-                    <th className="p-3">University</th>
-                    <th className="p-3">Country</th>
-                    <th className="p-3">Global Rank</th>
-                    <th className="p-3">Annual Fees (INR)</th>
-                    <th className="p-3">IELTS Requirement</th>
-                    <th className="p-3">Work Visa</th>
-                    <th className="p-3 text-right">Action</th>
+                    <th className="p-3.5">University</th>
+                    <th className="p-3.5">Country</th>
+                    <th className="p-3.5">Global Rank</th>
+                    <th className="p-3.5">Annual Fees (INR)</th>
+                    <th className="p-3.5">IELTS Requirement</th>
+                    <th className="p-3.5">Work Visa</th>
+                    <th className="p-3.5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#D9CFB8]/30">
                   {shortlistedUnis.map((uni) => (
-                    <tr key={uni.id} className="hover:bg-slate-50/70">
-                      <td className="p-3 font-bold text-[#102C57] flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-[#EA5C2B]" />
+                    <tr key={uni.id} className="hover:bg-[#FDFCF7] transition">
+                      <td className="p-3.5 font-bold text-[#103B47]">
                         <Link
                           href={`/universities/${uni.slug}`}
-                          className="hover:underline"
+                          className="flex items-center gap-2 hover:underline"
                         >
-                          {uni.name}
+                          <Building2 className="h-4 w-4 text-[#D89A3E] shrink-0" />
+                          <span>{uni.name}</span>
                         </Link>
                       </td>
-                      <td className="p-3 font-medium text-slate-600">
+                      <td className="p-3.5 font-medium text-[#103B47]/80">
                         {uni.country}
                       </td>
-                      <td className="p-3 font-semibold text-slate-700">
+                      <td className="p-3.5 font-mono font-bold text-[#103B47]">
                         #{uni.rankingGlobal}
                       </td>
-                      <td className="p-3 font-bold text-slate-800">
+                      <td className="p-3.5 font-mono font-bold text-[#103B47]">
                         {uni.tuitionFeeRangeINR}
                       </td>
-                      <td className="p-3 text-slate-700">
+                      <td className="p-3.5 font-mono text-[#103B47]/80">
                         {uni.ieltsMinScore} Bands
                       </td>
-                      <td className="p-3 text-emerald-700 font-medium">
+                      <td className="p-3.5 text-emerald-700 font-mono font-semibold">
                         {uni.postStudyWorkMonths} Months
                       </td>
-                      <td className="p-3 text-right">
+                      <td className="p-3.5 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/universities/${uni.slug}`}
-                            className="rounded-lg bg-[#102C57] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition"
+                            className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-[#103B47] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#1D5A6C] transition shadow-xs"
                           >
                             View
                           </Link>
                           <button
                             onClick={() => removeShortlist(uni.slug)}
-                            className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
+                            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-xl p-2 text-[#103B47]/60 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer"
                             title="Remove from shortlist"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
