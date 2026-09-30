@@ -39,7 +39,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#1D5A6C",
+  themeColor: "#103B47",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -70,7 +70,7 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${instrumentSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#FDFCF7] text-[#103B47]">
+      <body className="min-h-full flex flex-col font-sans bg-[#FDFCF7] text-[#103B47] pb-16 sm:pb-0">
         <AuthProvider>
           <HomeModalProvider>{children}</HomeModalProvider>
         </AuthProvider>

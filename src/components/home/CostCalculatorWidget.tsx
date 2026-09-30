@@ -196,7 +196,7 @@ export function CostCalculatorWidget({
       id="cost-calculator"
       className={`mx-auto ${
         variant === "embedded" ? "max-w-full" : "max-w-5xl"
-      } rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 lg:p-10 shadow-xs transition-all`}
+      } rounded-2xl border border-[#D9CFB8] bg-white p-4 sm:p-8 lg:p-10 shadow-xs transition-all`}
     >
       {/* 1. Header Bar with Currency Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D9CFB8]/60 pb-6">

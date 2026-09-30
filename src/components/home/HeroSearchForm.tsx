@@ -213,10 +213,10 @@ export function HeroSearchForm() {
   return (
     <form
       onSubmit={handleSearchSubmit}
-      className="mt-8 rounded-2xl border border-white/20 bg-[#132c52] sm:bg-white/10 p-2 sm:backdrop-blur-xl shadow-2xl sm:flex sm:items-center sm:gap-2 max-w-xl"
+      className="mt-8 rounded-2xl border border-white/20 bg-[#103B47]/80 sm:bg-white/10 p-2 sm:backdrop-blur-xl shadow-2xl sm:flex sm:items-center sm:gap-2 max-w-xl"
     >
       {/* Country Selector */}
-      <div className="flex flex-1 items-center gap-2.5 rounded-xl bg-white/10 px-3.5 py-2.5 sm:bg-transparent">
+      <div className="flex flex-1 min-h-[44px] items-center gap-2.5 rounded-xl bg-white/10 px-3.5 py-2.5 sm:bg-transparent">
         <CountryFlag
           code={
             currentCountry?.code || currentCountry?.slug?.toUpperCase() || "DE"
@@ -227,7 +227,7 @@ export function HeroSearchForm() {
         <div className="text-left w-full">
           <label
             htmlFor="country-select"
-            className="block text-[9px] font-bold uppercase tracking-wider text-slate-300"
+            className="block text-[9px] font-bold uppercase tracking-wider text-slate-300 font-mono"
           >
             Destination
           </label>
@@ -270,12 +270,12 @@ export function HeroSearchForm() {
       <div className="my-2 h-7 w-px bg-white/20 hidden sm:block" />
 
       {/* Program Selector */}
-      <div className="flex flex-1 items-center gap-2 rounded-xl bg-white/10 px-3.5 py-2.5 sm:bg-transparent">
-        <GraduationCap className="h-4 w-4 text-[#EA5C2B] shrink-0" />
+      <div className="flex flex-1 min-h-[44px] items-center gap-2 rounded-xl bg-white/10 px-3.5 py-2.5 sm:bg-transparent">
+        <GraduationCap className="h-4 w-4 text-[#D89A3E] shrink-0" />
         <div className="text-left w-full">
           <label
             htmlFor="program-select"
-            className="block text-[9px] font-bold uppercase tracking-wider text-slate-300"
+            className="block text-[9px] font-bold uppercase tracking-wider text-slate-300 font-mono"
           >
             Program
           </label>
@@ -299,12 +299,12 @@ export function HeroSearchForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#EA5C2B] px-5 py-3 text-xs font-bold text-white shadow-lg transition hover:bg-[#ff7240] sm:mt-0 sm:w-auto shrink-0 disabled:opacity-75 cursor-pointer"
+        className="mt-2 flex w-full min-h-[44px] items-center justify-center gap-1.5 rounded-xl bg-[#D89A3E] px-5 py-3 text-xs font-bold text-[#103B47] shadow-lg transition hover:bg-[#EBC783] sm:mt-0 sm:w-auto shrink-0 disabled:opacity-75 cursor-pointer active:scale-98"
       >
         {isSubmitting ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin text-[#103B47]" />
         ) : (
-          <Search className="h-4 w-4" />
+          <Search className="h-4 w-4 text-[#103B47]" />
         )}
         <span>{isSubmitting ? "Searching..." : "Search"}</span>
       </button>

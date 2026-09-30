@@ -98,23 +98,23 @@ export function HomeModalProvider({ children }: { children: ReactNode }) {
 
       {/* Sticky Mobile CTA Bar - Hidden on /studio, /admin, /portal */}
       {!isStudioOrAdmin && (
-        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white p-3 shadow-lg sm:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[#D9CFB8] bg-[#FDFCF7]/95 p-3 backdrop-blur-md shadow-lg sm:hidden">
           <button
             onClick={() => openLeadModal()}
-            className="w-full rounded-xl bg-[#D89A3E] py-3 text-center text-xs font-bold text-[#103B47] shadow-lg transition hover:bg-[#EBC783] active:scale-98"
+            className="w-full min-h-[44px] rounded-xl bg-[#D89A3E] py-3 text-center text-xs font-bold text-[#103B47] shadow-md transition hover:bg-[#EBC783] active:scale-98 cursor-pointer"
           >
             Get Free Counselling →
           </button>
         </div>
       )}
 
-      {/* [FR-AI-001] Floating Route AI Counsellor Button: Bottom-Right 20px (bottom-5 right-5) */}
+      {/* [FR-AI-001] Floating Route AI Counsellor Button: Bottom-Right (positioned above mobile sticky bar) */}
       {!isStudioOrAdmin && !isDNDActive && (
-        <div className="fixed bottom-[20px] right-[20px] z-40">
+        <div className="fixed bottom-[72px] right-4 sm:bottom-[24px] sm:right-[24px] z-40">
           <button
             onClick={() => openAICounsellor()}
             aria-label="Talk to Route AI counsellor"
-            className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#103B47] to-[#1D5A6C] border border-[#7C6BAE]/40 p-2.5 sm:px-4 sm:py-2.5 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:border-[#D89A3E] active:scale-95"
+            className="group flex min-h-[44px] min-w-[44px] items-center gap-2.5 rounded-full bg-gradient-to-r from-[#103B47] to-[#1D5A6C] border border-[#7C6BAE]/40 p-2.5 sm:px-4 sm:py-2.5 text-white shadow-2xl transition-all duration-200 hover:scale-105 hover:border-[#D89A3E] active:scale-95 cursor-pointer"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7C6BAE]/25 text-[#D89A3E] font-bold text-sm shadow-inner">
               ✦
