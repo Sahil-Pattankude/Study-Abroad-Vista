@@ -178,7 +178,7 @@ export default async function CountryProgramPage({ params }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
       <Header />
 
       {/* JSON-LD Schemas */}
@@ -193,36 +193,40 @@ export default async function CountryProgramPage({ params }: Props) {
 
       <main className="flex-1 pb-16">
         {/* Breadcrumb Navigation */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5">
+        <div className="border-b border-[#D9CFB8]/60 bg-[#FDFCF7] py-2.5">
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57]">
+            <Link href="/" className="hover:text-[#1D5A6C] transition">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
             <Link
               href={`/study-in-${country.slug}`}
-              className="hover:text-[#102C57]"
+              className="hover:text-[#1D5A6C] transition"
             >
               {country.name}
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-[#102C57] font-bold">{prog.name}</span>
+            <span className="text-[#103B47] font-bold">{prog.name}</span>
           </div>
         </div>
 
         {/* Hero Conversion Header */}
-        <section className="bg-gradient-to-b from-[#102C57] to-[#091A36] text-white py-12 sm:py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold">
+        <section className="relative overflow-hidden bg-gradient-to-b from-[#103B47] via-[#154654] to-[#1D5A6C] text-white py-12 sm:py-16">
+          <div className="pointer-events-none absolute -top-24 left-1/2 -z-0 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-[#D89A3E]/20 via-[#7C6BAE]/15 to-transparent blur-3xl" />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur-md shadow-inner">
               <CountryFlag code={country.code} name={country.name} size="sm" />
-              <span>{prog.level} Track</span>
+              <span className="text-[#FDFCF7]">{prog.level} Track</span>
             </div>
 
-            <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
-              {prog.name} in {country.name} for Indian Students
+            <h1 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#FDFCF7] leading-tight">
+              {prog.name} in {country.name} for{" "}
+              <span className="text-[#D89A3E] italic font-serif">
+                Indian Students
+              </span>
             </h1>
 
-            <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
+            <p className="mt-3 text-sm sm:text-base text-[#FDFCF7]/85 max-w-2xl leading-relaxed font-sans">
               Discover top universities offering {prog.name} in {country.name},
               realistic tuition costs in INR, eligibility criteria, and
               post-study work authorization.
@@ -230,35 +234,35 @@ export default async function CountryProgramPage({ params }: Props) {
 
             {/* Program Quick Specs */}
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 max-w-4xl">
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="text-[10px] uppercase font-bold text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="text-[10px] uppercase font-bold text-slate-300 font-mono">
                   Typical Duration
                 </span>
-                <span className="mt-1 block text-sm font-bold text-white">
+                <span className="mt-1 block text-sm font-bold text-white font-mono">
                   {prog.duration}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="text-[10px] uppercase font-bold text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="text-[10px] uppercase font-bold text-slate-300 font-mono">
                   Est. Tuition
                 </span>
-                <span className="mt-1 block text-sm font-bold text-white">
+                <span className="mt-1 block text-sm font-bold text-white font-mono">
                   {country.avgTuitionINR}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="text-[10px] uppercase font-bold text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="text-[10px] uppercase font-bold text-slate-300 font-mono">
                   Post-Study Visa
                 </span>
-                <span className="mt-1 block text-sm font-bold text-[#EA5C2B]">
+                <span className="mt-1 block text-sm font-bold text-[#D89A3E] font-mono">
                   {country.postStudyWorkVisa}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="text-[10px] uppercase font-bold text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="text-[10px] uppercase font-bold text-slate-300 font-mono">
                   ROI Score
                 </span>
-                <span className="mt-1 block text-sm font-bold text-emerald-400">
+                <span className="mt-1 block text-sm font-bold text-emerald-400 font-mono">
                   {prog.roiScore}/100
                 </span>
               </div>
@@ -271,18 +275,18 @@ export default async function CountryProgramPage({ params }: Props) {
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
             <div className="lg:col-span-8 space-y-8">
               {/* Specialization Areas */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-                <h2 className="text-xl font-bold text-slate-900">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
+                <h2 className="text-xl font-display font-bold text-[#103B47]">
                   High-Demand Specializations
                 </h2>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 font-sans">
                   Popular tracks Indian students pursue in {country.name}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {(prog.keyFields || []).map((field: string, i: number) => (
                     <span
                       key={i}
-                      className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700"
+                      className="rounded-lg bg-[#FDFCF7] border border-[#D9CFB8]/60 px-3 py-1.5 text-xs font-semibold text-[#103B47]"
                     >
                       {field}
                     </span>
@@ -291,8 +295,8 @@ export default async function CountryProgramPage({ params }: Props) {
               </section>
 
               {/* Universities Offering this Program */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-                <h2 className="text-xl font-bold text-slate-900">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
+                <h2 className="text-xl font-display font-bold text-[#103B47]">
                   Universities in {country.name} Offering {prog.name}
                 </h2>
                 <div className="mt-6 space-y-4">
@@ -300,37 +304,37 @@ export default async function CountryProgramPage({ params }: Props) {
                     relevantUniversities.map((uni) => (
                       <div
                         key={uni.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-slate-200 p-4 hover:border-[#102C57] transition"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-[#D9CFB8]/60 p-4 hover:border-[#1D5A6C] transition bg-[#FDFCF7]"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-slate-900">
+                            <span className="text-xs font-bold text-[#103B47] font-display">
                               {uni.name}
                             </span>
-                            <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-800">
+                            <span className="rounded bg-[#F5EFE0] px-1.5 py-0.5 text-[10px] font-mono font-bold text-[#103B47] border border-[#D9CFB8]">
                               QS #{uni.rankingGlobal}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-500 mt-1">
+                          <p className="text-[11px] text-slate-500 mt-1 font-sans">
                             {uni.city}, {country.name} • Intakes:{" "}
                             {uni.intakes.join(", ")}
                           </p>
                         </div>
                         <div className="mt-3 sm:mt-0 flex items-center gap-3">
-                          <span className="text-xs font-semibold text-slate-700">
+                          <span className="text-xs font-mono font-semibold text-[#103B47]">
                             {uni.tuitionFeeRangeINR}
                           </span>
                           <Link
                             href={`/universities/${uni.slug}`}
-                            className="rounded-lg bg-[#102C57] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#0c2242]"
+                            className="rounded-lg bg-[#1D5A6C] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#103B47] transition active:scale-95"
                           >
-                            Apply
+                            Explore →
                           </Link>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="rounded-xl bg-slate-50 p-6 text-center text-xs text-slate-500">
+                    <div className="rounded-xl bg-[#FDFCF7] border border-dashed border-[#D9CFB8] p-6 text-center text-xs text-slate-500">
                       All state and accredited universities in {country.name}{" "}
                       offer recognized {prog.name} curricula for international
                       applicants.
@@ -340,11 +344,11 @@ export default async function CountryProgramPage({ params }: Props) {
               </section>
 
               {/* Admission Requirements */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-                <h2 className="text-xl font-bold text-slate-900">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
+                <h2 className="text-xl font-display font-bold text-[#103B47]">
                   General Entry Requirements for Indian Students
                 </h2>
-                <div className="mt-4 space-y-2.5 text-xs text-slate-600">
+                <div className="mt-4 space-y-2.5 text-xs text-slate-600 font-sans">
                   <div className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
                     <span>

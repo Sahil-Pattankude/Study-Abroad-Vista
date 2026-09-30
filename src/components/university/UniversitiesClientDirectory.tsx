@@ -57,7 +57,7 @@ export function UniversitiesClientDirectory({
   return (
     <div className="space-y-8">
       {/* Search & Filter Bar */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-[#D9CFB8]/80 bg-white p-4 sm:p-6 shadow-2xs">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {/* Search Input */}
           <div className="relative md:col-span-1">
@@ -67,7 +67,7 @@ export function UniversitiesClientDirectory({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by university name, city..."
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#102C57] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#102C57]/10 transition"
+              className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] bg-[#FDFCF7]/50 py-2.5 pl-10 pr-4 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#103B47] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#103B47]/10 transition"
             />
           </div>
 
@@ -77,9 +77,11 @@ export function UniversitiesClientDirectory({
             <select
               value={selectedCountry}
               onChange={(e) => setSelectedCountry(e.target.value)}
-              className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-8 text-xs sm:text-sm text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#102C57]/10 transition cursor-pointer"
+              className="w-full min-h-[44px] appearance-none rounded-xl border border-[#D9CFB8] bg-[#FDFCF7]/50 py-2.5 pl-10 pr-8 text-xs sm:text-sm text-slate-900 focus:border-[#103B47] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#103B47]/10 transition cursor-pointer"
             >
-              <option value="all">All Countries ({initialUniversities.length})</option>
+              <option value="all">
+                All Countries ({initialUniversities.length})
+              </option>
               {uniqueCountries.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -93,7 +95,7 @@ export function UniversitiesClientDirectory({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "rank" | "name")}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-3.5 text-xs sm:text-sm text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#102C57]/10 transition cursor-pointer"
+              className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] bg-[#FDFCF7]/50 py-2.5 px-3.5 text-xs sm:text-sm text-slate-900 focus:border-[#103B47] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#103B47]/10 transition cursor-pointer"
             >
               <option value="rank">Sort by QS World Ranking (Top First)</option>
               <option value="name">Sort Alphabetically (A-Z)</option>
@@ -102,27 +104,30 @@ export function UniversitiesClientDirectory({
         </div>
 
         {/* Quick Filter Pill Chips */}
-        <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-500 mr-1">Popular Destinations:</span>
-          {["USA", "UK", "Canada", "Australia", "Germany", "Ireland"].map((cName) => {
-            const isSelected = selectedCountry.toLowerCase() === cName.toLowerCase();
-            return (
-              <button
-                key={cName}
-                type="button"
-                onClick={() =>
-                  setSelectedCountry(isSelected ? "all" : cName)
-                }
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition cursor-pointer ${
-                  isSelected
-                    ? "bg-[#102C57] text-white"
-                    : "border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                {cName}
-              </button>
-            );
-          })}
+        <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-[#D9CFB8]/40">
+          <span className="text-xs font-bold text-slate-500 mr-1">
+            Popular Destinations:
+          </span>
+          {["USA", "UK", "Canada", "Australia", "Germany", "Ireland"].map(
+            (cName) => {
+              const isSelected =
+                selectedCountry.toLowerCase() === cName.toLowerCase();
+              return (
+                <button
+                  key={cName}
+                  type="button"
+                  onClick={() => setSelectedCountry(isSelected ? "all" : cName)}
+                  className={`min-h-[36px] rounded-full px-4 py-1.5 text-xs font-bold transition cursor-pointer ${
+                    isSelected
+                      ? "bg-[#103B47] text-white shadow-2xs"
+                      : "border border-[#D9CFB8] bg-[#FDFCF7] text-slate-700 hover:bg-white hover:border-slate-300"
+                  }`}
+                >
+                  {cName}
+                </button>
+              );
+            },
+          )}
           {selectedCountry !== "all" && (
             <button
               type="button"
@@ -138,18 +143,22 @@ export function UniversitiesClientDirectory({
       {/* Results Count */}
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-slate-600">
-          Showing <span className="font-extrabold text-[#102C57]">{filteredUniversities.length}</span> institutions
+          Showing{" "}
+          <span className="font-extrabold text-[#103B47] font-mono">
+            {filteredUniversities.length}
+          </span>{" "}
+          institutions
         </p>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-500">
           Verified for Indian Aspirants 2026-2027
         </p>
       </div>
 
       {/* University Grid */}
       {filteredUniversities.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[#D9CFB8] bg-white p-12 text-center">
           <Building2 className="mx-auto h-12 w-12 text-slate-300" />
-          <h3 className="mt-4 text-base font-bold text-[#102C57]">
+          <h3 className="mt-4 text-base font-serif font-bold text-[#103B47]">
             No universities found
           </h3>
           <p className="mt-1 text-xs text-slate-500">
@@ -161,7 +170,7 @@ export function UniversitiesClientDirectory({
               setSearchQuery("");
               setSelectedCountry("all");
             }}
-            className="mt-4 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1b3d73] transition"
+            className="mt-4 min-h-[44px] rounded-xl bg-[#103B47] px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1D5A6C] transition cursor-pointer"
           >
             Reset Filters
           </button>
@@ -170,20 +179,20 @@ export function UniversitiesClientDirectory({
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredUniversities.map((uni) => {
             const countryObj = countries.find(
-              (c) => c.name.toLowerCase() === uni.country.toLowerCase()
+              (c) => c.name.toLowerCase() === uni.country.toLowerCase(),
             );
 
             return (
               <div
                 key={uni.id || uni.slug}
-                className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all duration-200"
+                className="group relative flex flex-col justify-between rounded-2xl border border-[#D9CFB8]/80 bg-white p-5 shadow-2xs hover:shadow-md hover:border-[#103B47]/30 transition-all duration-200"
               >
                 <div>
                   {/* Top Badge: Rank & Country */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-black text-amber-700 border border-amber-200/60">
-                      <Award className="h-3.5 w-3.5 text-amber-600" />
-                      #{uni.rankingGlobal} QS Global
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#D89A3E]/10 px-2.5 py-1 text-xs font-bold text-[#D89A3E] border border-[#D89A3E]/30 font-mono">
+                      <Award className="h-3.5 w-3.5 text-[#D89A3E]" />#
+                      {uni.rankingGlobal} QS Global
                     </span>
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
                       {countryObj && (
@@ -198,53 +207,61 @@ export function UniversitiesClientDirectory({
                   </div>
 
                   {/* University Name */}
-                  <h3 className="text-base font-extrabold text-[#102C57] group-hover:text-[#EA5C2B] transition leading-snug">
-                    <Link href={`/universities/${uni.slug}`} className="hover:underline">
+                  <h3 className="text-base font-serif font-bold text-[#103B47] group-hover:text-[#1D5A6C] transition leading-snug">
+                    <Link
+                      href={`/universities/${uni.slug}`}
+                      className="hover:underline"
+                    >
                       {uni.name}
                     </Link>
                   </h3>
 
                   {/* Location */}
                   <div className="mt-1 flex items-center gap-1 text-xs text-slate-500">
-                    <MapPin className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                    <span>{uni.city}, {uni.country}</span>
+                    <MapPin className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
+                    <span>
+                      {uni.city}, {uni.country}
+                    </span>
                   </div>
 
                   {/* Key Metrics Grid */}
-                  <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-slate-50/80 p-3 border border-slate-100 text-xs">
+                  <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-[#FDFCF7] p-3 border border-[#D9CFB8]/60 text-xs">
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
                         Annual Tuition
                       </span>
-                      <span className="font-extrabold text-slate-800">
+                      <span className="font-bold text-[#103B47] font-mono">
                         {uni.tuitionFeeRangeINR || "Contact for INR"}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
                         Acceptance Rate
                       </span>
-                      <span className="font-extrabold text-[#102C57]">
-                        {uni.acceptanceRate ? `${uni.acceptanceRate}%` : "Competitive"}
+                      <span className="font-bold text-[#103B47] font-mono">
+                        {uni.acceptanceRate
+                          ? `${uni.acceptanceRate}%`
+                          : "Competitive"}
                       </span>
                     </div>
                     {uni.ieltsMinScore ? (
                       <div>
-                        <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                        <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
                           IELTS Cutoff
                         </span>
-                        <span className="font-bold text-slate-700">
+                        <span className="font-bold text-slate-700 font-mono">
                           {uni.ieltsMinScore} Overall
                         </span>
                       </div>
                     ) : null}
                     {uni.postStudyWorkMonths ? (
                       <div>
-                        <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                        <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">
                           PSW Visa
                         </span>
-                        <span className="font-bold text-emerald-600 flex items-center gap-1">
-                          <Sparkles className="h-3 w-3" /> {uni.postStudyWorkMonths} Months
+                        <span className="font-bold text-[#D89A3E] flex items-center gap-1 font-mono">
+                          <Sparkles className="h-3 w-3" />{" "}
+                          {uni.postStudyWorkMonths} Months
                         </span>
                       </div>
                     ) : null}
@@ -252,19 +269,19 @@ export function UniversitiesClientDirectory({
                 </div>
 
                 {/* Bottom Card Actions */}
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-5 pt-4 border-t border-[#D9CFB8]/40 flex items-center justify-between">
                   <Link
                     href={`/compare/universities?u1=${uni.slug}`}
-                    className="text-xs font-semibold text-slate-500 hover:text-[#102C57] transition"
+                    className="text-xs font-semibold text-slate-500 hover:text-[#103B47] transition min-h-[44px] flex items-center"
                   >
                     + Compare
                   </Link>
                   <Link
                     href={`/universities/${uni.slug}`}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#102C57] px-3.5 py-2 text-xs font-bold text-white shadow-2xs hover:bg-[#EA5C2B] transition active:scale-98"
+                    className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#103B47] px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-[#1D5A6C] transition active:scale-98"
                   >
                     <span>View Profile</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
                   </Link>
                 </div>
               </div>

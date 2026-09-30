@@ -70,76 +70,184 @@ export default async function ProgramHubPage({ params }: Props) {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
       <Header />
 
       <main className="flex-1 pb-16">
         {/* Breadcrumbs */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5">
+        <div className="border-b border-[#D9CFB8]/60 bg-[#FDFCF7] py-2.5">
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57]">
+            <Link href="/" className="hover:text-[#1D5A6C] transition">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-slate-400">Programs</span>
+            <Link href="/programs" className="hover:text-[#1D5A6C] transition">
+              Programs
+            </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-[#102C57] font-bold">{prog.name}</span>
+            <span className="text-[#103B47] font-bold">{prog.name}</span>
           </div>
         </div>
 
         {/* Hero */}
-        <section className="bg-gradient-to-b from-[#102C57] to-[#091A36] text-white py-14">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold">
-              <Award className="h-3.5 w-3.5 text-[#EA5C2B]" />
-              <span>{prog.level} Degree Overview</span>
+        <section className="relative overflow-hidden bg-gradient-to-b from-[#103B47] via-[#154654] to-[#1D5A6C] text-white py-14 sm:py-20">
+          <div className="pointer-events-none absolute -top-24 left-1/2 -z-0 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-[#D89A3E]/20 via-[#7C6BAE]/15 to-transparent blur-3xl" />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-semibold backdrop-blur-md shadow-inner">
+              <Award className="h-3.5 w-3.5 text-[#D89A3E]" />
+              <span className="text-[#FDFCF7]">
+                {prog.level} Academic Track
+              </span>
             </div>
-            <h1 className="mt-4 font-serif text-3xl sm:text-5xl font-black text-white">
-              Study {prog.name} Abroad for Indian Students
+
+            <h1 className="mt-4 font-display text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-[#FDFCF7] leading-tight">
+              Study {prog.name} Abroad for{" "}
+              <span className="text-[#D89A3E] italic font-serif">
+                Indian Students
+              </span>
             </h1>
-            <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
+
+            <p className="mt-4 text-sm sm:text-base text-[#FDFCF7]/85 max-w-3xl leading-relaxed font-sans">
               {prog.summary}
             </p>
+
+            {/* Quick Specs Grid */}
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 max-w-3xl">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] uppercase font-bold text-slate-300 font-mono">
+                  Typical Duration
+                </span>
+                <span className="mt-1 block text-sm sm:text-base font-bold text-white">
+                  {prog.duration}
+                </span>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] uppercase font-bold text-slate-300 font-mono">
+                  Career ROI Score
+                </span>
+                <span className="mt-1 block text-sm sm:text-base font-mono font-bold text-[#D89A3E]">
+                  {prog.roiScore} / 100
+                </span>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] uppercase font-bold text-slate-300 font-mono">
+                  Degree Level
+                </span>
+                <span className="mt-1 block text-sm sm:text-base font-bold text-white">
+                  {prog.level}
+                </span>
+              </div>
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] uppercase font-bold text-slate-300 font-mono">
+                  Top Destinations
+                </span>
+                <span className="mt-1 block text-xs sm:text-sm font-bold text-white truncate">
+                  {prog.topDestinations.slice(0, 3).join(", ")}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
+        {/* Specialization Areas */}
+        {prog.keyFields && prog.keyFields.length > 0 && (
+          <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
+            <div className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-[#103B47]">
+                High-Demand Specializations & Tracks
+              </h2>
+              <p className="mt-1 text-xs sm:text-sm text-slate-500 font-sans">
+                Most popular {prog.name} disciplines chosen by Indian students
+                for global career growth
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {prog.keyFields.map((field, i) => (
+                  <span
+                    key={i}
+                    className="rounded-xl bg-[#FDFCF7] border border-[#D9CFB8]/80 px-3.5 py-1.5 text-xs font-semibold text-[#103B47] shadow-2xs"
+                  >
+                    ✦ {field}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Top Countries Grid */}
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
-          <h2 className="text-xl font-bold text-slate-900 mb-6">
-            Top Recommended Destinations for {prog.name}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {topCountries.slice(0, 9).map((country) => (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-10">
+          <div className="border-b border-[#D9CFB8]/60 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-2xl font-bold text-[#103B47]">
+                Top Destinations Offering {prog.name}
+              </h2>
+              <p className="text-xs text-slate-500 font-sans">
+                Compare tuition fees in ₹ Lakhs, post-study visa rights, and
+                admission criteria.
+              </p>
+            </div>
+            <span className="self-start sm:self-auto rounded-full bg-[#1D5A6C]/10 px-3 py-1 text-xs font-bold text-[#1D5A6C]">
+              {topCountries.length} Eligible Destinations
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topCountries.map((country) => (
               <Link
                 key={country.id}
                 href={`/study-in-${country.slug}/${prog.slug}`}
-                className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:border-[#102C57] hover:shadow-md transition"
+                className="group flex flex-col justify-between rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 shadow-xs hover:border-[#1D5A6C] hover:shadow-xl transition-all duration-200"
               >
-                <div className="flex items-center justify-between">
-                  <CountryFlag
-                    code={country.code}
-                    name={country.name}
-                    size="lg"
-                    className="h-7 w-10 object-cover rounded-xs shadow-2xs border border-slate-200"
-                  />
-                  <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
-                    {country.tier}
-                  </span>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <CountryFlag
+                      code={country.code}
+                      name={country.name}
+                      size="md"
+                    />
+                    <span className="rounded-md bg-[#F5EFE0] px-2 py-0.5 text-[10px] font-mono font-bold text-[#103B47] border border-[#D9CFB8]">
+                      {country.tier}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 text-lg font-bold text-[#103B47] font-display group-hover:text-[#D89A3E] transition">
+                    {country.name}
+                  </h3>
+
+                  <p className="mt-1 text-xs text-slate-500 line-clamp-2 font-sans">
+                    {country.heroTagline}
+                  </p>
+
+                  <div className="mt-5 space-y-2 border-t border-[#D9CFB8]/40 pt-4 text-xs font-mono">
+                    <div className="flex items-center justify-between text-slate-700">
+                      <span className="font-sans text-slate-500">
+                        Avg Tuition:
+                      </span>
+                      <span className="font-bold text-[#103B47]">
+                        {country.avgTuitionINR}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-slate-700">
+                      <span className="font-sans text-slate-500">
+                        Post-Study Visa:
+                      </span>
+                      <span className="font-bold text-[#D89A3E]">
+                        {country.postStudyWorkVisa}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="mt-4 text-base font-bold text-slate-900 group-hover:text-[#EA5C2B] transition">
-                  {country.name}
-                </h3>
-                <p className="mt-1 text-xs text-slate-500 line-clamp-2">
-                  {country.heroTagline}
-                </p>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#102C57]">
-                  <span>Avg: {country.avgTuitionINR}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#EA5C2B] group-hover:translate-x-1 transition-transform" />
+
+                <div className="mt-6 pt-3 border-t border-[#D9CFB8]/40 flex items-center justify-between text-xs font-bold text-[#1D5A6C]">
+                  <span>
+                    Explore {country.name} {prog.name} →
+                  </span>
+                  <ArrowRight className="h-4 w-4 text-[#D89A3E] group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>
             ))}
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />

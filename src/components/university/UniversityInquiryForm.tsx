@@ -73,9 +73,9 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-6 text-center shadow-md">
+      <div className="rounded-2xl border border-emerald-300/80 bg-emerald-50/70 p-6 text-center shadow-md">
         <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-600" />
-        <h3 className="mt-2 text-sm font-extrabold text-[#102C57]">Eligibility Review Requested!</h3>
+        <h3 className="mt-2 text-base font-serif font-bold text-[#103B47]">Eligibility Review Requested!</h3>
         <p className="mt-1 text-xs text-slate-600">
           Thank you, <strong className="text-slate-900">{fullName}</strong>. An admissions counselor for {universityName} will contact you via WhatsApp/Phone within 24 hours.
         </p>
@@ -84,17 +84,20 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg sticky top-24">
-      <h3 className="text-sm font-bold text-slate-900">Free Admission Review</h3>
-      <p className="mt-1 text-xs text-slate-500">Check your admission eligibility for {universityName}.</p>
+    <div className="rounded-2xl border border-[#D9CFB8]/80 bg-white p-6 shadow-sm sticky top-24">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="h-2 w-2 rounded-full bg-[#D89A3E]" />
+        <h3 className="text-base font-serif font-bold text-[#103B47]">Free Admission Review</h3>
+      </div>
+      <p className="text-xs text-slate-500">Check your admission eligibility for {universityName}.</p>
       
       {errorMsg && (
-        <div className="mt-3 rounded-lg bg-rose-50 p-2 text-xs font-semibold text-rose-700">
+        <div className="mt-3 rounded-xl bg-rose-50 border border-rose-200 p-2.5 text-xs font-semibold text-rose-700">
           {errorMsg}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-4 space-y-3 text-xs">
+      <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
         <div>
           <label className="block text-[11px] font-bold text-slate-700 mb-1">Full Name</label>
           <input
@@ -103,7 +106,7 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="e.g. Rahul Sharma"
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#102C57] focus:outline-none"
+            className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] px-3 py-2 text-xs sm:text-sm text-slate-800 focus:border-[#103B47] focus:ring-1 focus:ring-[#103B47] focus:outline-none bg-[#FDFCF7]/50"
           />
         </div>
 
@@ -115,7 +118,7 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="name@example.com"
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#102C57] focus:outline-none"
+            className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] px-3 py-2 text-xs sm:text-sm text-slate-800 focus:border-[#103B47] focus:ring-1 focus:ring-[#103B47] focus:outline-none bg-[#FDFCF7]/50"
           />
         </div>
 
@@ -128,14 +131,14 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="9876543210"
-            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#102C57] focus:outline-none"
+            className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] px-3 py-2 text-xs sm:text-sm text-slate-800 focus:border-[#103B47] focus:ring-1 focus:ring-[#103B47] focus:outline-none bg-[#FDFCF7]/50 font-mono"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl bg-[#102C57] py-2.5 text-xs font-bold text-white transition hover:bg-[#0c2242] flex items-center justify-center gap-1.5 disabled:opacity-50"
+          className="w-full min-h-[44px] rounded-xl bg-[#103B47] py-2.5 px-4 text-xs sm:text-sm font-bold text-white transition hover:bg-[#1D5A6C] flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 cursor-pointer active:scale-98"
         >
           {loading ? (
             <>
@@ -144,8 +147,8 @@ export function UniversityInquiryForm({ universityName, countrySlug }: Universit
             </>
           ) : (
             <>
-              Submit for Eligibility Check
-              <ArrowRight className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <span>Submit for Eligibility Check</span>
+              <ArrowRight className="h-4 w-4 text-[#D89A3E]" />
             </>
           )}
         </button>

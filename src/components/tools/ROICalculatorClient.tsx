@@ -78,40 +78,44 @@ export function ROICalculatorClient() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-20 pt-8 sm:pt-12">
+    <div className="min-h-screen bg-[#FDFCF7] pb-20 pt-8 sm:pt-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header Breadcrumb & Hero */}
         <div className="mb-8 text-center sm:text-left">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Executive Career Analytics • [FR-TOOLS-005]</span>
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#D9CFB8] bg-[#F5EFE0] px-3.5 py-1 text-xs font-semibold text-[#1D5A6C]">
+            <Sparkles className="h-3.5 w-3.5 text-[#D89A3E]" />
+            <span>Executive Career Analytics</span>
           </div>
-          <h1 className="font-serif text-3xl font-black text-[#102C57] sm:text-4xl lg:text-5xl">
+          <h1 className="font-serif text-3xl font-black text-[#103B47] sm:text-4xl lg:text-5xl">
             Executive MBA (EMBA) ROI & Career Gain Calculator
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p className="mt-3 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#6B6B6B]">
             Quantify your post-EMBA salary leap, calculate exact break-even
             payback timelines in years, and evaluate 10-year cumulative wealth
-            trajectory across global business schools.
+            trajectory in{" "}
+            <span className="font-mono text-[#103B47] font-semibold">
+              ₹ Lakhs
+            </span>{" "}
+            across global business schools.
           </p>
         </div>
 
         {/* Main 2-Column Calculator Layout */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           {/* Left Column: Interactive Inputs */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs lg:col-span-6 space-y-6">
-            <h2 className="text-base font-extrabold text-[#102C57] flex items-center gap-2">
-              <Briefcase className="h-4 w-4 text-[#EA5C2B]" />
+          <div className="rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xs lg:col-span-6 space-y-6">
+            <h2 className="text-base font-serif font-bold text-[#103B47] flex items-center gap-2">
+              <Briefcase className="h-4 w-4 text-[#D89A3E]" />
               <span>1. Your Current & Target Executive Profile</span>
             </h2>
 
             {/* Current Salary Slider */}
             <div>
-              <div className="flex justify-between items-center text-xs font-bold mb-2">
-                <span className="text-slate-700">
+              <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                <span className="text-[#103B47]">
                   Current Annual Total CTC (INR)
                 </span>
-                <span className="text-[#102C57] text-sm font-extrabold bg-slate-100 px-2.5 py-0.5 rounded-md">
+                <span className="text-[#103B47] text-sm font-mono font-bold bg-[#F5EFE0] border border-[#D9CFB8]/70 px-2.5 py-1 rounded-md">
                   {formatCurrency(currentSalaryINR)}
                 </span>
               </div>
@@ -122,9 +126,9 @@ export function ROICalculatorClient() {
                 step={250000}
                 value={currentSalaryINR}
                 onChange={(e) => setCurrentSalaryINR(Number(e.target.value))}
-                className="w-full accent-[#EA5C2B] cursor-pointer"
+                className="w-full accent-[#D89A3E] cursor-pointer h-2 bg-[#F5EFE0] rounded-lg"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+              <div className="flex justify-between text-[11px] font-mono text-[#6B6B6B] mt-1">
                 <span>₹10 Lakhs</span>
                 <span>₹50 Lakhs</span>
                 <span>₹1.0 Crore</span>
@@ -133,11 +137,11 @@ export function ROICalculatorClient() {
 
             {/* Target Post-EMBA Salary Slider */}
             <div>
-              <div className="flex justify-between items-center text-xs font-bold mb-2">
-                <span className="text-slate-700">
+              <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                <span className="text-[#103B47]">
                   Target Post-EMBA Leadership CTC
                 </span>
-                <span className="text-emerald-700 text-sm font-extrabold bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                <span className="text-[#103B47] text-sm font-mono font-bold bg-[#A8CDBD]/20 border border-[#A8CDBD] px-2.5 py-1 rounded-md">
                   {formatCurrency(targetSalaryINR)}
                 </span>
               </div>
@@ -148,9 +152,9 @@ export function ROICalculatorClient() {
                 step={500000}
                 value={targetSalaryINR}
                 onChange={(e) => setTargetSalaryINR(Number(e.target.value))}
-                className="w-full accent-emerald-600 cursor-pointer"
+                className="w-full accent-[#1D5A6C] cursor-pointer h-2 bg-[#F5EFE0] rounded-lg"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+              <div className="flex justify-between text-[11px] font-mono text-[#6B6B6B] mt-1">
                 <span>₹25 Lakhs</span>
                 <span>₹1.25 Crores</span>
                 <span>₹2.5 Crores</span>
@@ -158,17 +162,17 @@ export function ROICalculatorClient() {
             </div>
 
             {/* Program Cost Slider */}
-            <div className="border-t border-slate-100 pt-5">
-              <h2 className="text-base font-extrabold text-[#102C57] flex items-center gap-2 mb-4">
-                <Award className="h-4 w-4 text-[#EA5C2B]" />
+            <div className="border-t border-[#D9CFB8]/60 pt-5">
+              <h2 className="text-base font-serif font-bold text-[#103B47] flex items-center gap-2 mb-4">
+                <Award className="h-4 w-4 text-[#D89A3E]" />
                 <span>2. EMBA Program Investment & Format</span>
               </h2>
 
-              <div className="flex justify-between items-center text-xs font-bold mb-2">
-                <span className="text-slate-700">
+              <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                <span className="text-[#103B47]">
                   Total Program Tuition & Global Immersions
                 </span>
-                <span className="text-[#102C57] text-sm font-extrabold bg-slate-100 px-2.5 py-0.5 rounded-md">
+                <span className="text-[#103B47] text-sm font-mono font-bold bg-[#F5EFE0] border border-[#D9CFB8]/70 px-2.5 py-1 rounded-md">
                   {formatCurrency(programCostINR)}
                 </span>
               </div>
@@ -179,9 +183,9 @@ export function ROICalculatorClient() {
                 step={250000}
                 value={programCostINR}
                 onChange={(e) => setProgramCostINR(Number(e.target.value))}
-                className="w-full accent-[#102C57] cursor-pointer"
+                className="w-full accent-[#1D5A6C] cursor-pointer h-2 bg-[#F5EFE0] rounded-lg"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+              <div className="flex justify-between text-[11px] font-mono text-[#6B6B6B] mt-1">
                 <span>₹15L (Europe/Asia)</span>
                 <span>₹55L (INSEAD/LBS)</span>
                 <span>₹1.2Cr (Wharton/Kellogg)</span>
@@ -190,23 +194,21 @@ export function ROICalculatorClient() {
 
             {/* Program Format Type */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-[#103B47] mb-2">
                 Delivery Format & Opportunity Cost
               </label>
-              <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+              <div className="grid grid-cols-2 gap-2 text-xs font-medium">
                 <button
                   type="button"
                   onClick={() => setFormatType("executive_modular")}
-                  className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                  className={`min-h-[44px] p-3 rounded-xl border text-left transition cursor-pointer ${
                     formatType === "executive_modular"
-                      ? "border-[#EA5C2B] bg-orange-50/70 text-[#102C57] shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                      ? "border-[#D89A3E] bg-[#F5EFE0] text-[#103B47] ring-1 ring-[#D89A3E]"
+                      : "border-[#D9CFB8] bg-[#FDFCF7] text-[#6B6B6B] hover:bg-[#F5EFE0]"
                   }`}
                 >
-                  <p className="font-extrabold text-slate-900">
-                    Modular / Weekend
-                  </p>
-                  <p className="text-[10px] text-slate-500 font-normal mt-0.5">
+                  <p className="font-bold text-[#103B47]">Modular / Weekend</p>
+                  <p className="text-[11px] text-[#6B6B6B] font-mono mt-0.5">
                     Keep working • ₹0 Opportunity Cost
                   </p>
                 </button>
@@ -214,16 +216,16 @@ export function ROICalculatorClient() {
                 <button
                   type="button"
                   onClick={() => setFormatType("full_time")}
-                  className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                  className={`min-h-[44px] p-3 rounded-xl border text-left transition cursor-pointer ${
                     formatType === "full_time"
-                      ? "border-[#EA5C2B] bg-orange-50/70 text-[#102C57] shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                      ? "border-[#D89A3E] bg-[#F5EFE0] text-[#103B47] ring-1 ring-[#D89A3E]"
+                      : "border-[#D9CFB8] bg-[#FDFCF7] text-[#6B6B6B] hover:bg-[#F5EFE0]"
                   }`}
                 >
-                  <p className="font-extrabold text-slate-900">
+                  <p className="font-bold text-[#103B47]">
                     Full-Time Sabbatical
                   </p>
-                  <p className="text-[10px] text-slate-500 font-normal mt-0.5">
+                  <p className="text-[11px] text-[#6B6B6B] font-mono mt-0.5">
                     18 Months Salary Loss (+
                     {formatCurrency(currentSalaryINR * 1.5)})
                   </p>
@@ -237,53 +239,56 @@ export function ROICalculatorClient() {
             {/* Top Summary Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Payback Period */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
+              <div className="rounded-2xl border border-[#D9CFB8] bg-white p-6 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#6B6B6B]">
                     Break-Even Timeline
                   </span>
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-100 text-[#EA5C2B]">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#F5EFE0] text-[#D89A3E]">
                     <Clock className="h-4 w-4" />
                   </span>
                 </div>
                 <div className="mt-3 flex items-baseline gap-1.5">
-                  <span className="text-3xl font-black text-[#102C57]">
+                  <span className="text-3xl sm:text-4xl font-mono font-bold text-[#103B47]">
                     {breakEvenYears}
                   </span>
-                  <span className="text-sm font-bold text-slate-600">
+                  <span className="text-sm font-mono font-bold text-[#6B6B6B]">
                     Years
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-xs text-[#6B6B6B] mt-1.5">
                   Full investment recovered in approx.{" "}
-                  {Math.round(breakEvenYears * 12)} months post graduation.
+                  <strong className="text-[#103B47] font-mono">
+                    {Math.round(breakEvenYears * 12)} months
+                  </strong>{" "}
+                  post graduation.
                 </p>
               </div>
 
               {/* 10-Year Cumulative Gain */}
-              <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-xs">
+              <div className="rounded-2xl border border-[#1D5A6C] bg-gradient-to-br from-[#103B47] via-[#103B47] to-[#0B2830] p-6 text-[#FDFCF7] shadow-xl">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#A8CDBD]">
                     10-Yr Net Cumulative Gain
                   </span>
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-[#EBC783]">
                     <TrendingUp className="h-4 w-4" />
                   </span>
                 </div>
-                <div className="mt-3 text-3xl font-black text-emerald-700">
+                <div className="mt-3 text-3xl sm:text-4xl font-mono font-bold text-[#EBC783]">
                   {formatCurrency(tenYearCumulativeGainINR)}
                 </div>
-                <p className="text-[11px] text-emerald-700 font-medium mt-1">
+                <p className="text-xs text-[#A8CDBD] mt-1.5">
                   Net earnings gain over standard non-EMBA career path.
                 </p>
               </div>
             </div>
 
             {/* Trajectory Breakdown Table */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs overflow-hidden">
-              <h3 className="text-sm font-extrabold text-[#102C57] mb-3 flex items-center justify-between">
+            <div className="rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xs overflow-hidden">
+              <h3 className="text-base font-serif font-bold text-[#103B47] mb-4 flex items-center justify-between">
                 <span>10-Year Earnings Trajectory Comparison</span>
-                <span className="text-xs text-slate-500 font-normal">
+                <span className="text-xs font-mono text-[#6B6B6B] font-normal">
                   INR Lakhs
                 </span>
               </h3>
@@ -291,18 +296,18 @@ export function ROICalculatorClient() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-100 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 bg-slate-50/50">
-                      <th className="py-2 px-3">Horizon</th>
-                      <th className="py-2 px-3">Without EMBA</th>
-                      <th className="py-2 px-3 text-[#102C57]">
+                    <tr className="border-b border-[#D9CFB8]/60 text-[10px] font-mono font-bold uppercase tracking-wider text-[#6B6B6B] bg-[#F5EFE0]/70">
+                      <th className="py-2.5 px-3">Horizon</th>
+                      <th className="py-2.5 px-3">Without EMBA</th>
+                      <th className="py-2.5 px-3 text-[#103B47]">
                         With EMBA (Net)
                       </th>
-                      <th className="py-2 px-3 text-emerald-700 font-black">
-                        Net Career Wealth Delta
+                      <th className="py-2.5 px-3 text-[#1D5A6C] font-bold">
+                        Net Wealth Delta
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 font-medium">
+                  <tbody className="divide-y divide-[#D9CFB8]/40 font-mono">
                     {[
                       yearlyTrajectory[0],
                       yearlyTrajectory[2],
@@ -311,18 +316,18 @@ export function ROICalculatorClient() {
                     ].map((row) => (
                       <tr
                         key={row.year}
-                        className="hover:bg-slate-50/60 transition"
+                        className="hover:bg-[#F5EFE0]/40 transition"
                       >
-                        <td className="py-2.5 px-3 font-bold text-slate-800">
+                        <td className="py-3 px-3 font-bold text-[#103B47]">
                           Year {row.year}
                         </td>
-                        <td className="py-2.5 px-3 text-slate-600">
+                        <td className="py-3 px-3 text-[#6B6B6B]">
                           {formatCurrency(row.withoutEMBA)}
                         </td>
-                        <td className="py-2.5 px-3 font-bold text-[#102C57]">
+                        <td className="py-3 px-3 font-bold text-[#103B47]">
                           {formatCurrency(row.withEMBA)}
                         </td>
-                        <td className="py-2.5 px-3 font-black text-emerald-700">
+                        <td className="py-3 px-3 font-bold text-[#1D5A6C]">
                           +{formatCurrency(row.netBenefit)}
                         </td>
                       </tr>
@@ -331,17 +336,17 @@ export function ROICalculatorClient() {
                 </table>
               </div>
 
-              {/* Context-Aware Lead Capture [FR-TOOLS-010] */}
-              <div className="mt-5 pt-4 border-t border-slate-100">
+              {/* Context-Aware Lead Capture */}
+              <div className="mt-6 pt-4 border-t border-[#D9CFB8]/60">
                 <button
                   onClick={() =>
                     homeModals.openLeadModal(
                       `EMBA ROI Report - BreakEven: ${breakEvenYears} Yrs, 10Y Gain: ${formatCurrency(tenYearCumulativeGainINR)}`,
                     )
                   }
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#102C57] py-3 text-xs font-bold text-white shadow-md hover:bg-[#0c2242] transition cursor-pointer"
+                  className="min-h-[44px] w-full flex items-center justify-center gap-2 rounded-xl bg-[#D89A3E] py-3.5 px-6 text-xs sm:text-sm font-bold text-[#103B47] shadow-md hover:bg-[#c4872d] transition cursor-pointer"
                 >
-                  <Sparkles className="h-4 w-4 text-[#EA5C2B]" />
+                  <Sparkles className="h-4 w-4" />
                   <span>
                     Download Detailed Executive B-School ROI Dossier →
                   </span>

@@ -105,72 +105,83 @@ export default async function CountryHubPage({ params }: Props) {
     : ["Fall", "Spring"];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
       <Header />
 
       <main className="flex-1 pb-16">
         {/* Breadcrumbs */}
-        <div className="border-b border-slate-200/80 bg-white py-2.5">
+        <div className="border-b border-[#D9CFB8]/60 bg-[#FDFCF7] py-2.5">
           <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
-            <Link href="/" className="hover:text-[#102C57]">
+            <Link href="/" className="hover:text-[#1D5A6C] transition">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-slate-400">Destinations</span>
+            <Link
+              href="/destinations"
+              className="hover:text-[#1D5A6C] transition"
+            >
+              Destinations
+            </Link>
             <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-[#102C57] font-bold">{country.name}</span>
+            <span className="text-[#103B47] font-bold">{country.name}</span>
           </div>
         </div>
 
-        {/* 1. Hero with Quick Stats (W10 Template T-02) */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#102C57] to-[#091A36] text-white py-12 sm:py-16">
-          <div className="pointer-events-none absolute -top-24 left-1/2 -z-0 h-96 w-96 -translate-x-1/2 rounded-full bg-[#EA5C2B]/20 blur-3xl" />
+        {/* 1. Hero with Quick Stats (Brand Guidelines v5.1 Spec) */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-[#103B47] via-[#154654] to-[#1D5A6C] text-white py-12 sm:py-16">
+          <div className="pointer-events-none absolute -top-24 left-1/2 -z-0 h-96 w-96 -translate-x-1/2 rounded-full bg-gradient-to-tr from-[#D89A3E]/20 via-[#7C6BAE]/15 to-transparent blur-3xl" />
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold backdrop-blur-md shadow-inner">
               <CountryFlag
                 countryCode={country.code}
                 countryName={country.name}
                 size="sm"
               />
-              <span>Destination Guide • {country.tier}</span>
+              <span className="text-[#FDFCF7]">
+                Destination Guide • {country.tier}
+              </span>
             </div>
 
-            <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-              Study in {country.name} for Indian Students (2026–2027)
+            <h1 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#FDFCF7] leading-tight">
+              Study in {country.name} for{" "}
+              <span className="text-[#D89A3E] italic font-serif">
+                Indian Students
+              </span>{" "}
+              (2026–2027)
             </h1>
 
-            <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed">
+            <p className="mt-3 text-sm sm:text-base text-[#FDFCF7]/85 max-w-3xl leading-relaxed font-sans">
               {editorial?.heroSubtitle || country.heroTagline}
             </p>
 
             {/* Quick Stats Grid */}
             <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">
                   Avg Tuition
                 </span>
-                <span className="mt-1 block text-sm sm:text-base font-black text-white">
+                <span className="mt-1 block text-sm sm:text-base font-mono font-bold text-white">
                   {country.avgTuitionINR}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">
                   Living Costs
                 </span>
-                <span className="mt-1 block text-sm sm:text-base font-black text-white">
+                <span className="mt-1 block text-sm sm:text-base font-mono font-bold text-white">
                   {country.avgLivingCostINR}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">
                   Post-Study Visa
                 </span>
-                <span className="mt-1 block text-sm sm:text-base font-black text-[#EA5C2B]">
+                <span className="mt-1 block text-sm sm:text-base font-mono font-bold text-[#D89A3E]">
                   {country.postStudyWorkVisa}
                 </span>
               </div>
-              <div className="rounded-xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-md">
-                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
+                <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">
                   Top Intakes
                 </span>
                 <span className="mt-1 block text-xs sm:text-sm font-bold text-white">
@@ -187,11 +198,11 @@ export default async function CountryHubPage({ params }: Props) {
             {/* Left Content Area (8 Cols) */}
             <div className="lg:col-span-8 space-y-12">
               {/* 2. Overview & Why Choose */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
+                <h2 className="text-xl sm:text-2xl font-display font-bold tracking-tight text-[#103B47]">
                   {editorial?.overviewHeading || `Why Choose ${country.name}?`}
                 </h2>
-                <div className="mt-4 space-y-3 text-sm text-slate-600 leading-relaxed">
+                <div className="mt-4 space-y-3 text-sm text-slate-600 leading-relaxed font-sans">
                   {editorial ? (
                     editorial.overviewParagraphs.map((p, idx) => (
                       <p key={idx}>{p}</p>
@@ -221,9 +232,9 @@ export default async function CountryHubPage({ params }: Props) {
                 )}
 
                 {editorial && editorial.tradeoffsToKnow.length > 0 && (
-                  <div className="mt-6 rounded-xl border border-amber-200/80 bg-amber-50/60 p-4">
-                    <div className="flex items-center gap-2 text-xs font-bold text-amber-900 mb-2">
-                      <AlertCircle className="h-4 w-4 text-[#EA5C2B]" />
+                  <div className="mt-6 rounded-xl border border-[#D89A3E]/30 bg-[#F5EFE0]/50 p-4">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#103B47] mb-2 font-mono">
+                      <AlertCircle className="h-4 w-4 text-[#D89A3E]" />
                       <span>
                         Important Trade-Offs & Requirements to Know Upfront
                       </span>
@@ -240,17 +251,17 @@ export default async function CountryHubPage({ params }: Props) {
               </section>
 
               {/* 3. Programs in Country */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-display font-bold text-[#103B47]">
                       Available Programs in {country.name}
                     </h2>
                     <p className="mt-1 text-xs text-slate-500">
                       Explore eligible study tracks with Indian qualifications
                     </p>
                   </div>
-                  <span className="text-xs font-bold text-[#EA5C2B] bg-orange-50 px-2.5 py-1 rounded-lg">
+                  <span className="text-xs font-bold text-[#1D5A6C] bg-[#1D5A6C]/10 px-2.5 py-1 rounded-lg">
                     {availablePrograms.length} Core Streams
                   </span>
                 </div>
@@ -260,14 +271,14 @@ export default async function CountryHubPage({ params }: Props) {
                     <Link
                       key={prog.id}
                       href={`/destinations/${country.slug}/${prog.slug}`}
-                      className="group flex flex-col justify-between rounded-xl border border-slate-200 p-4 transition-all hover:border-[#102C57] hover:shadow-md bg-white"
+                      className="group flex flex-col justify-between rounded-xl border border-[#D9CFB8]/60 p-4 transition-all hover:border-[#1D5A6C] hover:shadow-md bg-white"
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900 group-hover:text-[#EA5C2B] transition-colors">
+                          <span className="text-xs font-bold text-[#103B47] group-hover:text-[#D89A3E] transition-colors">
                             {prog.name}
                           </span>
-                          <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                          <span className="rounded-md bg-[#FDFCF7] border border-[#D9CFB8]/50 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
                             {prog.duration}
                           </span>
                         </div>
@@ -275,9 +286,9 @@ export default async function CountryHubPage({ params }: Props) {
                           {prog.summary}
                         </p>
                       </div>
-                      <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-[#102C57] group-hover:translate-x-1 transition-transform">
+                      <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-[#1D5A6C] group-hover:translate-x-1 transition-transform">
                         <span>View universities & requirements</span>
-                        <ArrowRight className="h-3 w-3 text-[#EA5C2B]" />
+                        <ArrowRight className="h-3 w-3 text-[#D89A3E]" />
                       </div>
                     </Link>
                   ))}
@@ -285,10 +296,10 @@ export default async function CountryHubPage({ params }: Props) {
               </section>
 
               {/* 4. Cost Breakdown Table */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
                 <div className="flex items-center gap-2 mb-2">
-                  <Coins className="h-5 w-5 text-[#EA5C2B]" />
-                  <h2 className="text-xl font-bold text-slate-900">
+                  <Coins className="h-5 w-5 text-[#D89A3E]" />
+                  <h2 className="text-xl font-display font-bold text-[#103B47]">
                     Cost of Studying in {country.name} (INR Estimates)
                   </h2>
                 </div>
@@ -300,21 +311,18 @@ export default async function CountryHubPage({ params }: Props) {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500 bg-slate-50/50">
+                      <tr className="border-b border-[#D9CFB8] text-[11px] uppercase tracking-wider text-[#103B47] bg-[#F5EFE0] font-mono">
                         <th className="py-2.5 px-3">Program Track</th>
                         <th className="py-2.5 px-3">Tuition / Year</th>
                         <th className="py-2.5 px-3">Living Costs</th>
                         <th className="py-2.5 px-3">Total Annual</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 font-medium">
+                    <tbody className="divide-y divide-slate-100 font-medium font-mono">
                       {editorial?.costBreakdown ? (
                         editorial.costBreakdown.map((c, i) => (
-                          <tr
-                            key={i}
-                            className="hover:bg-slate-50/50 transition"
-                          >
-                            <td className="py-3 px-3 font-bold text-slate-800">
+                          <tr key={i} className="hover:bg-[#FDFCF7] transition">
+                            <td className="py-3 px-3 font-sans font-bold text-[#103B47]">
                               {c.programType}
                             </td>
                             <td className="py-3 px-3 text-slate-600">
@@ -323,21 +331,21 @@ export default async function CountryHubPage({ params }: Props) {
                             <td className="py-3 px-3 text-slate-600">
                               {c.livingCostINR}
                             </td>
-                            <td className="py-3 px-3 font-bold text-[#102C57]">
+                            <td className="py-3 px-3 font-bold text-[#1D5A6C]">
                               {c.totalAnnualINR}
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td className="py-3 px-3 font-bold text-slate-800">
+                          <td className="py-3 px-3 font-sans font-bold text-[#103B47]">
                             General Degree Average
                           </td>
                           <td className="py-3 px-3">{country.avgTuitionINR}</td>
                           <td className="py-3 px-3">
                             {country.avgLivingCostINR}
                           </td>
-                          <td className="py-3 px-3 font-bold text-[#102C57]">
+                          <td className="py-3 px-3 font-bold text-[#1D5A6C]">
                             ₹25 - 45 Lakhs
                           </td>
                         </tr>
@@ -347,18 +355,20 @@ export default async function CountryHubPage({ params }: Props) {
                 </div>
 
                 {editorial?.hiddenCosts && (
-                  <div className="mt-6 pt-6 border-t border-slate-100">
-                    <h4 className="text-xs font-bold text-slate-900 mb-2.5">
+                  <div className="mt-6 pt-6 border-t border-[#D9CFB8]/40">
+                    <h4 className="text-xs font-bold text-[#103B47] mb-2.5 font-mono">
                       Other Mandatory Incidental Costs:
                     </h4>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
                       {editorial.hiddenCosts.map((h, i) => (
                         <div
                           key={i}
-                          className="rounded-lg bg-slate-50 p-2.5 border border-slate-100"
+                          className="rounded-lg bg-[#FDFCF7] p-2.5 border border-[#D9CFB8]/60"
                         >
-                          <span className="block text-slate-500">{h.item}</span>
-                          <span className="font-bold text-slate-800">
+                          <span className="block text-slate-500 font-sans">
+                            {h.item}
+                          </span>
+                          <span className="font-bold text-[#103B47] font-mono">
                             {h.costINR}
                           </span>
                         </div>
@@ -377,10 +387,10 @@ export default async function CountryHubPage({ params }: Props) {
               </div>
 
               {/* 5. Top Universities */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-display font-bold text-[#103B47]">
                       Featured Universities in {country.name}
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">
@@ -395,27 +405,27 @@ export default async function CountryHubPage({ params }: Props) {
                       <Link
                         key={uni.id}
                         href={`/universities/${uni.slug}`}
-                        className="group rounded-xl border border-slate-200 p-4 transition hover:border-[#102C57] hover:shadow-md bg-white"
+                        className="group rounded-xl border border-[#D9CFB8]/60 p-4 transition hover:border-[#1D5A6C] hover:shadow-md bg-white"
                       >
                         <div className="flex items-start justify-between">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#102C57]/5 text-[#102C57]">
-                            <Building2 className="h-5 w-5 text-[#EA5C2B]" />
+                          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#1D5A6C]/10 text-[#1D5A6C]">
+                            <Building2 className="h-5 w-5 text-[#D89A3E]" />
                           </div>
-                          <span className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800 border border-amber-200">
+                          <span className="rounded-md bg-[#F5EFE0] px-2 py-0.5 text-[10px] font-mono font-bold text-[#103B47] border border-[#D9CFB8]">
                             QS #{uni.rankingGlobal}
                           </span>
                         </div>
-                        <h3 className="mt-3 text-sm font-bold text-slate-900 group-hover:text-[#EA5C2B] transition">
+                        <h3 className="mt-3 text-sm font-bold text-[#103B47] group-hover:text-[#D89A3E] transition font-sans">
                           {uni.name}
                         </h3>
                         <span className="text-xs text-slate-500">
                           {uni.city}, {country.name}
                         </span>
                         <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                          <span className="text-slate-500 font-medium">
+                          <span className="text-slate-500 font-mono font-medium">
                             {uni.tuitionFeeRangeINR}
                           </span>
-                          <span className="font-bold text-[#102C57]">
+                          <span className="font-bold text-[#1D5A6C] group-hover:text-[#D89A3E]">
                             View Profile →
                           </span>
                         </div>
@@ -423,7 +433,7 @@ export default async function CountryHubPage({ params }: Props) {
                     ))}
                   </div>
                 ) : (
-                  <div className="rounded-xl border border-dashed border-slate-200 p-6 text-center text-xs text-slate-500">
+                  <div className="rounded-xl border border-dashed border-[#D9CFB8] p-6 text-center text-xs text-slate-500">
                     Showing all institutional programs matching {country.name}{" "}
                     curriculum standards.
                   </div>
@@ -431,42 +441,42 @@ export default async function CountryHubPage({ params }: Props) {
               </section>
 
               {/* 6. Visa & Post-Study Work */}
-              <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+              <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
                 <div className="flex items-center gap-2 mb-4">
-                  <Plane className="h-5 w-5 text-[#EA5C2B]" />
-                  <h2 className="text-xl font-bold text-slate-900">
+                  <Plane className="h-5 w-5 text-[#D89A3E]" />
+                  <h2 className="text-xl font-display font-bold text-[#103B47]">
                     Student Visa & Post-Study Work Rights
                   </h2>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="rounded-xl bg-slate-50 p-4 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase text-slate-400">
+                  <div className="rounded-xl bg-[#FDFCF7] p-4 border border-[#D9CFB8]/60">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 font-mono">
                       Visa Classification
                     </span>
-                    <p className="mt-1 font-bold text-slate-800">
+                    <p className="mt-1 font-bold text-[#103B47]">
                       {editorial?.visaDetails.visaType ||
                         `${country.name} Student Visa`}
                     </p>
-                    <span className="mt-2 block text-[10px] font-bold uppercase text-slate-400">
+                    <span className="mt-2 block text-[10px] font-bold uppercase text-slate-400 font-mono">
                       Processing Time
                     </span>
                     <p className="mt-1 font-medium text-slate-700">
                       {editorial?.visaDetails.processingTime || "4 to 6 weeks"}
                     </p>
                   </div>
-                  <div className="rounded-xl bg-slate-50 p-4 border border-slate-100">
-                    <span className="text-[10px] font-bold uppercase text-slate-400">
+                  <div className="rounded-xl bg-[#FDFCF7] p-4 border border-[#D9CFB8]/60">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 font-mono">
                       Part-Time Work Limit
                     </span>
-                    <p className="mt-1 font-bold text-slate-800">
+                    <p className="mt-1 font-bold text-[#103B47]">
                       {editorial?.visaDetails.workHoursDuringTerm ||
                         "20 hours / week during terms"}
                     </p>
-                    <span className="mt-2 block text-[10px] font-bold uppercase text-slate-400">
+                    <span className="mt-2 block text-[10px] font-bold uppercase text-slate-400 font-mono">
                       Post-Study Work (PSW)
                     </span>
-                    <p className="mt-1 font-black text-[#EA5C2B]">
+                    <p className="mt-1 font-mono font-bold text-[#D89A3E]">
                       {editorial?.visaDetails.postStudyWorkDuration ||
                         country.postStudyWorkVisa}
                     </p>
@@ -487,10 +497,10 @@ export default async function CountryHubPage({ params }: Props) {
 
               {/* 7. FAQs */}
               {editorial?.faqs && editorial.faqs.length > 0 && (
-                <section className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
+                <section className="rounded-2xl border border-[#D9CFB8]/70 bg-white p-6 sm:p-8 shadow-xs">
                   <div className="flex items-center gap-2 mb-6">
-                    <HelpCircle className="h-5 w-5 text-[#EA5C2B]" />
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <HelpCircle className="h-5 w-5 text-[#D89A3E]" />
+                    <h2 className="text-xl font-display font-bold text-[#103B47]">
                       Frequently Asked Questions ({country.name})
                     </h2>
                   </div>
@@ -499,12 +509,12 @@ export default async function CountryHubPage({ params }: Props) {
                     {editorial.faqs.map((faq, i) => (
                       <div
                         key={i}
-                        className="rounded-xl border border-slate-100 bg-slate-50/60 p-4"
+                        className="rounded-xl border border-[#D9CFB8]/50 bg-[#FDFCF7] p-4"
                       >
-                        <h4 className="text-xs font-bold text-slate-900">
+                        <h4 className="text-xs font-bold text-[#103B47]">
                           {faq.question}
                         </h4>
-                        <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                        <p className="mt-1.5 text-xs text-slate-600 leading-relaxed font-sans">
                           {faq.answer}
                         </p>
                       </div>

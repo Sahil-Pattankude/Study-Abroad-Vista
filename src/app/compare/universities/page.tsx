@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function UniversityComparePage() {
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-slate-50">
+    <div className="flex min-h-screen flex-col justify-between bg-[#FDFCF7]">
       <Header />
       <main className="flex-1">
         <CompareNavHeader activeTab="universities" />

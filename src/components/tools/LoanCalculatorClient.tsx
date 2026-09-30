@@ -112,20 +112,24 @@ export function LoanCalculatorClient() {
     loanAmountINR <= coSignerIncomeINR * 30;
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-20 pt-8 sm:pt-12">
+    <div className="min-h-screen bg-[#FDFCF7] pb-20 pt-8 sm:pt-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header Breadcrumb & Hero */}
         <div className="mb-8 text-center sm:text-left">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
-            <Banknote className="h-3.5 w-3.5" />
-            <span>Fintech & Banking Partner Integration • [FR-TOOLS-009]</span>
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#D9CFB8] bg-[#F5EFE0] px-3.5 py-1 text-xs font-semibold text-[#1D5A6C]">
+            <Banknote className="h-3.5 w-3.5 text-[#D89A3E]" />
+            <span>Fintech & Banking Partner Integration</span>
           </div>
-          <h1 className="font-serif text-3xl font-black text-[#102C57] sm:text-4xl lg:text-5xl">
+          <h1 className="font-serif text-3xl font-black text-[#103B47] sm:text-4xl lg:text-5xl">
             Study Abroad Education Loan & EMI Calculator
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
-            Calculate instant pre-approval probability, monthly EMI repayments,
-            and compare competitive education loan quotes from SBI, HDFC
+          <p className="mt-3 max-w-3xl text-xs sm:text-sm md:text-base leading-relaxed text-[#6B6B6B]">
+            Calculate instant pre-approval probability, monthly EMI repayments
+            in{" "}
+            <span className="font-mono text-[#103B47] font-semibold">
+              ₹ Lakhs
+            </span>
+            , and compare competitive education loan quotes from SBI, HDFC
             Credila, Prodigy Finance, and Avanse.
           </p>
         </div>
@@ -133,17 +137,17 @@ export function LoanCalculatorClient() {
         {/* 2-Column: Loan Parameters + EMI Schedule & Partner Banks */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: Interactive Loan Inputs */}
-          <div className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6 h-fit">
-            <h2 className="text-sm font-extrabold text-[#102C57] flex items-center gap-2">
-              <Calculator className="h-4 w-4 text-[#EA5C2B]" />
+          <div className="lg:col-span-5 rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xs space-y-6 h-fit">
+            <h2 className="text-base font-serif font-bold text-[#103B47] flex items-center gap-2">
+              <Calculator className="h-4 w-4 text-[#D89A3E]" />
               <span>1. Your Education Loan Requirements</span>
             </h2>
 
             {/* Target Loan Amount Slider */}
             <div>
-              <div className="flex justify-between items-center text-xs font-bold mb-1.5">
-                <span className="text-slate-700">Target Loan Amount (INR)</span>
-                <span className="text-[#102C57] font-extrabold bg-slate-100 px-2.5 py-0.5 rounded-md text-sm">
+              <div className="flex justify-between items-center text-xs font-semibold mb-1.5">
+                <span className="text-[#103B47]">Target Loan Amount (INR)</span>
+                <span className="text-[#103B47] font-mono font-bold bg-[#F5EFE0] border border-[#D9CFB8]/70 px-2.5 py-1 rounded-md text-sm">
                   {formatCurrency(loanAmountINR)}
                 </span>
               </div>
@@ -154,9 +158,9 @@ export function LoanCalculatorClient() {
                 step={250000}
                 value={loanAmountINR}
                 onChange={(e) => setLoanAmountINR(Number(e.target.value))}
-                className="w-full accent-[#EA5C2B] cursor-pointer"
+                className="w-full accent-[#D89A3E] cursor-pointer h-2 bg-[#F5EFE0] rounded-lg"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
+              <div className="flex justify-between text-[11px] font-mono text-[#6B6B6B] mt-1">
                 <span>₹5 Lakhs</span>
                 <span>₹75 Lakhs</span>
                 <span>₹1.5 Crores</span>
@@ -165,11 +169,11 @@ export function LoanCalculatorClient() {
 
             {/* Co-Signer Monthly Income */}
             <div>
-              <div className="flex justify-between items-center text-xs font-bold mb-1.5">
-                <span className="text-slate-700">
+              <div className="flex justify-between items-center text-xs font-semibold mb-1.5">
+                <span className="text-[#103B47]">
                   Co-Signer Monthly Net Income (INR)
                 </span>
-                <span className="text-[#102C57] font-extrabold bg-slate-100 px-2.5 py-0.5 rounded-md text-sm">
+                <span className="text-[#103B47] font-mono font-bold bg-[#F5EFE0] border border-[#D9CFB8]/70 px-2.5 py-1 rounded-md text-sm">
                   {formatCurrency(coSignerIncomeINR)} / mo
                 </span>
               </div>
@@ -180,9 +184,9 @@ export function LoanCalculatorClient() {
                 step={10000}
                 value={coSignerIncomeINR}
                 onChange={(e) => setCoSignerIncomeINR(Number(e.target.value))}
-                className="w-full accent-[#102C57] cursor-pointer"
+                className="w-full accent-[#1D5A6C] cursor-pointer h-2 bg-[#F5EFE0] rounded-lg"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
+              <div className="flex justify-between text-[11px] font-mono text-[#6B6B6B] mt-1">
                 <span>₹30,000</span>
                 <span>₹2.5 Lakhs</span>
                 <span>₹5.0 Lakhs</span>
@@ -190,22 +194,22 @@ export function LoanCalculatorClient() {
             </div>
 
             {/* Collateral Security Option */}
-            <div className="border-t border-slate-100 pt-4">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+            <div className="border-t border-[#D9CFB8]/60 pt-4">
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-[#103B47] mb-2">
                 Collateral Security Available?
               </label>
-              <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+              <div className="grid grid-cols-2 gap-2 text-xs font-medium">
                 <button
                   type="button"
                   onClick={() => setHasCollateral(false)}
-                  className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                  className={`min-h-[44px] p-3 rounded-xl border text-left transition cursor-pointer ${
                     !hasCollateral
-                      ? "border-[#EA5C2B] bg-orange-50/70 text-[#102C57] shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                      ? "border-[#D89A3E] bg-[#F5EFE0] text-[#103B47] ring-1 ring-[#D89A3E]"
+                      : "border-[#D9CFB8] bg-[#FDFCF7] text-[#6B6B6B] hover:bg-[#F5EFE0]"
                   }`}
                 >
-                  <p className="font-bold text-slate-900">Non-Collateral</p>
-                  <p className="text-[10px] text-slate-500 font-normal mt-0.5">
+                  <p className="font-bold text-[#103B47]">Non-Collateral</p>
+                  <p className="text-[11px] text-[#6B6B6B] font-mono mt-0.5">
                     Unsecured • Faster ~10.45%
                   </p>
                 </button>
@@ -213,16 +217,16 @@ export function LoanCalculatorClient() {
                 <button
                   type="button"
                   onClick={() => setHasCollateral(true)}
-                  className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                  className={`min-h-[44px] p-3 rounded-xl border text-left transition cursor-pointer ${
                     hasCollateral
-                      ? "border-[#EA5C2B] bg-orange-50/70 text-[#102C57] shadow-2xs"
-                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                      ? "border-[#D89A3E] bg-[#F5EFE0] text-[#103B47] ring-1 ring-[#D89A3E]"
+                      : "border-[#D9CFB8] bg-[#FDFCF7] text-[#6B6B6B] hover:bg-[#F5EFE0]"
                   }`}
                 >
-                  <p className="font-bold text-slate-900">
+                  <p className="font-bold text-[#103B47]">
                     Property / FD Backed
                   </p>
-                  <p className="text-[10px] text-slate-500 font-normal mt-0.5">
+                  <p className="text-[11px] text-[#6B6B6B] font-mono mt-0.5">
                     Lowest Rates ~8.65%
                   </p>
                 </button>
@@ -231,7 +235,7 @@ export function LoanCalculatorClient() {
 
             {/* Repayment Tenure */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-[#103B47] mb-2">
                 Repayment Tenure
               </label>
               <div className="flex gap-2">
@@ -240,10 +244,10 @@ export function LoanCalculatorClient() {
                     key={yrs}
                     type="button"
                     onClick={() => setRepaymentTenureYears(yrs)}
-                    className={`flex-1 rounded-xl py-2 text-xs font-bold transition cursor-pointer ${
+                    className={`min-h-[44px] flex-1 rounded-xl py-2 text-xs font-mono font-bold transition cursor-pointer ${
                       repaymentTenureYears === yrs
-                        ? "bg-[#102C57] text-white shadow-xs"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-[#1D5A6C] text-white shadow-xs"
+                        : "bg-[#F5EFE0] text-[#103B47] border border-[#D9CFB8] hover:bg-[#ede5d0]"
                     }`}
                   >
                     {yrs} Yrs
@@ -256,65 +260,65 @@ export function LoanCalculatorClient() {
           {/* Right: EMI Financial Summary & Partner Banks */}
           <div className="lg:col-span-7 space-y-6">
             {/* Top EMI Summary Card */}
-            <div className="rounded-2xl border border-slate-700/80 bg-gradient-to-br from-slate-950 via-[#102C57] to-slate-950 p-6 text-white shadow-xl">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="rounded-2xl border border-[#1D5A6C] bg-gradient-to-br from-[#103B47] via-[#103B47] to-[#0B2830] p-6 sm:p-8 text-[#FDFCF7] shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#A8CDBD]">
                   Estimated Monthly EMI (Post Moratorium)
                 </span>
-                <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-300 border border-emerald-500/30">
+                <span className="rounded-full bg-[#A8CDBD]/20 px-3 py-1 text-xs font-mono font-bold text-[#A8CDBD] border border-[#A8CDBD]/30 self-start sm:self-auto">
                   {isHighProbability
                     ? "🟢 High Pre-Approval Odds"
                     : "🟡 Moderate Eligibility"}
                 </span>
               </div>
 
-              <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-black text-white sm:text-4xl">
+              <div className="mt-4 flex items-baseline gap-2">
+                <span className="text-3xl font-mono font-bold text-[#EBC783] sm:text-5xl">
                   {formatCurrency(emiINR)}
                 </span>
-                <span className="text-xs text-slate-300 font-semibold">
+                <span className="text-xs font-mono text-[#A8CDBD]">
                   / Month
                 </span>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3 border-t border-slate-800 pt-4 text-xs">
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3 border-t border-[#1D5A6C]/60 pt-5 text-xs">
+                <div className="rounded-xl bg-white/5 p-3 border border-[#1D5A6C]">
+                  <span className="text-[#A8CDBD] block text-[10px] font-mono uppercase font-semibold">
                     Est. Interest Rate
                   </span>
-                  <span className="text-sm font-extrabold text-orange-300 mt-0.5 block">
+                  <span className="text-sm font-mono font-bold text-[#EBC783] mt-0.5 block">
                     {estimatedRate}% p.a.
                   </span>
                 </div>
 
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
+                <div className="rounded-xl bg-white/5 p-3 border border-[#1D5A6C]">
+                  <span className="text-[#A8CDBD] block text-[10px] font-mono uppercase font-semibold">
                     Total Interest
                   </span>
-                  <span className="text-sm font-extrabold text-white mt-0.5 block">
+                  <span className="text-sm font-mono font-bold text-white mt-0.5 block">
                     {formatCurrency(totalInterestPayableINR)}
                   </span>
                 </div>
 
-                <div>
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">
-                    Total Loan Cost
+                <div className="rounded-xl bg-white/5 p-3 border border-[#1D5A6C] col-span-2 sm:col-span-1">
+                  <span className="text-[#A8CDBD] block text-[10px] font-mono uppercase font-semibold">
+                    Total Repayment
                   </span>
-                  <span className="text-sm font-extrabold text-emerald-300 mt-0.5 block">
+                  <span className="text-sm font-mono font-bold text-[#A8CDBD] mt-0.5 block">
                     {formatCurrency(totalRepaymentINR)}
                   </span>
                 </div>
               </div>
 
-              {/* Context-Aware Lead Action [FR-TOOLS-010] */}
-              <div className="mt-5 pt-3 border-t border-slate-800">
+              {/* Context-Aware Lead Action */}
+              <div className="mt-6 pt-4 border-t border-[#1D5A6C]/60">
                 <button
                   onClick={() =>
                     homeModals.openLeadModal(
                       `Education Loan Sanction: ${formatCurrency(loanAmountINR)} (${hasCollateral ? "Collateral" : "Non-Collateral"}, EMI: ${formatCurrency(emiINR)}/mo)`,
                     )
                   }
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] py-3 text-xs font-bold text-white shadow-md hover:bg-[#d94f20] transition cursor-pointer"
+                  className="min-h-[44px] w-full flex items-center justify-center gap-2 rounded-xl bg-[#D89A3E] py-3.5 px-6 text-xs sm:text-sm font-bold text-[#103B47] shadow-md hover:bg-[#c4872d] transition cursor-pointer"
                 >
                   <ShieldCheck className="h-4 w-4" />
                   <span>Apply for Instant Loan Pre-Approval Letter →</span>
@@ -322,11 +326,11 @@ export function LoanCalculatorClient() {
               </div>
             </div>
 
-            {/* Partner Bank Comparisons [FR-TOOLS-009] */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
-              <h3 className="text-sm font-extrabold text-[#102C57] mb-4 flex items-center justify-between">
+            {/* Partner Bank Comparisons */}
+            <div className="rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xs">
+              <h3 className="text-base font-serif font-bold text-[#103B47] mb-4 flex items-center justify-between">
                 <span>Integrated Lending Partners & Pre-Approval Schemes</span>
-                <span className="text-[11px] text-slate-500 font-normal">
+                <span className="text-xs font-mono text-[#6B6B6B] font-normal">
                   Updated Q3 2026
                 </span>
               </h3>
@@ -335,33 +339,33 @@ export function LoanCalculatorClient() {
                 {PARTNER_BANKS.map((bank) => (
                   <div
                     key={bank.id}
-                    className="p-4 rounded-xl border border-slate-100 bg-slate-50/60 hover:bg-slate-50 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                    className="p-4 rounded-xl border border-[#D9CFB8]/70 bg-[#FDFCF7] hover:bg-[#F5EFE0]/60 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                   >
                     <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-bold text-slate-900">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="text-xs sm:text-sm font-bold text-[#103B47]">
                           {bank.name}
                         </h4>
-                        <span className="rounded-md bg-slate-200 px-1.5 py-0.2 text-[9px] font-extrabold text-slate-700">
+                        <span className="rounded-md bg-[#F5EFE0] border border-[#D9CFB8] px-2 py-0.5 text-[10px] font-mono font-semibold text-[#1D5A6C]">
                           {bank.type}
                         </span>
                       </div>
-                      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500">
+                      <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#6B6B6B] font-mono">
                         <span>
                           Rate:{" "}
-                          <strong className="text-slate-800 font-bold">
+                          <strong className="text-[#103B47] font-bold">
                             {bank.interestRateRange}
                           </strong>
                         </span>
                         <span>
                           Max:{" "}
-                          <strong className="text-slate-800 font-bold">
+                          <strong className="text-[#103B47] font-bold">
                             {bank.maxAmountINR}
                           </strong>
                         </span>
                         <span>
                           Approval:{" "}
-                          <strong className="text-emerald-700 font-bold">
+                          <strong className="text-[#1D5A6C] font-bold">
                             {bank.preApprovalSpeed}
                           </strong>
                         </span>
@@ -374,7 +378,7 @@ export function LoanCalculatorClient() {
                           `Loan Application with ${bank.name} (${formatCurrency(loanAmountINR)})`,
                         )
                       }
-                      className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-[#102C57] hover:border-[#102C57] transition shadow-2xs shrink-0 cursor-pointer"
+                      className="min-h-[44px] rounded-lg border border-[#1D5A6C] bg-white px-4 py-2 text-xs font-bold text-[#1D5A6C] hover:bg-[#1D5A6C] hover:text-white transition shadow-2xs shrink-0 cursor-pointer"
                     >
                       Check Eligibility →
                     </button>

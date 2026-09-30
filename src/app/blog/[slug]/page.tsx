@@ -60,21 +60,21 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] text-[#103B47] flex flex-col justify-between">
       <Header />
 
       {/* Breadcrumb navigation */}
-      <div className="border-b border-slate-200/80 bg-white py-2.5">
-        <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
-          <Link href="/" className="hover:text-[#102C57]">
+      <div className="border-b border-[#D9CFB8]/60 bg-[#F5EFE0]/60 py-3">
+        <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-mono text-[#6B6B6B]">
+          <Link href="/" className="hover:text-[#103B47] transition">
             Home
           </Link>
-          <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-          <Link href="/blog" className="hover:text-[#102C57]">
+          <ChevronRight className="h-3.5 w-3.5 text-[#D9CFB8]" />
+          <Link href="/blog" className="hover:text-[#103B47] transition">
             Blog
           </Link>
-          <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-          <span className="text-[#EA5C2B] font-bold truncate max-w-xs">
+          <ChevronRight className="h-3.5 w-3.5 text-[#D9CFB8]" />
+          <span className="text-[#1D5A6C] font-bold truncate max-w-xs">
             {article.tag}
           </span>
         </div>
@@ -82,55 +82,55 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 w-full">
         {/* Back Link */}
-        <div className="mt-6">
+        <div className="mt-4">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#102C57] transition"
+            className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#1D5A6C] hover:text-[#103B47] transition"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Blog
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to All Articles
           </Link>
         </div>
 
         {/* Article Header */}
-        <header className="mt-6 border-b border-slate-200 pb-8">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#EA5C2B]/10 px-3 py-1 text-xs font-bold text-[#EA5C2B]">
+        <header className="mt-6 border-b border-[#D9CFB8]/60 pb-8">
+          <div className="inline-flex items-center gap-2 rounded-md bg-[#F5EFE0] border border-[#D9CFB8] px-3 py-1 text-xs font-mono font-bold text-[#1D5A6C]">
             {article.tag}
           </div>
 
-          <h1 className="mt-4 font-serif text-3xl font-extrabold tracking-tight text-[#102C57] sm:text-4xl lg:text-5xl leading-tight">
+          <h1 className="mt-4 font-serif text-3xl font-black tracking-tight text-[#103B47] sm:text-4xl lg:text-5xl leading-tight">
             {article.title}
           </h1>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+          <div className="mt-6 flex flex-wrap items-center gap-4 text-xs font-mono text-[#6B6B6B]">
             <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-slate-400" />
+              <Calendar className="h-4 w-4 text-[#1D5A6C]" />
               <span>{article.date}</span>
             </div>
             <span>•</span>
             <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-slate-400" />
+              <Clock className="h-4 w-4 text-[#D89A3E]" />
               <span>{article.readTime}</span>
             </div>
             <span>•</span>
-            <div className="flex items-center gap-1.5 text-emerald-700 font-semibold">
-              <CheckCircle2 className="h-4 w-4" />
+            <div className="flex items-center gap-1.5 text-[#1D5A6C] font-semibold">
+              <CheckCircle2 className="h-4 w-4 text-[#1D5A6C]" />
               <span>Verified Admissions Intelligence</span>
             </div>
           </div>
         </header>
 
         {/* Article Body */}
-        <article className="prose prose-slate mt-8 max-w-none">
-          <p className="text-lg font-medium leading-relaxed text-slate-700">
+        <article className="mt-8 max-w-none">
+          <p className="text-base sm:text-lg font-serif font-medium leading-relaxed text-[#103B47]/90 bg-[#F5EFE0]/40 p-5 rounded-2xl border border-[#D9CFB8]/60">
             {article.excerpt}
           </p>
 
-          <div className="my-8 rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
-            <h3 className="font-bold text-sm text-[#102C57] flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
-              Official Admissions & Regulatory Context
+          <div className="my-8 rounded-2xl border border-[#D9CFB8] bg-[#F5EFE0]/50 p-6">
+            <h3 className="font-serif font-bold text-sm sm:text-base text-[#103B47] flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[#D89A3E]" />
+              <span>Official Admissions & Regulatory Context</span>
             </h3>
-            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+            <p className="mt-2 text-xs sm:text-[13px] text-[#6B6B6B] leading-relaxed">
               This guide has been verified against official admissions portals,
               embassy guidelines, and university catalogs by the international
               education team at Dnyanal Educon Pvt. Ltd.
@@ -140,11 +140,11 @@ export default async function BlogPostPage({ params }: PageProps) {
           {article.body &&
           Array.isArray(article.body) &&
           article.body.length > 0 ? (
-            <div className="space-y-6 text-sm leading-relaxed text-slate-700">
+            <div className="space-y-6 text-sm sm:text-base leading-relaxed text-[#1A1A1A]">
               <PortableText value={article.body as any} />
             </div>
           ) : (
-            <div className="space-y-6 text-sm leading-relaxed text-slate-700">
+            <div className="space-y-6 text-sm sm:text-base leading-relaxed text-[#1A1A1A]">
               <p>
                 When planning an international educational journey,
                 understanding the exact eligibility criteria, living expense
@@ -162,22 +162,22 @@ export default async function BlogPostPage({ params }: PageProps) {
 
           {/* Author Card if present */}
           {article.author && (
-            <div className="mt-10 flex items-center gap-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 not-prose">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#102C57] text-white font-bold text-sm">
+            <div className="mt-10 flex items-center gap-4 rounded-2xl border border-[#D9CFB8] bg-white p-5 not-prose shadow-xs">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#103B47] text-[#FDFCF7] font-mono font-bold text-sm">
                 {article.author.name.charAt(0)}
               </div>
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#EA5C2B]">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#D89A3E]">
                   Author & Admissions Strategist
                 </span>
-                <h4 className="text-sm font-bold text-[#102C57]">
+                <h4 className="text-sm font-serif font-bold text-[#103B47]">
                   {article.author.name}
                 </h4>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-[#6B6B6B]">
                   {article.author.role || "Admissions Strategist"}
                 </p>
                 {article.author.bio && (
-                  <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                  <p className="mt-1 text-xs text-[#6B6B6B] leading-relaxed">
                     {article.author.bio}
                   </p>
                 )}
@@ -187,25 +187,30 @@ export default async function BlogPostPage({ params }: PageProps) {
         </article>
 
         {/* Lead Capture Callout */}
-        <div className="mt-12 rounded-3xl bg-gradient-to-r from-[#102C57] via-[#1a3d73] to-[#091A36] p-8 text-white shadow-xl">
+        <div className="mt-12 rounded-3xl bg-gradient-to-br from-[#103B47] via-[#1D5A6C] to-[#0B2830] p-8 text-[#FDFCF7] shadow-xl border border-[#1D5A6C]">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#EBC783]">
                 Free Admissions Assistance
               </span>
-              <h3 className="mt-2 text-xl font-bold">
+              <h3 className="mt-2 text-xl sm:text-2xl font-serif font-bold text-white">
                 Need Help Shortlisting Universities for This Program?
               </h3>
-              <p className="mt-1 text-xs text-slate-300">
+              <p className="mt-1 text-xs sm:text-sm text-[#A8CDBD] max-w-xl">
                 Get a personalized list of 5 accredited universities matching
-                your academic profile and budget in ₹ Lakhs.
+                your academic profile and budget in{" "}
+                <span className="font-mono text-white font-semibold">
+                  ₹ Lakhs
+                </span>
+                .
               </p>
             </div>
             <Link
               href="/#destinations-grid"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#EA5C2B] px-6 py-3.5 text-xs font-bold text-white shadow-lg hover:bg-[#ff7240] transition shrink-0"
+              className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl bg-[#D89A3E] px-6 py-3.5 text-xs sm:text-sm font-bold text-[#103B47] shadow-lg hover:bg-[#c4872d] transition shrink-0"
             >
-              Explore Universities <ArrowRight className="h-4 w-4" />
+              <span>Explore Universities</span>{" "}
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

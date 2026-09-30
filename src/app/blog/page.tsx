@@ -2,7 +2,14 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getAllArticles } from "@/lib/sanity/fetchers";
-import { Clock, Calendar, ArrowRight, BookOpen, Compass, ShieldCheck } from "lucide-react";
+import {
+  Clock,
+  Calendar,
+  ArrowRight,
+  BookOpen,
+  Compass,
+  ShieldCheck,
+} from "lucide-react";
 
 export const metadata = {
   title: "Study Abroad Blog & Admissions News | Abroadroute",
@@ -14,23 +21,29 @@ export default async function BlogDirectoryPage() {
   const articles = await getAllArticles();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
+    <div className="min-h-screen bg-[#FDFCF7] text-[#103B47] flex flex-col justify-between">
       <Header />
 
       <main className="flex-1 pb-16">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-[#102C57] via-[#0D2346] to-[#091A36] text-white py-16 sm:py-20">
+        <section className="bg-gradient-to-b from-[#103B47] via-[#103B47] to-[#0B2830] text-[#FDFCF7] py-16 sm:py-20 border-b border-[#1D5A6C]/50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-semibold text-slate-200">
-                <BookOpen className="h-3.5 w-3.5 text-[#EA5C2B]" />
-                Official Abroadroute Blog
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#D9CFB8]/40 bg-[#F5EFE0]/10 px-3.5 py-1 text-xs font-semibold text-[#A8CDBD]">
+                <BookOpen className="h-3.5 w-3.5 text-[#D89A3E]" />
+                <span>Official Abroadroute Admissions Journal</span>
               </div>
-              <h1 className="mt-4 font-serif text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
-                Admissions News, Insights & <span className="text-[#EA5C2B]">Visa Updates</span>
+              <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+                Admissions News, Insights &{" "}
+                <span className="text-[#EBC783]">Visa Updates</span>
               </h1>
-              <p className="mt-3 text-sm text-slate-300 leading-relaxed max-w-2xl">
-                Real-time regulatory analyses, blocked account cost changes in ₹ Lakhs, and strategy breakdowns compiled by Dnyanal Educon counsellors.
+              <p className="mt-3 text-xs sm:text-sm md:text-base text-[#A8CDBD] leading-relaxed max-w-2xl">
+                Real-time regulatory analyses, blocked account cost changes in{" "}
+                <span className="font-mono font-semibold text-white">
+                  ₹ Lakhs
+                </span>
+                , and strategy breakdowns compiled by Dnyanal Educon
+                counsellors.
               </p>
             </div>
           </div>
@@ -39,18 +52,19 @@ export default async function BlogDirectoryPage() {
         {/* Directory Grid */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
           {/* Section Heading & Stats */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#D9CFB8]/60 pb-5">
             <div>
-              <h2 className="text-xl font-bold text-[#102C57]">
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47]">
                 Latest Blog Posts & Guides ({articles.length})
               </h2>
-              <p className="text-xs text-slate-500">
-                Published via Sanity Content Lake. Live updates for 2027 intake applicants.
+              <p className="text-xs text-[#6B6B6B] mt-0.5 font-mono">
+                Published via Sanity Content Lake. Live regulatory updates for
+                2027 intake applicants.
               </p>
             </div>
             <Link
               href="/studio"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs self-start sm:self-auto"
+              className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl border border-[#1D5A6C] bg-white px-4 py-2 text-xs font-bold text-[#1D5A6C] hover:bg-[#1D5A6C] hover:text-white transition shadow-xs self-start sm:self-auto"
             >
               Author Studio →
             </Link>
@@ -61,39 +75,39 @@ export default async function BlogDirectoryPage() {
             {articles.map((article) => (
               <div
                 key={article._id}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-xs hover:shadow-md hover:border-slate-300 transition group"
+                className="flex flex-col justify-between rounded-2xl border border-[#D9CFB8] bg-white p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-[#1D5A6C] transition group"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span className="font-bold text-[#EA5C2B] bg-[#EA5C2B]/10 px-2.5 py-0.5 rounded-full text-[11px]">
+                  <div className="flex items-center justify-between text-xs text-[#6B6B6B]">
+                    <span className="font-mono font-bold text-[#1D5A6C] bg-[#F5EFE0] border border-[#D9CFB8] px-2.5 py-0.5 rounded-md text-[11px]">
                       {article.tag}
                     </span>
-                    <span className="flex items-center gap-1 text-[11px]">
-                      <Clock className="h-3 w-3 text-slate-400" />
+                    <span className="flex items-center gap-1 text-[11px] font-mono text-[#6B6B6B]">
+                      <Clock className="h-3 w-3 text-[#D89A3E]" />
                       {article.readTime}
                     </span>
                   </div>
 
                   <Link href={`/blog/${article.slug}`}>
-                    <h3 className="mt-4 text-base font-bold leading-snug text-[#102C57] group-hover:text-[#EA5C2B] transition">
+                    <h3 className="mt-4 font-serif text-base sm:text-lg font-bold leading-snug text-[#103B47] group-hover:text-[#D89A3E] transition">
                       {article.title}
                     </h3>
                   </Link>
 
-                  <p className="mt-2.5 text-xs leading-relaxed text-slate-600 line-clamp-3">
+                  <p className="mt-2.5 text-xs sm:text-[13px] leading-relaxed text-[#6B6B6B] line-clamp-3">
                     {article.excerpt}
                   </p>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
-                  <span className="text-[11px] flex items-center gap-1">
-                    <Calendar className="h-3 w-3 text-slate-400" />
+                <div className="mt-6 flex items-center justify-between border-t border-[#D9CFB8]/60 pt-4 text-xs text-[#6B6B6B]">
+                  <span className="text-[11px] font-mono flex items-center gap-1">
+                    <Calendar className="h-3 w-3 text-[#1D5A6C]" />
                     {article.date}
                   </span>
 
                   <Link
                     href={`/blog/${article.slug}`}
-                    className="font-bold text-[#102C57] group-hover:text-[#EA5C2B] inline-flex items-center gap-1 text-xs transition"
+                    className="min-h-[44px] font-bold text-[#1D5A6C] group-hover:text-[#D89A3E] inline-flex items-center gap-1 text-xs transition"
                   >
                     Read Article <ArrowRight className="h-3.5 w-3.5" />
                   </Link>

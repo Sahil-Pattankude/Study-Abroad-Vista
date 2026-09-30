@@ -215,75 +215,75 @@ function LoginForm() {
           <BrandLogo variant="wordmark" theme="light" size="md" />
           <Link
             href="/"
-            className="text-xs font-semibold text-slate-500 hover:text-[#1D5A6C] transition"
+            className="text-xs font-mono font-semibold text-[#6B6B6B] hover:text-[#103B47] transition"
           >
             ← Back to Home
           </Link>
         </div>
       </header>
 
-      {/* Main Login Card - Template T-11 Multi-Portal Switchboard */}
+      {/* Main Login Card */}
       <main className="flex-1 flex items-center justify-center py-8 px-4 sm:px-6">
-        <div className="w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xl">
+        <div className="w-full max-w-md rounded-3xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xl">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-[#102C57]">
-              <Compass className="h-6 w-6 text-[#EA5C2B]" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F5EFE0] border border-[#D9CFB8] text-[#103B47]">
+              <Compass className="h-6 w-6 text-[#D89A3E]" />
             </div>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="mt-3 font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#103B47]">
               Sign In to Your Portal
             </h1>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-[#6B6B6B]">
               Select your role to access your dedicated workspace
             </p>
           </div>
 
           {/* 3 Role Selector Tabs */}
-          <div className="mt-6 grid grid-cols-3 gap-1.5 rounded-2xl bg-slate-100/90 p-1 text-xs font-bold">
+          <div className="mt-6 grid grid-cols-3 gap-1.5 rounded-2xl bg-[#F5EFE0] border border-[#D9CFB8] p-1 text-xs font-bold font-mono">
             <button
               type="button"
               onClick={() => handleRoleTabChange("student")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
+              className={`min-h-[44px] flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "student"
-                  ? "bg-white text-[#102C57] shadow-xs"
-                  : "text-slate-500 hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <GraduationCap className="h-4 w-4 text-[#EA5C2B]" />
+              <GraduationCap className="h-4 w-4 text-[#D89A3E]" />
               <span>Student</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleRoleTabChange("buyer")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
+              className={`min-h-[44px] flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "buyer"
-                  ? "bg-white text-[#102C57] shadow-xs"
-                  : "text-slate-500 hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <Briefcase className="h-4 w-4 text-emerald-600" />
+              <Briefcase className="h-4 w-4 text-[#A8CDBD]" />
               <span>B2B Buyer</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleRoleTabChange("university")}
-              className={`flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
+              className={`min-h-[44px] flex flex-col items-center justify-center gap-1 rounded-xl py-2 px-1 text-[11px] transition cursor-pointer ${
                 activeRoleTab === "university"
-                  ? "bg-white text-[#102C57] shadow-xs"
-                  : "text-slate-500 hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white shadow-xs font-bold"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <Building2 className="h-4 w-4 text-indigo-600" />
+              <Building2 className="h-4 w-4 text-[#EBC783]" />
               <span>University</span>
             </button>
           </div>
 
           {/* Active Role Quick Banner */}
-          <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/50 p-2.5 text-center text-xs">
-            <span className="font-semibold text-slate-600">Logging into: </span>
-            <strong className="text-[#102C57]">
+          <div className="mt-4 rounded-xl border border-[#A8CDBD]/40 bg-[#A8CDBD]/15 p-2.5 text-center text-xs">
+            <span className="font-semibold text-[#103B47]">Logging into: </span>
+            <strong className="text-[#103B47] font-mono">
               {activeRoleTab === "university"
                 ? "🏛️ University Partner Portal (/portal/university)"
                 : activeRoleTab === "buyer"
@@ -294,18 +294,18 @@ function LoginForm() {
 
           {/* Error notice */}
           {error && (
-            <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
+            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
               {error}
             </div>
           )}
 
           {/* Email + Password Form */}
-          <form onSubmit={handleSignIn} className="mt-4 space-y-3 text-xs">
+          <form onSubmit={handleSignIn} className="mt-4 space-y-3.5 text-xs">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">
+              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                 Official Email Address
               </label>
-              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                 <input
                   type="email"
                   required
@@ -320,44 +320,44 @@ function LoginForm() {
                           ? "admin@abroadroute.com"
                           : "name@example.com"
                   }
-                  className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"
+                  className="min-h-[44px] w-full rounded-xl py-2.5 px-3.5 text-[#103B47] font-semibold focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-[11px] font-bold text-slate-700">
+                <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47]">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-[11px] font-medium text-[#EA5C2B] hover:underline"
+                  className="text-[11px] font-semibold text-[#D89A3E] hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
-              <div className="relative rounded-xl border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full rounded-xl py-2.5 px-3.5 text-slate-900 font-semibold focus:outline-none"
+                  className="min-h-[44px] w-full rounded-xl py-2.5 px-3.5 text-[#103B47] font-semibold focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 text-slate-600 cursor-pointer">
+              <label className="flex items-center gap-2 text-[#6B6B6B] cursor-pointer">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-slate-300 text-[#102C57] accent-[#102C57]"
+                  className="h-4 w-4 rounded border-[#D9CFB8] text-[#1D5A6C] accent-[#1D5A6C]"
                 />
-                <span className="text-[11px] text-slate-500">
+                <span className="text-xs text-[#6B6B6B]">
                   Remember this session
                 </span>
               </label>
@@ -366,7 +366,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full rounded-xl bg-[#102C57] py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#0c2242] active:scale-[0.99] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+              className="min-h-[44px] mt-2 w-full rounded-xl bg-[#103B47] py-3 text-xs sm:text-sm font-bold text-white shadow-md transition hover:bg-[#0B2830] active:scale-[0.99] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
             >
               <span>
                 {loading
@@ -385,11 +385,11 @@ function LoginForm() {
           </form>
 
           {/* Micro Footer */}
-          <div className="mt-5 border-t border-slate-100 pt-4 text-center text-xs text-slate-500">
+          <div className="mt-5 border-t border-[#D9CFB8]/60 pt-4 text-center text-xs text-[#6B6B6B]">
             <span>Need an institutional or consultant account? </span>
             <Link
               href="/signup"
-              className="font-bold text-[#EA5C2B] hover:underline"
+              className="font-bold text-[#D89A3E] hover:underline"
             >
               Register here →
             </Link>
@@ -404,12 +404,12 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 border border-indigo-100 text-[#102C57] mb-3 animate-pulse">
-            <Compass className="h-6 w-6 text-[#EA5C2B]" />
+        <div className="min-h-screen bg-[#FDFCF7] flex flex-col items-center justify-center p-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F5EFE0] border border-[#D9CFB8] text-[#103B47] mb-3 animate-pulse">
+            <Compass className="h-6 w-6 text-[#D89A3E]" />
           </div>
-          <p className="text-xs font-semibold text-slate-500 flex items-center gap-2">
-            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#102C57]" />
+          <p className="text-xs font-semibold text-[#6B6B6B] flex items-center gap-2">
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#103B47]" />
             Loading Portal Switchboard...
           </p>
         </div>

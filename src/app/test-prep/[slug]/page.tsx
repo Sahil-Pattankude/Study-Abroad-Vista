@@ -121,36 +121,36 @@ export default async function TestPrepDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
       />
 
-      <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#FDFCF7] flex flex-col justify-between">
         <Header />
 
         <main className="flex-1 pb-16">
           {/* Breadcrumbs */}
-          <div className="border-b border-slate-200/80 bg-white py-2.5">
+          <div className="border-b border-[#D9CFB8]/60 bg-white/70 backdrop-blur-xs py-2.5">
             <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8 text-xs font-semibold text-slate-500">
-              <Link href="/" className="hover:text-[#102C57] transition">
+              <Link href="/" className="hover:text-[#103B47] transition">
                 Home
               </Link>
               <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
               <Link
                 href="/test-prep"
-                className="hover:text-[#102C57] transition"
+                className="hover:text-[#103B47] transition"
               >
                 Test Prep Hub
               </Link>
               <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-              <span className="text-[#102C57] font-bold">{exam.name}</span>
+              <span className="text-[#103B47] font-bold">{exam.name}</span>
             </div>
           </div>
 
           {/* Hero Section */}
-          <section className="relative overflow-hidden bg-gradient-to-b from-[#102C57] via-[#0D2346] to-[#091A36] text-white py-14 sm:py-18">
+          <section className="relative overflow-hidden bg-gradient-to-b from-[#103B47] via-[#0E323D] to-[#0A242C] text-white py-12 sm:py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-semibold text-white">
+                <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-xs">
                   {exam.category}
                 </span>
-                <span className="inline-flex items-center rounded-full bg-orange-500/20 px-3 py-0.5 text-xs font-semibold text-[#EA5C2B] border border-orange-500/30">
+                <span className="inline-flex items-center rounded-full bg-[#D89A3E]/20 px-3 py-1 text-xs font-bold text-[#D89A3E] border border-[#D89A3E]/30">
                   Conducted by: {exam.conductingBody}
                 </span>
               </div>
@@ -158,7 +158,7 @@ export default async function TestPrepDetailPage({ params }: Props) {
               <h1 className="mt-4 font-serif text-3xl sm:text-5xl font-black text-white tracking-tight">
                 {exam.name}
               </h1>
-              <p className="mt-1 text-sm font-medium text-slate-300">
+              <p className="mt-1 text-sm sm:text-base font-medium text-slate-300">
                 {exam.fullName}
               </p>
 
@@ -168,50 +168,50 @@ export default async function TestPrepDetailPage({ params }: Props) {
 
               {/* Quick Metrics Bar */}
               <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Exam Fee (INR)
                   </span>
-                  <p className="mt-1 text-base font-black text-[#EA5C2B]">
+                  <p className="mt-1 text-base sm:text-lg font-black font-mono text-[#D89A3E]">
                     {exam.feeINR}
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Total Duration
                   </span>
-                  <p className="mt-1 text-sm font-bold text-white">
+                  <p className="mt-1 text-sm font-bold font-mono text-white">
                     {exam.duration}
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Score Validity
                   </span>
-                  <p className="mt-1 text-sm font-bold text-white">
+                  <p className="mt-1 text-sm font-bold font-mono text-white">
                     {exam.validityYears === 99
                       ? "Lifetime"
                       : `${exam.validityYears} Years`}
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Score Scale
                   </span>
-                  <p className="mt-1 text-sm font-bold text-white">
+                  <p className="mt-1 text-sm font-bold font-mono text-white">
                     {exam.scoringScale}
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Indian Target Cutoff
                   </span>
-                  <p className="mt-1 text-sm font-black text-emerald-400">
+                  <p className="mt-1 text-sm font-black font-mono text-emerald-300">
                     {exam.targetCutoffIndianStudents}
                   </p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur-xs">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-3.5 backdrop-blur-xs">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
                     Delivery Mode
                   </span>
                   <p
@@ -227,13 +227,13 @@ export default async function TestPrepDetailPage({ params }: Props) {
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <LeadTriggerButton
                   country={exam.targetCountries[0]}
-                  className="rounded-xl bg-[#EA5C2B] px-6 py-3 text-xs font-bold text-white shadow-md hover:bg-[#d44e20] transition inline-flex items-center gap-2"
+                  className="min-h-[44px] rounded-xl bg-[#D89A3E] px-6 py-3 text-xs sm:text-sm font-bold text-slate-950 shadow-md hover:bg-[#c4872f] transition inline-flex items-center gap-2 cursor-pointer active:scale-98"
                 >
                   <span>Get Free {exam.shortName} Prep Assessment</span>
                   <ArrowRight className="h-4 w-4" />
                 </LeadTriggerButton>
-                <AICounsellorTriggerButton className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-xs font-bold text-white hover:bg-white/20 transition inline-flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-[#EA5C2B]" />
+                <AICounsellorTriggerButton className="min-h-[44px] rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-xs sm:text-sm font-bold text-white hover:bg-white/20 transition inline-flex items-center gap-2 cursor-pointer">
+                  <Sparkles className="h-4 w-4 text-[#D89A3E]" />
                   <span>Ask AI for {exam.shortName} Tips</span>
                 </AICounsellorTriggerButton>
               </div>
@@ -246,16 +246,16 @@ export default async function TestPrepDetailPage({ params }: Props) {
               {/* Main Content Area (2 cols) */}
               <div className="lg:col-span-2 space-y-10">
                 {/* 1. Overview Section */}
-                <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
-                  <h2 className="text-xl font-bold text-[#102C57] flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-[#EA5C2B]" />
+                <section className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 sm:p-8 shadow-2xs">
+                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47] flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-[#D89A3E]" />
                     <span>About {exam.name}</span>
                   </h2>
                   <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-600">
                     {exam.overview}
                   </p>
 
-                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-100 pt-6">
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-[#D9CFB8]/40 pt-6">
                     <div>
                       <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
                         Target Degrees & Programs
@@ -264,7 +264,7 @@ export default async function TestPrepDetailPage({ params }: Props) {
                         {exam.targetPrograms.map((prog) => (
                           <span
                             key={prog}
-                            className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
+                            className="rounded-lg bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-2.5 py-1 text-xs font-semibold text-[#103B47]"
                           >
                             {prog}
                           </span>
@@ -275,7 +275,7 @@ export default async function TestPrepDetailPage({ params }: Props) {
                       <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
                         Conducting Body & Frequency
                       </h3>
-                      <p className="mt-2 text-xs font-bold text-slate-800">
+                      <p className="mt-2 text-xs font-bold text-slate-900">
                         {exam.conductingBody}
                       </p>
                       <p className="text-xs text-slate-500">{exam.frequency}</p>
@@ -284,13 +284,13 @@ export default async function TestPrepDetailPage({ params }: Props) {
                 </section>
 
                 {/* 2. Section-by-Section Exam Format */}
-                <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+                <section className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 sm:p-8 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-[#102C57] flex items-center gap-2">
-                      <Layers className="h-5 w-5 text-[#EA5C2B]" />
+                    <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47] flex items-center gap-2">
+                      <Layers className="h-5 w-5 text-[#D89A3E]" />
                       <span>{exam.shortName} Section Breakdown & Syllabus</span>
                     </h2>
-                    <span className="text-xs font-bold text-slate-400">
+                    <span className="text-xs font-bold text-slate-400 font-mono">
                       {exam.sections.length} Sections
                     </span>
                   </div>
@@ -299,11 +299,11 @@ export default async function TestPrepDetailPage({ params }: Props) {
                     {exam.sections.map((sec, idx) => (
                       <div
                         key={idx}
-                        className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 hover:border-[#102C57]/30 transition"
+                        className="rounded-2xl border border-[#D9CFB8]/70 bg-[#FDFCF7]/60 p-5 hover:border-[#103B47]/30 transition"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#102C57] text-[10px] font-bold text-white">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#103B47] text-[10px] font-bold text-white font-mono">
                               {idx + 1}
                             </span>
                             <h3 className="text-sm font-bold text-slate-900">
@@ -311,12 +311,14 @@ export default async function TestPrepDetailPage({ params }: Props) {
                             </h3>
                           </div>
                           <div className="flex items-center gap-3 text-xs font-semibold text-slate-500">
-                            <span className="flex items-center gap-1">
+                            <span className="flex items-center gap-1 font-mono">
                               <Clock className="h-3.5 w-3.5 text-slate-400" />
                               {sec.duration}
                             </span>
                             <span>•</span>
-                            <span>{sec.questionsCount}</span>
+                            <span className="font-mono">
+                              {sec.questionsCount}
+                            </span>
                           </div>
                         </div>
 
@@ -327,11 +329,13 @@ export default async function TestPrepDetailPage({ params }: Props) {
                             </strong>{" "}
                             {sec.skillsTested}
                           </p>
-                          <div className="mt-2.5 rounded-xl bg-orange-50/80 border border-orange-200/50 p-3 text-slate-700">
-                            <p className="text-[11px] font-bold text-[#EA5C2B] uppercase tracking-wider mb-0.5">
+                          <div className="mt-2.5 rounded-xl bg-[#D89A3E]/10 border border-[#D89A3E]/30 p-3 text-slate-800">
+                            <p className="text-[11px] font-bold text-[#D89A3E] uppercase tracking-wider mb-0.5">
                               Strategy for Indian Students:
                             </p>
-                            <p className="text-xs">{sec.tips}</p>
+                            <p className="text-xs leading-relaxed">
+                              {sec.tips}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -340,9 +344,9 @@ export default async function TestPrepDetailPage({ params }: Props) {
                 </section>
 
                 {/* 3. Minimum Cutoffs & Country Score Requirements */}
-                <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
-                  <h2 className="text-xl font-bold text-[#102C57] flex items-center gap-2">
-                    <Globe2 className="h-5 w-5 text-[#EA5C2B]" />
+                <section className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 sm:p-8 shadow-2xs">
+                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47] flex items-center gap-2">
+                    <Globe2 className="h-5 w-5 text-[#D89A3E]" />
                     <span>Target Score Requirements by Destination</span>
                   </h2>
                   <p className="mt-1 text-xs text-slate-500">
@@ -353,7 +357,7 @@ export default async function TestPrepDetailPage({ params }: Props) {
                   <div className="mt-6 overflow-x-auto">
                     <table className="w-full text-left text-xs border-collapse">
                       <thead>
-                        <tr className="border-b border-slate-200 bg-slate-50 text-slate-700">
+                        <tr className="border-b border-[#D9CFB8]/70 bg-[#FDFCF7] text-slate-700">
                           <th className="p-3 font-bold">Destination Country</th>
                           <th className="p-3 font-bold">Minimum Threshold</th>
                           <th className="p-3 font-bold text-emerald-800">
@@ -364,26 +368,26 @@ export default async function TestPrepDetailPage({ params }: Props) {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-600">
+                      <tbody className="divide-y divide-[#D9CFB8]/40 text-slate-600">
                         {exam.scoreRequirementsByCountry.map((req, idx) => (
                           <tr
                             key={idx}
-                            className="hover:bg-slate-50/80 transition"
+                            className="hover:bg-[#FDFCF7]/80 transition"
                           >
                             <td className="p-3 font-bold text-slate-900 flex items-center gap-2">
                               <span className="text-xl">{req.flag}</span>
                               <span>{req.country}</span>
                             </td>
-                            <td className="p-3 font-medium text-slate-700">
+                            <td className="p-3 font-medium text-slate-700 font-mono">
                               {req.minRequired}
                             </td>
-                            <td className="p-3 font-bold text-emerald-700">
+                            <td className="p-3 font-bold text-emerald-700 font-mono">
                               {req.competitiveScore}
                             </td>
                             <td className="p-3 text-right">
                               <Link
-                                href={`/study-in-${req.country.toLowerCase().replace(/\s+/g, "-")}`}
-                                className="font-bold text-[#102C57] hover:text-[#EA5C2B] hover:underline"
+                                href={`/destinations/${req.country.toLowerCase().replace(/\s+/g, "-")}`}
+                                className="font-bold text-[#103B47] hover:text-[#D89A3E] hover:underline"
                               >
                                 View Country
                               </Link>
@@ -396,13 +400,13 @@ export default async function TestPrepDetailPage({ params }: Props) {
                 </section>
 
                 {/* 4. 8-Week Preparation Roadmap */}
-                <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+                <section className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 sm:p-8 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-[#102C57] flex items-center gap-2">
-                      <Zap className="h-5 w-5 text-[#EA5C2B]" />
+                    <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47] flex items-center gap-2">
+                      <Zap className="h-5 w-5 text-[#D89A3E]" />
                       <span>8-Week Structured Study Roadmap</span>
                     </h2>
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700">
+                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 font-mono">
                       Step-by-Step
                     </span>
                   </div>
@@ -415,14 +419,14 @@ export default async function TestPrepDetailPage({ params }: Props) {
                     {exam.prepRoadmap.map((item, idx) => (
                       <div
                         key={idx}
-                        className="relative flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5"
+                        className="relative flex gap-4 rounded-2xl border border-[#D9CFB8]/70 bg-[#FDFCF7]/60 p-5"
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#102C57] text-xs font-bold text-white">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#103B47] text-xs font-bold text-white font-mono">
                           {idx + 1}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="rounded-md bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-[#EA5C2B]">
+                            <span className="rounded-md bg-[#D89A3E]/15 px-2 py-0.5 text-[10px] font-bold text-[#D89A3E] font-mono">
                               {item.week}
                             </span>
                             <h3 className="text-sm font-bold text-slate-900">
@@ -439,9 +443,9 @@ export default async function TestPrepDetailPage({ params }: Props) {
                 </section>
 
                 {/* 5. Frequently Asked Questions */}
-                <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
-                  <h2 className="text-xl font-bold text-[#102C57] flex items-center gap-2">
-                    <HelpCircle className="h-5 w-5 text-[#EA5C2B]" />
+                <section className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 sm:p-8 shadow-2xs">
+                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#103B47] flex items-center gap-2">
+                    <HelpCircle className="h-5 w-5 text-[#D89A3E]" />
                     <span>Frequently Asked Questions about {exam.name}</span>
                   </h2>
 
@@ -449,7 +453,7 @@ export default async function TestPrepDetailPage({ params }: Props) {
                     {exam.faqs.map((faq, idx) => (
                       <div
                         key={idx}
-                        className="rounded-2xl border border-slate-200 bg-slate-50/60 p-5"
+                        className="rounded-2xl border border-[#D9CFB8]/70 bg-[#FDFCF7]/60 p-5"
                       >
                         <h3 className="text-sm font-bold text-slate-900">
                           {faq.question}
@@ -467,11 +471,11 @@ export default async function TestPrepDetailPage({ params }: Props) {
               <div className="space-y-6">
                 {/* 1. Quick Profile Assessment Card */}
                 <div className="sticky top-24 space-y-6">
-                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-md">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-50 text-[#EA5C2B] mb-4">
+                  <div className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 shadow-sm">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#D89A3E]/15 text-[#D89A3E] mb-4">
                       <Sparkles className="h-6 w-6" />
                     </div>
-                    <h3 className="text-base font-bold text-[#102C57]">
+                    <h3 className="text-lg font-serif font-bold text-[#103B47]">
                       Get Free {exam.shortName} Readiness Evaluation
                     </h3>
                     <p className="mt-2 text-xs text-slate-500 leading-relaxed">
@@ -483,37 +487,37 @@ export default async function TestPrepDetailPage({ params }: Props) {
                     <div className="mt-6 space-y-3">
                       <LeadTriggerButton
                         country={exam.targetCountries[0]}
-                        className="w-full rounded-xl bg-[#EA5C2B] py-3 text-xs font-bold text-white shadow-xs hover:bg-[#d44e20] transition flex items-center justify-center gap-2"
+                        className="w-full min-h-[44px] rounded-xl bg-[#D89A3E] py-3 text-xs sm:text-sm font-bold text-slate-950 shadow-xs hover:bg-[#c4872f] transition flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                       >
                         <span>Schedule Free Strategy Call</span>
                         <ArrowRight className="h-4 w-4" />
                       </LeadTriggerButton>
 
-                      <AICounsellorTriggerButton className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 text-xs font-bold text-slate-700 hover:bg-slate-100 transition flex items-center justify-center gap-2">
-                        <Sparkles className="h-4 w-4 text-[#EA5C2B]" />
+                      <AICounsellorTriggerButton className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] py-3 text-xs sm:text-sm font-bold text-[#103B47] hover:bg-white transition flex items-center justify-center gap-2 cursor-pointer">
+                        <Sparkles className="h-4 w-4 text-[#D89A3E]" />
                         <span>Instant AI Consultation</span>
                       </AICounsellorTriggerButton>
                     </div>
 
-                    <div className="mt-6 border-t border-slate-100 pt-4 text-[11px] text-slate-400 space-y-1.5">
+                    <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4 text-[11px] text-slate-400 space-y-2">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                         <span>100% Free Zero-Bias Counseling</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                         <span>Official IDP & ETS Partner Guidance</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                         <span>DPDP Act 2023 Compliant</span>
                       </div>
                     </div>
                   </div>
 
                   {/* 2. Related Exams Widget */}
-                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#102C57] mb-4">
+                  <div className="rounded-3xl border border-[#D9CFB8]/80 bg-white p-6 shadow-2xs">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#103B47] mb-4">
                       Related & Alternative Tests
                     </h3>
                     <ul className="space-y-3 text-xs">
@@ -521,17 +525,17 @@ export default async function TestPrepDetailPage({ params }: Props) {
                         <li key={rel.id}>
                           <Link
                             href={`/test-prep/${rel.slug}`}
-                            className="group flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-3 hover:border-[#102C57]/20 hover:bg-slate-100 transition"
+                            className="group flex items-center justify-between rounded-xl border border-[#D9CFB8]/60 bg-[#FDFCF7]/60 p-3 hover:border-[#103B47]/30 hover:bg-white transition"
                           >
                             <div>
-                              <p className="font-bold text-slate-900 group-hover:text-[#EA5C2B] transition">
+                              <p className="font-bold text-slate-900 group-hover:text-[#103B47] transition">
                                 {rel.name}
                               </p>
-                              <p className="text-[10px] text-slate-400">
+                              <p className="text-[10px] text-slate-400 font-mono">
                                 {rel.feeINR} • {rel.category.split(" ")[0]}
                               </p>
                             </div>
-                            <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 group-hover:text-[#EA5C2B] transition-transform" />
+                            <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 group-hover:text-[#D89A3E] transition-transform" />
                           </Link>
                         </li>
                       ))}

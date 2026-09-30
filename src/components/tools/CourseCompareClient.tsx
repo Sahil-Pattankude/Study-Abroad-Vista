@@ -446,21 +446,21 @@ export function CourseCompareClient() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-20 pt-8 sm:pt-12">
+    <div className="min-h-screen bg-[#FDFCF7] pb-20 pt-8 sm:pt-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header Hero */}
         <div className="mb-8 text-center sm:text-left">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-bold text-[#102C57]">
-            <Sparkles className="h-3.5 w-3.5 text-[#EA5C2B]" />
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#D89A3E]/30 bg-[#D89A3E]/10 px-3.5 py-1 text-xs font-bold text-[#103B47]">
+            <Sparkles className="h-3.5 w-3.5 text-[#D89A3E]" />
             <span>
               Interactive Utility • Compare Up to 5 Academic Courses & Degrees
               Side-by-Side
             </span>
           </div>
-          <h1 className="font-serif text-3xl font-black text-[#102C57] sm:text-4xl lg:text-5xl">
+          <h1 className="font-serif text-3xl font-black text-[#103B47] sm:text-4xl lg:text-5xl">
             Course & Program Comparison Matrix
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base font-normal">
             Compare course specializations, tuition fees in INR, minimum IELTS
             cutoffs, GRE/GMAT waiver rules, application deadlines, and STEM
             post-study work authorization across top international degree
@@ -469,23 +469,23 @@ export function CourseCompareClient() {
         </div>
 
         {/* Controls Bar */}
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-4 text-xs font-bold text-[#102C57]">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#D9CFB8]/80 bg-white p-4 shadow-2xs">
+          <div className="flex items-center gap-4 text-xs font-bold text-[#103B47]">
             <div className="flex items-center gap-1.5">
-              <GraduationCap className="h-4 w-4 text-[#EA5C2B]" />
+              <GraduationCap className="h-4 w-4 text-[#D89A3E]" />
               <span>Comparing {activeCourses.length} of 5 Courses</span>
             </div>
 
             {/* Highlight Differences Toggle */}
             <button
               onClick={() => setHighlightDifferences(!highlightDifferences)}
-              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 transition ${
+              className={`flex min-h-[40px] items-center gap-1.5 rounded-xl border px-3.5 py-1.5 transition cursor-pointer ${
                 highlightDifferences
-                  ? "border-amber-300 bg-amber-50 text-amber-900 font-bold"
-                  : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                  ? "border-[#D89A3E] bg-[#D89A3E]/15 text-[#103B47] font-bold"
+                  : "border-[#D9CFB8] bg-[#FDFCF7] text-slate-700 hover:bg-white"
               }`}
             >
-              <SlidersHorizontal className="h-3.5 w-3.5 text-amber-600" />
+              <SlidersHorizontal className="h-3.5 w-3.5 text-[#D89A3E]" />
               <span>
                 {highlightDifferences
                   ? "Differences Highlighted ✓"
@@ -498,15 +498,15 @@ export function CourseCompareClient() {
             {activeCourses.length < 5 && (
               <button
                 onClick={() => setIsSelectorOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#102C57] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0d2346] cursor-pointer"
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-[#103B47] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#1D5A6C] cursor-pointer"
               >
-                <Plus className="h-4 w-4 text-[#EA5C2B]" />
+                <Plus className="h-4 w-4 text-[#D89A3E]" />
                 <span>Add Course ({5 - activeCourses.length} left)</span>
               </button>
             )}
             <button
               onClick={() => homeModals.openLeadModal()}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#EA5C2B] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#ff7240] cursor-pointer"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-[#D89A3E] px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-[#c4872f] cursor-pointer active:scale-98"
             >
               <span>Get Course Eligibility Review</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -516,14 +516,14 @@ export function CourseCompareClient() {
 
         {/* Modal Overlay to Add Course */}
         {isSelectorOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-            <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl animate-in fade-in zoom-in-95">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs">
+            <div className="relative w-full max-w-lg rounded-3xl border border-[#D9CFB8] bg-[#FDFCF7] p-6 shadow-2xl animate-in fade-in zoom-in-95">
+              <div className="flex items-center justify-between border-b border-[#D9CFB8]/60 pb-4">
                 <div>
-                  <h3 className="text-base font-extrabold text-[#102C57]">
+                  <h3 className="text-base font-serif font-bold text-[#103B47]">
                     Select Course / Program to Compare
                   </h3>
-                  <p className="text-[11px] text-emerald-600 font-medium mt-0.5 flex items-center gap-1">
+                  <p className="text-[11px] text-[#1D5A6C] font-medium mt-0.5 flex items-center gap-1">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span>
                       Supabase Live Catalog • {coursesPool.length} Courses
@@ -533,20 +533,20 @@ export function CourseCompareClient() {
                 </div>
                 <button
                   onClick={() => setIsSelectorOpen(false)}
-                  className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                  className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
               <div className="mt-4 relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search course title or university..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 py-2.5 pl-9 pr-4 text-xs focus:border-[#102C57] focus:outline-none focus:ring-1 focus:ring-[#102C57]"
+                  className="w-full min-h-[44px] rounded-xl border border-[#D9CFB8] bg-white py-2.5 pl-10 pr-4 text-xs sm:text-sm focus:border-[#103B47] focus:outline-none focus:ring-1 focus:ring-[#103B47]"
                 />
               </div>
 
@@ -560,15 +560,15 @@ export function CourseCompareClient() {
                     <button
                       key={c.id}
                       onClick={() => addCourse(c.slug)}
-                      className="flex w-full items-center justify-between rounded-xl p-2.5 text-left transition hover:bg-slate-50 border border-slate-100"
+                      className="flex w-full items-center justify-between rounded-xl p-3 text-left transition hover:bg-white border border-[#D9CFB8]/50 bg-white/60 cursor-pointer min-h-[44px]"
                     >
                       <div>
-                        <p className="font-bold text-[#102C57]">{c.name}</p>
+                        <p className="font-bold text-[#103B47]">{c.name}</p>
                         <p className="text-[11px] text-slate-500">
                           {c.universityName} • {c.country} {c.flagEmoji}
                         </p>
                       </div>
-                      <span className="rounded-lg bg-indigo-50 px-2.5 py-1 text-[11px] font-bold text-[#102C57] hover:bg-[#102C57] hover:text-white transition">
+                      <span className="rounded-lg bg-[#D89A3E]/15 border border-[#D89A3E]/30 px-2.5 py-1 text-[11px] font-bold text-[#103B47] hover:bg-[#D89A3E] hover:text-slate-950 transition">
                         + Add
                       </span>
                     </button>
@@ -580,10 +580,10 @@ export function CourseCompareClient() {
         )}
 
         {/* Comparison Table */}
-        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-xl">
+        <div className="overflow-x-auto rounded-3xl border border-[#D9CFB8]/80 bg-white shadow-sm">
           <table className="w-full min-w-[760px] border-collapse text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50/80">
+              <tr className="border-b border-[#D9CFB8]/70 bg-[#FDFCF7]">
                 <th className="w-48 p-4 font-bold uppercase tracking-wider text-slate-400">
                   Course Parameters
                 </th>
@@ -591,10 +591,10 @@ export function CourseCompareClient() {
                   <th key={course.id} className="p-4 align-top w-64">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="inline-block rounded-md bg-indigo-50 px-2 py-0.5 text-[10px] font-bold text-indigo-800 mb-1">
+                        <span className="inline-block rounded-md bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-2 py-0.5 text-[10px] font-bold text-[#103B47] mb-1">
                           {course.level}
                         </span>
-                        <h4 className="font-extrabold text-[#102C57] text-xs leading-snug">
+                        <h4 className="font-serif font-bold text-[#103B47] text-xs leading-snug">
                           {course.name}
                         </h4>
                         <p className="mt-1 text-[11px] text-slate-500 font-normal">
@@ -604,7 +604,7 @@ export function CourseCompareClient() {
                       {activeCourses.length > 1 && (
                         <button
                           onClick={() => removeCourse(course.slug)}
-                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition shrink-0"
+                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition shrink-0 cursor-pointer"
                           title="Remove course from comparison"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -615,12 +615,12 @@ export function CourseCompareClient() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tbody className="divide-y divide-[#D9CFB8]/40 text-slate-700">
               {/* Row 1: University & Country */}
               <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <Building2 className="h-4 w-4 text-indigo-600" />
+                    <Building2 className="h-4 w-4 text-[#1D5A6C]" />
                     <span>Institution & Location</span>
                   </div>
                 </td>
@@ -628,7 +628,7 @@ export function CourseCompareClient() {
                   <td key={c.id} className="p-4 font-semibold text-slate-900">
                     <Link
                       href={`/universities/${c.universitySlug}`}
-                      className="hover:text-[#EA5C2B] transition"
+                      className="hover:text-[#D89A3E] transition"
                     >
                       {c.universityName}
                     </Link>
@@ -640,23 +640,26 @@ export function CourseCompareClient() {
               </tr>
 
               {/* Row 2: Course Duration */}
-              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className={highlightDifferences ? "bg-[#D89A3E]/10" : ""}>
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
                     <Layers className="h-4 w-4 text-slate-500" />
                     <span>Duration & Format</span>
                   </div>
                 </td>
                 {activeCourses.map((c) => (
-                  <td key={c.id} className="p-4 font-bold text-slate-800">
+                  <td
+                    key={c.id}
+                    className="p-4 font-bold text-slate-800 font-mono"
+                  >
                     {c.duration}
                   </td>
                 ))}
               </tr>
 
               {/* Row 3: Tuition Fees (INR) */}
-              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className={highlightDifferences ? "bg-[#D89A3E]/10" : ""}>
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
                     <DollarSign className="h-4 w-4 text-emerald-600" />
                     <span>Tuition Fee (INR / yr)</span>
@@ -665,7 +668,7 @@ export function CourseCompareClient() {
                 {activeCourses.map((c) => (
                   <td
                     key={c.id}
-                    className="p-4 font-bold text-emerald-700 text-sm"
+                    className="p-4 font-bold font-mono text-[#103B47] text-sm"
                   >
                     {c.tuitionFeeINR}
                     <span className="block text-[10px] font-normal text-slate-400 mt-0.5">
@@ -676,16 +679,16 @@ export function CourseCompareClient() {
               </tr>
 
               {/* Row 4: IELTS Cutoff */}
-              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className={highlightDifferences ? "bg-[#D89A3E]/10" : ""}>
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <BookOpen className="h-4 w-4 text-blue-600" />
+                    <BookOpen className="h-4 w-4 text-sky-600" />
                     <span>Min. IELTS Band</span>
                   </div>
                 </td>
                 {activeCourses.map((c) => (
                   <td key={c.id} className="p-4 font-semibold">
-                    <span className="rounded-md bg-blue-50 px-2 py-0.5 text-blue-800 font-bold">
+                    <span className="rounded-md bg-sky-50 border border-sky-200 px-2 py-0.5 text-sky-900 font-bold font-mono">
                       {c.ieltsMinScore} Overall
                     </span>
                   </td>
@@ -693,21 +696,21 @@ export function CourseCompareClient() {
               </tr>
 
               {/* Row 5: GRE / GMAT Requirement */}
-              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className={highlightDifferences ? "bg-[#D89A3E]/10" : ""}>
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <GraduationCap className="h-4 w-4 text-purple-600" />
+                    <GraduationCap className="h-4 w-4 text-[#D89A3E]" />
                     <span>GRE / GMAT Policy</span>
                   </div>
                 </td>
                 {activeCourses.map((c) => (
                   <td key={c.id} className="p-4 font-medium">
                     {c.greGmatRequired ? (
-                      <span className="inline-flex items-center gap-1 text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded">
+                      <span className="inline-flex items-center gap-1 text-amber-800 font-bold bg-[#D89A3E]/15 border border-[#D89A3E]/30 px-2 py-0.5 rounded">
                         <Check className="h-3.5 w-3.5" /> Required
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                      <span className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
                         <Check className="h-3.5 w-3.5 text-emerald-600" />{" "}
                         Waived / Optional
                       </span>
@@ -717,15 +720,18 @@ export function CourseCompareClient() {
               </tr>
 
               {/* Row 6: Post-Study Work Visa */}
-              <tr className={highlightDifferences ? "bg-amber-50/30" : ""}>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className={highlightDifferences ? "bg-[#D89A3E]/10" : ""}>
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
+                    <ShieldCheck className="h-4 w-4 text-[#D89A3E]" />
                     <span>Post-Study Work Rights</span>
                   </div>
                 </td>
                 {activeCourses.map((c) => (
-                  <td key={c.id} className="p-4 font-bold text-[#EA5C2B]">
+                  <td
+                    key={c.id}
+                    className="p-4 font-bold font-mono text-[#D89A3E]"
+                  >
                     {c.postStudyWorkMonths} Months (
                     {Math.round(c.postStudyWorkMonths / 12)} Yrs)
                   </td>
@@ -734,9 +740,9 @@ export function CourseCompareClient() {
 
               {/* Row 7: Upcoming Intake Deadline */}
               <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4 text-indigo-600" />
+                    <Calendar className="h-4 w-4 text-[#1D5A6C]" />
                     <span>Upcoming Deadline</span>
                   </div>
                 </td>
@@ -749,15 +755,15 @@ export function CourseCompareClient() {
 
               {/* Row 8: ROI & Employability Score */}
               <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <div className="flex items-center gap-1.5">
-                    <Award className="h-4 w-4 text-amber-500" />
+                    <Award className="h-4 w-4 text-[#D89A3E]" />
                     <span>ROI Score</span>
                   </div>
                 </td>
                 {activeCourses.map((c) => (
-                  <td key={c.id} className="p-4 font-extrabold text-indigo-900">
-                    <span className="rounded-lg bg-amber-50 border border-amber-200 px-2 py-1 text-amber-900 font-black">
+                  <td key={c.id} className="p-4 font-extrabold text-[#103B47]">
+                    <span className="rounded-lg bg-[#D89A3E]/15 border border-[#D89A3E]/30 px-2.5 py-1 text-[#103B47] font-mono font-black">
                       {c.roiScore} / 100
                     </span>
                   </td>
@@ -766,7 +772,7 @@ export function CourseCompareClient() {
 
               {/* Row 9: Core Curriculum Modules */}
               <tr>
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <span>Core Curriculum Modules</span>
                 </td>
                 {activeCourses.map((c) => (
@@ -775,7 +781,7 @@ export function CourseCompareClient() {
                       {c.coreModules.map((m, idx) => (
                         <span
                           key={idx}
-                          className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700"
+                          className="rounded bg-[#1D5A6C]/10 border border-[#1D5A6C]/15 px-2 py-0.5 text-[10px] font-semibold text-[#103B47]"
                         >
                           {m}
                         </span>
@@ -786,8 +792,8 @@ export function CourseCompareClient() {
               </tr>
 
               {/* Row 10: Action CTAs */}
-              <tr className="bg-slate-50/20">
-                <td className="bg-slate-50/40 p-4 font-bold text-[#102C57]">
+              <tr className="bg-[#FDFCF7]/40">
+                <td className="bg-[#FDFCF7]/60 p-4 font-bold text-[#103B47]">
                   <span>Course Action</span>
                 </td>
                 {activeCourses.map((c) => (
@@ -795,13 +801,13 @@ export function CourseCompareClient() {
                     <div className="space-y-2">
                       <Link
                         href={`/universities/${c.universitySlug}`}
-                        className="block w-full rounded-xl border border-[#102C57] text-center py-2 text-xs font-bold text-[#102C57] hover:bg-[#102C57] hover:text-white transition"
+                        className="block w-full min-h-[40px] leading-[38px] rounded-xl border border-[#103B47] text-center text-xs font-bold text-[#103B47] hover:bg-[#103B47] hover:text-white transition cursor-pointer"
                       >
                         University Page
                       </Link>
                       <button
                         onClick={() => homeModals.openLeadModal(c.country)}
-                        className="block w-full rounded-xl bg-[#EA5C2B] text-center py-2 text-xs font-bold text-white hover:bg-[#ff7240] transition shadow-sm cursor-pointer"
+                        className="block w-full min-h-[40px] rounded-xl bg-[#D89A3E] text-center text-xs font-bold text-slate-950 hover:bg-[#c4872f] transition shadow-2xs cursor-pointer active:scale-98"
                       >
                         Review Eligibility
                       </button>

@@ -78,37 +78,37 @@ export function UniversityActions({
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-3">
         {currentClaimStatus === "verified" ? (
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs font-bold text-emerald-800">
+          <span className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-300 px-3.5 py-2 text-xs font-bold text-emerald-800">
             <CheckCircle2 className="h-4 w-4 text-emerald-600" />
             Verified Institution
           </span>
         ) : !isLoggedIn ? (
           <button
             onClick={() => setIsClaimModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50/80 px-3.5 py-2 text-xs font-bold text-[#102C57] transition hover:bg-indigo-100 hover:border-indigo-300 cursor-pointer shadow-2xs"
+            className="flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#D9CFB8] bg-white px-3.5 py-2 text-xs font-bold text-[#103B47] transition hover:bg-[#FDFCF7] hover:border-[#103B47] cursor-pointer shadow-2xs"
           >
-            <ShieldCheck className="h-4 w-4 text-[#EA5C2B]" />
+            <ShieldCheck className="h-4 w-4 text-[#D89A3E]" />
             <span>Claim Profile</span>
           </button>
         ) : null}
 
         <button
           onClick={toggleShortlist}
-          className={`flex items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-bold transition shadow-xs ${
+          className={`flex min-h-[44px] items-center gap-1.5 rounded-xl border px-4 py-2 text-xs font-bold transition shadow-2xs cursor-pointer ${
             isShortlisted
-              ? "border-amber-300 bg-amber-50 text-amber-900"
-              : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+              ? "border-[#D89A3E] bg-[#D89A3E]/10 text-[#D89A3E]"
+              : "border-[#D9CFB8] bg-white text-slate-700 hover:bg-[#FDFCF7] hover:border-slate-300"
           }`}
         >
           <Star
-            className={`h-4 w-4 ${isShortlisted ? "fill-amber-500 text-amber-500" : "text-slate-400"}`}
+            className={`h-4 w-4 ${isShortlisted ? "fill-[#D89A3E] text-[#D89A3E]" : "text-slate-400"}`}
           />
           <span>{isShortlisted ? "Shortlisted ✓" : "★ Shortlist"}</span>
         </button>
 
         <button
           onClick={() => openLeadModal(countrySlug)}
-          className="flex items-center gap-1.5 rounded-xl bg-[#EA5C2B] px-5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#d94f20] active:scale-98 cursor-pointer"
+          className="flex min-h-[44px] items-center gap-2 rounded-xl bg-[#D89A3E] px-5 py-2 text-xs font-bold text-slate-950 shadow-sm transition hover:bg-[#c4872f] active:scale-98 cursor-pointer"
         >
           <span>Apply via Vista</span>
           <ArrowRight className="h-4 w-4" />
@@ -116,9 +116,9 @@ export function UniversityActions({
       </div>
 
       {showSyncPrompt && !isLoggedIn && (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/90 p-2.5 text-xs text-amber-900 shadow-sm animate-in fade-in duration-200">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-[#D89A3E]/40 bg-[#D89A3E]/10 p-2.5 text-xs text-[#103B47] shadow-2xs animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
-            <Lock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+            <Lock className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
             <span className="text-[11px] font-medium">
               Saved to guest session! Sign in to sync across devices & track
               application deadlines.
@@ -132,7 +132,7 @@ export function UniversityActions({
                   "Create a free student account or sign in to permanently save your shortlisted universities, sync across all your devices, and track application deadlines.",
               })
             }
-            className="shrink-0 rounded-lg bg-[#102C57] px-2.5 py-1 text-[11px] font-bold text-white hover:bg-[#0c2242] transition cursor-pointer"
+            className="shrink-0 rounded-lg bg-[#103B47] px-3 py-1.5 text-[11px] font-bold text-white hover:bg-[#1D5A6C] transition cursor-pointer"
           >
             Save to Profile →
           </button>

@@ -284,15 +284,15 @@ export default function SignupPage() {
       <header className="border-b border-[#D9CFB8]/60 bg-white/90 backdrop-blur-md sticky top-0 z-30 px-4 py-3.5 sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <BrandLogo variant="wordmark" theme="light" size="md" />
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-slate-500 hidden sm:inline">
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <span className="text-[#6B6B6B] hidden sm:inline">
               Already have an account?
             </span>
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#1D5A6C]/20 bg-white px-3.5 py-1.5 font-bold text-[#1D5A6C] transition hover:bg-[#1D5A6C]/5"
+              className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl border border-[#1D5A6C] bg-white px-4 py-2 font-bold text-[#1D5A6C] transition hover:bg-[#1D5A6C] hover:text-white"
             >
-              Sign in
+              <span>Sign in</span>
               <ArrowRight className="h-3 w-3 text-[#D89A3E]" />
             </Link>
           </div>
@@ -301,54 +301,54 @@ export default function SignupPage() {
 
       {/* Main Container */}
       <main className="flex-1 flex items-center justify-center py-8 px-4 sm:px-6">
-        <div className="w-full max-w-md rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.03)]">
+        <div className="w-full max-w-md rounded-3xl border border-[#D9CFB8] bg-white p-6 sm:p-8 shadow-xl">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#103B47]">
               Create your account
             </h1>
-            <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+            <p className="mt-1 text-xs text-[#6B6B6B] leading-relaxed">
               Join 50,000+ Indian students, verified consultancies, and
-              universities.
+              universities worldwide.
             </p>
           </div>
 
           {/* Role Pill Selector */}
-          <div className="mt-5 grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 text-xs font-semibold text-slate-600">
+          <div className="mt-5 grid grid-cols-3 gap-1 rounded-xl bg-[#F5EFE0] border border-[#D9CFB8] p-1 text-xs font-semibold font-mono">
             <button
               type="button"
               onClick={() => setRole("student")}
-              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all ${
+              className={`min-h-[44px] flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all cursor-pointer ${
                 role === "student"
-                  ? "bg-white text-[#102C57] font-bold shadow-xs"
-                  : "hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white font-bold shadow-xs"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <GraduationCap className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <GraduationCap className="h-3.5 w-3.5 text-[#D89A3E]" />
               <span>Student</span>
             </button>
             <button
               type="button"
               onClick={() => setRole("buyer")}
-              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all ${
+              className={`min-h-[44px] flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all cursor-pointer ${
                 role === "buyer"
-                  ? "bg-white text-[#102C57] font-bold shadow-xs"
-                  : "hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white font-bold shadow-xs"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <Briefcase className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <Briefcase className="h-3.5 w-3.5 text-[#A8CDBD]" />
               <span>Consultant</span>
             </button>
             <button
               type="button"
               onClick={() => setRole("university")}
-              className={`flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all ${
+              className={`min-h-[44px] flex items-center justify-center gap-1.5 rounded-lg py-2 transition-all cursor-pointer ${
                 role === "university"
-                  ? "bg-white text-[#102C57] font-bold shadow-xs"
-                  : "hover:text-slate-900"
+                  ? "bg-[#1D5A6C] text-white font-bold shadow-xs"
+                  : "text-[#6B6B6B] hover:text-[#103B47]"
               }`}
             >
-              <Building2 className="h-3.5 w-3.5 text-[#EA5C2B]" />
+              <Building2 className="h-3.5 w-3.5 text-[#EBC783]" />
               <span>University</span>
             </button>
           </div>
@@ -358,7 +358,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => handleOAuth("google")}
-              className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              className="min-h-[44px] flex items-center justify-center gap-2 rounded-xl border border-[#D9CFB8] bg-white py-2 px-3 text-xs font-semibold text-[#103B47] transition hover:bg-[#F5EFE0]/50 shadow-2xs cursor-pointer"
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
                 <path
@@ -383,7 +383,7 @@ export default function SignupPage() {
             <button
               type="button"
               onClick={() => handleOAuth("linkedin")}
-              className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              className="min-h-[44px] flex items-center justify-center gap-2 rounded-xl border border-[#D9CFB8] bg-white py-2 px-3 text-xs font-semibold text-[#103B47] transition hover:bg-[#F5EFE0]/50 shadow-2xs cursor-pointer"
             >
               <svg
                 className="h-3.5 w-3.5 text-[#0A66C2]"
@@ -399,10 +399,10 @@ export default function SignupPage() {
           {/* Divider */}
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-[#D9CFB8]/60" />
             </div>
-            <div className="relative flex justify-center text-[10px] uppercase font-semibold">
-              <span className="bg-white px-2 text-slate-400">
+            <div className="relative flex justify-center text-[10px] uppercase font-mono font-semibold">
+              <span className="bg-white px-2 text-[#6B6B6B]">
                 or continue with email
               </span>
             </div>
@@ -410,42 +410,42 @@ export default function SignupPage() {
 
           {/* Error Alert */}
           {error && (
-            <div className="mb-3 rounded-lg border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
+            <div className="mb-3 rounded-xl border border-rose-200 bg-rose-50 p-2.5 text-xs font-medium text-rose-700">
               {error}
             </div>
           )}
 
           {/* Registration Form */}
-          <form onSubmit={handleRegister} className="space-y-3">
+          <form onSubmit={handleRegister} className="space-y-3.5">
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-2.5">
               <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                   First Name
                 </label>
-                <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+                <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                   <input
                     type="text"
                     required
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Your name"
-                    className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                    className="min-h-[44px] w-full rounded-xl py-2 px-3 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                   Last Name
                 </label>
-                <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+                <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                   <input
                     type="text"
                     required
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     placeholder="Your surname"
-                    className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                    className="min-h-[44px] w-full rounded-xl py-2 px-3 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                   />
                 </div>
               </div>
@@ -453,14 +453,14 @@ export default function SignupPage() {
 
             {/* Email Field */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                 {role === "university"
                   ? "Institutional Email"
                   : role === "buyer"
                     ? "Work Email"
                     : "Email Address"}
               </label>
-              <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                 <input
                   type="email"
                   required
@@ -473,21 +473,21 @@ export default function SignupPage() {
                         ? "director@consultancy.com"
                         : "student@example.com"
                   }
-                  className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  className="min-h-[44px] w-full rounded-xl py-2 px-3 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Conditional Org / University & Country Fields */}
             {role !== "student" && (
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {role === "university" && (
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                       Country of Institution{" "}
                       <span className="text-rose-500">*</span>
                     </label>
-                    <div className="relative flex items-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+                    <div className="relative flex items-center rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] px-3 py-1.5 transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10 min-h-[44px]">
                       <CountryFlag
                         code={
                           countriesList.find(
@@ -505,7 +505,7 @@ export default function SignupPage() {
                         aria-label="Select country of institution"
                         value={selectedCountrySlug}
                         onChange={(e) => setSelectedCountrySlug(e.target.value)}
-                        className="w-full bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer pl-2"
+                        className="w-full bg-transparent text-xs font-bold text-[#103B47] focus:outline-none cursor-pointer pl-2"
                       >
                         {countriesList.map((c) => (
                           <option key={c.id} value={c.slug}>
@@ -518,12 +518,12 @@ export default function SignupPage() {
                 )}
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                  <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                     {role === "buyer"
                       ? "Consultancy / Agency Name"
                       : "University / College Name"}
                   </label>
-                  <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+                  <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                     <input
                       type="text"
                       required
@@ -537,7 +537,7 @@ export default function SignupPage() {
                           ? "Apex Global Admissions"
                           : "e.g. Holland University, University of Toronto..."
                       }
-                      className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                      className="min-h-[44px] w-full rounded-xl py-2 px-3 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                     />
                     {role === "university" && (
                       <datalist id="university-options">
@@ -555,11 +555,11 @@ export default function SignupPage() {
 
             {/* Phone Field */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                 WhatsApp / Mobile Number
               </label>
-              <div className="relative flex rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
-                <span className="flex items-center pl-3 pr-2 text-xs font-semibold text-slate-500 border-r border-slate-100">
+              <div className="relative flex rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10 min-h-[44px]">
+                <span className="flex items-center pl-3 pr-2 text-xs font-mono font-semibold text-[#6B6B6B] border-r border-[#D9CFB8]/60">
                   +91
                 </span>
                 <input
@@ -568,63 +568,63 @@ export default function SignupPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                   placeholder="9876543210"
-                  className="w-full rounded-r-lg py-2 px-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  className="w-full rounded-r-xl py-2 px-2.5 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+              <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#103B47] mb-1">
                 Password (Min. 8 characters)
               </label>
-              <div className="relative rounded-lg border border-slate-200 bg-white transition focus-within:border-[#102C57] focus-within:ring-2 focus-within:ring-[#102C57]/10">
+              <div className="relative rounded-xl border border-[#D9CFB8] bg-[#FDFCF7] transition focus-within:border-[#1D5A6C] focus-within:ring-2 focus-within:ring-[#1D5A6C]/10">
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full rounded-lg py-2 px-3 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                  className="min-h-[44px] w-full rounded-xl py-2 px-3 text-xs text-[#103B47] font-semibold placeholder-[#6B6B6B]/60 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* DPDP Consent */}
             <div className="space-y-2 pt-1">
-              <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer select-none">
+              <label className="flex items-start gap-2 text-xs text-[#6B6B6B] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   required
                   checked={dpdpConsent}
                   onChange={(e) => setDpdpConsent(e.target.checked)}
-                  className="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-[#102C57] accent-[#102C57] cursor-pointer"
+                  className="mt-0.5 h-4 w-4 rounded border-[#D9CFB8] text-[#1D5A6C] accent-[#1D5A6C] cursor-pointer shrink-0"
                 />
-                <span className="text-[11px] leading-tight text-slate-500">
+                <span className="text-[11px] leading-tight text-[#6B6B6B]">
                   I agree to the{" "}
-                  <span className="text-slate-800 font-medium underline">
+                  <span className="text-[#103B47] font-medium underline">
                     Terms
                   </span>{" "}
                   &{" "}
-                  <span className="text-slate-800 font-medium underline">
+                  <span className="text-[#103B47] font-medium underline">
                     Privacy Policy
                   </span>
                   , consenting to academic data processing under the{" "}
-                  <strong className="text-slate-700 font-semibold">
+                  <strong className="text-[#103B47] font-semibold">
                     DPDP Act 2023
                   </strong>
                   . <span className="text-rose-500 font-bold">*</span>
                 </span>
               </label>
 
-              <label className="flex items-start gap-2 text-xs text-slate-600 cursor-pointer select-none">
+              <label className="flex items-start gap-2 text-xs text-[#6B6B6B] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={marketingOptIn}
                   onChange={(e) => setMarketingOptIn(e.target.checked)}
-                  className="mt-0.5 h-3.5 w-3.5 rounded border-slate-300 text-[#102C57] accent-[#102C57] cursor-pointer"
+                  className="mt-0.5 h-4 w-4 rounded border-[#D9CFB8] text-[#1D5A6C] accent-[#1D5A6C] cursor-pointer shrink-0"
                 />
-                <span className="text-[11px] leading-tight text-slate-500">
+                <span className="text-[11px] leading-tight text-[#6B6B6B]">
                   Send scholarship deadlines, intake alerts, and visa updates
                   via WhatsApp (Optional).
                 </span>
@@ -635,7 +635,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full rounded-xl bg-[#EA5C2B] py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#d94f20] active:scale-[0.99] disabled:opacity-50"
+              className="min-h-[44px] mt-2 w-full rounded-xl bg-[#D89A3E] py-3 text-xs sm:text-sm font-bold text-[#103B47] shadow-md transition hover:bg-[#c4872d] active:scale-[0.99] disabled:opacity-50 cursor-pointer"
             >
               {loading
                 ? "Creating account..."
@@ -644,11 +644,11 @@ export default function SignupPage() {
           </form>
 
           {/* Micro Footer inside Card */}
-          <div className="mt-5 text-center text-xs text-slate-500">
+          <div className="mt-5 text-center text-xs text-[#6B6B6B]">
             <span>Already have an account? </span>
             <Link
               href="/login"
-              className="font-bold text-[#102C57] hover:underline"
+              className="font-bold text-[#1D5A6C] hover:underline"
             >
               Sign in →
             </Link>
@@ -657,8 +657,8 @@ export default function SignupPage() {
       </main>
 
       {/* Page Footer */}
-      <footer className="border-t border-slate-200/80 bg-white py-3 text-center text-[11px] text-slate-400">
-        © 2026 Abroadroute • Protected by 256-bit Encryption & Supabase Auth
+      <footer className="border-t border-[#D9CFB8]/60 bg-white py-3.5 text-center text-xs font-mono text-[#6B6B6B]">
+        © 2026 Abroadroute
       </footer>
     </div>
   );
