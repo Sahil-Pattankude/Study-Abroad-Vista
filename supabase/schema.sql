@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS countries (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Programs Table (6 Disciplines)
+-- Programs Table (8 Disciplines)
 CREATE TABLE IF NOT EXISTS programs (
     id VARCHAR(32) PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
@@ -52,6 +52,27 @@ CREATE TABLE IF NOT EXISTS programs (
     top_destinations TEXT[],
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Program Specialisations Table (Year 1 Scope)
+CREATE TABLE IF NOT EXISTS specialisations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    program_slug VARCHAR(64) NOT NULL,
+    anchor_category VARCHAR(128) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    description TEXT,
+    focus_areas TEXT[] NOT NULL DEFAULT '{}',
+    target_destinations TEXT[] NOT NULL DEFAULT '{}',
+    duration_formats TEXT[] NOT NULL DEFAULT '{}',
+    licensing_pathways TEXT[] NOT NULL DEFAULT '{}',
+    content_investment_share VARCHAR(64),
+    is_year_one_anchor BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_specialisations_program_slug ON specialisations(program_slug);
+CREATE INDEX IF NOT EXISTS idx_specialisations_slug ON specialisations(slug);
 
 -- Universities Table
 CREATE TABLE IF NOT EXISTS universities (

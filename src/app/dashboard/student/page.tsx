@@ -39,14 +39,23 @@ export default function StudentDashboardPage() {
     });
   }, []);
 
-  // 2. Fetch backend shortlists once when authenticated
+  // 2. Fetch backend shortlists when authenticated user changes
   useEffect(() => {
     if (user && (user.id || user.email)) {
-      fetchBackendShortlist(user);
+      fetchBackendShortlist(user).then((slugs) => {
+        if (allUniversities.length > 0) {
+          const matched = slugs
+            .map((slug) => allUniversities.find((u) => u.slug === slug))
+            .filter(Boolean) as University[];
+          setShortlistedUnis(matched);
+        }
+      });
+    } else {
+      setShortlistedUnis([]);
     }
-  }, [user?.id, user?.email]);
+  }, [user?.id, user?.email, allUniversities]);
 
-  // 3. Sync shortlistedUnis from in-memory allUniversities and cookies
+  // 3. Sync shortlistedUnis on shortlist update events
   useEffect(() => {
     const updateMatched = (slugs: string[]) => {
       if (allUniversities.length > 0) {
@@ -57,17 +66,22 @@ export default function StudentDashboardPage() {
       }
     };
 
-    updateMatched(getSavedShortlist());
+    updateMatched(getSavedShortlist(user));
 
     const handleUpdate = (e: any) => {
-      const slugs = Array.isArray(e.detail) ? e.detail : getSavedShortlist();
+      const detail = e.detail;
+      const slugs = Array.isArray(detail)
+        ? detail
+        : Array.isArray(detail?.slugs)
+          ? detail.slugs
+          : getSavedShortlist(user);
       updateMatched(slugs);
     };
 
     window.addEventListener("vista_shortlist_updated", handleUpdate);
     return () =>
       window.removeEventListener("vista_shortlist_updated", handleUpdate);
-  }, [allUniversities]);
+  }, [allUniversities, user]);
 
   const removeShortlist = (slug: string) => {
     try {

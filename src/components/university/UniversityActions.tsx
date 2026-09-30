@@ -42,21 +42,21 @@ export function UniversityActions({
 
   useEffect(() => {
     setMounted(true);
-    setIsShortlisted(isUniversityShortlisted(universitySlug));
+    setIsShortlisted(isUniversityShortlisted(universitySlug, user));
 
     const handleUpdate = () => {
-      setIsShortlisted(isUniversityShortlisted(universitySlug));
+      setIsShortlisted(isUniversityShortlisted(universitySlug, user));
     };
 
     window.addEventListener("vista_shortlist_updated", handleUpdate);
     return () => {
       window.removeEventListener("vista_shortlist_updated", handleUpdate);
     };
-  }, [universitySlug]);
+  }, [universitySlug, user]);
 
   const toggleShortlist = () => {
     try {
-      if (isUniversityShortlisted(universitySlug)) {
+      if (isUniversityShortlisted(universitySlug, user)) {
         removeFromShortlist(universitySlug, user);
         setIsShortlisted(false);
         setShowSyncPrompt(false);

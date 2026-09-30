@@ -1,10 +1,51 @@
 /**
- * Cookie and Supabase Backend persistence for saved university shortlists.
- * Cookie Name: `vista_saved_shortlist`.
+ * User-isolated Cookie and Supabase Backend persistence for saved university shortlists.
+ * Keys are scoped per user email (e.g. `vista_saved_shortlist_student1_gmail_com`) or `vista_saved_shortlist_guest`.
  */
 
-const COOKIE_NAME = "vista_saved_shortlist";
 const MAX_AGE_SECONDS = 365 * 24 * 60 * 60; // 1 year
+
+/**
+ * Extracts and normalizes the active user's email for key scoping.
+ */
+export function getActiveUserEmail(
+  user?: { email?: string } | string | null,
+): string | null {
+  if (typeof user === "string" && user.trim()) {
+    return user.trim().toLowerCase();
+  }
+  if (user && typeof user === "object" && user.email) {
+    return user.email.trim().toLowerCase();
+  }
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem("vista_user_session");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.email) {
+          return parsed.email.trim().toLowerCase();
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return null;
+}
+
+/**
+ * Generates the scoped storage key name.
+ */
+export function getShortlistKey(
+  user?: { email?: string } | string | null,
+): string {
+  const email = getActiveUserEmail(user);
+  if (email) {
+    const sanitized = email.replace(/[^a-z0-9]/g, "_");
+    return `vista_saved_shortlist_${sanitized}`;
+  }
+  return "vista_saved_shortlist_guest";
+}
 
 /**
  * Parses all browser cookies into a key-value record.
@@ -27,17 +68,19 @@ function parseCookies(): Record<string, string> {
 }
 
 /**
- * Reads the list of shortlisted university slugs from cookies.
- * Automatically migrates legacy localStorage data into cookies if present.
+ * Reads the list of shortlisted university slugs for the specific user/guest from cookies/localStorage.
  */
-export function getSavedShortlist(): string[] {
+export function getSavedShortlist(
+  user?: { email?: string } | string | null,
+): string[] {
   if (typeof window === "undefined") return [];
+
+  const key = getShortlistKey(user);
 
   try {
     const cookies = parseCookies();
-    let cookieVal = cookies[COOKIE_NAME];
+    const cookieVal = cookies[key];
 
-    // If cookie exists and is valid JSON array
     if (cookieVal) {
       const parsed = JSON.parse(cookieVal);
       if (Array.isArray(parsed)) {
@@ -45,38 +88,37 @@ export function getSavedShortlist(): string[] {
       }
     }
 
-    // Legacy migration check: check if user had items in localStorage
-    const legacyStorage = localStorage.getItem("vista_saved_shortlist");
-    if (legacyStorage) {
-      const parsed = JSON.parse(legacyStorage);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        setSavedShortlist(parsed, { silent: true });
-        localStorage.removeItem("vista_saved_shortlist");
+    // Check localStorage fallback for this key
+    const localVal = localStorage.getItem(key);
+    if (localVal) {
+      const parsed = JSON.parse(localVal);
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
   } catch (err) {
-    console.warn("Failed to parse shortlist cookie:", err);
+    console.warn("Failed to parse shortlist:", err);
   }
 
   return [];
 }
 
 /**
- * Writes the list of university slugs to the `vista_saved_shortlist` cookie.
- * Options: { silent?: boolean } - if true, suppresses dispatching the update event.
+ * Writes the list of university slugs to user-scoped cookie and localStorage.
  */
 export function setSavedShortlist(
   slugs: string[],
+  user?: { email?: string } | string | null,
   options?: { silent?: boolean },
 ): void {
   if (typeof document === "undefined") return;
 
+  const key = getShortlistKey(user);
+
   try {
     const uniqueSlugs = Array.from(new Set(slugs.filter(Boolean)));
-    const previousSlugs = getSavedShortlist();
+    const previousSlugs = getSavedShortlist(user);
 
-    // Check if content actually changed
     const hasChanged =
       uniqueSlugs.length !== previousSlugs.length ||
       uniqueSlugs.some((s) => !previousSlugs.includes(s));
@@ -84,41 +126,45 @@ export function setSavedShortlist(
     const jsonStr = encodeURIComponent(JSON.stringify(uniqueSlugs));
     const isSecure = window.location.protocol === "https:";
 
-    document.cookie = `${COOKIE_NAME}=${jsonStr}; path=/; max-age=${MAX_AGE_SECONDS}; SameSite=Lax${
+    // Set cookie
+    document.cookie = `${key}=${jsonStr}; path=/; max-age=${MAX_AGE_SECONDS}; SameSite=Lax${
       isSecure ? "; Secure" : ""
     }`;
 
-    // Clean up any legacy localStorage entry
+    // Set localStorage
     try {
-      localStorage.removeItem("vista_saved_shortlist");
+      localStorage.setItem(key, JSON.stringify(uniqueSlugs));
     } catch {
       // ignore
     }
 
-    // Dispatch global event only if explicitly not silent and data has changed
+    // Dispatch global event
     if (!options?.silent && hasChanged) {
+      const email = getActiveUserEmail(user);
       window.dispatchEvent(
-        new CustomEvent("vista_shortlist_updated", { detail: uniqueSlugs }),
+        new CustomEvent("vista_shortlist_updated", {
+          detail: { slugs: uniqueSlugs, email },
+        }),
       );
     }
   } catch (err) {
-    console.warn("Failed to set shortlist cookie:", err);
+    console.warn("Failed to set shortlist:", err);
   }
 }
 
 /**
- * Adds a university slug to the cookie shortlist and syncs to Supabase backend if user is logged in.
+ * Adds a university slug to the user's scoped shortlist and persists to Supabase backend if authenticated.
  */
 export function addToShortlist(
   slug: string,
   user?: { id?: string; email?: string } | null,
 ): string[] {
-  if (!slug) return getSavedShortlist();
-  const current = getSavedShortlist();
+  if (!slug) return getSavedShortlist(user);
+  const current = getSavedShortlist(user);
   let updated = current;
   if (!current.includes(slug)) {
     updated = [...current, slug];
-    setSavedShortlist(updated);
+    setSavedShortlist(updated, user);
   }
 
   // If user is authenticated, persist to Supabase backend
@@ -138,18 +184,18 @@ export function addToShortlist(
 }
 
 /**
- * Removes a university slug from the cookie shortlist and removes from Supabase backend if user is logged in.
+ * Removes a university slug from the user's scoped shortlist and deletes from Supabase backend.
  */
 export function removeFromShortlist(
   slug: string,
   user?: { id?: string; email?: string } | null,
 ): string[] {
-  if (!slug) return getSavedShortlist();
-  const current = getSavedShortlist();
+  if (!slug) return getSavedShortlist(user);
+  const current = getSavedShortlist(user);
   const updated = current.filter((s) => s !== slug);
-  setSavedShortlist(updated);
+  setSavedShortlist(updated, user);
 
-  // If user is authenticated, remove from Supabase backend
+  // If user is authenticated, delete from Supabase backend
   if (user && (user.id || user.email)) {
     fetch("/api/shortlist", {
       method: "DELETE",
@@ -166,59 +212,60 @@ export function removeFromShortlist(
 }
 
 /**
- * Checks whether a given university slug is shortlisted in cookies.
+ * Checks whether a given university slug is shortlisted in user's scoped storage.
  */
-export function isUniversityShortlisted(slug: string): boolean {
+export function isUniversityShortlisted(
+  slug: string,
+  user?: { email?: string } | string | null,
+): boolean {
   if (!slug) return false;
-  const current = getSavedShortlist();
+  const current = getSavedShortlist(user);
   return current.includes(slug);
 }
 
 /**
- * Syncs guest cookie shortlists with the Supabase backend upon signup or login.
- * Merges backend + cookie lists and updates both silently without triggering loops.
+ * Clears shortlist cookies and storage for the current user and guest.
  */
-export async function syncShortlistWithBackend(user: {
-  id?: string;
-  email?: string;
-}): Promise<string[]> {
-  if (!user || (!user.id && !user.email)) return getSavedShortlist();
-
-  const cookieSlugs = getSavedShortlist();
+export function clearShortlistCookie(
+  user?: { email?: string } | string | null,
+): void {
+  if (typeof document === "undefined") return;
 
   try {
-    const res = await fetch("/api/shortlist/sync", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.id,
-        email: user.email,
-        slugs: cookieSlugs,
-      }),
+    const keysToClear = [
+      getShortlistKey(user),
+      "vista_saved_shortlist_guest",
+      "vista_saved_shortlist",
+    ];
+
+    keysToClear.forEach((key) => {
+      document.cookie = `${key}=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      try {
+        localStorage.removeItem(key);
+      } catch {
+        // ignore
+      }
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data.shortlists)) {
-        setSavedShortlist(data.shortlists, { silent: true });
-        return data.shortlists;
-      }
-    }
+    const email = getActiveUserEmail(user);
+    window.dispatchEvent(
+      new CustomEvent("vista_shortlist_updated", {
+        detail: { slugs: [], email },
+      }),
+    );
   } catch (err) {
-    console.warn("Shortlist sync with backend failed:", err);
+    console.warn("Failed to clear shortlist:", err);
   }
-
-  return cookieSlugs;
 }
 
 /**
- * Fetches user shortlists directly from Supabase backend and updates cookies silently without triggering loops.
+ * Fetches user shortlists directly from Supabase backend for this authenticated user and saves to their scoped storage.
  */
 export async function fetchBackendShortlist(user: {
   id?: string;
   email?: string;
 }): Promise<string[]> {
-  if (!user || (!user.id && !user.email)) return getSavedShortlist();
+  if (!user || (!user.id && !user.email)) return getSavedShortlist(user);
 
   try {
     const query = user.id
@@ -228,7 +275,7 @@ export async function fetchBackendShortlist(user: {
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data.shortlists)) {
-        setSavedShortlist(data.shortlists, { silent: true });
+        setSavedShortlist(data.shortlists, user);
         return data.shortlists;
       }
     }
@@ -236,5 +283,45 @@ export async function fetchBackendShortlist(user: {
     console.warn("Fetch backend shortlist failed:", err);
   }
 
-  return getSavedShortlist();
+  return getSavedShortlist(user);
+}
+
+/**
+ * Explicitly syncs guest cookies with backend ONLY when explicitly requested.
+ */
+export async function syncShortlistWithBackend(user: {
+  id?: string;
+  email?: string;
+}): Promise<string[]> {
+  if (!user || (!user.id && !user.email)) return getSavedShortlist(user);
+
+  const guestSlugs = getSavedShortlist(null);
+  if (guestSlugs.length === 0) {
+    return fetchBackendShortlist(user);
+  }
+
+  try {
+    const res = await fetch("/api/shortlist/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.id,
+        email: user.email,
+        slugs: guestSlugs,
+      }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.shortlists)) {
+        setSavedShortlist(data.shortlists, user, { silent: true });
+        clearShortlistCookie(null);
+        return data.shortlists;
+      }
+    }
+  } catch (err) {
+    console.warn("Shortlist sync with backend failed:", err);
+  }
+
+  return getSavedShortlist(user);
 }

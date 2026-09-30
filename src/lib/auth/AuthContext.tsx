@@ -7,6 +7,10 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import {
+  clearShortlistCookie,
+  fetchBackendShortlist,
+} from "@/lib/cookies/shortlist";
 
 export type UserRole = "student" | "buyer" | "university" | "admin";
 
@@ -109,7 +113,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           ) {
             role = "university";
           } else if (
-            emailLower.includes("admin@abroadroute") || emailLower.includes("admin@studyabroadvista") ||
+            emailLower.includes("admin@abroadroute") ||
+            emailLower.includes("admin@studyabroadvista") ||
             emailLower.includes("admin")
           ) {
             role = "admin";
@@ -189,15 +194,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore
     }
+
+    // Immediately fetch and isolate this user's specific shortlists
+    if (newUser.id || newUser.email) {
+      fetchBackendShortlist({ id: newUser.id, email: newUser.email }).catch(
+        () => {},
+      );
+    }
   };
 
   const logout = () => {
+    const currentUser = user;
     setUser(null);
     try {
       localStorage.removeItem("vista_user_session");
     } catch {
       // ignore
     }
+    clearShortlistCookie(currentUser);
     import("@/lib/supabase/client")
       .then(({ supabase }) => supabase.auth.signOut())
       .catch(() => {});

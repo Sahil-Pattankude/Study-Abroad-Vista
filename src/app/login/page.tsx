@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useAuth, UserRole } from "@/lib/auth/AuthContext";
 import { supabase } from "@/lib/supabase/client";
-import { syncShortlistWithBackend } from "@/lib/cookies/shortlist";
+import { fetchBackendShortlist } from "@/lib/cookies/shortlist";
 import { BrandLogo } from "@/components/ui/BrandSignatures";
 
 function LoginForm() {
@@ -169,9 +169,9 @@ function LoginForm() {
         meta,
       );
 
-      // Sync guest shortlists with Supabase backend on student login
+      // Fetch this specific student's shortlist from Supabase backend
       try {
-        await syncShortlistWithBackend({
+        await fetchBackendShortlist({
           id: authedUser.id,
           email: authedUser.email || userEmail,
         });

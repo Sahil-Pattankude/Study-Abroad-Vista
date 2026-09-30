@@ -244,7 +244,7 @@ export default function UniversityPortalPage() {
   const [programsList, setProgramsList] = useState<ProgramItem[]>([
     {
       id: 1,
-      name: "M.Sc. in Robotics, Cognition, Intelligence",
+      name: "M.Sc. in Rob, Cognition, Intelligence",
       degreeType: "Postgraduate (M.Sc.)",
       duration: "2 Years (4 Semesters)",
       fees: "€0 (Tuition Free / Public)",
@@ -346,7 +346,7 @@ export default function UniversityPortalPage() {
       email: "ananya.deshmukh@outlook.com",
       phone: "+91 97654 32189",
       location: "Hyderabad, Telangana",
-      degreeApplied: "M.Sc. in Robotics, Cognition, Intelligence",
+      degreeApplied: "M.Sc. in Ro, Cognition, Intelligence",
       currentBg: "B.Tech Mechanical Engineering (BITS Pilani, 8.62 CGPA)",
       cgpa: "8.62",
       testScores: "TOEFL 108 · GRE 326",

@@ -47,6 +47,21 @@ export interface Program {
   roiScore: number; // out of 100
 }
 
+export interface Specialisation {
+  id: string;
+  programSlug: ProgramCategory | string;
+  anchorCategory: string;
+  name: string;
+  slug: string;
+  description: string;
+  focusAreas: string[];
+  targetDestinations: string[];
+  durationFormats: string[];
+  licensingPathways: string[];
+  contentInvestmentShare: string;
+  isYearOneAnchor: boolean;
+}
+
 export interface University {
   id: string;
   name: string;

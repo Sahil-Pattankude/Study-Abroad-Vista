@@ -67,17 +67,22 @@ export default function StudentAccountDashboard() {
       }
     };
 
-    updateMatched(getSavedShortlist());
+    updateMatched(getSavedShortlist(user));
 
     const handleUpdate = (e: any) => {
-      const slugs = Array.isArray(e.detail) ? e.detail : getSavedShortlist();
+      const detail = e.detail;
+      const slugs = Array.isArray(detail)
+        ? detail
+        : Array.isArray(detail?.slugs)
+          ? detail.slugs
+          : getSavedShortlist(user);
       updateMatched(slugs);
     };
 
     window.addEventListener("vista_shortlist_updated", handleUpdate);
     return () =>
       window.removeEventListener("vista_shortlist_updated", handleUpdate);
-  }, [allUniversities]);
+  }, [allUniversities, user]);
 
 
 
