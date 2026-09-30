@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { fetchLivePrograms } from "@/lib/supabase/dataFetchers";
 import { Program } from "@/types";
 import { GraduationCap, Award, Compass, ArrowRight } from "lucide-react";
@@ -41,25 +42,36 @@ export async function ProgramStreamGrid({
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FDFCF7] text-[#1D5A6C] border border-[#D9CFB8]/40">
+                  <Link
+                    href={`/programs/${program.slug}`}
+                    className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FDFCF7] text-[#1D5A6C] border border-[#D9CFB8]/40 transition hover:scale-105 hover:border-[#1D5A6C]"
+                    title={`Explore ${program.name} Degree Details`}
+                  >
                     <GraduationCap className="h-6 w-6 text-[#D89A3E]" />
-                  </div>
+                  </Link>
                   <div className="flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700">
                     <Award className="h-3 w-3" />
                     ROI: {program.roiScore}/100
                   </div>
                 </div>
 
-                <h3 className="mt-4 font-display text-lg font-bold text-[#1D5A6C]">
-                  {program.name}
-                </h3>
-                <span className="text-[11px] font-semibold text-slate-500">
-                  {program.level} • {program.duration}
-                </span>
+                <Link
+                  href={`/programs/${program.slug}`}
+                  className="group/title block mt-4"
+                >
+                  <h3 className="font-display text-lg font-bold text-[#1D5A6C] transition group-hover/title:text-[#D89A3E] group-hover/title:underline">
+                    {program.name}
+                  </h3>
+                  <span className="text-[11px] font-semibold text-slate-500">
+                    {program.level} • {program.duration}
+                  </span>
+                </Link>
 
-                <p className="mt-3 text-xs leading-relaxed text-slate-600">
-                  {program.summary}
-                </p>
+                <Link href={`/programs/${program.slug}`} className="block mt-3">
+                  <p className="text-xs leading-relaxed text-slate-600 hover:text-[#1D5A6C] transition line-clamp-3">
+                    {program.summary}
+                  </p>
+                </Link>
 
                 {/* Key Fields */}
                 <div className="mt-4">
@@ -89,14 +101,20 @@ export async function ProgramStreamGrid({
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4">
+              <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4 flex flex-col gap-2">
+                <Link
+                  href={`/programs/${program.slug}`}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1D5A6C] py-2.5 text-xs font-bold text-white transition hover:bg-[#103B47] shadow-xs"
+                >
+                  <span>Explore {program.name}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
+                </Link>
                 <LeadTriggerButton
                   country={program.slug}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1D5A6C]/5 py-2.5 text-xs font-bold text-[#1D5A6C] border border-[#1D5A6C]/20 transition hover:bg-[#1D5A6C] hover:text-white"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#FDFCF7] py-2 text-xs font-semibold text-slate-700 border border-[#D9CFB8]/80 transition hover:bg-[#F5EFE0]"
                 >
                   <Compass className="h-3.5 w-3.5 text-[#D89A3E]" />
-                  Explore Eligibility & Intake
-                  <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
+                  <span>Check Eligibility / Apply</span>
                 </LeadTriggerButton>
               </div>
             </div>

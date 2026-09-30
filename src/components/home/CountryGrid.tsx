@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { ArrowRight, Clock, Banknote, ShieldCheck } from "lucide-react";
 import { CountryGridTabs } from "./CountryGridTabs";
 import { LeadTriggerButton } from "@/components/home/HomeClientContext";
@@ -62,31 +63,39 @@ async function CountryCards() {
             className="group relative flex flex-col justify-between rounded-2xl border border-[#D9CFB8]/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-[#1D5A6C]/40 hover:shadow-xl"
           >
             <div>
-              {/* Header with Flag and Tier */}
+              {/* Header with Flag and Tier - Clickable to /study-in-[country] */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <CountryFlag
-                    countryCode={country.code}
-                    countryName={country.name}
-                    size="lg"
-                  />
+                <Link
+                  href={`/study-in-${country.slug}`}
+                  className="flex items-center gap-3 group/link cursor-pointer"
+                  title={`Explore study opportunities in ${country.name}`}
+                >
+                  <div className="transition transform group-hover/link:scale-105">
+                    <CountryFlag
+                      countryCode={country.code}
+                      countryName={country.name}
+                      size="lg"
+                    />
+                  </div>
                   <div>
-                    <h3 className="text-lg font-bold text-[#1D5A6C] font-display transition group-hover:text-[#D89A3E]">
+                    <h3 className="text-lg font-bold text-[#1D5A6C] font-display transition group-hover/link:text-[#D89A3E] group-hover/link:underline">
                       {country.name}
                     </h3>
                     <span className="text-[11px] font-semibold text-slate-500">
                       {country.code} • {country.tier}
                     </span>
                   </div>
-                </div>
+                </Link>
                 <span className="rounded-full bg-[#1D5A6C]/10 px-2.5 py-1 text-[10px] font-bold text-[#1D5A6C]">
                   {country.safetyRating} ★ Safety
                 </span>
               </div>
 
-              <p className="mt-3.5 text-xs leading-relaxed text-slate-600">
-                {country.heroTagline}
-              </p>
+              <Link href={`/study-in-${country.slug}`} className="block">
+                <p className="mt-3.5 text-xs leading-relaxed text-slate-600 hover:text-[#1D5A6C] transition">
+                  {country.heroTagline}
+                </p>
+              </Link>
 
               {/* Key Metrics */}
               <div className="mt-5 space-y-2 border-t border-[#D9CFB8]/40 pt-4 text-xs">
