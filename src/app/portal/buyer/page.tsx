@@ -77,6 +77,18 @@ interface WalletTransaction {
   invoiceNumber?: string;
 }
 
+function formatTimeAgo(dateStr?: string): string {
+  if (!dateStr) return "Recently";
+  const d = new Date(dateStr);
+  const now = new Date();
+  const diffSec = Math.floor((now.getTime() - d.getTime()) / 1000);
+  if (diffSec < 60) return "Just now";
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} mins ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} hours ago`;
+  if (diffSec < 172800) return "Yesterday";
+  return `${Math.floor(diffSec / 86400)} days ago`;
+}
+
 export default function BuyerPortalPage() {
   const router = useRouter();
   const { user, isLoggedIn, isLoading, logout } = useAuth();
@@ -88,6 +100,7 @@ export default function BuyerPortalPage() {
 
   // Leads State
   const [leadsList, setLeadsList] = useState<LeadItem[]>([]);
+  const [isFetchingLeads, setIsFetchingLeads] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "unread" | "contacted" | "converted" | "disputed"
@@ -340,7 +353,7 @@ export default function BuyerPortalPage() {
       }
     }
 
-    // Read real submitted leads from localStorage if available
+    // 1. Initial load of default and locally cached leads
     try {
       const liveStored = JSON.parse(
         localStorage.getItem("vista_submitted_leads") || "[]",
@@ -384,6 +397,87 @@ export default function BuyerPortalPage() {
     } catch {
       setLeadsList(defaultLeads);
     }
+
+    // 2. Fetch live leads directly from Supabase via /api/leads
+    const loadBackendLeads = async () => {
+      setIsFetchingLeads(true);
+      try {
+        const res = await fetch("/api/leads", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.leads) && data.leads.length > 0) {
+            const mappedDb: LeadItem[] = data.leads.map((l: any, idx: number) => {
+              const countrySlug = (l.country_target || "germany").toLowerCase();
+              const countryName =
+                countrySlug.charAt(0).toUpperCase() +
+                countrySlug.slice(1).replace(/-/g, " ");
+              const rawProg = String(l.program_target || "ms");
+              const progName = rawProg.toUpperCase().includes("DEGREE")
+                ? rawProg
+                : `${rawProg.toUpperCase()} Degree Track`;
+
+              let status: LeadItem["status"] = "unread";
+              if (
+                l.status === "contacted" ||
+                l.status === "converted" ||
+                l.status === "disputed"
+              ) {
+                status = l.status;
+              }
+
+              let formattedPhone = l.phone || "+91 98765 43210";
+              if (formattedPhone && !formattedPhone.startsWith("+")) {
+                formattedPhone = `+91 ${formattedPhone}`;
+              }
+
+              return {
+                id: l.id || `db-lead-${idx}`,
+                name: l.full_name || l.fullName || "Applicant",
+                phone: formattedPhone,
+                email: l.email || "student@example.com",
+                targetCountry: countryName,
+                targetCountrySlug: countrySlug,
+                program: progName,
+                programSlug: rawProg.toLowerCase(),
+                budget: l.budget_range_inr || "₹15 - 25 Lakhs",
+                intake: l.intake_year || "Fall 2026",
+                leadScore: 94,
+                tier: "Exclusive",
+                sourcePage: `/${countrySlug}`,
+                sourceJourney: [
+                  "Direct Inquiry",
+                  "Student Portal",
+                  "Lead Capture Form",
+                ],
+                createdAt: formatTimeAgo(l.created_at),
+                cpl: 1500,
+                status: status,
+              };
+            });
+
+            // Merge live database leads with demo leads
+            const seen = new Set<string>();
+            const combined: LeadItem[] = [];
+
+            [...mappedDb, ...defaultLeads].forEach((item) => {
+              const key = (item.id || item.email).toLowerCase();
+              if (!seen.has(key)) {
+                seen.add(key);
+                combined.push(item);
+              }
+            });
+
+            setLeadsList(combined);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch backend leads:", err);
+      } finally {
+        setIsFetchingLeads(false);
+      }
+    };
+
+    loadBackendLeads();
   }, []);
 
   // Filtered Leads
@@ -757,16 +851,102 @@ export default function BuyerPortalPage() {
                   ))}
                 </div>
 
-                {/* Real-time Search */}
-                <div className="relative w-full sm:w-72">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <input
-                    type="text"
-                    placeholder="Search name, phone, email, country..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none"
-                  />
+                {/* Real-time Search & Refresh Button */}
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <div className="relative flex-1 sm:w-72">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search name, phone, email, country..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 focus:border-[#102C57] focus:bg-white focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setIsFetchingLeads(true);
+                      fetch("/api/leads", { cache: "no-store" })
+                        .then((res) => res.json())
+                        .then((data) => {
+                          if (Array.isArray(data.leads)) {
+                            const mapped = data.leads.map((l: any, idx: number) => {
+                              const countrySlug = (l.country_target || "germany").toLowerCase();
+                              const countryName =
+                                countrySlug.charAt(0).toUpperCase() +
+                                countrySlug.slice(1).replace(/-/g, " ");
+                              const rawProg = String(l.program_target || "ms");
+                              const progName = rawProg.toUpperCase().includes("DEGREE")
+                                ? rawProg
+                                : `${rawProg.toUpperCase()} Degree Track`;
+
+                              let status: LeadItem["status"] = "unread";
+                              if (
+                                l.status === "contacted" ||
+                                l.status === "converted" ||
+                                l.status === "disputed"
+                              ) {
+                                status = l.status;
+                              }
+
+                              let formattedPhone = l.phone || "+91 98765 43210";
+                              if (formattedPhone && !formattedPhone.startsWith("+")) {
+                                formattedPhone = `+91 ${formattedPhone}`;
+                              }
+
+                              return {
+                                id: l.id || `db-lead-${idx}`,
+                                name: l.full_name || l.fullName || "Applicant",
+                                phone: formattedPhone,
+                                email: l.email || "student@example.com",
+                                targetCountry: countryName,
+                                targetCountrySlug: countrySlug,
+                                program: progName,
+                                programSlug: rawProg.toLowerCase(),
+                                budget: l.budget_range_inr || "₹15 - 25 Lakhs",
+                                intake: l.intake_year || "Fall 2026",
+                                leadScore: 94,
+                                tier: "Exclusive" as const,
+                                sourcePage: `/${countrySlug}`,
+                                sourceJourney: [
+                                  "Direct Inquiry",
+                                  "Student Portal",
+                                  "Lead Capture Form",
+                                ],
+                                createdAt: formatTimeAgo(l.created_at),
+                                cpl: 1500,
+                                status: status,
+                              };
+                            });
+
+                            const seen = new Set<string>();
+                            const combined: LeadItem[] = [];
+                            mapped.forEach((item: LeadItem) => {
+                              const key = (item.id || item.email).toLowerCase();
+                              if (!seen.has(key)) {
+                                seen.add(key);
+                                combined.push(item);
+                              }
+                            });
+                            setLeadsList(combined);
+                          }
+                        })
+                        .finally(() => setIsFetchingLeads(false));
+                    }}
+                    disabled={isFetchingLeads}
+                    className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer shadow-2xs disabled:opacity-60 shrink-0"
+                    title="Refresh live leads from database"
+                  >
+                    <RotateCcw
+                      className={`h-3.5 w-3.5 text-[#102C57] ${
+                        isFetchingLeads ? "animate-spin" : ""
+                      }`}
+                    />
+                    <span className="hidden sm:inline">
+                      {isFetchingLeads ? "Syncing..." : "Refresh"}
+                    </span>
+                  </button>
                 </div>
               </div>
 

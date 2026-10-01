@@ -47,6 +47,19 @@ async function check() {
       console.log(`Email: [${u.email}] | user_metadata.shortlists:`, u.user_metadata?.shortlists);
     });
   }
+
+  console.log("\n=== CHECKING SUPABASE LEADS TABLE ===");
+  const { data: leadsRows, error: leadsError } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
+  if (leadsError) {
+    console.error("Error selecting leads:", leadsError);
+  } else {
+    console.log("Total rows in leads table:", leadsRows ? leadsRows.length : 0);
+    if (leadsRows) {
+      leadsRows.forEach((l) => {
+        console.log(`Lead ID: ${l.id} | Name: ${l.full_name} | Email: ${l.email} | Phone: ${l.phone} | Country: ${l.country_target} | Program: ${l.program_target} | Created: ${l.created_at}`);
+      });
+    }
+  }
 }
 
 check().catch(console.error);
