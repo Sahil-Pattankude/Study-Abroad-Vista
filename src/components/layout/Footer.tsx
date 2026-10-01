@@ -518,6 +518,17 @@ export function Footer() {
               · Contact: contact@abroadroute.com · Grievance Officer:
               dpo@abroadroute.com · DPDP 2023 Compliant.
             </p>
+            <p className="mt-1 text-[11px] text-slate-400">
+              Website developed by{" "}
+              <a
+                href="https://magicworksitsolutions.com"
+                rel="nofollow"
+                target="_blank"
+                className="font-semibold text-[#D89A3E] hover:underline"
+              >
+                MagicWorks
+              </a>
+            </p>
           </div>
           <div className="mt-4 flex gap-6 sm:mt-0">
             <Link
