@@ -240,7 +240,7 @@ export default function SignupPage() {
       } else if (role === "university") {
         router.push("/portal/university");
       } else {
-        router.push("/account/dashboard");
+        router.push("/dashboard/student");
       }
     } catch (err: any) {
       setError(err?.message || "Registration failed. Please try again.");
@@ -256,7 +256,7 @@ export default function SignupPage() {
     } else if (role === "university") {
       router.push("/portal/university");
     } else {
-      router.push("/account/dashboard");
+      router.push("/dashboard/student");
     }
   };
 

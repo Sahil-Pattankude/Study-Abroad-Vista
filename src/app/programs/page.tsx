@@ -142,11 +142,11 @@ export default async function ProgramsIndexPage() {
                 <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4">
                   <Link
                     href={`/programs/${program.slug}`}
-                    className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#1D5A6C]/5 py-2.5 text-xs font-bold text-[#1D5A6C] border border-[#1D5A6C]/20 transition group-hover:bg-[#1D5A6C] group-hover:text-white"
+                    className="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#1D5A6C]/5 px-3.5 py-2.5 text-xs font-bold text-[#1D5A6C] border border-[#1D5A6C]/20 transition group-hover:bg-[#1D5A6C] group-hover:text-white"
                   >
-                    <Compass className="h-3.5 w-3.5 text-[#D89A3E]" />
-                    <span>Explore {program.name} Track</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
+                    <Compass className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
+                    <span>Explore Program Track</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
                   </Link>
                 </div>
               </div>

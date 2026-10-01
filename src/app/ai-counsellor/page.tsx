@@ -185,7 +185,7 @@ export default function AICounsellorFullPage() {
       setShowLevel3Consultation(true);
     }
 
-    const savedShortlist = getSavedShortlist();
+    const savedShortlist = getSavedShortlist(user);
 
     const placeholderModelMsg: AIChatMessage = {
       id: (Date.now() + 1).toString(),

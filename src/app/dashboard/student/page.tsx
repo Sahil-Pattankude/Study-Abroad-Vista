@@ -57,6 +57,11 @@ export default function StudentDashboardPage() {
 
   // 3. Sync shortlistedUnis on shortlist update events
   useEffect(() => {
+    if (!user?.email) {
+      setShortlistedUnis([]);
+      return;
+    }
+
     const updateMatched = (slugs: string[]) => {
       if (allUniversities.length > 0) {
         const matched = slugs
@@ -70,6 +75,14 @@ export default function StudentDashboardPage() {
 
     const handleUpdate = (e: any) => {
       const detail = e.detail;
+      const eventEmail = detail?.email?.toLowerCase();
+      const currentEmail = user?.email?.toLowerCase();
+
+      // Only respond to events scoped to this exact user or unscoped events
+      if (eventEmail && currentEmail && eventEmail !== currentEmail) {
+        return;
+      }
+
       const slugs = Array.isArray(detail)
         ? detail
         : Array.isArray(detail?.slugs)
@@ -81,7 +94,7 @@ export default function StudentDashboardPage() {
     window.addEventListener("vista_shortlist_updated", handleUpdate);
     return () =>
       window.removeEventListener("vista_shortlist_updated", handleUpdate);
-  }, [allUniversities, user]);
+  }, [allUniversities, user?.email]);
 
   const removeShortlist = (slug: string) => {
     try {

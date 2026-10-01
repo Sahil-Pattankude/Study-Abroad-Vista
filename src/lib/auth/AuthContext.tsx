@@ -10,6 +10,7 @@ import {
 import {
   clearShortlistCookie,
   fetchBackendShortlist,
+  syncShortlistWithBackend,
 } from "@/lib/cookies/shortlist";
 
 export type UserRole = "student" | "buyer" | "university" | "admin";
@@ -195,9 +196,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // ignore
     }
 
-    // Immediately fetch and isolate this user's specific shortlists
+    // Immediately fetch and isolate this user's specific shortlists (syncing any guest shortlists)
     if (newUser.id || newUser.email) {
-      fetchBackendShortlist({ id: newUser.id, email: newUser.email }).catch(
+      syncShortlistWithBackend({ id: newUser.id, email: newUser.email }).catch(
         () => {},
       );
     }
@@ -212,6 +213,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // ignore
     }
     clearShortlistCookie(currentUser);
+    clearShortlistCookie(null);
     import("@/lib/supabase/client")
       .then(({ supabase }) => supabase.auth.signOut())
       .catch(() => {});

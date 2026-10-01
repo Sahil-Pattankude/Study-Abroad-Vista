@@ -7,6 +7,7 @@
     "dev:turbo": "node ./node_modules/next/dist/bin/next dev --turbo",
     "build": "node ./node_modules/next/dist/bin/next build",
     "start": "node ./node_modules/next/dist/bin/next start",
+    "db:backup": "node scripts/backup_database.js",
     "test:db": "node scripts/test-db.mjs",
     "test:sanity": "node scripts/test-sanity.mjs"
   },

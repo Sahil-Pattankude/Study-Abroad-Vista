@@ -185,7 +185,7 @@ export function AICounsellorDrawer({
     }
 
     try {
-      const savedShortlist = getSavedShortlist();
+      const savedShortlist = getSavedShortlist(user);
 
       setMessages((prev) => [
         ...prev,

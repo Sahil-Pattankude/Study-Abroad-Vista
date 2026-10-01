@@ -36,15 +36,17 @@ export async function GET(request: Request) {
       );
     }
 
-    // Try reading from student_shortlists table first
-    if (user?.email) {
+    const targetEmail = (user?.email || email || "").toLowerCase();
+
+    // 1. Try reading from student_shortlists table first
+    if (targetEmail) {
       try {
-        const { data: tableData } = await supabaseAdmin
+        const { data: tableData, error: tableError } = await supabaseAdmin
           .from("student_shortlists")
           .select("university_slug")
-          .eq("user_email", user.email);
+          .eq("user_email", targetEmail);
 
-        if (tableData && tableData.length > 0) {
+        if (!tableError && tableData && tableData.length > 0) {
           const slugs = tableData.map((r: any) => r.university_slug);
           return NextResponse.json({
             success: true,

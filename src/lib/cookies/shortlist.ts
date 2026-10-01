@@ -14,21 +14,8 @@ export function getActiveUserEmail(
   if (typeof user === "string" && user.trim()) {
     return user.trim().toLowerCase();
   }
-  if (user && typeof user === "object" && user.email) {
+  if (user && typeof user === "object" && user.email && user.email.trim()) {
     return user.email.trim().toLowerCase();
-  }
-  if (typeof window !== "undefined") {
-    try {
-      const stored = localStorage.getItem("vista_user_session");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed?.email) {
-          return parsed.email.trim().toLowerCase();
-        }
-      }
-    } catch {
-      // ignore
-    }
   }
   return null;
 }

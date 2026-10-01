@@ -101,19 +101,19 @@ export async function ProgramStreamGrid({
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4 flex flex-col gap-2">
+              <div className="mt-6 border-t border-[#D9CFB8]/40 pt-4 flex flex-col gap-2.5">
                 <Link
                   href={`/programs/${program.slug}`}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1D5A6C] py-2.5 text-xs font-bold text-white transition hover:bg-[#103B47] shadow-xs"
+                  className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[#1D5A6C] px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-[#103B47] shadow-xs"
                 >
-                  <span>Explore {program.name}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E]" />
+                  <span>Explore Program</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
                 </Link>
                 <LeadTriggerButton
                   country={program.slug}
-                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#FDFCF7] py-2 text-xs font-semibold text-slate-700 border border-[#D9CFB8]/80 transition hover:bg-[#F5EFE0]"
+                  className="flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-xl bg-[#FDFCF7] px-3.5 py-2 text-xs font-semibold text-slate-700 border border-[#D9CFB8]/80 transition hover:bg-[#F5EFE0] cursor-pointer"
                 >
-                  <Compass className="h-3.5 w-3.5 text-[#D89A3E]" />
+                  <Compass className="h-3.5 w-3.5 text-[#D89A3E] shrink-0" />
                   <span>Check Eligibility / Apply</span>
                 </LeadTriggerButton>
               </div>
