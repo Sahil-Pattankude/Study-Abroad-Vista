@@ -92,24 +92,23 @@ export function EditUniversityProfileModal({
     };
 
     try {
-      // 1. Persist to Supabase if table exists
-      if (initialData.id) {
-        await supabase
-          .from("universities")
-          .update({
-            name: updatedObj.name,
-            city: updatedObj.city,
-            country: updatedObj.country,
-            ranking_global: updatedObj.rankingGlobal,
-            ranking_national: updatedObj.rankingNational,
-            tuition_fee_range_inr: updatedObj.tuitionFeeRangeINR,
-            ielts_min_score: updatedObj.ieltsMinScore,
-            acceptance_rate: updatedObj.acceptanceRate,
-            post_study_work_months: updatedObj.postStudyWorkMonths,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", initialData.id);
-      }
+      // 1. Persist to Supabase via server API route
+      await fetch("/api/universities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: updatedObj.name,
+          slug: (initialData.id || updatedObj.name).toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          country_id: updatedObj.country.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          city: updatedObj.city,
+          ranking_global: updatedObj.rankingGlobal,
+          ranking_national: updatedObj.rankingNational,
+          tuition_fee_range_inr: updatedObj.tuitionFeeRangeINR,
+          ielts_min_score: updatedObj.ieltsMinScore,
+          acceptance_rate: updatedObj.acceptanceRate,
+          post_study_work_months: updatedObj.postStudyWorkMonths,
+        }),
+      });
 
       onSave(updatedObj);
       setSuccess(true);
@@ -118,7 +117,7 @@ export function EditUniversityProfileModal({
         onClose();
       }, 1200);
     } catch (err: any) {
-      console.warn("Supabase update error fallback:", err);
+      console.warn("API update error fallback:", err);
       onSave(updatedObj);
       setSuccess(true);
       setTimeout(() => {

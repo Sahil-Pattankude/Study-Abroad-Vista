@@ -96,7 +96,7 @@ const FALLBACK_ARTICLES: ArticlePreview[] = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-[#FDFCF7] text-slate-900">
       {/* Top Header */}
       <Header />
 
@@ -243,9 +243,9 @@ export default function Home() {
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
               <div>
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-[#103B47]/10 px-3 py-1 text-xs font-bold text-[#103B47]">
-                  Student Utilities
+                  ✦ Student Utilities
                 </div>
-                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#103B47] sm:text-4xl">
+                <h2 className="mt-2.5 font-display text-3xl font-bold tracking-tight text-[#103B47] sm:text-4xl">
                   Tools Built for Decisions
                 </h2>
                 <p className="mt-2 text-sm text-slate-600">
@@ -406,9 +406,9 @@ export default function Home() {
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
               <div>
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-[#103B47]/10 px-3 py-1 text-xs font-bold text-[#103B47]">
-                  Admissions Intelligence
+                  ✦ Admissions Intelligence
                 </div>
-                <h2 className="mt-2.5 font-serif text-3xl font-extrabold tracking-tight text-[#103B47] sm:text-4xl">
+                <h2 className="mt-2.5 font-display text-3xl font-bold tracking-tight text-[#103B47] sm:text-4xl">
                   Latest Study Abroad Guides & Visa Updates
                 </h2>
                 <p className="mt-2 text-sm text-slate-600">
@@ -465,7 +465,7 @@ export default function Home() {
         {/* Why Indian Families Choose Us */}
         <section className="cv-auto bg-slate-50 py-16 text-center border-t border-slate-200">
           <div className="mx-auto max-w-4xl px-4">
-            <h2 className="font-serif text-2xl font-black text-[#103B47] sm:text-3xl">
+            <h2 className="font-display text-2xl font-bold text-[#103B47] sm:text-3xl">
               Why Indian Students & Families Choose Abroadroute
             </h2>
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3 text-left">
@@ -510,10 +510,10 @@ export default function Home() {
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div className="rounded-3xl bg-[#103B47] border border-[#1D5A6C]/40 p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
               <div className="pointer-events-none absolute right-0 top-0 -mt-10 -mr-10 h-60 w-60 rounded-full bg-[#D89A3E]/10 blur-2xl" />
-              <span className="text-xs font-extrabold uppercase tracking-widest text-[#D89A3E]">
-                Student Story · Authenticated Guidance
+              <span className="text-xs font-bold uppercase tracking-widest text-[#D89A3E]">
+                ✦ Student Story · Authenticated Guidance
               </span>
-              <p className="mt-4 font-serif text-xl sm:text-2xl leading-relaxed text-slate-100">
+              <p className="mt-4 font-serif italic text-xl sm:text-2xl leading-relaxed text-slate-100 font-normal">
                 “The shortlist and cost comparison helped our family understand
                 the realistic total expenses in ₹ Lakhs before we ever committed
                 to speaking with a counsellor.”

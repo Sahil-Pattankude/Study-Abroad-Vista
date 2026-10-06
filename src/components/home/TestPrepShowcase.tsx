@@ -28,7 +28,7 @@ export function TestPrepShowcase() {
               <Sparkles className="h-3.5 w-3.5 text-[#D89A3E]" />
               Phase 1 Standardized Exam Intelligence
             </div>
-            <h2 className="mt-2.5 font-serif text-3xl font-black tracking-tight text-[#103B47] sm:text-4xl">
+            <h2 className="mt-2.5 font-display text-3xl font-bold tracking-tight text-[#103B47] sm:text-4xl">
               Test Prep & Global Licensing Hub
             </h2>
             <p className="mt-2 text-sm text-slate-600 max-w-2xl leading-relaxed">
@@ -58,7 +58,7 @@ export function TestPrepShowcase() {
                 </span>
               </div>
 
-              <h3 className="mt-4 text-lg font-serif font-bold text-[#103B47]">English Language Proficiency</h3>
+              <h3 className="mt-4 text-lg font-display font-bold text-[#103B47]">English Language Proficiency</h3>
               <p className="mt-1 text-xs text-slate-500">IELTS Academic, TOEFL iBT, PTE Academic & Duolingo DET.</p>
 
               <div className="mt-5 space-y-2.5">
@@ -98,7 +98,7 @@ export function TestPrepShowcase() {
                 </span>
               </div>
 
-              <h3 className="mt-4 text-lg font-serif font-bold text-[#103B47]">Graduate & MBA Admissions</h3>
+              <h3 className="mt-4 text-lg font-display font-bold text-[#103B47]">Graduate & MBA Admissions</h3>
               <p className="mt-1 text-xs text-slate-500">Aptitude exams for STEM Master&apos;s and Top Global Business Schools.</p>
 
               <div className="mt-5 space-y-2.5">
@@ -138,7 +138,7 @@ export function TestPrepShowcase() {
                 </span>
               </div>
 
-              <h3 className="mt-4 text-lg font-serif font-bold text-[#103B47]">Medical & Nursing Licensing</h3>
+              <h3 className="mt-4 text-lg font-display font-bold text-[#103B47]">Medical & Nursing Licensing</h3>
               <p className="mt-1 text-xs text-slate-500">Licensing roadmaps for Indian MBBS doctors and Nursing graduates.</p>
 
               <div className="mt-5 space-y-2.5">

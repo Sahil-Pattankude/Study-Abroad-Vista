@@ -129,19 +129,24 @@ export async function POST(request: Request) {
 
     if (data?.user?.id && role === "university") {
       const uniSlug = finalOrg.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-      // Create or update claim entry
-      await supabaseAdmin.from("university_claims").upsert(
-        {
-          university_id: uniSlug,
-          university_name: finalOrg,
-          country_id: finalCountrySlug,
-          user_id: data.user.id,
-          applicant_name: name || `${firstName || ""} ${lastName || ""}`.trim(),
-          official_email: email.trim(),
-          verification_status: "verified",
-        },
-        { onConflict: "id" },
-      );
+      
+      // 1. Create or update claim entry in pending state for admin review
+      try {
+        await supabaseAdmin.from("university_claims").upsert(
+          {
+            university_id: uniSlug,
+            university_name: finalOrg,
+            country_id: finalCountrySlug,
+            user_id: data.user.id,
+            applicant_name: name || `${firstName || ""} ${lastName || ""}`.trim(),
+            official_email: email.trim(),
+            verification_status: "pending",
+          },
+          { onConflict: "id" },
+        );
+      } catch (claimErr) {
+        console.warn("university_claims upsert error:", claimErr);
+      }
     }
 
     if (error) {

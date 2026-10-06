@@ -230,7 +230,7 @@ function LoginForm() {
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F5EFE0] border border-[#D9CFB8] text-[#103B47]">
               <Compass className="h-6 w-6 text-[#D89A3E]" />
             </div>
-            <h1 className="mt-3 font-serif text-2xl sm:text-3xl font-bold tracking-tight text-[#103B47]">
+            <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#103B47]">
               Sign In to Your Portal
             </h1>
             <p className="mt-1 text-xs text-[#6B6B6B]">
@@ -283,12 +283,12 @@ function LoginForm() {
           {/* Active Role Quick Banner */}
           <div className="mt-4 rounded-xl border border-[#A8CDBD]/40 bg-[#A8CDBD]/15 p-2.5 text-center text-xs">
             <span className="font-semibold text-[#103B47]">Logging into: </span>
-            <strong className="text-[#103B47] font-mono">
+            <strong className="text-[#103B47] font-semibold">
               {activeRoleTab === "university"
-                ? "🏛️ University Partner Portal (/portal/university)"
+                ? "🏛️ University Partner Portal"
                 : activeRoleTab === "buyer"
-                  ? "🏢 B2B Consultant Lead Portal (/portal/buyer)"
-                  : "🎓 Student Dashboard (/dashboard/student)"}
+                  ? "🏢 B2B Consultant Lead Portal"
+                  : "🎓 Student Dashboard"}
             </strong>
           </div>
 

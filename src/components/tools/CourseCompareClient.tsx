@@ -457,10 +457,10 @@ export function CourseCompareClient() {
               Side-by-Side
             </span>
           </div>
-          <h1 className="font-serif text-3xl font-black text-[#103B47] sm:text-4xl lg:text-5xl">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-[#103B47] sm:text-4xl lg:text-5xl">
             Course & Program Comparison Matrix
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base font-normal">
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base font-sans font-normal">
             Compare course specializations, tuition fees in INR, minimum IELTS
             cutoffs, GRE/GMAT waiver rules, application deadlines, and STEM
             post-study work authorization across top international degree
@@ -520,7 +520,7 @@ export function CourseCompareClient() {
             <div className="relative w-full max-w-lg rounded-3xl border border-[#D9CFB8] bg-[#FDFCF7] p-6 shadow-2xl animate-in fade-in zoom-in-95">
               <div className="flex items-center justify-between border-b border-[#D9CFB8]/60 pb-4">
                 <div>
-                  <h3 className="text-base font-serif font-bold text-[#103B47]">
+                  <h3 className="text-base font-display font-bold text-[#103B47]">
                     Select Course / Program to Compare
                   </h3>
                   <p className="text-[11px] text-[#1D5A6C] font-medium mt-0.5 flex items-center gap-1">
@@ -594,7 +594,7 @@ export function CourseCompareClient() {
                         <span className="inline-block rounded-md bg-[#1D5A6C]/10 border border-[#1D5A6C]/20 px-2 py-0.5 text-[10px] font-bold text-[#103B47] mb-1">
                           {course.level}
                         </span>
-                        <h4 className="font-serif font-bold text-[#103B47] text-xs leading-snug">
+                        <h4 className="font-display font-bold text-[#103B47] text-xs leading-snug">
                           {course.name}
                         </h4>
                         <p className="mt-1 text-[11px] text-slate-500 font-normal">
